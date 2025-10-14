@@ -1,11 +1,11 @@
 <!-- (dl
 (section-meta
-    (title Doculisp)
+    (title Doculisp API)
     (author jason-kerney)
     (include
         (Section ../../../lang/docs/readme/why.md)
         (Section ./quickStart.md)
-        (Section ./cli.md)
+        (Section ./api-usage.md)
         (Section ./other.md)
         (*Next ./next.md)
         (*Language ../../../lang/docs/readme/_main.md)
@@ -15,12 +15,12 @@
 ) -->
 
 ```
-___  ____ ____ _  _ _    _ ____ ___
-|  \ |  | |    |  | |    | [__  |__]
-|__/ |__| |___ |__| |___ | ___] |
+___  ____ ____ _  _ _    _ ____ ___     ___  ___  _
+|  \ |  | |    |  | |    | [__  |__]   |__| |__] |
+|__/ |__| |___ |__| |___ | ___] |      |  | |    |
 ```
 
-A Compiler for Doculisp Lang.
+A TypeScript API library for parsing and compiling Doculisp documents.
 
 <!--
 (dl

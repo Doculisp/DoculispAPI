@@ -5,21 +5,21 @@
 <!-- Compiled with doculisp https://www.npmjs.com/package/doculisp -->
 <!-- Written By: jason-kerney -->
 
-# Doculisp #
+# Doculisp API #
 
 ```
-___  ____ ____ _  _ _    _ ____ ___
-|  \ |  | |    |  | |    | [__  |__]
-|__/ |__| |___ |__| |___ | ___] |
+___  ____ ____ _  _ _    _ ____ ___     ___  ___  _
+|  \ |  | |    |  | |    | [__  |__]   |__| |__] |
+|__/ |__| |___ |__| |___ | ___] |      |  | |    |
 ```
 
-A Compiler for Doculisp Lang.
+A TypeScript API library for parsing and compiling Doculisp documents.
 
 ## Table of Contents ##
 
 1. Section: [Why Doculisp?](#why-doculisp)
 2. Section: [Get Started](#get-started)
-3. Section: [Installation & Usage](#installation--usage)
+3. Section: [API Usage](#api-usage)
 4. Section: [Learn More](#learn-more)
 
 ## Why Doculisp? ##
@@ -111,7 +111,7 @@ Every section and header can have a unique ID that enables dynamic linking withi
 
 ## Get Started ##
 
-Get up and running with Doculisp in just 5 minutes!
+Get up and running with the Doculisp API in just 5 minutes!
 
 ### What is Doculisp? ###
 
@@ -120,33 +120,64 @@ Doculisp solves the **documentation maintenance problem**. Instead of managing o
 **Before Doculisp:** One huge README.md file with merge conflicts
 **After Doculisp:** Multiple small, focused files with clean collaboration
 
-### Quick Start ###
+### API Quick Start ###
 
 ### 1. Install ###
 
 ```bash
-npm install -g doculisp
+npm install doculisp-api
 ```
 
-### 2. Create main.md ###
+### 2. Basic Usage ###
 
-```markdown
-<!--
-(dl
-    (section-meta
-        (title My Project)
-        (include
-            (Installation ./install.md)
-            (Usage ./usage.md)
-        )
+```typescript
+import { DoculispApi } from 'doculisp-api';
+
+// Initialize the API
+const api = await DoculispApi.create();
+
+// Compile a Doculisp file to markdown
+const results = await api.compileFile('./docs/main.dlisp', './README.md');
+
+// Check results
+results.forEach(result => {
+    if (result.success) {
+        console.log(`✓ ${result.value}`);
+    } else {
+        console.error(`✗ ${result.message}`);
+    }
+});
+```
+
+### 3. Test/Validate Files ###
+
+```typescript
+// Test a file without writing output
+const testResults = await api.testFile('./docs/main.dlisp');
+
+testResults.forEach(result => {
+    if (result.success) {
+        console.log(`✓ Valid: ${result.value}`);
+    } else {
+        console.error(`✗ Error: ${result.message}`);
+    }
+});
+```
+
+### 4. Create Doculisp Files ###
+
+**main.dlisp:**
+```doculisp
+(section-meta
+    (title My Project)
+    (include
+        (Installation ./install.md)
+        (Usage ./usage.md)
     )
 )
--->
 
-<!-- (dl (content (toc))) -->
+(content (toc))
 ```
-
-### 3. Create section files ###
 
 **install.md:**
 ````markdown
@@ -167,61 +198,106 @@ myProject.run();
 ```
 ````
 
-### 4. Compile ###
-
-```bash
-doculisp main.md README.md
-```
-
-**Result:** Complete README with table of contents and combined sections.
+**Result:** Complete README with table of contents and combined sections programmatically generated.
 
 ### Next Steps ###
 
 For comprehensive tutorials, examples, and best practices, see the [User Guide](./USER_GUIDE.md).
 
-## Installation & Usage ##
+## API Usage ##
 
-### To Install Doculisp ###
+### Installation ###
 
-To install the cli globally run the following command: `npm i -g doculisp`
+Install the Doculisp API library in your TypeScript/JavaScript project:
 
-To install the cli locally run the following command: `npm i doculisp --save-dev`
-
-### Running the Doculisp compiler ###
-
-If you have Doculisp installed globally then you can run `doculisp` from the command line.
-
-If you have Doculisp installed locally then you can run `node ./node_modules/doculisp/dist/index.js` from the command line.
-
-### Using the Doculisp compiler ###
-
-If you run Doculisp with the help option : `doculisp --help` you will see the following:
-
-```
-___  ____ ____ _  _ _    _ ____ ___
-|  \ |  | |    |  | |    | [__  |__]
-|__/ |__| |___ |__| |___ | ___] |
-
-            Compiler Version: N.N.N
-            Language Version: N.N.N
-
-Usage: doculisp [options] [source] [output]
-
-A compiler for markdown
-
-Arguments:
-  source         the path to the file to compile
-  output         the path to the output location including output file name
-
-Options:
-  -V, --version  output the version number
-  -t, --test     runs the compiler without generating the output file
-  --update       updates doculisp
-  -h, --help     display help for command
+```bash
+npm install doculisp-api
 ```
 
-When using `--test` only the source path if mandatory.
-When compiling both the source and destination are mandatory.
+### Basic Usage ###
+
+```typescript
+import { DoculispApi } from 'doculisp-api';
+
+// Initialize the API
+const api = await DoculispApi.create();
+
+// Compile a single Doculisp file
+const results = await api.compileFile('./docs/source.dlisp', './output.md');
+
+// Test/validate without writing
+const testResults = await api.testFile('./docs/source.dlisp');
+
+// Handle results
+results.forEach(result => {
+    if (result.success) {
+        console.log(`✓ ${result.value}`);
+    } else {
+        console.error(`✗ ${result.message}`);
+    }
+});
+```
+
+### Advanced Usage ###
+
+Access lower-level components for custom processing:
+
+```typescript
+import { DoculispApi } from 'doculisp-api';
+
+const api = await DoculispApi.create();
+
+// Get individual components
+const astBuilder = api.getAstBuilder();
+const stringWriter = api.getStringWriter();
+const pathConstructor = api.getPathConstructor();
+const util = api.getUtil();
+
+// Create custom variable tables
+const variableTable = api.createVariableTable();
+
+// Work with paths
+const inputPath = pathConstructor('./docs/source.dlisp');
+const outputPath = pathConstructor('./dist/output.md');
+
+// Custom processing pipeline
+const parseResult = astBuilder.parse(variableTable);
+if (parseResult.success) {
+    const writeResult = stringWriter.writeAst(util.ok(parseResult.value), variableTable);
+    console.log(writeResult);
+}
+```
+
+### Project Files ###
+
+The API supports `.dlproj` project files for batch processing:
+
+```typescript
+// Compile an entire project
+const projectResults = await api.compileFile('./docs/project.dlproj');
+
+// Project files define multiple documents
+// See the CLI documentation for .dlproj file format
+```
+
+### Error Handling ###
+
+All API methods return `Result<T>` objects with success/failure information:
+
+```typescript
+const results = await api.compileFile('./source.dlisp', './output.md');
+
+results.forEach(result => {
+    if (result.success) {
+        // result.value contains the success message or output path
+        console.log(`Success: ${result.value}`);
+    } else {
+        // result.message contains error details
+        // result.documentPath contains the file path with the error
+        console.error(`Error in ${result.documentPath}: ${result.message}`);
+    }
+});
+```
 
 ## Learn More ##
 

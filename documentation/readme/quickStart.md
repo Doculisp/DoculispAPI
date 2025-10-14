@@ -1,6 +1,6 @@
 <!-- (dl (section-meta Get Started)) -->
 
-Get up and running with Doculisp in just 5 minutes! 
+Get up and running with the Doculisp API in just 5 minutes! 
 
 <!-- (dl (# What is Doculisp?)) -->
 
@@ -9,33 +9,64 @@ Doculisp solves the **documentation maintenance problem**. Instead of managing o
 **Before Doculisp:** One huge README.md file with merge conflicts  
 **After Doculisp:** Multiple small, focused files with clean collaboration
 
-<!-- (dl (# Quick Start)) -->
+<!-- (dl (# API Quick Start)) -->
 
 ### 1. Install ###
 
 ```bash
-npm install -g doculisp
+npm install doculisp-api
 ```
 
-### 2. Create main.md ###
+### 2. Basic Usage ###
 
-```markdown
-<!--
-(dl
-    (section-meta
-        (title My Project)
-        (include
-            (Installation ./install.md)
-            (Usage ./usage.md)
-        )
+```typescript
+import { DoculispApi } from 'doculisp-api';
+
+// Initialize the API
+const api = await DoculispApi.create();
+
+// Compile a Doculisp file to markdown
+const results = await api.compileFile('./docs/main.dlisp', './README.md');
+
+// Check results
+results.forEach(result => {
+    if (result.success) {
+        console.log(`✓ ${result.value}`);
+    } else {
+        console.error(`✗ ${result.message}`);
+    }
+});
+```
+
+### 3. Test/Validate Files ###
+
+```typescript
+// Test a file without writing output
+const testResults = await api.testFile('./docs/main.dlisp');
+
+testResults.forEach(result => {
+    if (result.success) {
+        console.log(`✓ Valid: ${result.value}`);
+    } else {
+        console.error(`✗ Error: ${result.message}`);
+    }
+});
+```
+
+### 4. Create Doculisp Files ###
+
+**main.dlisp:**
+```doculisp
+(section-meta
+    (title My Project)
+    (include
+        (Installation ./install.md)
+        (Usage ./usage.md)
     )
 )
--->
 
-<!-- (dl (content (toc))) -->
+(content (toc))
 ```
-
-### 3. Create section files ###
 
 **install.md:**
 ````markdown
@@ -56,13 +87,7 @@ myProject.run();
 ```
 ````
 
-### 4. Compile ###
-
-```bash
-doculisp main.md README.md
-```
-
-**Result:** Complete README with table of contents and combined sections.
+**Result:** Complete README with table of contents and combined sections programmatically generated.
 
 <!-- (dl (# Next Steps)) -->
 
