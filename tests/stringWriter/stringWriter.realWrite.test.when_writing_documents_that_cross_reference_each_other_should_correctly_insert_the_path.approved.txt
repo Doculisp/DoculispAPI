@@ -1,8 +1,8 @@
-D:\Development\github\Doculisp\DoculispTypeScript\tests\Sample\project\simple.md
+D:\Development\github\Doculisp\DoculispApi\tests\Sample\project\simple.md
 
-D:\Development\github\Doculisp\DoculispTypeScript\tests\Sample\project\linked.md
+D:\Development\github\Doculisp\DoculispApi\tests\Sample\project\linked.md
 
-D:\Development\github\Doculisp\DoculispTypeScript\tests\Sample\second.md
+D:\Development\github\Doculisp\DoculispApi\tests\Sample\second.md
 
 <!-- GENERATED DOCUMENT DO NOT EDIT! -->
 <!-- prettier-ignore-start -->
