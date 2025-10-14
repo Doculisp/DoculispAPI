@@ -1,0 +1,13 @@
+{
+  "01 Parse Ast": {
+    "sourcePath": "./someFile.md"
+  },
+  "02 Convert to Markdown": {
+    "astMaybe": {
+      "success": true,
+      "value": {
+        "type": "doculisp-empty"
+      }
+    }
+  }
+}

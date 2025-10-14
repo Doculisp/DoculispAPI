@@ -1,0 +1,5 @@
+{
+  "documentPath": "main.dlisp",
+  "message": "The subtitle block at 'main.dlisp' Line: 4, Char: 6 is missing the subtitle text.",
+  "success": false
+}
