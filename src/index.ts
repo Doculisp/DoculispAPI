@@ -13,7 +13,7 @@ import { IStringWriter } from './types/types.stringWriter';
 import { IVariableTable, sourceKey } from './types/types.variableTable';
 import { PathConstructor } from './types/types.filePath';
 import { IUtil } from './types/types.general';
-import { IContainer } from './types/types.containers';
+import { IContainer, ITestableContainer } from './types/types.containers';
 
 /**
  * Main API class for Doculisp document compilation
@@ -30,7 +30,18 @@ export class DoculispApi {
      */
     static async create(): Promise<DoculispApi> {
         const container = await containerPromise;
-        return new DoculispApi(container);
+        return new DoculispApi(container.buildTestable()); // Use a testable container to prevent the API from having a global state
+    }
+
+    /**
+     * Create a testable API instance with an isolated container
+     * @returns A tuple containing the testable container and the API instance
+     */
+    static async createTestable(): Promise<[ITestableContainer, DoculispApi]> {
+        const baseContainer = await containerPromise;
+        const testableContainer = baseContainer.buildTestable();
+        const api = new DoculispApi(testableContainer);
+        return [testableContainer, api];
     }
 
     /**

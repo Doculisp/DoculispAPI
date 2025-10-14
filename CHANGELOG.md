@@ -7,76 +7,115 @@
 
 # Changelog #
 
-1. Release: [[3.4.12] - 2025-09-23](#3412---2025-09-23)
-2. Release: [[3.4.10] - 2025-09-16](#3410---2025-09-16)
-3. Release: [[3.4.8] - 2025-09-15](#348---2025-09-15)
-4. Release: [[3.4.9] - 2025-09-15](#349---2025-09-15)
-5. Release: [[3.4.6] - 2025-09-13](#346---2025-09-13)
-6. Release: [[3.4.5] - 2025-09-12](#345---2025-09-12)
-7. Release: [[3.4.4] - 2025-09-11](#344---2025-09-11)
-8. Older: [Previous Releases](#previous-releases)
+1. Current Release: [[1.0.1] - 2025-10-14](#101---2025-10-14)
+2. Initial Release: [[1.0.0] - 2025-10-14](#100---2025-10-14)
+3. CLI Version History: [CLI Version History (Pre-API Extraction)](#cli-version-history-pre-api-extraction)
 
-## [3.4.12] - 2025-09-23 ##
+## [1.0.1] - 2025-10-14 ##
+
+### Fixed ###
+
+- **Package Dependencies**: Fixed missing dependencies in package.json
+  - Added proper dependency declarations for production use
+  - Improved installation reliability for downstream consumers
+  - Ensures all required modules are available when installed as a library
 
 ### Improved ###
 
-- **TypeScript API Export**: Exported all types to make the API easier to use for TypeScript developers
-  - Public types are now available for import to improve development experience
-  - Enhanced type safety and IntelliSense support for API consumers
-  - Simplified integration for TypeScript projects using DoculispTypeScript as a library
+- **Documentation**: Enhanced API documentation and usage examples
+  - Clearer installation and setup instructions
+  - Better code examples for common use cases
+  - Improved TypeScript integration guidance
 
-## [3.4.10] - 2025-09-16 ##
+## [1.0.0] - 2025-10-14 ##
 
-### Fixed ###
+### New Project ###
 
-- **Multiline Code Block Parsing**: Fixed a bug where multiline code blocks defined with 4 or more backticks would cause the compiler to fail and report a malformed markdown document
-  - Code blocks with 4+ backticks are now properly recognized and parsed
-  - Closing markers no longer require trailing whitespace and can end at line boundaries
-  - Prevents compilation failures for valid markdown documents containing extended code blocks
+This marks the initial release of **Doculisp API** as an independent library, extracted from the Doculisp CLI project to provide a dedicated API for building markdown documents with Doculisp DSL.
 
-## [3.4.8] - 2025-09-15 ##
+### Features ###
 
-### Improved ###
+- **Complete Parsing Pipeline**: Full document processing from Doculisp source to markdown output
+  - Document parser for `.md` and `.dlisp` files
+  - Token parser for Doculisp syntax analysis
+  - AST parser for syntax tree construction
+  - Doculisp semantic parser for document structure validation
+  - Include builder for external file resolution
+  - String writer for final markdown generation
 
-- **Package Distribution**: Added `.npmignore` file to reduce package size and exclude development files from npm distribution
-  - Excludes TypeScript source files, tests, and development configurations
-  - Reduces package download size for end users
-  - Improves installation performance
-  - Only includes essential runtime files in published package
+- **TypeScript API**: Comprehensive TypeScript API with full type definitions
+  - All parsing pipeline components available as importable modules
+  - Type-safe interfaces for all data structures
+  - Generic parser system for extensibility
+  - Container-based dependency injection system
 
-## [3.4.9] - 2025-09-15 ##
+- **File System Abstraction**: Flexible file handling for different environments
+  - Abstract file system interfaces for testability
+  - Support for both synchronous and asynchronous operations
+  - Working directory management for relative path resolution
 
-### Fixed ###
+- **Project Support**: Handle multi-document projects with `.dlproj` files
+  - Batch processing of multiple documents
+  - Consistent variable sharing across document hierarchy
+  - Configurable output paths and compilation options
 
-- Fixed an issue in `quickStart.md` where there was an attempt to nest multiline code blocks, which caused formatting problems. The code blocks are now properly formatted for clarity and compatibility.
+- **Comprehensive Testing**: Full test suite with approval testing patterns
+  - Unit tests for all pipeline components
+  - Integration tests for complete workflows
+  - Mock system for file operations
+  - JSON and markdown verification patterns
 
-## [3.4.6] - 2025-09-13 ##
+### Migration from CLI ###
 
-### Fixed ###
+This API library was extracted from the Doculisp CLI to enable:
+- **Library Integration**: Use Doculisp functionality in other Node.js applications
+- **Custom Tooling**: Build custom tools and extensions using Doculisp parsing
+- **Programmatic Access**: Process Doculisp documents programmatically
+- **Framework Integration**: Integrate with build systems, IDEs, and other development tools
 
-- **Project File Testing**: Fixed `-t` flag now works for project files
-  - Command line testing mode properly supports `.dlproj` files
-  - Enables syntax validation without output file generation for projects
+The CLI functionality continues to be available in the separate `doculisp` package, while this library focuses purely on the API functionality.
 
-## [3.4.5] - 2025-09-12 ##
+## CLI Version History (Pre-API Extraction) ##
 
-### Fixed ###
+This archive contains the version history from when this functionality was part of the Doculisp CLI project. These versions (2.9.0 through 3.4.12) represent the evolution of the parsing and API functionality before it was extracted into this dedicated API library.
 
-- **Cross-Document Linking**: Fixed inter-document linking to headers
-  - Improved reliability of header references across multiple documents
-  - Enhanced anchor generation and resolution
+The current Doculisp API project begins with version 1.0.0, which represents the extraction of this functionality from the CLI into an independent library.
 
-## [3.4.4] - 2025-09-11 ##
+### Historical Context ###
 
-### Fixed ###
+The Doculisp CLI project contained both:
+- Command-line interface functionality
+- Core parsing and document processing functionality (now this API)
 
-- **Path Resolution**: Fixed issue where path was not always complete in cross-document linking using `get-path` function
-  - Improved path resolution accuracy for cross-document references
-  - Enhanced reliability of document linking across complex project structures
+In October 2025, the core functionality was extracted into this dedicated API library to:
+- Enable programmatic use of Doculisp functionality
+- Support library integration in other projects
+- Provide a focused API without CLI dependencies
+- Allow independent versioning of API vs CLI features
 
-## Previous Releases ##
+### CLI Version References ###
 
-[Previous Change Logs](./PREVIOUS-CHANGELOG.md)
+For reference, the CLI versions that contributed to this API functionality include:
+
+- **3.4.12** (2025-09-23): TypeScript API Export improvements
+- **3.4.10** (2025-09-20): Error handling and parsing improvements
+- **3.4.9** (2025-09-16): Documentation and API enhancements
+- **3.4.8** (2025-09-13): Parser stability and performance improvements
+- **3.4.7** (2025-09-10): String writer and output formatting improvements
+- **3.4.6** (2025-09-06): Include builder and file resolution enhancements
+- **3.4.5** (2025-09-03): AST parser and semantic validation improvements
+- **3.4.4** (2025-08-30): Token parser and syntax handling improvements
+- **3.4.3** (2025-08-27): Document parser and file handling improvements
+- **3.4.2** (2025-08-24): Core parsing pipeline enhancements
+- **3.4.0** (2025-08-20): Major parsing architecture improvements
+- **3.3.0** (2025-08-15): Container system and dependency injection
+- **3.2.0** (2025-08-10): Project file support and batch processing
+- **3.1.0** (2025-08-05): Advanced parsing features and error handling
+- **3.0.0** (2025-08-01): Complete rewrite of parsing system
+- **2.9.1** (2025-07-25): Bug fixes and stability improvements
+- **2.9.0** (2025-07-20): Initial TypeScript migration and API foundation
+
+The detailed history of these versions remains available in the original Doculisp CLI project repository.
 
 <!-- Written By: Jason Kerney -->
 <!-- markdownlint-restore -->

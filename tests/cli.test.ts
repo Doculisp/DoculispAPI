@@ -6,8 +6,8 @@ describe('Doculisp API', () => {
     let api: DoculispApi;
     const testProjectFile = path.resolve('./documentation/doculisp.dlproj');
 
-    beforeAll(async () => {
-        api = await DoculispApi.create();
+    beforeEach(async () => {
+        [, api] = await DoculispApi.createTestable();
     });
 
     describe('testFile method', () => {
