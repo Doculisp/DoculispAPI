@@ -30,7 +30,7 @@ export class DoculispApi {
      */
     static async create(): Promise<DoculispApi> {
         const container = await containerPromise;
-        return new DoculispApi(container.buildTestable()); // Use a testable container to prevent the API from having a global state
+        return new DoculispApi(container);
     }
 
     /**

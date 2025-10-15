@@ -19,7 +19,7 @@ describe('the registry', () => {
     });
 
     it('should throw an exception when building something that has not been registered', () => {
-        expect(() => testable.build('bad module')).toThrow('No module called "bad module" registered');
+        expect(() => testable.build('bad module')).toThrow('Build failed: No module named \'bad module\' is registered.');
     });
 
     it('should restoreAll replaced modules', () => {
@@ -98,6 +98,15 @@ describe('the registry', () => {
     });
 
     describe('has a register method that', () => {
+        it('should require a valid name for registration', () => {
+            let registerable: any = {
+                builder: function test() { return {}; },
+                name: null,
+            };
+    
+            expect(() => { testable.register(registerable); }).toThrow('Registration failed: Module name is required.');
+        });
+
         it('should register an item and call its function when built', () => {
             let fn = jest.fn();
             const expected = { value: 'hello' };
@@ -169,7 +178,7 @@ describe('the registry', () => {
                 register(blue).
                 register(orange);
     
-            expect(() => { testable.build('orange'); }).toThrow('Circular dependencies between ("orange" => "blue" => "orange")');
+            expect(() => { testable.build('orange'); }).toThrow('Build failed: Circular dependency detected: "orange" => "blue" => "orange".');
         });
 
         it('should call builder function each time the item is built.', () => {
@@ -259,7 +268,7 @@ describe('the registry', () => {
             };
     
             testable.register(blue);
-            expect(() => { testable.register(orange); }).toThrow('Module named "blue" already registered.');
+            expect(() => { testable.register(orange); }).toThrow('Registration failed: Module \'blue\' is already registered.');
         });
     
         it('should allow for the registration of a value with a name property', () => {
@@ -278,7 +287,7 @@ describe('the registry', () => {
         it('should not allow for registration of value without name prop or provided name', () => {
             const value = { word: 'hello' };
     
-            expect(() => { testable.registerValue(value); }).toThrow('Most provide a name as a property or a parameter when registering a value as a module.');
+            expect(() => { testable.registerValue(value); }).toThrow('Registration failed: Module name must be provided either as a property or parameter.');
         });
     
         it('should allow value to be registered when given a name parameter.', () => {
@@ -302,7 +311,7 @@ describe('the registry', () => {
             let result = testable.build('dog');
     
             expect(result).toBe(expected);
-            expect(() => {testable.build('expectedThing'); }).toThrow('No module called "expectedThing" registered');
+            expect(() => {testable.build('expectedThing'); }).toThrow('Build failed: No module named \'expectedThing\' is registered.');
         });
     });
 
@@ -320,7 +329,7 @@ describe('the registry', () => {
         });
 
         it('should fail registration if function does not have name and no name is provided.', () => {
-            expect(() => { testable.registerBuilder(() => 'black', []); }).toThrow('Must provide a name on the function or as a parameter to register a builder.');
+            expect(() => { testable.registerBuilder(() => 'black', []); }).toThrow('Registration failed: Function name is required either on the function or as a parameter.');
         });
 
         it('should register the builder by the name parameter if provided.', () => {
@@ -333,7 +342,7 @@ describe('the registry', () => {
 
             expect(fn).toHaveBeenCalledWith();
             expect(result).toBe(65);
-            expect(() => { testable.build('neon'); }).toThrow('No module called "neon" registered');
+            expect(() => { testable.build('neon'); }).toThrow('Build failed: No module named \'neon\' is registered.');
         });
 
         it('should build the dependencies when built', () => {
@@ -438,7 +447,7 @@ describe('the registry', () => {
                 name: 'getNumberTest',
             };
 
-            expect(() => { testable.replace(registerable); }).toThrow('Cannot replace module "getNumberTest" as it has not been registered.');
+            expect(() => { testable.replace(registerable); }).toThrow('Replacement failed: Module \'getNumberTest\' is not registered.');
         });
 
         it('should not let you replace a module that has been replaced', () => {
@@ -460,7 +469,7 @@ describe('the registry', () => {
             testable.register(registerable);
             testable.replace(aRegisterable);
 
-            expect(() => testable.replace(bRegisterable)).toThrow('Cannot replace module "replaced" as it has not been registered.');
+            expect(() => testable.replace(bRegisterable)).toThrow('Replacement failed: Module \'replaced\' is not registered.');
         });
 
         it('should allow you to replace a non singleton with a singleton', () => {
@@ -601,7 +610,7 @@ describe('the registry', () => {
 
             testable.register(registerable);
 
-            expect(() => { testable.replaceBuilder(() => {}, []); }).toThrow('Must provide a name either on the passed method or parameter to replace builder.');
+            expect(() => { testable.replaceBuilder(() => {}, []); }).toThrow('Replacement failed: Builder name is required either on the function or as a parameter.');
         });
 
         it('should allow replacement with anonymous function if name is passed', () => {
@@ -667,7 +676,7 @@ describe('the registry', () => {
         it('should not allow a replacement with no name attribute or name parameter', () => {
             testable.registerBuilder(() => {}, [], 'grey');
 
-            expect(() => testable.replaceValue({ orange: 'jam' })).toThrow('Cannot replace value unless it has a name property or the name is passed as a parameter.');
+            expect(() => testable.replaceValue({ orange: 'jam' })).toThrow('Replacement failed: Value name must be provided either as a property or parameter.');
         });
 
         it('should allow replacement of module when name is passed as a parameter', () => {
@@ -693,7 +702,7 @@ describe('the registry', () => {
         });
 
         it('should not allow replacement of anonymous function if no name is given as a parameter', () => {
-            expect(() => testable.replacePackageBuilder(() => { return {}; })).toThrow('Must provide a name either on the passed method or parameter to replace package builder.')
+            expect(() => testable.replacePackageBuilder(() => { return {}; })).toThrow('Replacement failed: Package builder name is required either on the function or as a parameter.');
         });
 
         it('should allow replacement of anonymous function if name is give as a parameter', () => {
@@ -726,7 +735,7 @@ describe('the registry', () => {
         });
 
         it('should not replace a package with value that does not have a name if no name is provided as a parameter.', () => {
-            expect(() => testable.replacePackageValue({ bad: true })).toThrow('Cannot replace package with value unless it has a name property or the name is passed as a parameter.')
+            expect(() => testable.replacePackageValue({ bad: true })).toThrow('Replacement failed: Package value name must be provided either as a property or parameter.');
         });
 
         it('should allow for a value without a name property if the name is passed as a parameter.', () => {

@@ -125,7 +125,7 @@ class Container implements ITestableContainer {
     _register(registry: IDictionary<IRegisterable>, registerable: IRegisterable): ITestableContainer {
         let key = registerable.name;
         if (this._hasKey(registry, key)) {
-            throw new Error(`Module named "${key}" already registered.`);
+            throw new Error(`Registration failed: Module '${key}' is already registered.`);
         }
 
         registry[key] = registerable;
@@ -134,7 +134,7 @@ class Container implements ITestableContainer {
 
     register(registerable: IRegisterable): ITestableContainer {
         if (!registerable.name) {
-            throw new Error('Must have a valid name to be registered.');
+            throw new Error('Registration failed: Module name is required.');
         }
         this._register(this._registry, registerable);
         return this;
@@ -142,7 +142,7 @@ class Container implements ITestableContainer {
     
     registerValue(value: any, name?: string | undefined): ITestableContainer {
         if (!value.name && !name) {
-            throw new Error('Most provide a name as a property or a parameter when registering a value as a module.');
+            throw new Error('Registration failed: Module name must be provided either as a property or parameter.');
         }
 
         const registerable: IRegisterable = {
@@ -156,7 +156,7 @@ class Container implements ITestableContainer {
     
     registerBuilder(fn: (...args: any[]) => any, dependencies: string[], name?: string | undefined, singleton?: boolean | undefined): ITestableContainer {
         if(!fn.name && !name) {
-            throw new Error('Must provide a name on the function or as a parameter to register a builder.');
+            throw new Error('Registration failed: Function name is required either on the function or as a parameter.');
         }
 
         const registerable: IRegisterable = {
@@ -187,7 +187,7 @@ class Container implements ITestableContainer {
             }
 
             if (!t) {
-                throw new Error(`No module called "${moduleName}" registered`);
+                throw new Error(`Build failed: No module named '${moduleName}' is registered.`);
             }
             this.registerBuilder(() => t, [], moduleName);
             moduleBuilder = this._registry[moduleName] as IRegisterable;
@@ -205,7 +205,7 @@ class Container implements ITestableContainer {
 
         if (recursive) {
             let recursiveModules = recursive.reverse().map(name => `"${name}"`).join(' => ');
-            throw new Error(`Circular dependencies between (${recursiveModules})`);
+            throw new Error(`Build failed: Circular dependency detected: ${recursiveModules}.`);
         }
 
         modules[modules.length] = moduleName;
@@ -246,10 +246,10 @@ class Container implements ITestableContainer {
     _replace(registerable: IRegisterable, isPackage?: boolean) : ITestableContainer {
         let key = registerable.name;
         if(!isPackage && !this._hasKey(this._registry, key)) {
-            throw new Error(`Cannot replace module "${key}" as it has not been registered.`);
+            throw new Error(`Replacement failed: Module '${key}' is not registered.`);
         }
         if(!isPackage && this._hasKey(this._replacements, key)) {
-            throw new Error (`Cannot replace module "${key}" as it has not been registered.`)
+            throw new Error(`Replacement failed: Module '${key}' is not registered.`);
         }
 
         return this._register(this._replacements, registerable);
@@ -261,7 +261,7 @@ class Container implements ITestableContainer {
     
     replaceBuilder(fn: (...args: any[]) => any, dependencies: string[], name?: string | undefined, singleton?: boolean | undefined): ITestableContainer {
         if (!fn.name && !name) {
-            throw new Error('Must provide a name either on the passed method or parameter to replace builder.');
+            throw new Error('Replacement failed: Builder name is required either on the function or as a parameter.');
         }
 
         let registerable: IRegisterable = {
@@ -277,7 +277,7 @@ class Container implements ITestableContainer {
     replaceValue(value: any, name?: string | undefined): ITestableContainer {
         let key = name ?? value.name;
         if (!key) {
-            throw new Error('Cannot replace value unless it has a name property or the name is passed as a parameter.');
+            throw new Error('Replacement failed: Value name must be provided either as a property or parameter.');
         }
 
         return this.replaceBuilder(() => { return value; }, [], key, true);
@@ -285,7 +285,7 @@ class Container implements ITestableContainer {
     
     replacePackageBuilder(fn: (...args: any[]) => any, name?: string | undefined, singleton?: boolean | undefined): ITestableContainer {
         if(!fn.name && !name) {
-            throw new Error('Must provide a name either on the passed method or parameter to replace package builder.');
+            throw new Error('Replacement failed: Package builder name is required either on the function or as a parameter.');
         }
 
         let registerable: IRegisterable = {
@@ -299,7 +299,7 @@ class Container implements ITestableContainer {
     
     replacePackageValue(value: any, name?: string | undefined): ITestableContainer {
         if(!value.name && !name) {
-            throw new Error('Cannot replace package with value unless it has a name property or the name is passed as a parameter.');
+            throw new Error('Replacement failed: Package value name must be provided either as a property or parameter.');
         }
 
         return this.replacePackageBuilder(() => value, name ?? value.name);
