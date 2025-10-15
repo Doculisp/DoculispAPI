@@ -1,8 +1,8 @@
-import { AtomAst, IAstContainer, IAstParser, IAstAtom, IAstCommand, IAstEmpty, IAstParameter, IAstValue, RootAst, CoreAst } from "../types/types.ast";
+import { IdentifierAst, IAstContainer, IAstParser, IAstIdentifier, IAstCommand, IAstEmpty, IAstParameter, IAstValue, RootAst, CoreAst } from "../types/types.ast";
 import { IRegisterable } from "../types/types.containers";
 import { ILocation, IUtil, Result } from "../types/types.general";
 import { IInternals, StepParseResult } from "../types/types.internal";
-import { AtomToken, ParameterToken, TextToken, Token, TokenizedDocument } from "../types/types.tokens";
+import { IdentifierToken, ParameterToken, TextToken, Token, TokenizedDocument } from "../types/types.tokens";
 import { ITrimArray } from "../types/types.trimArray";
 
 function buildAstParser(util: IUtil, internals: IInternals, trimArray: ITrimArray): IAstParser {
@@ -22,24 +22,24 @@ function buildAstParser(util: IUtil, internals: IInternals, trimArray: ITrimArra
         };
     }
 
-    function parseAtomToken(atom: AtomToken): IAstAtom {
+    function parseIdentifierToken(identifier: IdentifierToken): IAstIdentifier {
         return {
-            type: 'ast-atom',
-            location: atom.location,
-            value: atom.text,
+            type: 'ast-identifier',
+            location: identifier.location,
+            value: identifier.text,
         }
     }
 
-    function parseCommandToken(atom: AtomToken, parameter: ParameterToken): IAstCommand {
+    function parseCommandToken(identifier: IdentifierToken, parameter: ParameterToken): IAstCommand {
         return {
             type: 'ast-command',
-            value: atom.text,
+            value: identifier.text,
             parameter: parseParameterToken(parameter),
-            location: atom.location
+            location: identifier.location
         }
     }
 
-    function parseContainerToken(command: AtomToken, ast: AtomAst[]): IAstContainer {
+    function parseContainerToken(command: IdentifierToken, ast: IdentifierAst[]): IAstContainer {
         return {
             type: 'ast-container',
             subStructure: ast,
@@ -48,15 +48,15 @@ function buildAstParser(util: IUtil, internals: IInternals, trimArray: ITrimArra
         };
     }
 
-    function parseAtom(input: Token[], current: ILocation): StepParseResult<Token[], IAstAtom> {
+    function parseIdentifier(input: Token[], current: ILocation): StepParseResult<Token[], IAstIdentifier> {
         if(input.length < 2) {
             return internals.noResultFound();
         }
 
-        const atom = input[0] as Token;
+        const identifier = input[0] as Token;
         const close = input[1] as Token;
 
-        if(atom.type !== 'token - atom') {
+        if(identifier.type !== 'token - identifier') {
             return internals.noResultFound();
         }
 
@@ -66,7 +66,7 @@ function buildAstParser(util: IUtil, internals: IInternals, trimArray: ITrimArra
 
         return util.ok({
             type: 'parse result',
-            subResult: parseAtomToken(atom),
+            subResult: parseIdentifierToken(identifier),
             location: current,
             rest: trimArray.trim(2, input),
         });
@@ -100,7 +100,7 @@ function buildAstParser(util: IUtil, internals: IInternals, trimArray: ITrimArra
         const parameter = input[1] as Token;
         const closeCommand = input[2] as Token;
 
-        if(command.type !== 'token - atom') {
+        if(command.type !== 'token - identifier') {
             return internals.noResultFound();
         }
 
@@ -126,17 +126,17 @@ function buildAstParser(util: IUtil, internals: IInternals, trimArray: ITrimArra
         }
 
         const container = input[0] as Token;
-        const atom = input[0] as Token;
+        const identifier = input[0] as Token;
 
-        if(container.type !== 'token - atom') {
+        if(container.type !== 'token - identifier') {
             return internals.noResultFound();
         }
 
-        if (atom.type !== 'token - atom') {
+        if (identifier.type !== 'token - identifier') {
             return internals.noResultFound();
         }
 
-        const parser = internals.createArrayParser<Token, AtomAst>(parseAtom, parseCommand, parseContainer);
+        const parser = internals.createArrayParser<Token, IdentifierAst>(parseIdentifier, parseCommand, parseContainer);
         const parsed = parser.parse(trimArray.trim(1, input), container.location);
 
         if(!parsed.success) {
@@ -172,7 +172,7 @@ function buildAstParser(util: IUtil, internals: IInternals, trimArray: ITrimArra
             });
         }
 
-        const parser = internals.createArrayParser<Token, CoreAst>(parseText, parseCommand, parseAtom, parseContainer);
+        const parser = internals.createArrayParser<Token, CoreAst>(parseText, parseCommand, parseIdentifier, parseContainer);
         const parsed = parser.parse(tokenDoc.tokens, (tokenDoc.tokens[0] as Token).location);
 
         if(!parsed.success) {

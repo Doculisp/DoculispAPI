@@ -1,4 +1,4 @@
-import { AtomAst, CoreAst, IAstEmpty, RootAst } from "../types/types.ast";
+import { IdentifierAst, CoreAst, IAstEmpty, RootAst } from "../types/types.ast";
 import { IProjectDocument, IProjectDocuments, IProjectParser } from "../types/types.astProject";
 import { IRegisterable } from "../types/types.containers";
 import { IPath, PathConstructor } from "../types/types.filePath";
@@ -39,7 +39,7 @@ function buildAstProject(internals: IInternals, util: IUtil, trimArray: ITrimArr
        function parseDocuments(input: CoreAst[], current: ILocation): StepParseResult<CoreAst[], IProjectDocuments> {
             const ast = input[0] as CoreAst;
 
-            if(ast.type !== 'ast-atom' && ast.type !== 'ast-container') {
+            if(ast.type !== 'ast-identifier' && ast.type !== 'ast-container') {
                 return internals.noResultFound();
             }
 
@@ -47,7 +47,7 @@ function buildAstProject(internals: IInternals, util: IUtil, trimArray: ITrimArr
                 return internals.noResultFound();
             }
 
-            if(ast.type === 'ast-atom') {
+            if(ast.type === 'ast-identifier') {
                 const empty: IProjectDocuments = {
                     type: 'project-documents',
                     documents: [],
@@ -63,7 +63,7 @@ function buildAstProject(internals: IInternals, util: IUtil, trimArray: ITrimArr
             }
 
             const parser = internals.createArrayParser(parseDocument);
-            const maybe = parser.parse(ast.subStructure, (ast.subStructure[0] as AtomAst).location);
+            const maybe = parser.parse(ast.subStructure, (ast.subStructure[0] as IdentifierAst).location);
 
             if(!maybe.success) {
                 return maybe;
@@ -73,7 +73,7 @@ function buildAstProject(internals: IInternals, util: IUtil, trimArray: ITrimArr
 
             if(0 < remaining.remaining.length) {
                 const bad = remaining.remaining[0] as CoreAst;
-                return util.fail(`Documents block at '${current.documentPath.fullName}' Line: ${current.line}, Char: ${current.char} contains unknown atom of '${bad.value}' at Line: ${bad.location.line}, Char ${bad.location.char}.`, current.documentPath);
+                return util.fail(`Documents block at '${current.documentPath.fullName}' Line: ${current.line}, Char: ${current.char} contains unknown identifier of '${bad.value}' at Line: ${bad.location.line}, Char ${bad.location.char}.`, current.documentPath);
             }
 
             const documents: IProjectDocuments = {
@@ -91,7 +91,7 @@ function buildAstProject(internals: IInternals, util: IUtil, trimArray: ITrimArr
         }
 
         function parseSource(input: CoreAst[], current: ILocation): StepParseResult<CoreAst[], ISource> {
-            const ast = input[0] as AtomAst;
+            const ast = input[0] as IdentifierAst;
 
             if(ast.type !== 'ast-command') {
                 return internals.noResultFound();
@@ -116,7 +116,7 @@ function buildAstProject(internals: IInternals, util: IUtil, trimArray: ITrimArr
         }
 
         function parseOutput(input: CoreAst[], current: ILocation): StepParseResult<CoreAst[], IOutput> {
-            const ast = input[0] as AtomAst;
+            const ast = input[0] as IdentifierAst;
 
             if(ast.type !== 'ast-command') {
                 return internals.noResultFound();
@@ -157,8 +157,8 @@ function buildAstProject(internals: IInternals, util: IUtil, trimArray: ITrimArr
                 }
 
                 if(0 < remaining.remaining.length) {
-                    const first = remaining.remaining[0] as AtomAst;
-                    return util.fail(`Unknown atom at '${current.documentPath.fullName}' Line: ${first.location.line}, Char: ${first.location.char} of '${first.value}'`, current.documentPath);
+                    const first = remaining.remaining[0] as IdentifierAst;
+                    return util.fail(`Unknown identifier at '${current.documentPath.fullName}' Line: ${first.location.line}, Char: ${first.location.char} of '${first.value}'`, current.documentPath);
                 }
 
                 const sources = result.filter(r => r.type === 'i-source');
@@ -241,7 +241,7 @@ function buildAstProject(internals: IInternals, util: IUtil, trimArray: ITrimArr
 
                 return util.fail(`Duplicate id '${id}' at '${current.documentPath.fullName}' Line: ${current.line}, Char: ${current.char}.${msg}`, current.documentPath);
             }
-            return parseDocumentByParts(current, input, id)(ast.subStructure, (ast.subStructure[0] as AtomAst).location);
+            return parseDocumentByParts(current, input, id)(ast.subStructure, (ast.subStructure[0] as IdentifierAst).location);
         }
 
         function parseDocument(input: CoreAst[], current: ILocation): StepParseResult<CoreAst[], IProjectDocument> {
@@ -258,7 +258,7 @@ function buildAstProject(internals: IInternals, util: IUtil, trimArray: ITrimArr
             const parseByParts = parseDocumentByParts(current, false)
             const parser = internals.createArrayParser(parseByParts, parseDocId);
 
-            const maybe = parser.parse(ast.subStructure, (ast.subStructure[0] as AtomAst).location);
+            const maybe = parser.parse(ast.subStructure, (ast.subStructure[0] as IdentifierAst).location);
 
             if(!maybe.success) {
                 return maybe;
@@ -301,7 +301,7 @@ function buildAstProject(internals: IInternals, util: IUtil, trimArray: ITrimArr
 
         if(0 < remaining.remaining.length) {
             const bad = remaining.remaining[0] as CoreAst;
-            return util.fail(`Unknown atom at '${bad.location.documentPath.fullName}' Line: ${bad.location.line}, Char: ${bad.location.char} of '${bad.value}'.`, bad.location.documentPath);
+            return util.fail(`Unknown identifier at '${bad.location.documentPath.fullName}' Line: ${bad.location.line}, Char: ${bad.location.char} of '${bad.value}'.`, bad.location.documentPath);
         }
 
         if(0 === result.length) {

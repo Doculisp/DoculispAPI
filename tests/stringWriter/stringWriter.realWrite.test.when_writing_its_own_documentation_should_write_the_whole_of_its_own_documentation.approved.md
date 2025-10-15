@@ -76,7 +76,7 @@ A language for Readme.
 6. Language: [Content Block](#content-block)
 7. Language: [Dynamic Headings](#dynamic-headings)
 8. Language: [Comment Block](#comment-block)
-9. Language: [Key Atoms by Depth](#key-atoms-by-depth)
+9. Language: [Key Identifiers by Depth](#key-identifiers-by-depth)
 10. Structure: [".dlisp" files](#dlisp-files)
 11. Recognition: [Contributors ✨](#contributors-)
 
@@ -94,7 +94,7 @@ If the text under a subheading is small, I would recommend  not breaking it into
 
 ### Basic Structure ###
 
-The basic structure of Doculisp is all code is contained within blocks. A block is constructed within an HTML comment region. It starts with an open parentheses `(` followed by a sting of non-whitespace characters. This is called an atom. It then has 1 of three possibilities. It can have a parameter, a new block, or nothing. All blocks must close with a close parentheses `)`.
+The basic structure of Doculisp is all code is contained within blocks. A block is constructed within an HTML comment region. It starts with an open parentheses `(` followed by a sting of non-whitespace characters. This is called an identifier. It then has 1 of three possibilities. It can have a parameter, a new block, or nothing. All blocks must close with a close parentheses `)`.
 
 Even the Doculisp main block follows this.
 
@@ -110,7 +110,7 @@ Example
 -->
 ```
 
-The first block is the `dl` block. In it `dl` is the atom. It contains the `section-meta` sub-block.  That block has the atom `section-meta` followed by a further sub block. The last sub block is the `title` sub block. In it `title` is the atom and `Basic Structure` is the parameter.
+The first block is the `dl` block. In it `dl` is the identifier. It contains the `section-meta` sub-block.  That block has the identifier `section-meta` followed by a further sub block. The last sub block is the `title` sub block. In it `title` is the identifier and `Basic Structure` is the parameter.
 
 #### Parameter ####
 
@@ -119,10 +119,10 @@ A parameter is a string of characters that contains no line advancement (`\r` or
 #### Visual Explanation ####
 
 ```doculisp
-(atom)
-(atom parameter)
-(atom (atom2))
-(atom (atom2 second parameter))
+(identifier)
+(identifier parameter)
+(identifier (identifier2))
+(identifier (identifier2 second parameter))
 ```
 
 ### Doculisp Master Block ###
@@ -236,7 +236,7 @@ This will create a subsection called `section` that is built using the file `./t
 
 #### Exception to the Rule ####
 
-Comment block breaks this rule slightly. The astrict character is a special character that cause all atoms that start with to be treated as a comment, and all parameters and sub blocks to be ignored.
+Comment block breaks this rule slightly. The astrict character is a special character that cause all identifiers that start with to be treated as a comment, and all parameters and sub blocks to be ignored.
 
 ### Content Block ###
 
@@ -376,9 +376,9 @@ xample:
 
 In this example the `section-meta` and all its subblocks are commented out. However when you uncomment `section-meta` then the `include` block will be commented out. When you uncomment that block, then the `section ./comment.md` block will be commented out.
 
-### Key Atoms by Depth ###
+### Key Identifiers by Depth ###
 
-Here is a list of all the key atoms by depth:
+Here is a list of all the key identifiers by depth:
 
 * markdown
 * `dl`

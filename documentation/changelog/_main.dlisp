@@ -2,9 +2,10 @@
     (title Changelog)
     (* Only the most recent 10 versions are listed here, the rest are listed in the previous dlisp)
     (include
-        (Current-Release ./1_0_1.md)
-        (Initial-Release ./1_0_0.md)
-        (CLI-Version-History ./cli-version-archive.md)(* When 1.0.0 is moved to the previous dlisp move this also.)
+        (Release ./2_0_0.md)
+        (Release ./1_0_1.md)
+        (Release ./1_0_0.md)
+        (History ./cli-version-archive.md)(* When 1.0.0 is moved to the previous dlisp move this also.)
     )
     (author Jason Kerney)
 )

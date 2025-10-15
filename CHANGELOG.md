@@ -7,9 +7,47 @@
 
 # Changelog #
 
-1. Current Release: [[1.0.1] - 2025-10-14](#101---2025-10-14)
-2. Initial Release: [[1.0.0] - 2025-10-14](#100---2025-10-14)
-3. CLI Version History: [CLI Version History (Pre-API Extraction)](#cli-version-history-pre-api-extraction)
+1. Release: [[2.0.0] - TBD](#200---tbd)
+2. Release: [[1.0.1] - 2025-10-14](#101---2025-10-14)
+3. Release: [[1.0.0] - 2025-10-14](#100---2025-10-14)
+4. History: [CLI Version History (Pre-API Extraction)](#cli-version-history-pre-api-extraction)
+
+## [2.0.0] - TBD ##
+
+### Breaking Changes ###
+
+- **API Terminology**: Renamed all references from "atom" to "identifier" throughout the codebase
+  - **Token Types**: `AtomToken` → `IdentifierToken`
+  - **AST Types**: `IAstAtom` → `IAstIdentifier`, `AtomAst` → `IdentifierAst`
+  - **Parser Functions**: `parseAtom()` → `parseIdentifier()`, `tokenizeAtom()` → `tokenizeIdentifier()`
+  - **Type Interfaces**: Updated all type definitions to use "identifier" terminology
+  - **Documentation**: Updated all documentation, comments, and examples to reflect new terminology
+  - **Test Files**: Updated test names and expectations to use identifier terminology
+  - **Error Messages**: Changed error messages from "Unknown atom" to "Unknown identifier"
+
+### Improved ###
+
+- **Code Clarity**: The terminology change from "atom" to "identifier" provides clearer understanding of the language structure
+  - Function names and keywords in Doculisp are now consistently called "identifiers"
+  - More intuitive for developers familiar with programming language terminology
+  - Better alignment with standard compiler and parser terminology
+
+### Technical Details ###
+
+- **Parser Infrastructure**: All parser handlers updated to use identifier terminology
+- **Type System**: Complete type system refactoring for consistency
+- **Internal APIs**: All internal function signatures updated
+- **Language Server Integration**: Updated completion providers and syntax highlighting
+- **Testing Framework**: Comprehensive test updates with new approval test baselines
+
+### Migration Guide ###
+
+For users of the DoculispTypeScript API:
+- Update any references to `AtomToken` to use `IdentifierToken`
+- Replace `IAstAtom` with `IAstIdentifier` in type annotations
+- Change `AtomAst` to `IdentifierAst` where used
+- Update any custom parser extensions to use the new identifier terminology
+- Review any error handling that looked for "atom" in error messages - now use "identifier"
 
 ## [1.0.1] - 2025-10-14 ##
 

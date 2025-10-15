@@ -113,7 +113,7 @@ The **Tokenizer** is the **second stage** that converts parsed document content 
 <!-- (dl (## Overview)) -->
 
 **Primary Responsibilities:**
-- Convert Doculisp blocks into individual tokens (atoms, parameters, parentheses)
+- Convert Doculisp blocks into individual tokens (identifiers, parameters, parentheses)
 - Preserve text content as text tokens  
 - Handle nested parentheses and escape sequences
 - Maintain precise location tracking for error reporting
@@ -146,23 +146,23 @@ type TokenizedDocument = {
     readonly projectLocation: IProjectLocation; // Original document context
 }
 
-type Token = TextToken | CloseParenthesisToken | AtomToken | ParameterToken;
+type Token = TextToken | CloseParenthesisToken | IdentifierToken | ParameterToken;
 ```
 
 <!-- (dl (## Token Types)) -->
 
-**Atom Tokens** - Function names or keywords:
+**Identifier Tokens** - Function names or keywords:
 ```typescript
-// (section-meta) → AtomToken: "section-meta"
-// (title My Document) → AtomToken: "title"
-type AtomToken = {
-    readonly text: string;        // Atom name
+// (section-meta) → IdentifierToken: "section-meta"
+// (title My Document) → IdentifierToken: "title"
+type IdentifierToken = {
+    readonly text: string;        // Identifier name
     readonly location: ILocation; // Position in source
-    readonly type: 'token - atom';
+    readonly type: 'token - identifier';
 }
 ```
 
-**Parameter Tokens** - Arguments passed to atoms:
+**Parameter Tokens** - Arguments passed to identifiers:
 ```typescript
 // (title My Document Title) → ParameterToken: "My Document Title"
 type ParameterToken = {
@@ -278,7 +278,7 @@ interface IAstText {
 **Expression Nodes** - Doculisp expressions:
 ```typescript
 interface IAstExpression {
-    readonly atom: string;         // Function name (e.g., "section-meta")
+    readonly identifier: string;         // Function name (e.g., "section-meta")
     readonly parameters: string[]; // Arguments to the function
     readonly location: ILocation;  // Position in source
     readonly parts: AstPart[];     // Nested expressions
@@ -299,7 +299,7 @@ interface IAstEmpty {
 The AstParser processes tokens through several stages:
 
 1. **Token Validation**: Ensures proper token sequence and structure
-2. **Expression Building**: Groups atoms with their parameters and children  
+2. **Expression Building**: Groups identifiers with their parameters and children  
 3. **Hierarchy Construction**: Builds nested expression trees
 4. **Text Preservation**: Maintains original text content alongside structure
 5. **Location Tracking**: Preserves precise source location information
@@ -436,7 +436,7 @@ async function getSyntaxTokens(document: string, filePath: string): Promise<Synt
 
 function mapTokenTypeToSyntaxHighlight(tokenType: string): string {
     switch (tokenType) {
-        case 'token - atom': return 'keyword';
+        case 'token - identifier': return 'keyword';
         case 'token - parameter': return 'string'; 
         case 'token - text': return 'comment';
         case 'token - close parenthesis': return 'delimiter';
@@ -567,7 +567,7 @@ function analyzeASTNodes(astParts: AstPart[]): StructureElement[] {
         if (part.type === 'ast-expression') {
             elements.push({
                 type: 'expression',
-                atom: part.atom,
+                identifier: part.identifier,
                 parameters: part.parameters,
                 location: part.location,
                 children: analyzeASTNodes(part.parts)
@@ -592,7 +592,7 @@ interface DocumentAnalysis {
 
 interface StructureElement {
     type: 'expression' | 'text';
-    atom?: string;
+    identifier?: string;
     parameters?: string[];
     content?: string;
     location: ILocation;

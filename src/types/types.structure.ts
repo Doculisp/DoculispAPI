@@ -1,18 +1,18 @@
 export interface IValidateSubItem {
-    isValidSubAtom(name: string): boolean;
-    getStructureForSubAtom(name: string): IStructure | false;
-    getMandatorySubAtoms(): IStructure[];
+    isValidSubIdentifier(name: string): boolean;
+    getStructureForSubIdentifier(name: string): IStructure | false;
+    getMandatorySubIdentifiers(): IStructure[];
 }
 
 export interface IStructure {
     hasParameter: true | false | 'maybe';
-    hasSubAtom: false | IValidateSubItem;
+    hasSubIdentifier: false | IValidateSubItem;
     mandatory?: true;
     type: 'comment' | 'section' | 'include' | 'ref-link' | 'subtitle' | 'title' | 'section-meta' | 'toc' | 'content' | 'header';
 };
 
 export interface IRootStructure {
     hasParameter: false;
-    SubAtoms: IValidateSubItem;
+    SubIdentifiers: IValidateSubItem;
     type: 'dl';
 };

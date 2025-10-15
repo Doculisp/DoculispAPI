@@ -185,45 +185,44 @@ function buildTokenize(doesIt: ILispSearches, internals: IInternals, util: IUtil
             return internals.noResultFound()
         }
     
-        function tokenizeAtom(input: string, current: ILocation): StringStepParseResult<Token> {
+        function tokenizeIdentifier(input: string, current: ILocation): StringStepParseResult<Token> {
             let doesItStartWithWord = /^[^\(\)\s]+/;
             if(doesItStartWithWord.test(input) && isToken) {
-                let atomValue: string = (input.match(doesItStartWithWord) as any)[0];
-    
-                let atom: Token = {
-                    type: 'token - atom',
-                    text: atomValue,
+                let identifierValue: string = (input.match(doesItStartWithWord) as any)[0];
+
+                let identifier: Token = {
+                    type: 'token - identifier',
+                    text: identifierValue,
                     location: current,
                 };
-    
+
                 isToken = false;
-    
+
                 return util.ok({
-                    subResult: atom,
-                    rest: input.slice(atomValue.length),
+                    subResult: identifier,
+                    rest: input.slice(identifierValue.length),
                     type: "parse result",
-                    location: current.increaseChar(atomValue.length),
+                    location: current.increaseChar(identifierValue.length),
                 });
             }
-    
+
             return internals.noResultFound()
         }
-    
         function tokenizeParameter(input: string, current: ILocation): StringStepParseResult<Token> {
             let doesItStartWithParameter = /^([^\s\(\)\\]+|\\\)|\\\(|\\\w|\\\\)+([^\(\)\\]+|\\\)|\\\(|\\\w|\\\\)*/;
             if(doesItStartWithParameter.test(input) && !isToken) {
                 let parameterValue: string = (input.match(doesItStartWithParameter) as any)[0];
                 let paramLength = parameterValue.length;
                 
-                let atom: Token = {
+                let parameter: Token = {
                     type: 'token - parameter',
                     text: parameterValue.trim().replace('\\(', '(').replace('\\)', ')').replace('\\\\', '\\'),
                     location: current,
                 };
-    
+
                 return util.ok({
                     type: 'parse result',
-                    subResult: atom,
+                    subResult: parameter,
                     rest: input.slice(paramLength),
                     location: current.increaseChar(paramLength),
                 });
@@ -239,7 +238,7 @@ function buildTokenize(doesIt: ILispSearches, internals: IInternals, util: IUtil
         }
         
         const documentPath = documentMap.value.projectLocation.documentPath;
-        const parser = internals.createStringParser(tokenizeWhiteSpace, tokenizeComment, tokenizeParenthesis, tokenizeParameter, tokenizeAtom);
+        const parser = internals.createStringParser(tokenizeWhiteSpace, tokenizeComment, tokenizeParenthesis, tokenizeParameter, tokenizeIdentifier);
         
         function toTokens(block: ILispBlock): Result<Token[]> {
             let parsed = parser.parse(block.text, block.location);

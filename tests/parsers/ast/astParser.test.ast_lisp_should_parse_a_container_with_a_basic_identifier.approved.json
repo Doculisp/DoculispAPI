@@ -19,7 +19,7 @@
               "documentPath": "./_main.dlisp",
               "line": 1
             },
-            "type": "ast-atom",
+            "type": "ast-identifier",
             "value": "title"
           }
         ],

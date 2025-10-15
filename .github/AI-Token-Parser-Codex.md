@@ -73,12 +73,12 @@ type TextToken = {
 - Preserves original text exactly
 - Single token per text part
 
-#### AtomToken
+#### IdentifierToken
 ```typescript
-type AtomToken = {
+type IdentifierToken = {
     readonly text: string;
     readonly location: ILocation;
-    readonly type: 'token - atom';
+    readonly type: 'token - identifier';
 };
 ```
 - First element after opening parenthesis
@@ -93,7 +93,7 @@ type ParameterToken = {
     readonly type: 'token - parameter';
 };
 ```
-- Arguments/parameters following atoms
+- Arguments/parameters following identifiers
 - Supports escaped parentheses: `\(` and `\)`
 - Supports escaped backslashes: `\\`
 - Pattern: `/^([^\s\(\)\\]+|\\\)|\\\(|\\\w|\\\\)+([^\(\)\\]+|\\\)|\\\(|\\\w|\\\\)*/`
@@ -113,7 +113,7 @@ type CloseParenthesisToken = {
 
 ### State Management
 The tokenizer maintains an `isToken` boolean flag:
-- `true`: Expecting atom (immediately after opening paren)
+- `true`: Expecting identifier (immediately after opening paren)
 - `false`: Expecting parameter or close paren
 
 ### Token Recognition Sequence
@@ -135,7 +135,7 @@ Parsing attempts handlers in this order:
    - Opening paren `(`: Sets `isToken = true`, discarded
    - Closing paren `)`: Creates CloseParenthesisToken
 
-4. **Atom Parsing**
+4. **Identifier Parsing**
    - Only when `isToken = true`
    - Non-whitespace, non-parenthesis characters
    - Sets `isToken = false` after parsing
@@ -186,7 +186,7 @@ const parser = internals.createStringParser(
     tokenizeComment, 
     tokenizeParenthesis,
     tokenizeParameter,
-    tokenizeAtom
+    tokenizeIdentifier
 );
 ```
 
@@ -222,7 +222,7 @@ type HandleStringValue<T> = (
 1. **Error Propagation**: Failed input `DocumentMap`
 2. **Empty Input**: Empty parts array
 3. **Text Processing**: Plain text parts
-4. **Basic Atoms**: Simple function names
+4. **Basic Identifiers**: Simple function names
 5. **Parameters**: Single and multi-word arguments
 6. **Nesting**: Complex nested expressions
 7. **Comments**: Nested comment handling
@@ -260,8 +260,8 @@ const tokenizer: IRegisterable = {
 ## Key Implementation Notes
 
 1. **Single Pass**: Tokenizes each lisp block in one pass
-2. **State Machine**: Uses `isToken` flag to distinguish atom vs parameter context  
-3. **Greedy Matching**: Atoms and parameters consume maximum possible characters
+2. **State Machine**: Uses `isToken` flag to distinguish identifier vs parameter context  
+3. **Greedy Matching**: Identifiers and parameters consume maximum possible characters
 4. **Location Preservation**: Every token maintains precise source location
 5. **Error Context**: Failures include file path for debugging
 6. **Escape Processing**: Parameters undergo escape sequence transformation

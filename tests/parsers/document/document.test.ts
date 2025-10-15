@@ -312,7 +312,7 @@ describe('document', () => {
             verifyAsJson(result);
         });
 
-        it('should fail to parse a file that contains a dl atom', () => {
+        it('should fail to parse a file that contains a dl identifier', () => {
             let dlisp = `(dl
 (section-meta
     (title Doculisp)

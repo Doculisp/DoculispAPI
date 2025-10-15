@@ -93,14 +93,14 @@ describe('tokenizer', () => {
             verifyAsJson(result);
         });
         
-        it('should tokenize an single atom', () => {
+        it('should tokenize an single identifier', () => {
             const start: ILocation = getLocation(BASIC_SAMPLE_DOCUMENT, 0, 0, 4, 2);
             let parseResult: Result<DocumentMap> = ok({
                 projectLocation: buildProjectLocation(BASIC_SAMPLE_DOCUMENT, 2, 7),
                 parts: [
                     {
                         type: 'lisp',
-                        text: '(atom)',
+                        text: '(identifier)',
                         location: start,
                     },
                 ],
@@ -111,14 +111,14 @@ describe('tokenizer', () => {
             verifyAsJson(result);
         });
         
-        it('should tokenize an single atom with space after atom', () => {
+        it('should tokenize an single identifier with space after identifier', () => {
             const start: ILocation = getLocation(BASIC_SAMPLE_DOCUMENT, 0, 0, 4, 2);
             let parseResult: Result<DocumentMap> = ok({
                 projectLocation: buildProjectLocation(BASIC_SAMPLE_DOCUMENT, 3, 7),
                 parts: [
                     {
                         type: 'lisp',
-                        text: '(atom )',
+                        text: '(identifier )',
                         location: start,
                     },
                 ],
@@ -129,14 +129,14 @@ describe('tokenizer', () => {
             verifyAsJson(result);
         });
         
-        it('should tokenize an single atom with new line after atom', () => {
+        it('should tokenize an single identifier with new line after identifier', () => {
             const start: ILocation = getLocation(BASIC_SAMPLE_DOCUMENT, 0, 0, 4, 2);
             let parseResult: Result<DocumentMap> = ok({
                 projectLocation: buildProjectLocation(BASIC_SAMPLE_DOCUMENT, 7, 4),
                 parts: [
                     {
                         type: 'lisp',
-                        text: '(atom\r\n)',
+                        text: '(identifier\r\n)',
                         location: start,
                     },
                 ],
@@ -147,7 +147,7 @@ describe('tokenizer', () => {
             verifyAsJson(result);
         });
         
-        it('should tokenize an single atom containing only numbers', () => {
+        it('should tokenize an single identifier containing only numbers', () => {
             const start: ILocation = getLocation(BASIC_SAMPLE_DOCUMENT, 0, 0, 4, 2 );
             let parseResult: Result<DocumentMap> = ok({
                 projectLocation: buildProjectLocation(BASIC_SAMPLE_DOCUMENT, 4, 6),
@@ -165,14 +165,14 @@ describe('tokenizer', () => {
             verifyAsJson(result);
         });
         
-        it('should tokenize an single atom with hyphen and underscore', () => {
+        it('should tokenize an single identifier with hyphen and underscore', () => {
             const start: ILocation = getLocation(BASIC_SAMPLE_DOCUMENT, 0, 0, 4, 2);
             let parseResult: Result<DocumentMap> = ok({
                 projectLocation: buildProjectLocation(BASIC_SAMPLE_DOCUMENT, 7, 7),
                 parts: [
                     {
                         type: 'lisp',
-                        text: '(atom-start_end)',
+                        text: '(identifier-start_end)',
                         location: start,
                     },
                 ],
@@ -183,7 +183,7 @@ describe('tokenizer', () => {
             verifyAsJson(result);
         });
 
-        it('should tokenize a single atom with a single word parameter', () => {
+        it('should tokenize a single identifier with a single word parameter', () => {
             const start: ILocation = getLocation('Z:/parameter.md', 0, 0, 1, 13);
 
             let parseResult: Result<DocumentMap> = ok({
@@ -203,7 +203,7 @@ describe('tokenizer', () => {
             verifyAsJson(result);
         });
 
-        it('should tokenize a single atom with a multi word parameter', () => {
+        it('should tokenize a single identifier with a multi word parameter', () => {
             const start: ILocation = getLocation('Z:/parameter.md', 0, 0, 1, 13);
 
             let parseResult: Result<DocumentMap> = ok({

@@ -11,7 +11,7 @@ describe('Doculisp API', () => {
     });
 
     describe('testFile method', () => {
-        it('should handle .dlproj files without throwing Unknown atom errors', async () => {
+        it('should handle .dlproj files without throwing Unknown identifier errors', async () => {
             const result = await api.testFile(testProjectFile);
             
             // Should be an array of results

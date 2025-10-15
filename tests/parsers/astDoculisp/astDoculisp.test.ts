@@ -240,11 +240,11 @@ describe('astDoculisp', () => {
                 verifyAsJson(result);
             });
 
-            it('should not parse a section meta with a invalid atom', () => {
+            it('should not parse a section meta with a invalid identifier', () => {
                 const content = `<!--
 (dl
     (section-meta
-        (title A Bad atom)
+        (title A Bad identifier)
         (bad does stuff)
         (include
                 (sample ./good.md)

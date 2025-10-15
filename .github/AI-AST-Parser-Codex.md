@@ -35,16 +35,16 @@ type TextToken = {
 - Plain text content outside Doculisp expressions
 - Converted directly to `IAstValue` nodes
 
-#### AtomToken
+#### IdentifierToken
 ```typescript
-type AtomToken = {
+type IdentifierToken = {
     readonly text: string;
     readonly location: ILocation;
-    readonly type: 'token - atom';
+    readonly type: 'token - identifier';
 };
 ```
 - Function/command names in Doculisp expressions
-- Used for atoms, commands, and containers
+- Used for identifiers, commands, and containers
 
 #### ParameterToken
 ```typescript
@@ -54,7 +54,7 @@ type ParameterToken = {
     readonly type: 'token - parameter';
 };
 ```
-- Arguments/parameters following atoms
+- Arguments/parameters following identifiers
 - Used in command structures
 
 #### CloseParenthesisToken
@@ -102,12 +102,12 @@ interface IAstValue {
 - Represents plain text content
 - Direct conversion from `TextToken`
 
-#### IAstAtom
+#### IAstIdentifier
 ```typescript
-interface IAstAtom {
+interface IAstIdentifier {
     readonly value: string;
     readonly location: ILocation;
-    readonly type: 'ast-atom';
+    readonly type: 'ast-identifier';
 }
 ```
 - Simple Doculisp functions with no parameters
@@ -141,7 +141,7 @@ interface IAstCommand {
 interface IAstContainer {
     readonly value: string;
     readonly location: ILocation;
-    readonly subStructure: AtomAst[];
+    readonly subStructure: IdentifierAst[];
     readonly type: 'ast-container';
 }
 ```
@@ -151,8 +151,8 @@ interface IAstContainer {
 ### Type Hierarchies
 
 ```typescript
-type AtomAst = IAstCommand | IAstContainer | IAstAtom;
-type CoreAst = IAstValue | AtomAst;
+type IdentifierAst = IAstCommand | IAstContainer | IAstIdentifier;
+type CoreAst = IAstValue | IdentifierAst;
 type Ast = CoreAst | IAstParameter;
 ```
 
@@ -165,7 +165,7 @@ The AST parser uses the generic parser infrastructure with specialized handler f
 const parser = internals.createArrayParser<Token, CoreAst>(
     parseText, 
     parseCommand, 
-    parseAtom, 
+    parseIdentifier, 
     parseContainer
 );
 ```
@@ -184,40 +184,40 @@ const parser = internals.createArrayParser<Token, CoreAst>(
 // Output: IAstValue
 ```
 
-#### 2. Atom Parsing
-**Pattern**: Atom + Close Parenthesis
-**Handler**: `parseAtom()`
+#### 2. Identifier Parsing
+**Pattern**: Identifier + Close Parenthesis
+**Handler**: `parseIdentifier()`
 **Requirements**:
 - 2 tokens minimum
-- Pattern: `AtomToken + CloseParenthesisToken`
+- Pattern: `IdentifierToken + CloseParenthesisToken`
 
 ```typescript
-// Input: [AtomToken, CloseParenthesisToken]
-// Output: IAstAtom
+// Input: [IdentifierToken, CloseParenthesisToken]
+// Output: IAstIdentifier
 ```
 
 #### 3. Command Parsing
-**Pattern**: Atom + Parameter + Close Parenthesis
+**Pattern**: Identifier + Parameter + Close Parenthesis
 **Handler**: `parseCommand()`
 **Requirements**:
 - 3 tokens minimum
-- Pattern: `AtomToken + ParameterToken + CloseParenthesisToken`
+- Pattern: `IdentifierToken + ParameterToken + CloseParenthesisToken`
 
 ```typescript
-// Input: [AtomToken, ParameterToken, CloseParenthesisToken]
+// Input: [IdentifierToken, ParameterToken, CloseParenthesisToken]
 // Output: IAstCommand
 ```
 
 #### 4. Container Parsing
-**Pattern**: Atom + Nested Content + Close Parenthesis
+**Pattern**: Identifier + Nested Content + Close Parenthesis
 **Handler**: `parseContainer()`
 **Requirements**:
 - 3+ tokens minimum
-- Pattern: `AtomToken + [NestedTokens...] + CloseParenthesisToken`
+- Pattern: `IdentifierToken + [NestedTokens...] + CloseParenthesisToken`
 - Recursively parses nested content
 
 ```typescript
-// Input: [AtomToken, ...NestedTokens, CloseParenthesisToken]
+// Input: [IdentifierToken, ...NestedTokens, CloseParenthesisToken]
 // Output: IAstContainer with subStructure
 ```
 
@@ -252,13 +252,13 @@ function parseText(input: Token[], current: ILocation): StepParseResult<Token[],
 - **Output**: `IAstValue` with text content
 - **Consumption**: 1 token
 
-#### parseAtom Handler
+#### parseIdentifier Handler
 ```typescript
-function parseAtom(input: Token[], current: ILocation): StepParseResult<Token[], IAstAtom>
+function parseIdentifier(input: Token[], current: ILocation): StepParseResult<Token[], IAstIdentifier>
 ```
 - **Input Requirements**: At least 2 tokens
-- **Token Validation**: `AtomToken` + `CloseParenthesisToken`
-- **Output**: `IAstAtom` with atom value
+- **Token Validation**: `IdentifierToken` + `CloseParenthesisToken`
+- **Output**: `IAstIdentifier` with identifier value
 - **Consumption**: 2 tokens
 
 #### parseCommand Handler
@@ -266,7 +266,7 @@ function parseAtom(input: Token[], current: ILocation): StepParseResult<Token[],
 function parseCommand(input: Token[], current: ILocation): StepParseResult<Token[], IAstCommand>
 ```
 - **Input Requirements**: Exactly 3 tokens
-- **Token Validation**: `AtomToken` + `ParameterToken` + `CloseParenthesisToken`
+- **Token Validation**: `IdentifierToken` + `ParameterToken` + `CloseParenthesisToken`
 - **Output**: `IAstCommand` with embedded `IAstParameter`
 - **Error Handling**: Fails if close parenthesis missing
 - **Consumption**: 3 tokens
@@ -276,7 +276,7 @@ function parseCommand(input: Token[], current: ILocation): StepParseResult<Token
 function parseContainer(input: Token[], current: ILocation): StepParseResult<Token[], IAstContainer>
 ```
 - **Input Requirements**: At least 3 tokens
-- **Token Validation**: `AtomToken` + nested content + `CloseParenthesisToken`
+- **Token Validation**: `IdentifierToken` + nested content + `CloseParenthesisToken`
 - **Recursive Parsing**: Creates sub-parser for nested content
 - **Output**: `IAstContainer` with `subStructure` array
 - **Error Handling**: Validates proper closing parenthesis
@@ -373,7 +373,7 @@ describe('ast parser', () => {
 ### Common Test Scenarios
 1. **Empty Documents**: No tokens → `IAstEmpty`
 2. **Text Only**: Plain text tokens → `IAstValue` nodes
-3. **Simple Atoms**: `(atom)` → `IAstAtom`
+3. **Simple Identifiers**: `(identifier)` → `IAstIdentifier`
 4. **Commands**: `(command parameter)` → `IAstCommand`
 5. **Containers**: `(container (nested))` → `IAstContainer`
 6. **Mixed Content**: Text + Doculisp combinations
@@ -391,24 +391,24 @@ verifyAsJson(result);
 2. **Greedy Parsing**: Handlers consume maximum valid token sequences  
 3. **Location Preservation**: Every AST node maintains source location
 4. **Error Context**: Failures include file path and location details
-5. **Recursive Structure**: Containers can contain any `AtomAst` types
+5. **Recursive Structure**: Containers can contain any `IdentifierAst` types
 6. **Validation Logic**: Strict token sequence validation prevents malformed AST
 7. **Memory Efficiency**: Uses array trimming instead of copying
 8. **Immutable Results**: Parsing doesn't modify input token arrays
 
 ## AST Structure Examples
 
-### Simple Atom
+### Simple Identifier
 ```
 Input:  (content)
-Tokens: [AtomToken("content"), CloseParenthesisToken]
-AST:    IAstAtom { value: "content", type: "ast-atom" }
+Tokens: [IdentifierToken("content"), CloseParenthesisToken]
+AST:    IAstIdentifier { value: "content", type: "ast-identifier" }
 ```
 
 ### Command
 ```
 Input:  (title My Document)
-Tokens: [AtomToken("title"), ParameterToken("My Document"), CloseParenthesisToken]
+Tokens: [IdentifierToken("title"), ParameterToken("My Document"), CloseParenthesisToken]
 AST:    IAstCommand { 
           value: "title", 
           parameter: IAstParameter { value: "My Document" },
@@ -419,7 +419,7 @@ AST:    IAstCommand {
 ### Container
 ```
 Input:  (section-meta (title Hello))
-Tokens: [AtomToken("section-meta"), AtomToken("title"), ParameterToken("Hello"), CloseParenthesisToken, CloseParenthesisToken]
+Tokens: [IdentifierToken("section-meta"), IdentifierToken("title"), ParameterToken("Hello"), CloseParenthesisToken, CloseParenthesisToken]
 AST:    IAstContainer {
           value: "section-meta",
           subStructure: [
@@ -435,11 +435,11 @@ AST:    IAstContainer {
 ### Mixed Content
 ```
 Input:  Some text (content)
-Tokens: [TextToken("Some text"), AtomToken("content"), CloseParenthesisToken]
+Tokens: [TextToken("Some text"), IdentifierToken("content"), CloseParenthesisToken]
 AST:    RootAst {
           ast: [
             IAstValue { value: "Some text", type: "ast-value" },
-            IAstAtom { value: "content", type: "ast-atom" }
+            IAstIdentifier { value: "content", type: "ast-identifier" }
           ]
         }
 ```

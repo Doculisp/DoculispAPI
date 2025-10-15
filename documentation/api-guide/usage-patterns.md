@@ -214,7 +214,7 @@ class DoculispSyntaxHighlighter {
     private mapTokenType(tokenType: string): number {
         // Map to Language Server Protocol semantic token types
         switch (tokenType) {
-            case 'token - atom': return 0; // keyword
+            case 'token - identifier': return 0; // keyword
             case 'token - parameter': return 1; // string
             case 'token - text': return 2; // comment
             case 'token - close parenthesis': return 3; // operator
@@ -289,12 +289,12 @@ class DoculispCompletionProvider {
         const context = this.analyzeCompletionContext(tokenizedResult.value.tokens, position);
         
         switch (context.type) {
-            case 'atom':
-                return this.CORE_ATOMS.map(atom => ({
-                    label: atom,
+            case 'identifier':
+                return this.CORE_ATOMS.map(identifier => ({
+                    label: identifier,
                     kind: 'Function',
-                    documentation: this.getAtomDocumentation(atom),
-                    insertText: atom
+                    documentation: this.getIdentifierDocumentation(identifier),
+                    insertText: identifier
                 }));
                 
             case 'toc-style':
@@ -327,25 +327,25 @@ class DoculispCompletionProvider {
         );
 
         if (tokensAtPosition.length === 0) {
-            return { type: 'atom' };
+            return { type: 'identifier' };
         }
 
         // Analyze surrounding context
         const tokenIndex = tokens.findIndex(t => tokensAtPosition.includes(t));
         const previousTokens = tokens.slice(Math.max(0, tokenIndex - 3), tokenIndex);
         
-        if (previousTokens.some(t => t.type === 'token - atom' && t.text === 'style')) {
+        if (previousTokens.some(t => t.type === 'token - identifier' && t.text === 'style')) {
             return { type: 'toc-style' };
         }
         
-        if (previousTokens.some(t => t.type === 'token - atom' && t.text?.match(/^[A-Z]/))) {
+        if (previousTokens.some(t => t.type === 'token - identifier' && t.text?.match(/^[A-Z]/))) {
             return { type: 'file-path' };
         }
         
-        return { type: 'atom' };
+        return { type: 'identifier' };
     }
 
-    private getAtomDocumentation(atom: string): string {
+    private getIdentifierDocumentation(identifier: string): string {
         const docs = {
             'section-meta': 'Define document metadata including title, author, and includes',
             'title': 'Set the document title',
@@ -354,7 +354,7 @@ class DoculispCompletionProvider {
             '#': 'Create a dynamic header at the current nesting level',
             'get-path': 'Create cross-reference to another document section'
         };
-        return docs[atom] || `Doculisp atom: ${atom}`;
+        return docs[identifier] || `Doculisp identifier: ${identifier}`;
     }
 
     private getTocStyleDocumentation(style: string): string {
@@ -385,7 +385,7 @@ interface CompletionItem {
 }
 
 interface CompletionContext {
-    type: 'atom' | 'toc-style' | 'file-path';
+    type: 'identifier' | 'toc-style' | 'file-path';
 }
 ```
 
@@ -592,7 +592,7 @@ async function analyzeDoculispContent(files: string[]) {
         totalFiles: files.length,
         filesByType: { md: 0, dlisp: 0, dlproj: 0 },
         totalDoculispBlocks: 0,
-        mostCommonAtoms: {},
+        mostCommonIdentifiers: {},
         averageTokensPerFile: 0
     };
 
@@ -625,12 +625,12 @@ async function analyzeDoculispContent(files: string[]) {
             const doculispTokens = tokens.filter(t => t.type !== 'token - text');
             analysis.totalDoculispBlocks += doculispTokens.length;
 
-            // Track atom frequency
+            // Track identifier frequency
             tokens
-                .filter(t => t.type === 'token - atom')
+                .filter(t => t.type === 'token - identifier')
                 .forEach(t => {
-                    analysis.mostCommonAtoms[t.text] = 
-                        (analysis.mostCommonAtoms[t.text] || 0) + 1;
+                    analysis.mostCommonIdentifiers[t.text] = 
+                        (analysis.mostCommonIdentifiers[t.text] || 0) + 1;
                 });
 
         } catch (error) {

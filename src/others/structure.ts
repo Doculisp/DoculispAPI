@@ -4,64 +4,64 @@ import { IRootStructure, IStructure } from "../types/types.structure";
 function buildStructure(): IRootStructure {
     const commentBlock: IStructure = {
         hasParameter: 'maybe',
-        hasSubAtom: {
-            getStructureForSubAtom(_name) { return commentBlock; },
-            isValidSubAtom(_name) { return true; },
-            getMandatorySubAtoms() { return []; }
+        hasSubIdentifier: {
+            getStructureForSubIdentifier(_name) { return commentBlock; },
+            isValidSubIdentifier(_name) { return true; },
+            getMandatorySubIdentifiers() { return []; }
         },
         type: 'comment',
     }
 
     const sectionBlock: IStructure = {
         hasParameter: true,
-        hasSubAtom: false,
+        hasSubIdentifier: false,
         type: 'section',
     };
 
     const includeBlock: IStructure = {
         hasParameter: false,
-        hasSubAtom: {
-            isValidSubAtom(_name: string) {
+        hasSubIdentifier: {
+            isValidSubIdentifier(_name: string) {
                 return true;
             },
-            getStructureForSubAtom(name: string) {
+            getStructureForSubIdentifier(name: string) {
                 if(name.startsWith('*')) {
                     return commentBlock;
                 }
 
                 return sectionBlock;
             },
-            getMandatorySubAtoms() { return []; },
+            getMandatorySubIdentifiers() { return []; },
         },
         type: 'include',
     };
 
     const refLinkBlock: IStructure = {
         hasParameter: true,
-        hasSubAtom: false,
+        hasSubIdentifier: false,
         type: 'ref-link',
     }
 
     const subtitleBlock: IStructure = {
         hasParameter: true,
-        hasSubAtom: false,
+        hasSubIdentifier: false,
         type: 'subtitle',
     }
 
     const titleBlock: IStructure = {
         hasParameter: true,
-        hasSubAtom: false,
+        hasSubIdentifier: false,
         mandatory: true,
         type: 'title',
     }
 
     const sectionMetaBlock: IStructure = {
         hasParameter: false,
-        hasSubAtom: {
-            getMandatorySubAtoms() {
+        hasSubIdentifier: {
+            getMandatorySubIdentifiers() {
                 return [ titleBlock ];
             },
-            getStructureForSubAtom(name) {
+            getStructureForSubIdentifier(name) {
                 switch (name) {
                     case 'title':
                         return titleBlock;
@@ -83,7 +83,7 @@ function buildStructure(): IRootStructure {
                         return false;
                 }
             },
-            isValidSubAtom(name) {
+            isValidSubIdentifier(name) {
                 return (
                     [
                         'title',
@@ -100,15 +100,15 @@ function buildStructure(): IRootStructure {
 
     const tocBlock: IStructure = {
         hasParameter: true,
-        hasSubAtom: false,
+        hasSubIdentifier: false,
         type: 'toc',
     }
 
     const contentBlock: IStructure = {
         hasParameter: false,
-        hasSubAtom: {
-            getMandatorySubAtoms() { return []; },
-            getStructureForSubAtom(name) {
+        hasSubIdentifier: {
+            getMandatorySubIdentifiers() { return []; },
+            getStructureForSubIdentifier(name) {
                 if (name === 'toc') {
                     return tocBlock;
                 }
@@ -119,7 +119,7 @@ function buildStructure(): IRootStructure {
 
                 return false;
             },
-            isValidSubAtom(name) {
+            isValidSubIdentifier(name) {
                 return (
                     [
                         'toc'
@@ -133,15 +133,15 @@ function buildStructure(): IRootStructure {
 
     const headerBlock: IStructure = {
         hasParameter: true,
-        hasSubAtom: false,
+        hasSubIdentifier: false,
         type: 'header',
     }
 
     const doculispBlock: IRootStructure = {
         hasParameter: false,
-        SubAtoms: {
-            getMandatorySubAtoms() { return []; },
-            getStructureForSubAtom(name) {
+        SubIdentifiers: {
+            getMandatorySubIdentifiers() { return []; },
+            getStructureForSubIdentifier(name) {
                 if(name.startsWith('*')) {
                     return commentBlock;
                 }
@@ -160,7 +160,7 @@ function buildStructure(): IRootStructure {
 
                 return false;
             },
-            isValidSubAtom(name) {
+            isValidSubIdentifier(name) {
                 return (
                     name.startsWith('*')
                     || name.replaceAll('#', '').length === 0

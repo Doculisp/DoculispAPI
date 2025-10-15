@@ -215,7 +215,7 @@ Output: "  hello world\n\ngoodbye"
 
 **Doculisp Comments:**
 - Within Lisp blocks using `*` prefix
-- Example: `(*commented-atom (parameter))`
+- Example: `(*commented-identifier (parameter))`
 - Completely removed from output
 
 ## Error Handling

@@ -52,9 +52,9 @@ Doculisp is a **modular documentation system** that solves the problem of unwiel
 
 All Doculisp code follows this pattern:
 ```
-(atom)                    # Simple atom
-(atom parameter)          # Atom with parameter
-(atom (sub-atom))        # Nested atoms
+(identifier)                    # Simple identifier
+(identifier parameter)          # Identifier with parameter
+(identifier (sub-identifier))        # Nested identifiers
 ```
 
 ### Critical Rules
@@ -169,7 +169,7 @@ The number of `#` determines depth relative to current section level.
 
 ### Comments
 
-Comment out any block by prefixing the atom with `*`:
+Comment out any block by prefixing the identifier with `*`:
 
 ```doculisp
 (*section-meta
@@ -355,7 +355,7 @@ project/
 - **Single responsibility**: Each file has one clear purpose
 - **Logical grouping**: Related content in same directory
 - **Clear hierarchy**: Directory structure mirrors document structure
-- **Atomic changes**: Edit individual files rather than large documents
+- **Identifieric changes**: Edit individual files rather than large documents
 
 ## Best Practices
 

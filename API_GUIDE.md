@@ -1143,7 +1143,7 @@ The **Tokenizer** is the **second stage** that converts parsed document content 
 #### Overview ####
 
 **Primary Responsibilities:**
-- Convert Doculisp blocks into individual tokens (atoms, parameters, parentheses)
+- Convert Doculisp blocks into individual tokens (identifiers, parameters, parentheses)
 - Preserve text content as text tokens
 - Handle nested parentheses and escape sequences
 - Maintain precise location tracking for error reporting
@@ -1176,23 +1176,23 @@ type TokenizedDocument = {
     readonly projectLocation: IProjectLocation; // Original document context
 }
 
-type Token = TextToken | CloseParenthesisToken | AtomToken | ParameterToken;
+type Token = TextToken | CloseParenthesisToken | IdentifierToken | ParameterToken;
 ```
 
 #### Token Types ####
 
-**Atom Tokens** - Function names or keywords:
+**Identifier Tokens** - Function names or keywords:
 ```typescript
-// (section-meta) → AtomToken: "section-meta"
-// (title My Document) → AtomToken: "title"
-type AtomToken = {
-    readonly text: string;        // Atom name
+// (section-meta) → IdentifierToken: "section-meta"
+// (title My Document) → IdentifierToken: "title"
+type IdentifierToken = {
+    readonly text: string;        // Identifier name
     readonly location: ILocation; // Position in source
-    readonly type: 'token - atom';
+    readonly type: 'token - identifier';
 }
 ```
 
-**Parameter Tokens** - Arguments passed to atoms:
+**Parameter Tokens** - Arguments passed to identifiers:
 ```typescript
 // (title My Document Title) → ParameterToken: "My Document Title"
 type ParameterToken = {
@@ -1308,7 +1308,7 @@ interface IAstText {
 **Expression Nodes** - Doculisp expressions:
 ```typescript
 interface IAstExpression {
-    readonly atom: string;         // Function name (e.g., "section-meta")
+    readonly identifier: string;         // Function name (e.g., "section-meta")
     readonly parameters: string[]; // Arguments to the function
     readonly location: ILocation;  // Position in source
     readonly parts: AstPart[];     // Nested expressions
@@ -1329,7 +1329,7 @@ interface IAstEmpty {
 The AstParser processes tokens through several stages:
 
 1. **Token Validation**: Ensures proper token sequence and structure
-2. **Expression Building**: Groups atoms with their parameters and children
+2. **Expression Building**: Groups identifiers with their parameters and children
 3. **Hierarchy Construction**: Builds nested expression trees
 4. **Text Preservation**: Maintains original text content alongside structure
 5. **Location Tracking**: Preserves precise source location information
@@ -1466,7 +1466,7 @@ async function getSyntaxTokens(document: string, filePath: string): Promise<Synt
 
 function mapTokenTypeToSyntaxHighlight(tokenType: string): string {
     switch (tokenType) {
-        case 'token - atom': return 'keyword';
+        case 'token - identifier': return 'keyword';
         case 'token - parameter': return 'string';
         case 'token - text': return 'comment';
         case 'token - close parenthesis': return 'delimiter';
@@ -1597,7 +1597,7 @@ function analyzeASTNodes(astParts: AstPart[]): StructureElement[] {
         if (part.type === 'ast-expression') {
             elements.push({
                 type: 'expression',
-                atom: part.atom,
+                identifier: part.identifier,
                 parameters: part.parameters,
                 location: part.location,
                 children: analyzeASTNodes(part.parts)
@@ -1622,7 +1622,7 @@ interface DocumentAnalysis {
 
 interface StructureElement {
     type: 'expression' | 'text';
-    atom?: string;
+    identifier?: string;
     parameters?: string[];
     content?: string;
     location: ILocation;
@@ -3032,7 +3032,7 @@ class DoculispCompletionProvider {
         const context = this.analyzeContext(tokenizedResult.value.tokens, position);
 
         switch (context.type) {
-            case 'atom': return this.CORE_ATOMS.map(atom => ({ label: atom, kind: 'Function' }));
+            case 'identifier': return this.CORE_ATOMS.map(identifier => ({ label: identifier, kind: 'Function' }));
             case 'toc-style': return this.getTocStyleCompletions();
             case 'file-path': return this.getFileCompletions(uri);
             default: return [];
@@ -3257,7 +3257,7 @@ function convertToLanguageServerError(result: IFail): Diagnostic {
 }
 
 function determineSeverity(message: string): 'error' | 'warning' | 'info' {
-    if (message.includes('Unknown atom') || message.includes('Circular dependencies')) return 'error';
+    if (message.includes('Unknown identifier') || message.includes('Circular dependencies')) return 'error';
     if (message.includes('file') || message.includes('path')) return 'warning';
     return 'info';
 }
@@ -3527,7 +3527,7 @@ class DoculispSyntaxHighlighter {
     private mapTokenType(tokenType: string): number {
         // Map to Language Server Protocol semantic token types
         switch (tokenType) {
-            case 'token - atom': return 0; // keyword
+            case 'token - identifier': return 0; // keyword
             case 'token - parameter': return 1; // string
             case 'token - text': return 2; // comment
             case 'token - close parenthesis': return 3; // operator
@@ -3602,12 +3602,12 @@ class DoculispCompletionProvider {
         const context = this.analyzeCompletionContext(tokenizedResult.value.tokens, position);
 
         switch (context.type) {
-            case 'atom':
-                return this.CORE_ATOMS.map(atom => ({
-                    label: atom,
+            case 'identifier':
+                return this.CORE_ATOMS.map(identifier => ({
+                    label: identifier,
                     kind: 'Function',
-                    documentation: this.getAtomDocumentation(atom),
-                    insertText: atom
+                    documentation: this.getIdentifierDocumentation(identifier),
+                    insertText: identifier
                 }));
 
             case 'toc-style':
@@ -3640,25 +3640,25 @@ class DoculispCompletionProvider {
         );
 
         if (tokensAtPosition.length === 0) {
-            return { type: 'atom' };
+            return { type: 'identifier' };
         }
 
         // Analyze surrounding context
         const tokenIndex = tokens.findIndex(t => tokensAtPosition.includes(t));
         const previousTokens = tokens.slice(Math.max(0, tokenIndex - 3), tokenIndex);
 
-        if (previousTokens.some(t => t.type === 'token - atom' && t.text === 'style')) {
+        if (previousTokens.some(t => t.type === 'token - identifier' && t.text === 'style')) {
             return { type: 'toc-style' };
         }
 
-        if (previousTokens.some(t => t.type === 'token - atom' && t.text?.match(/^[A-Z]/))) {
+        if (previousTokens.some(t => t.type === 'token - identifier' && t.text?.match(/^[A-Z]/))) {
             return { type: 'file-path' };
         }
 
-        return { type: 'atom' };
+        return { type: 'identifier' };
     }
 
-    private getAtomDocumentation(atom: string): string {
+    private getIdentifierDocumentation(identifier: string): string {
         const docs = {
             'section-meta': 'Define document metadata including title, author, and includes',
             'title': 'Set the document title',
@@ -3667,7 +3667,7 @@ class DoculispCompletionProvider {
             '#': 'Create a dynamic header at the current nesting level',
             'get-path': 'Create cross-reference to another document section'
         };
-        return docs[atom] || `Doculisp atom: ${atom}`;
+        return docs[identifier] || `Doculisp identifier: ${identifier}`;
     }
 
     private getTocStyleDocumentation(style: string): string {
@@ -3698,7 +3698,7 @@ interface CompletionItem {
 }
 
 interface CompletionContext {
-    type: 'atom' | 'toc-style' | 'file-path';
+    type: 'identifier' | 'toc-style' | 'file-path';
 }
 ```
 
@@ -3905,7 +3905,7 @@ async function analyzeDoculispContent(files: string[]) {
         totalFiles: files.length,
         filesByType: { md: 0, dlisp: 0, dlproj: 0 },
         totalDoculispBlocks: 0,
-        mostCommonAtoms: {},
+        mostCommonIdentifiers: {},
         averageTokensPerFile: 0
     };
 
@@ -3938,12 +3938,12 @@ async function analyzeDoculispContent(files: string[]) {
             const doculispTokens = tokens.filter(t => t.type !== 'token - text');
             analysis.totalDoculispBlocks += doculispTokens.length;
 
-            // Track atom frequency
+            // Track identifier frequency
             tokens
-                .filter(t => t.type === 'token - atom')
+                .filter(t => t.type === 'token - identifier')
                 .forEach(t => {
-                    analysis.mostCommonAtoms[t.text] =
-                        (analysis.mostCommonAtoms[t.text] || 0) + 1;
+                    analysis.mostCommonIdentifiers[t.text] =
+                        (analysis.mostCommonIdentifiers[t.text] || 0) + 1;
                 });
 
         } catch (error) {

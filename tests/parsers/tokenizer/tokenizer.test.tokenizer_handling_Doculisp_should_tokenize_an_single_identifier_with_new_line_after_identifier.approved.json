@@ -2,8 +2,8 @@
   "success": true,
   "value": {
     "projectLocation": {
-      "documentDepth": 3,
-      "documentIndex": 7,
+      "documentDepth": 7,
+      "documentIndex": 4,
       "documentPath": "D:/comments/simple.md"
     },
     "tokens": [
@@ -15,16 +15,16 @@
           "documentPath": "D:/comments/simple.md",
           "line": 4
         },
-        "text": "atom",
-        "type": "token - atom"
+        "text": "identifier",
+        "type": "token - identifier"
       },
       {
         "location": {
-          "char": 8,
+          "char": 1,
           "documentDepth": 0,
           "documentIndex": 0,
           "documentPath": "D:/comments/simple.md",
-          "line": 4
+          "line": 5
         },
         "type": "token - close parenthesis"
       }

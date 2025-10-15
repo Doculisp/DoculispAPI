@@ -116,13 +116,13 @@ describe('ast', () => {
             verifyAsJson(result);
         });
 
-        it('should parse a basic atom', () => {
+        it('should parse a basic identifier', () => {
             const text = '(content)';
             const result = toResult(text, buildProjectLocation('./_main.dlisp', 1, 1));
             verifyAsJson(result);
         });
 
-        it('should parse a container with a basic atom', () => {
+        it('should parse a container with a basic identifier', () => {
             const text = '(section-meta (title))';
             const result = toResult(text, buildProjectLocation('./_main.dlisp', 1, 1));
             verifyAsJson(result);

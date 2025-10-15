@@ -4,9 +4,9 @@
 
 <!-- Compiled with doculisp https://www.npmjs.com/package/doculisp -->
 
-# Key Atoms by Depth #
+# Key Identifiers by Depth #
 
-Here is a list of all the key atoms by depth:
+Here is a list of all the key identifiers by depth:
 
 * markdown
 * `dl`

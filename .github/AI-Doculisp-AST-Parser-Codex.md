@@ -53,19 +53,19 @@ interface IAstCommand {
 interface IAstContainer {
     readonly value: string;
     readonly location: ILocation;
-    readonly subStructure: AtomAst[];
+    readonly subStructure: IdentifierAst[];
     readonly type: 'ast-container';
 }
 ```
 - Complex nested structures
 - Used for section-meta, content, and include blocks
 
-#### IAstAtom
+#### IAstIdentifier
 ```typescript
-interface IAstAtom {
+interface IAstIdentifier {
     readonly value: string;
     readonly location: ILocation;
-    readonly type: 'ast-atom';
+    readonly type: 'ast-identifier';
 }
 ```
 - Simple commands without parameters
@@ -248,7 +248,7 @@ The parser maintains global state for validation:
 
 ### Title Processing
 ```typescript
-function parseTitle(ast: AtomAst[], location: ILocation, refLink: string | false, subtitle: string | false): Result<ITitle>
+function parseTitle(ast: IdentifierAst[], location: ILocation, refLink: string | false, subtitle: string | false): Result<ITitle>
 ```
 
 **Features**:
@@ -259,7 +259,7 @@ function parseTitle(ast: AtomAst[], location: ILocation, refLink: string | false
 
 ### Include Processing
 ```typescript
-function parseInclude(ast: AtomAst[], location: ILocation): Result<ILoad[] | false>
+function parseInclude(ast: IdentifierAst[], location: ILocation): Result<ILoad[] | false>
 ```
 
 **Features**:
@@ -270,7 +270,7 @@ function parseInclude(ast: AtomAst[], location: ILocation): Result<ILoad[] | fal
 
 ### Author Processing
 ```typescript
-function parseAuthor(ast: AtomAst[], location: ILocation): Result<false>
+function parseAuthor(ast: IdentifierAst[], location: ILocation): Result<false>
 ```
 
 **Features**:
@@ -283,7 +283,7 @@ function parseAuthor(ast: AtomAst[], location: ILocation): Result<false>
 
 ### TOC Processing
 ```typescript
-function parseToc(ast: AtomAst[], location: ILocation): Result<ITableOfContents | false>
+function parseToc(ast: IdentifierAst[], location: ILocation): Result<ITableOfContents | false>
 ```
 
 **Features**:

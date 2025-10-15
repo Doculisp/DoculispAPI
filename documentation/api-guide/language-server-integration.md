@@ -68,7 +68,7 @@ class DoculispCompletionProvider {
         const context = this.analyzeContext(tokenizedResult.value.tokens, position);
         
         switch (context.type) {
-            case 'atom': return this.CORE_ATOMS.map(atom => ({ label: atom, kind: 'Function' }));
+            case 'identifier': return this.CORE_ATOMS.map(identifier => ({ label: identifier, kind: 'Function' }));
             case 'toc-style': return this.getTocStyleCompletions();
             case 'file-path': return this.getFileCompletions(uri);
             default: return [];

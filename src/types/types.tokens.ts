@@ -12,10 +12,10 @@ export type CloseParenthesisToken = {
     readonly type: 'token - close parenthesis';
 };
 
-export type AtomToken = {
+export type IdentifierToken = {
     readonly text: string;
     readonly location: ILocation;
-    readonly type: 'token - atom';
+    readonly type: 'token - identifier';
 };
 
 export type ParameterToken = {
@@ -24,7 +24,7 @@ export type ParameterToken = {
     readonly type: 'token - parameter';
 };
 
-export type Token = TextToken | CloseParenthesisToken | AtomToken | ParameterToken;
+export type Token = TextToken | CloseParenthesisToken | IdentifierToken | ParameterToken;
 
 export type TokenizedDocument = {
     readonly tokens: Token[];

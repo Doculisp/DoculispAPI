@@ -106,7 +106,7 @@ More content.
 
 **Resulting Token Structure:**
 1. TextToken: "# Welcome\n\nSome text here.\n\n"
-2. AtomToken: "section-meta"
+2. IdentifierToken: "section-meta"
 3. ParameterToken: "Example"
 4. CloseParenthesisToken
 5. TextToken: "\n\nMore content."
