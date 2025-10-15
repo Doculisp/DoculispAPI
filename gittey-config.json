@@ -50,7 +50,7 @@
         },
         {
             "name": "docs",
-            "command": "node ./dist/index.js ./documentation/doculisp.dlproj"
+            "command": "doculisp ./documentation/doculisp.dlproj"
         }
     ],
     "collaborators": []
