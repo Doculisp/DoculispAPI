@@ -176,7 +176,7 @@ function buildWriter(util: IUtil, stringBuilderConstructor: StringBuilderConstru
 
     function writeGetPath(astIdPath: IPathId, table: IVariableTable): Result<string> {
         if(!table.hasKey(astIdPath.id)) {
-            util.fail(`Unknown id '${astIdPath.id}' at '${astIdPath.documentOrder.documentPath}' Line: ${astIdPath.documentOrder.line}, Char: ${astIdPath.documentOrder.char}`, astIdPath.documentOrder.documentPath);
+            util.fail(`Validation Error: Unknown document ID '${astIdPath.id}' at '${astIdPath.documentOrder.documentPath}' (Line: ${astIdPath.documentOrder.line}, Char: ${astIdPath.documentOrder.char}).`, astIdPath.documentOrder.documentPath);
         }
 
         const output = (
@@ -188,7 +188,7 @@ function buildWriter(util: IUtil, stringBuilderConstructor: StringBuilderConstru
         const idPathVariable = table.getValue(astIdPath.id) as IVariableId | IVariableEmptyId | false;
 
         if(!idPathVariable) {
-            return util.fail(`Unknown id '${astIdPath.id}' at '${astIdPath.documentOrder.documentPath}' Line: ${astIdPath.documentOrder.line}, Char: ${astIdPath.documentOrder.char}`, astIdPath.documentOrder.documentPath);
+            return util.fail(`Validation Error: Unknown document ID '${astIdPath.id}' at '${astIdPath.documentOrder.documentPath}' (Line: ${astIdPath.documentOrder.line}, Char: ${astIdPath.documentOrder.char}).`, astIdPath.documentOrder.documentPath);
         }
 
         if(idPathVariable.type === 'variable-empty-id' || !output) {

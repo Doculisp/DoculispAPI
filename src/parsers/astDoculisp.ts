@@ -63,7 +63,7 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
             }
     
             if(ast.type !== 'ast-command') {
-                return util.fail(`Dynamic Header at '${ast.location.documentPath.fullName}' Line: ${ast.location.line}, Char: ${ast.location.char} is missing the header text`, current.documentPath);
+                return util.fail(`Validation Error: Missing header text in dynamic header at '${ast.location.documentPath.fullName}' (Line: ${ast.location.line}, Char: ${ast.location.char}).`, current.documentPath);
             }
 
             const id = ast.value.replace(/^#+/, '');
@@ -75,7 +75,7 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
                 }
 
                 if(!textHelper.isLowercase(id)) {
-                    return util.fail(`Heading id '${id}' at '${current.documentPath.fullName}' Line: ${ast.location.line}, Char: ${ast.location.char} must be lowercase. Did you mean '${id.toLocaleLowerCase()}'?`)
+                    return util.fail(`Validation Error: Heading ID must be lowercase at '${current.documentPath.fullName}' (Line: ${ast.location.line}, Char: ${ast.location.char}). Did you mean '${id.toLocaleLowerCase()}'?`)
                 }
 
                 if(variableTable.hasKey(id)) {
