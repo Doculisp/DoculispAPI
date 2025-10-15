@@ -1,4 +1,4 @@
 {
-  "message": "In include block at 'C:/_main.dlisp' Line: 5, Char 10 contains invalid file type. Included files must be markdown or dlisp files. 'C:/sub.docx'",
+  "message": "Validation Error: Invalid file type in include block at 'C:/_main.dlisp' (Line: 5, Char: 10). Included files must be markdown or dlisp files.",
   "success": false
 }
