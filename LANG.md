@@ -684,7 +684,7 @@ Can be simplified to:
 
 ## Language Specification Version ##
 
-Doculisp version 1.2.1
+Doculisp version 2.0.0
 
 ## Contributors ✨ ##
 

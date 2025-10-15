@@ -1,5 +1,5 @@
 {
   "documentPath": "/docs.dlproj",
-  "message": "Document identifier block at '/docs.dlproj' Line: 4, Char: 10 does not contain a source block.",
+  "message": "Validation Error: Missing source block in document identifier at '/docs.dlproj' (Line: 4, Char: 10).",
   "success": false
 }

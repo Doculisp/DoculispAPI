@@ -169,11 +169,11 @@ function buildAstProject(internals: IInternals, util: IUtil, trimArray: ITrimArr
                 }
 
                 if(0 === sources.length) {
-                    return util.fail(`Document identifier block at '${originalLocation.documentPath}' Line: ${originalLocation.line}, Char: ${originalLocation.char} does not contain a source block.`, originalLocation.documentPath)
+                    return util.fail(`Validation Error: Missing source block in document identifier at '${originalLocation.documentPath}' (Line: ${originalLocation.line}, Char: ${originalLocation.char}).`, originalLocation.documentPath)
                 }
 
                 if(0 === outputs.length) {
-                    return util.fail(`Document identifier block at '${originalLocation.documentPath}' Line: ${originalLocation.line}, Char: ${originalLocation.char} does not contain a output block.`, originalLocation.documentPath)
+                    return util.fail(`Validation Error: Missing output block in document identifier at '${originalLocation.documentPath}' (Line: ${originalLocation.line}, Char: ${originalLocation.char}).`, originalLocation.documentPath)
                 }
 
                 if(1 < sources.length) {
@@ -222,13 +222,13 @@ function buildAstProject(internals: IInternals, util: IUtil, trimArray: ITrimArr
             const table = textHelper.symbolLocation(id)
             if(!!table) {
                 let bads = Object.keys(table);
-                let badMsg = bads.map(badS => `'${badS}' @ id char ${table[badS]}`).join('\n\t');
+                let badMsg = bads.map(badS => `'${badS}' at ID character ${table[badS]}`).join('.\n  ') + '.';
 
-                return util.fail(`Symbol(s) in document id ${id}' at '${current.documentPath.fullName}' Line: ${current.line}, Char: ${current.char}\n${badMsg}`);
+                return util.fail(`Validation Error: Invalid characters in document ID '${id}' at '${current.documentPath.fullName}' (Line: ${current.line}, Char: ${current.char}).\n  ${badMsg}`);
             }
 
             if(!textHelper.isLowercase(id)) {
-                return util.fail(`Id must be lowercase '${id}' at '${current.documentPath.fullName}' Line: ${current.line}, Char: ${current.char}. Did you mean '${id.toLocaleLowerCase()}'?`)
+                return util.fail(`Validation Error: Document ID must be lowercase at '${current.documentPath.fullName}' (Line: ${current.line}, Char: ${current.char}). Did you mean '${id.toLocaleLowerCase()}'?`)
             }
 
             if(variableTable.hasKey(id)) {
@@ -236,10 +236,10 @@ function buildAstProject(internals: IInternals, util: IUtil, trimArray: ITrimArr
                 let msg = '';
 
                 if(orig && orig.type === 'variable-id') {
-                    msg = `\n\tOriginal us of Id was in '${orig.source.documentPath}' Line: ${orig.source.line}, Char: ${orig.source.char}.`;
+                    msg = `\n  Original use of ID was at '${orig.source.documentPath}' (Line: ${orig.source.line}, Char: ${orig.source.char}).`;
                 }
 
-                return util.fail(`Duplicate id '${id}' at '${current.documentPath.fullName}' Line: ${current.line}, Char: ${current.char}.${msg}`, current.documentPath);
+                return util.fail(`Validation Error: Duplicate document ID '${id}' at '${current.documentPath.fullName}' (Line: ${current.line}, Char: ${current.char}).${msg}`, current.documentPath);
             }
             return parseDocumentByParts(current, input, id)(ast.subStructure, (ast.subStructure[0] as IdentifierAst).location);
         }
