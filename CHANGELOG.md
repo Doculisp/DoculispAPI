@@ -27,6 +27,24 @@
 
 ### Improved ###
 
+- **Error Messages**: Significantly improved error message quality across the entire system
+  - **Document Parser**: Complete overhaul of all document parsing error messages with standardized formatting
+    - Parse errors now use consistent `"Parse Error:"` prefix with clear descriptions
+    - Standardized location format: `(Line: X, Char: Y)` with proper parentheses
+    - Enhanced clarity: "Unclosed multiline code block", "Embedded Doculisp block detected", etc.
+    - All 7 document parser error messages updated and tested
+  - **Container System**: All dependency injection error messages now include clear prefixes and context
+    - Registration errors: `Registration failed: Module name is required.`
+    - Build errors: `Build failed: No module named 'moduleName' is registered.`
+    - Replacement errors: `Replacement failed: Module 'name' is not registered.`
+    - Circular dependency detection: `Build failed: Circular dependency detected: "a" => "b" => "a".`
+  - **File Handler**: Enhanced file operation error messages with full context
+    - File load errors: `File load failed: [reason] (Path: [fullPath])`
+    - File write errors: `File write failed: [reason] (Path: [fullPath])`
+    - Directory errors: `Working directory [operation] failed: [reason] (Path: [fullPath])`
+  - **Error Consistency**: All error messages now follow consistent formatting patterns
+  - **Better Debugging**: Error messages include file paths, operation context, and clear failure reasons
+
 - **Code Clarity**: The terminology change from "atom" to "identifier" provides clearer understanding of the language structure
   - Function names and keywords in Doculisp are now consistently called "identifiers"
   - More intuitive for developers familiar with programming language terminology
@@ -38,16 +56,36 @@
 - **Type System**: Complete type system refactoring for consistency
 - **Internal APIs**: All internal function signatures updated
 - **Language Server Integration**: Updated completion providers and syntax highlighting
+- **Error Handling Infrastructure**: Complete overhaul of error message generation
+  - Systematic error message standardization initiative across entire codebase
+  - Standardized error message prefixes across all modules (`Parse Error:`, `Validation Error:`, etc.)
+  - Enhanced error context with file paths and operation details
+  - Consistent location format: `(Line: X, Char: Y)` with proper punctuation
+  - Improved error message consistency and readability
+  - Better error propagation through the processing pipeline
+  - Comprehensive error message improvement plan covering all parser modules
 - **Testing Framework**: Comprehensive test updates with new approval test baselines
+  - Updated all container tests to expect new error message formats
+  - Added comprehensive file handler error message testing
+  - Systematic update of all document parser approval tests to match new error message formats
+  - Enhanced test coverage for error scenarios and edge cases
+  - All 7 document parser error messages verified with updated approval test baselines
 
 ### Migration Guide ###
 
 For users of the DoculispTypeScript API:
-- Update any references to `AtomToken` to use `IdentifierToken`
-- Replace `IAstAtom` with `IAstIdentifier` in type annotations
-- Change `AtomAst` to `IdentifierAst` where used
-- Update any custom parser extensions to use the new identifier terminology
-- Review any error handling that looked for "atom" in error messages - now use "identifier"
+- **Terminology Updates**: Update any references to `AtomToken` to use `IdentifierToken`
+- **Type System Changes**: Replace `IAstAtom` with `IAstIdentifier` in type annotations
+- **AST Updates**: Change `AtomAst` to `IdentifierAst` where used
+- **Parser Extensions**: Update any custom parser extensions to use the new identifier terminology
+- **Error Handling**: Review any error handling code that depends on specific error message formats
+  - Document parser errors now use `"Parse Error:"` prefix with standardized location format
+  - Container errors now have consistent prefixes (`Registration failed:`, `Build failed:`, etc.)
+  - File operation errors now include full file paths in parentheses
+  - Location information now uses parentheses format: `(Line: X, Char: Y)` instead of `Line: X, Char: Y`
+  - Circular dependency messages use arrow notation (`"a" => "b" => "c"`)
+  - Replace any string matching for "atom" in error messages with "identifier"
+  - Update any error message parsing that relied on previous inconsistent formats
 
 ## [1.0.1] - 2025-10-14 ##
 

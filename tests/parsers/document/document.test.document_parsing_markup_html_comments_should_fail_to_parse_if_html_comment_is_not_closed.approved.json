@@ -1,5 +1,5 @@
 {
   "documentPath": "C:/examples/bad.md",
-  "message": "Open HTML Comment at 'C:/examples/bad.md' Line: 1, Char: 1 but does not close.",
+  "message": "Parse Error: Unclosed HTML comment at 'C:/examples/bad.md' (Line: 1, Char: 1).",
   "success": false
 }

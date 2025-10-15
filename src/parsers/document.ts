@@ -307,7 +307,7 @@ function getPartParsers(projectLocation: IProjectLocation, doesIt: IDocumentSear
     
             if(parsed.success) {
                 if(opened) {
-                    return util.fail(`Multiline code block at '${starting.documentPath.fullName}' Line: ${starting.line}, Char: ${starting.char} does not close`, projectLocation.documentPath);
+                    return util.fail(`Parse Error: Unclosed multiline code block at '${starting.documentPath.fullName}' (Line: ${starting.line}, Char: ${starting.char}).`, projectLocation.documentPath);
                 }
                 
                 const [pieces, leftover] = parsed.value;
@@ -359,7 +359,7 @@ function getPartParsers(projectLocation: IProjectLocation, doesIt: IDocumentSear
                 }
                 
                 if(doesIt.startWithAnyNewline.test(input)){
-                    return util.fail(`Inline code block at '${starting.documentPath.fullName}' Line: ${starting.line}, Char: ${starting.char} contains a new line before closing.`, projectLocation.documentPath);
+                    return util.fail(`Parse Error: Inline code block contains newline before closing at '${starting.documentPath.fullName}' (Line: ${starting.line}, Char: ${starting.char}).`, projectLocation.documentPath);
                 }
 
                 return internals.noResultFound();
@@ -411,7 +411,7 @@ function getPartParsers(projectLocation: IProjectLocation, doesIt: IDocumentSear
     
             if(parsed.success) {
                 if(opened) {
-                    return util.fail(`Inline code block at '${starting.documentPath.fullName}' Line: ${starting.line}, Char: ${starting.char} does not close`, projectLocation.documentPath);
+                    return util.fail(`Parse Error: Unclosed inline code block at '${starting.documentPath.fullName}' (Line: ${starting.line}, Char: ${starting.char}).`, projectLocation.documentPath);
                 }
     
                 const [parts, leftover] = parsed.value;
@@ -441,7 +441,7 @@ function getPartParsers(projectLocation: IProjectLocation, doesIt: IDocumentSear
             function tryParseDoculispOpen(input: string, current: ILocation): StringStepParseResult<DocumentPart> {
                 if(doesIt.startWithDocuLisp.test(input)) {
                     if(0 < depth) {
-                        return util.fail(`Doculisp Block at '${starting.documentPath.fullName}' Line: ${starting.line}, Char: ${starting.char} contains an embedded doculisp block at Line: ${current.line}, Char: ${current.char}.`, projectLocation.documentPath);
+                        return util.fail(`Parse Error: Embedded Doculisp block detected at '${starting.documentPath.fullName}' (Line: ${current.line}, Char: ${current.char}) inside block starting at (Line: ${starting.line}, Char: ${starting.char}).`, projectLocation.documentPath);
                     }
     
                     const parsed: string = (input.match(doesIt.startWithDocuLisp) as any)[0];
@@ -540,7 +540,7 @@ function getPartParsers(projectLocation: IProjectLocation, doesIt: IDocumentSear
             const parsed = parser.parse(toParse, starting);
             if(parsed.success) {
                 if(0 < depth) {
-                    return util.fail(`Doculisp block at '${starting.documentPath.fullName}' Line: ${starting.line}, Char: ${starting.char} is not closed.`, projectLocation.documentPath);
+                    return util.fail(`Parse Error: Unclosed Doculisp block at '${starting.documentPath.fullName}' (Line: ${starting.line}, Char: ${starting.char}).`, projectLocation.documentPath);
                 }
     
                 const [parts, leftover] = parsed.value;
@@ -639,7 +639,7 @@ function getPartParsers(projectLocation: IProjectLocation, doesIt: IDocumentSear
             const parsed = parser.parse(toParse, starting);
             if(parsed.success) {
                 if(opened) {
-                    return util.fail(`Open HTML Comment at '${starting.documentPath.fullName}' Line: ${starting.line}, Char: ${starting.char} but does not close.`, projectLocation.documentPath);
+                    return util.fail(`Parse Error: Unclosed HTML comment at '${starting.documentPath.fullName}' (Line: ${starting.line}, Char: ${starting.char}).`, projectLocation.documentPath);
                 }
 
                 const [result, leftover] = parsed.value;
@@ -882,7 +882,7 @@ function documentParse(doesIt: IDocumentSearches, parserBuilder: IInternals, uti
             const [parts, leftover] = parsed.value;
             if(isDoculispFile && 0 < leftover.remaining.length) {
                 const ending = leftover.location.increaseChar(-1);
-                return util.fail(`Doculisp block at '${ending.documentPath.fullName}' Line: 1, Char: 1 has something not contained in parenthesis at Line: ${ending.line}, Char: ${ending.char}.`, documentPath);
+                return util.fail(`Parse Error: Extra content found outside parentheses at '${ending.documentPath.fullName}' (Line: ${ending.line}, Char: ${ending.char}).`, documentPath);
             }
 
             const lineConcat = parserBuilder.createArrayParser(lineBuilder(util, trimArray));
