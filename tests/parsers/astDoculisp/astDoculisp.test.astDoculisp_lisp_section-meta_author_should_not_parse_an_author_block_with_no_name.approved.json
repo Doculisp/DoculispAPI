@@ -1,5 +1,5 @@
 {
   "documentPath": "main.dlisp",
-  "message": "Author block at 'main.dlisp' Line: 4, Char: 6 does not contain the author's name.",
+  "message": "Validation Error: Author block at 'main.dlisp' does not contain the author's name (Line: 4, Char: 6).",
   "success": false
 }

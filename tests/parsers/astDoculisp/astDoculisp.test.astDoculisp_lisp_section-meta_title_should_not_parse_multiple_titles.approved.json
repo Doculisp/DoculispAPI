@@ -1,5 +1,5 @@
 {
   "documentPath": "main.dlisp",
-  "message": "The section-meta block at 'main.dlisp' Line: 0, Char: 0 contains more then a single title block.",
+  "message": "Validation Error: Multiple title blocks found in section-meta at 'main.dlisp' (Line: 0, Char: 0). Only one title block allowed per section-meta.",
   "success": false
 }
