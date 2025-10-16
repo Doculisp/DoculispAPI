@@ -109,7 +109,7 @@ function buildAstParser(util: IUtil, internals: IInternals, trimArray: ITrimArra
         }
 
         if(closeCommand.type !== 'token - close parenthesis') {
-            return util.fail(`Malformed lisp at ${closeCommand.location}.`, closeCommand.location.documentPath);
+            return util.fail(`Parse Error: Malformed lisp expression at '${closeCommand.location.documentPath.fullName}' (Line: ${closeCommand.location.line}, Char: ${closeCommand.location.char}).`, closeCommand.location.documentPath);
         }
 
         return util.ok({
@@ -148,7 +148,7 @@ function buildAstParser(util: IUtil, internals: IInternals, trimArray: ITrimArra
         const close = remaining.remaining[0] as Token;
 
         if(remaining.remaining.length === 0 || close.type !== 'token - close parenthesis') {
-            return util.fail(`Malformed lisp at ${remaining.location}`, remaining.location.documentPath);
+            return util.fail(`Parse Error: Malformed lisp expression at '${remaining.location.documentPath.fullName}' (Line: ${remaining.location.line}, Char: ${remaining.location.char}).`, remaining.location.documentPath);
         }
 
         return util.ok({
@@ -183,7 +183,8 @@ function buildAstParser(util: IUtil, internals: IInternals, trimArray: ITrimArra
 
         if(0 < leftovers.remaining.length) {
             const token: Token = leftovers.remaining[0] as Token;
-            return util.fail(`Unknown Token '${JSON.stringify(token, null, 4)}`, token.location.documentPath)
+            const tokenText = token.type === 'token - close parenthesis' ? ')' : (token as any).text;
+            return util.fail(`Parse Error: Unknown token '${tokenText}' at '${token.location.documentPath.fullName}' (Line: ${token.location.line}, Char: ${token.location.char}).`, token.location.documentPath)
         }
         
         return util.ok({

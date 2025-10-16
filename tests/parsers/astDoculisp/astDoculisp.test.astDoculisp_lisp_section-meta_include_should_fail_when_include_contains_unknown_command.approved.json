@@ -1,0 +1,5 @@
+{
+  "documentPath": "./malformed.dlisp",
+  "message": "Parse Error: Include contains unknown command 'invalidContainer' at './malformed.dlisp' (Line: 6, Char: 10).",
+  "success": false
+}

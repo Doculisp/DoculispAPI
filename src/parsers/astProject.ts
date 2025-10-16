@@ -73,7 +73,7 @@ function buildAstProject(internals: IInternals, util: IUtil, trimArray: ITrimArr
 
             if(0 < remaining.remaining.length) {
                 const bad = remaining.remaining[0] as CoreAst;
-                return util.fail(`Documents block at '${current.documentPath.fullName}' Line: ${current.line}, Char: ${current.char} contains unknown identifier of '${bad.value}' at Line: ${bad.location.line}, Char ${bad.location.char}.`, current.documentPath);
+                return util.fail(`Parse Error: Documents block contains unknown identifier '${bad.value}' at '${current.documentPath.fullName}' (Line: ${bad.location.line}, Char: ${bad.location.char}).`, current.documentPath);
             }
 
             const documents: IProjectDocuments = {
@@ -158,7 +158,7 @@ function buildAstProject(internals: IInternals, util: IUtil, trimArray: ITrimArr
 
                 if(0 < remaining.remaining.length) {
                     const first = remaining.remaining[0] as IdentifierAst;
-                    return util.fail(`Unknown identifier at '${current.documentPath.fullName}' Line: ${first.location.line}, Char: ${first.location.char} of '${first.value}'`, current.documentPath);
+                    return util.fail(`Parse Error: Unknown identifier '${first.value}' at '${current.documentPath.fullName}' (Line: ${first.location.line}, Char: ${first.location.char}).`, current.documentPath);
                 }
 
                 const sources = result.filter(r => r.type === 'i-source');
@@ -178,12 +178,12 @@ function buildAstProject(internals: IInternals, util: IUtil, trimArray: ITrimArr
 
                 if(1 < sources.length) {
                     const bad = sources[1] as ISource;
-                    return util.fail(`Duplicate source block at '${current.documentPath}' Line: ${bad.location.line}, Char: ${bad.location.char}.`, current.documentPath);
+                    return util.fail(`Parse Error: Duplicate source block at '${current.documentPath}' (Line: ${bad.location.line}, Char: ${bad.location.char}).`, current.documentPath);
                 }
 
                 if(1 < outputs.length) {
                     const bad = outputs[1] as IOutput;
-                    return util.fail(`Duplicate output block at '${current.documentPath}' Line: ${bad.location.line}, Char: ${bad.location.char}.`, current.documentPath);
+                    return util.fail(`Parse Error: Duplicate output block at '${current.documentPath}' (Line: ${bad.location.line}, Char: ${bad.location.char}).`, current.documentPath);
                 }
 
                 const source = sources[0] as ISource;

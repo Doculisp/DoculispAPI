@@ -1,0 +1,5 @@
+{
+  "documentPath": "./malformed.dlproj",
+  "message": "Parse Error: Documents block contains unknown identifier 'unknownIdentifier' at './malformed.dlproj' (Line: 7, Char: 6).",
+  "success": false
+}

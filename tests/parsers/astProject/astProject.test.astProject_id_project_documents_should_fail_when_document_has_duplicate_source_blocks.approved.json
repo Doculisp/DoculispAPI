@@ -1,0 +1,5 @@
+{
+  "documentPath": "./malformed.dlproj",
+  "message": "Parse Error: Duplicate source block at './malformed.dlproj' (Line: 4, Char: 10).",
+  "success": false
+}

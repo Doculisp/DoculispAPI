@@ -104,9 +104,111 @@ describe('ast', () => {
     
             verifyAsJson(result);
         });
+
+        it('should fail when command is missing closing parenthesis', () => {
+            // Create tokens directly: identifier + parameter but no closing parenthesis
+            const projectLocation = buildProjectLocation('./malformed.dlisp', 1, 1);
+            const tokens: Result<TokenizedDocument> = ok({
+                projectLocation: projectLocation,
+                tokens: [
+                    {
+                        type: 'token - identifier',
+                        text: 'title',
+                        location: util.toLocation(projectLocation, 1, 2)
+                    },
+                    {
+                        type: 'token - parameter', 
+                        text: 'Missing Close',
+                        location: util.toLocation(projectLocation, 1, 8)
+                    }
+                    // Missing the close parenthesis token!
+                ]
+            });
+
+            const result = parser.parse(tokens);
+            verifyAsJson(result);
+        });
+
+        it('should fail when container structure is malformed', () => {
+            // Create tokens for a container that's missing closing parenthesis
+            const projectLocation = buildProjectLocation('./malformed.dlisp', 1, 1);
+            const tokens: Result<TokenizedDocument> = ok({
+                projectLocation: projectLocation,
+                tokens: [
+                    {
+                        type: 'token - identifier',
+                        text: 'section-meta',
+                        location: util.toLocation(projectLocation, 1, 2)
+                    },
+                    {
+                        type: 'token - identifier',
+                        text: 'title',
+                        location: util.toLocation(projectLocation, 1, 15)
+                    },
+                    {
+                        type: 'token - parameter',
+                        text: 'Complete',
+                        location: util.toLocation(projectLocation, 1, 21)
+                    },
+                    {
+                        type: 'token - close parenthesis',
+                        location: util.toLocation(projectLocation, 1, 30)
+                    }
+                    // Missing outer closing parenthesis for section-meta!
+                ]
+            });
+
+            const result = parser.parse(tokens);
+            verifyAsJson(result);
+        });
+
+        it('should fail when encountering unknown token type', () => {
+            // Create tokens that include an extra token after a complete expression
+            const projectLocation = buildProjectLocation('./malformed.dlisp', 1, 1);
+            const tokens: Result<TokenizedDocument> = ok({
+                projectLocation: projectLocation,
+                tokens: [
+                    {
+                        type: 'token - identifier',
+                        text: 'title',
+                        location: util.toLocation(projectLocation, 1, 2)
+                    },
+                    {
+                        type: 'token - parameter',
+                        text: 'Test',
+                        location: util.toLocation(projectLocation, 1, 8)
+                    },
+                    {
+                        type: 'token - close parenthesis',
+                        location: util.toLocation(projectLocation, 1, 12)
+                    },
+                    {
+                        type: 'token - parameter', // This extra token should trigger "Unknown Token" error
+                        text: '@invalid',
+                        location: util.toLocation(projectLocation, 1, 13)
+                    }
+                ]
+            });
+
+            const result = parser.parse(tokens);
+            verifyAsJson(result);
+        });
     });
 
     describe('lisp', () => {
+        let parser: IAstParser = undefined as any;
+
+        beforeEach(() => {
+            util = null as any;
+            parser = testable.ast.parserBuilder(container, environment => {
+                const pathHandler: PathConstructor = function (filePath): IPath {
+                        return buildPath(filePath)
+                };
+                environment.replaceValue(pathHandler, 'pathConstructor');
+                util = environment.buildAs<IUtil>('util');
+            });
+        });
+        
         it('should simple lisp tokens', () => {
             const contents = `<!--
 (dl (# My heading))
@@ -175,6 +277,95 @@ describe('ast', () => {
 
             const result = toResult(text, buildProjectLocation('./_main.dlisp', 4, 7));
 
+            verifyAsJson(result);
+        });
+
+        it('should fail when command is missing closing parenthesis', () => {
+            // Create tokens directly: identifier + parameter but no closing parenthesis
+            const projectLocation = buildProjectLocation('./malformed.dlisp', 1, 1);
+            const tokens: Result<TokenizedDocument> = ok({
+                projectLocation: projectLocation,
+                tokens: [
+                    {
+                        type: 'token - identifier',
+                        text: 'title',
+                        location: util.toLocation(projectLocation, 1, 2)
+                    },
+                    {
+                        type: 'token - parameter', 
+                        text: 'Missing Close',
+                        location: util.toLocation(projectLocation, 1, 8)
+                    }
+                    // Missing the close parenthesis token!
+                ]
+            });
+
+            const result = parser.parse(tokens);
+            verifyAsJson(result);
+        });
+
+        it('should fail when container structure is malformed', () => {
+            // Create tokens for a container that's missing closing parenthesis
+            const projectLocation = buildProjectLocation('./malformed.dlisp', 1, 1);
+            const tokens: Result<TokenizedDocument> = ok({
+                projectLocation: projectLocation,
+                tokens: [
+                    {
+                        type: 'token - identifier',
+                        text: 'section-meta',
+                        location: util.toLocation(projectLocation, 1, 2)
+                    },
+                    {
+                        type: 'token - identifier',
+                        text: 'title',
+                        location: util.toLocation(projectLocation, 1, 15)
+                    },
+                    {
+                        type: 'token - parameter',
+                        text: 'Complete',
+                        location: util.toLocation(projectLocation, 1, 21)
+                    },
+                    {
+                        type: 'token - close parenthesis',
+                        location: util.toLocation(projectLocation, 1, 30)
+                    }
+                    // Missing outer closing parenthesis for section-meta!
+                ]
+            });
+
+            const result = parser.parse(tokens);
+            verifyAsJson(result);
+        });
+
+        it('should fail when encountering unknown token type', () => {
+            // Create tokens that include an extra token after a complete expression
+            const projectLocation = buildProjectLocation('./malformed.dlisp', 1, 1);
+            const tokens: Result<TokenizedDocument> = ok({
+                projectLocation: projectLocation,
+                tokens: [
+                    {
+                        type: 'token - identifier',
+                        text: 'title',
+                        location: util.toLocation(projectLocation, 1, 2)
+                    },
+                    {
+                        type: 'token - parameter',
+                        text: 'Test',
+                        location: util.toLocation(projectLocation, 1, 8)
+                    },
+                    {
+                        type: 'token - close parenthesis',
+                        location: util.toLocation(projectLocation, 1, 12)
+                    },
+                    {
+                        type: 'token - parameter', // This extra token should trigger "Unknown Token" error
+                        text: '@invalid',
+                        location: util.toLocation(projectLocation, 1, 13)
+                    }
+                ]
+            });
+
+            const result = parser.parse(tokens);
             verifyAsJson(result);
         });
     });

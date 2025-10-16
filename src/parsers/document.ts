@@ -850,10 +850,10 @@ function lineBuilder(util: IUtil, trimArray: ITrimArray): HandleValue<DocumentPa
 function documentParse(doesIt: IDocumentSearches, parserBuilder: IInternals, util: IUtil, trimArray: ITrimArray): Valid<DocumentParser> {    
     return function (documentText: string, projectLocation: IProjectLocation): Result<DocumentMap> {
         if(projectLocation.documentDepth <= 0) {
-            return util.fail(`Document Depth must be a value of 1 or larger.`, projectLocation.documentPath);
+            return util.fail(`Validation Error: Document depth must be a value of 1 or larger.`, projectLocation.documentPath);
         }
         if(projectLocation.documentIndex <= 0) {
-            return util.fail(`Document Index must be a value of 1 or larger.`, projectLocation.documentPath);
+            return util.fail(`Validation Error: Document index must be a value of 1 or larger.`, projectLocation.documentPath);
         }
 
         const partParsers = getPartParsers(projectLocation, doesIt, parserBuilder, util);

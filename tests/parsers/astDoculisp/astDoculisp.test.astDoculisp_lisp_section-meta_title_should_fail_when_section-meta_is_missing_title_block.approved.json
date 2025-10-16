@@ -1,0 +1,5 @@
+{
+  "documentPath": "./malformed.dlisp",
+  "message": "Parse Error: Section-meta missing title block at './malformed.dlisp' (Line: 0, Char: 0).",
+  "success": false
+}

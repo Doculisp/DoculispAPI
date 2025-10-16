@@ -131,7 +131,9 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
                 }
     
                 if(titles.length === 0) {
-                    return util.fail(`The section-meta block at '${location.documentPath.fullName}' Line: ${location.line}, Char: ${location.char} is missing a title block.`, current.documentPath);
+                    if(!hasSectionMeta) {
+                    return util.fail(`Parse Error: Section-meta missing title block at '${location.documentPath.fullName}' (Line: ${location.line}, Char: ${location.char}).`, current.documentPath);
+                }
                 }
 
                 const title = titles[0] as IdentifierAst;
@@ -221,7 +223,7 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
     
                     if(0 < bad.length) {
                         const next = bad[0] as IdentifierAst;
-                        return util.fail(`Include contains unknown command '${next.value}' at '${next.location.documentPath.fullName}' Line: ${next.location.line}, Char: ${next.location.char}.`, location.documentPath);
+                        return util.fail(`Parse Error: Include contains unknown command '${next.value}' at '${next.location.documentPath.fullName}' (Line: ${next.location.line}, Char: ${next.location.char}).`, location.documentPath);
                     }
     
                     const commands = ast as IAstCommand[];

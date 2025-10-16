@@ -302,6 +302,13 @@ A story of a misbehaving parser.
 
                     verifyAsJson(result);
                 });
+
+                it('should fail when section-meta is missing title block', () => {
+                    const contents = `(section-meta (subtitle Just A Subtitle))`;
+                    const result = toResult(contents, buildProjectLocation('./malformed.dlisp', 1, 1));
+
+                    verifyAsJson(result);
+                });
             });
 
             describe('author', () => {
@@ -580,6 +587,23 @@ A story of a misbehaving parser.
 )`;
 
                     const result = toResult(contents, buildProjectLocation('main.dlisp', 1, 4));
+
+                    verifyAsJson(result);
+                });
+
+                it('should fail when include contains unknown command', () => {
+                    const contents = `
+(section-meta
+    (title Test Document)
+    (include
+        (Section ./valid.md)
+        (invalidContainer
+            (subCommand value)
+        )
+    )
+)`;
+
+                    const result = toResult(contents, buildProjectLocation('./malformed.dlisp', 1, 4));
 
                     verifyAsJson(result);
                 });

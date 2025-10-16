@@ -1,0 +1,5 @@
+{
+  "documentPath": "./malformed.dlisp",
+  "message": "Parse Error: Unknown token '@invalid' at './malformed.dlisp' (Line: 1, Char: 13).",
+  "success": false
+}

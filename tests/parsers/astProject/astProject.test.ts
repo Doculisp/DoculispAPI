@@ -268,5 +268,61 @@ describe('astProject', () => {
             const result = resultBuilder(project, buildProjectLocation('/docs.dlproj'));
             verifyAsJson(result);
         });
+
+        it('should fail when documents block contains unknown identifier', () => {
+            const project = `
+(documents
+    (document
+        (source ./readme.md)
+        (output ./README.md)
+    )
+    (unknownIdentifier some-value)
+)
+`;
+            const result = resultBuilder(project, buildProjectLocation('./malformed.dlproj'));
+            verifyAsJson(result);
+        });
+
+        it('should fail when document structure contains unknown identifier', () => {
+            const project = `
+(documents
+    (document
+        (source ./readme.md)
+        (output ./README.md)
+        (unknownBlock some-parameter)
+    )
+)
+`;
+            const result = resultBuilder(project, buildProjectLocation('./malformed.dlproj'));
+            verifyAsJson(result);
+        });
+
+        it('should fail when document has duplicate source blocks', () => {
+            const project = `
+(documents
+    (document
+        (source ./readme.md)
+        (source ./another-readme.md)
+        (output ./README.md)
+    )
+)
+`;
+            const result = resultBuilder(project, buildProjectLocation('./malformed.dlproj'));
+            verifyAsJson(result);
+        });
+
+        it('should fail when document has duplicate output blocks', () => {
+            const project = `
+(documents
+    (document
+        (source ./readme.md)
+        (output ./README.md)
+        (output ./ANOTHER-README.md)
+    )
+)
+`;
+            const result = resultBuilder(project, buildProjectLocation('./malformed.dlproj'));
+            verifyAsJson(result);
+        });
     });
 });
