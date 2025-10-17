@@ -196,27 +196,18 @@ function getPartParsers(projectLocation: IProjectLocation, doesIt: IDocumentSear
                         type: 'discard',
                     }));
                 }
-                
-                function toCleanPart(source: DocumentPart): DocumentPart{
-                    const part: DocumentPart = {
-                        location: source.location,
-                        text: source.text.replaceAll('\r\n', '\n').replaceAll('\r', '\n'),
-                        type: source.type,
-                    };
-                    return part;
-                }
     
                 if(1 === result.length) {
                     
                     return util.ok(internals.buildStepParse(step, {
                         type: 'parse result',
-                        subResult: toCleanPart(result[0] as DocumentPart),
+                        subResult: (result[0] as DocumentPart),
                     }));
                 }
     
                 return util.ok(internals.buildStepParse(step, {
                     type: 'parse group result',
-                    subResult: result.map(r => { return { type:'keep', keptValue: toCleanPart(r) }; }),
+                    subResult: result.map(r => { return { type:'keep', keptValue: (r) }; }),
                 }));
             }
     
