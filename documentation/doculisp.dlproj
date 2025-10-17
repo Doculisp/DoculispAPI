@@ -6,12 +6,6 @@
         )
     )
     (document
-        (user-guide
-            (source ./user-guide/_main.dlisp)
-            (output ../USER_GUIDE.md)
-        )
-    )
-    (document
         (lang
             (source ../../lang/docs/readme/_main.md)
             (output ../LANG.md)

@@ -58,7 +58,7 @@ Context-aware completion using pipeline analysis:
 
 ```typescript
 class DoculispCompletionProvider {
-    private readonly CORE_ATOMS = [
+    private readonly CORE_IDENTIFIERS = [
         'section-meta', 'title', 'include', 'content', 'toc', 'get-path',
         '#', '##', '###', '####', '#####', '######'
     ];
@@ -68,7 +68,7 @@ class DoculispCompletionProvider {
         const context = this.analyzeContext(tokenizedResult.value.tokens, position);
         
         switch (context.type) {
-            case 'identifier': return this.CORE_ATOMS.map(identifier => ({ label: identifier, kind: 'Function' }));
+            case 'identifier': return this.CORE_IDENTIFIERS.map(identifier => ({ label: identifier, kind: 'Function' }));
             case 'toc-style': return this.getTocStyleCompletions();
             case 'file-path': return this.getFileCompletions(uri);
             default: return [];

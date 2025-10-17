@@ -449,10 +449,13 @@ return util.ok(finalResult);
 ```
 
 **Error Standards:**
-- Include file path and line/character position when available
-- Clear description of what failed and why
-- Propagate original error context through call stack
-- No exceptions thrown - all errors returned as `Result<T>` failures
+- **Standardized prefixes**: All errors use consistent prefixes (`Parse Error:`, `Validation Error:`, etc.)
+- **Location format**: Consistent `(Line: X, Char: Y)` format with proper punctuation
+- **Enhanced context**: Include file path and comprehensive failure context
+- **Clear descriptions**: Specific error messages that explain what failed and why
+- **Error propagation**: Maintain original error context through the entire call stack
+- **Result pattern**: No exceptions thrown - all errors returned as `Result<T>` failures
+- **Consistent terminology**: All error messages use "identifier" terminology (never "atom")
 
 #### Output Generation ####
 
@@ -3022,7 +3025,7 @@ Context-aware completion using pipeline analysis:
 
 ```typescript
 class DoculispCompletionProvider {
-    private readonly CORE_ATOMS = [
+    private readonly CORE_IDENTIFIERS = [
         'section-meta', 'title', 'include', 'content', 'toc', 'get-path',
         '#', '##', '###', '####', '#####', '######'
     ];
@@ -3032,7 +3035,7 @@ class DoculispCompletionProvider {
         const context = this.analyzeContext(tokenizedResult.value.tokens, position);
 
         switch (context.type) {
-            case 'identifier': return this.CORE_ATOMS.map(identifier => ({ label: identifier, kind: 'Function' }));
+            case 'identifier': return this.CORE_IDENTIFIERS.map(identifier => ({ label: identifier, kind: 'Function' }));
             case 'toc-style': return this.getTocStyleCompletions();
             case 'file-path': return this.getFileCompletions(uri);
             default: return [];
@@ -3564,7 +3567,7 @@ class DoculispCompletionProvider {
     private tokenizer: TokenFunction;
     private pathConstructor: IPathConstructor;
 
-    private readonly CORE_ATOMS = [
+    private readonly CORE_IDENTIFIERS = [
         'section-meta', 'title', 'subtitle', 'author', 'id', 'ref-link', 'include',
         'content', 'toc', 'label', 'style', 'get-path',
         '#', '##', '###', '####', '#####', '######'
@@ -3603,7 +3606,7 @@ class DoculispCompletionProvider {
 
         switch (context.type) {
             case 'identifier':
-                return this.CORE_ATOMS.map(identifier => ({
+                return this.CORE_IDENTIFIERS.map(identifier => ({
                     label: identifier,
                     kind: 'Function',
                     documentation: this.getIdentifierDocumentation(identifier),

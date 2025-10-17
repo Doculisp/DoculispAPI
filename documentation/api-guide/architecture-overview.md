@@ -146,10 +146,13 @@ return util.ok(finalResult);
 ```
 
 **Error Standards:**
-- Include file path and line/character position when available
-- Clear description of what failed and why
-- Propagate original error context through call stack
-- No exceptions thrown - all errors returned as `Result<T>` failures
+- **Standardized prefixes**: All errors use consistent prefixes (`Parse Error:`, `Validation Error:`, etc.)
+- **Location format**: Consistent `(Line: X, Char: Y)` format with proper punctuation
+- **Enhanced context**: Include file path and comprehensive failure context
+- **Clear descriptions**: Specific error messages that explain what failed and why
+- **Error propagation**: Maintain original error context through the entire call stack
+- **Result pattern**: No exceptions thrown - all errors returned as `Result<T>` failures
+- **Consistent terminology**: All error messages use "identifier" terminology (never "atom")
 
 <!-- (dl (## Output Generation)) -->
 

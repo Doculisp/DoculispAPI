@@ -251,7 +251,7 @@ class DoculispCompletionProvider {
     private tokenizer: TokenFunction;
     private pathConstructor: IPathConstructor;
 
-    private readonly CORE_ATOMS = [
+    private readonly CORE_IDENTIFIERS = [
         'section-meta', 'title', 'subtitle', 'author', 'id', 'ref-link', 'include',
         'content', 'toc', 'label', 'style', 'get-path',
         '#', '##', '###', '####', '#####', '######'
@@ -290,7 +290,7 @@ class DoculispCompletionProvider {
         
         switch (context.type) {
             case 'identifier':
-                return this.CORE_ATOMS.map(identifier => ({
+                return this.CORE_IDENTIFIERS.map(identifier => ({
                     label: identifier,
                     kind: 'Function',
                     documentation: this.getIdentifierDocumentation(identifier),
