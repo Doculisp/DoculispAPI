@@ -91,4 +91,4 @@ myProject.run();
 
 <!-- (dl (# Next Steps)) -->
 
-For comprehensive tutorials, examples, and best practices, see the [User Guide](<!-- (dl (get-path user-guide)) -->).
+For comprehensive tutorials, examples, and best practices, see the [API Guide](<!-- (dl (get-path api-guide)) -->).

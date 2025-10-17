@@ -202,7 +202,7 @@ myProject.run();
 
 ### Next Steps ###
 
-For comprehensive tutorials, examples, and best practices, see the [User Guide](./USER_GUIDE.md).
+For comprehensive tutorials, examples, and best practices, see the [API Guide](./API_GUIDE.md).
 
 ## API Usage ##
 
@@ -301,7 +301,7 @@ results.forEach(result => {
 
 ## Learn More ##
 
-* [User Guide](./USER_GUIDE.md) - Complete guide with tutorials and best practices
+* [API Guide](./API_GUIDE.md) - Complete guide with tutorials and best practices
 * [Language Documentation](./LANG.md) - Language syntax reference
 * [Project File Format](./PROJECT.md) - Multi-document compilation
 
