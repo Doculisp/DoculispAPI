@@ -324,5 +324,58 @@ describe('astProject', () => {
             const result = resultBuilder(project, buildProjectLocation('./malformed.dlproj'));
             verifyAsJson(result);
         });
+
+        it('should fail when document block contains unknown block', () => {
+            const project = `
+(documents
+    (document
+        (source ./readme.md)
+        (output ./README.md)
+        (unknownBlock ./something)
+    )
+)
+`;
+            const result = resultBuilder(project, buildProjectLocation('./malformed.dlproj'));
+            verifyAsJson(result);
+        });
+
+        it('should fail when document block does not contain source or output', () => {
+            const project = `
+(documents
+    (document
+    )
+)
+`;
+            const result = resultBuilder(project, buildProjectLocation('./malformed.dlproj'));
+            verifyAsJson(result);
+        });
+
+        it('should fail when document has duplicate unknown blocks', () => {
+            const project = `
+(documents
+    (document
+        (source ./readme.md)
+        (source ./readme.md)
+        (output ./README.md)
+    )
+)
+`;
+            const result = resultBuilder(project, buildProjectLocation('./malformed.dlproj'));
+            verifyAsJson(result);
+        });
+
+        it('should fail when project contains unknown top-level identifier', () => {
+            const project = `
+(documents
+    (document
+        (source ./readme.md)
+        (output ./README.md)
+    )
+)
+(unknownTopLevel ./something)
+`;
+            const result = resultBuilder(project, buildProjectLocation('./malformed.dlproj'));
+            verifyAsJson(result);
+        });
     });
 });

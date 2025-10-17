@@ -1,0 +1,5 @@
+{
+  "documentPath": "test.dlisp",
+  "message": "Parse Error: Unknown token 'First section' at 'test.dlisp' (Line: 6, Char: 1).",
+  "success": false
+}

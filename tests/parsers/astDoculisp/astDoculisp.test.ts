@@ -607,6 +607,35 @@ A story of a misbehaving parser.
 
                     verifyAsJson(result);
                 });
+
+                it('should fail when section-meta has more than one include', () => {
+                    const contents = `
+(section-meta
+    (title Test Document)
+    (include
+        (Section ./first.md)
+    )
+    (include
+        (Section ./second.md)
+    )
+)`;
+
+                    const result = toResult(contents, buildProjectLocation('./malformed.dlisp', 1, 4));
+
+                    verifyAsJson(result);
+                });
+
+                it('should fail when include block has unknown parameter', () => {
+                    const contents = `
+(section-meta
+    (title Test Document)
+    (include unknownParameter)
+)`;
+
+                    const result = toResult(contents, buildProjectLocation('./malformed.dlisp', 1, 4));
+
+                    verifyAsJson(result);
+                });
             });
 
             describe('id', () => {
@@ -938,6 +967,62 @@ A story of a misbehaving parser.
 
                 verifyAsJson(result);
             });
+        });
+    });
+
+    describe('error handling', () => {
+        test('astDoculisp should handle multiple includes in same section', () => {
+            const doculispContent = '(section-meta\n    (title Test Title)\n    (include first.md)\n    (include second.md)\n)';
+            const result = toResult(doculispContent, buildProjectLocation('test.dlisp', 1, 1));
+            verifyAsJson(result);
+        });
+
+        test('astDoculisp should handle unknown parameter in section-meta block', () => {
+            const doculispContent = '(section-meta\n    (title Test Title)\n    (id TestId)\n    (unknown-param Value)\n)';
+            const result = toResult(doculispContent, buildProjectLocation('test.dlisp', 1, 1));
+            verifyAsJson(result);
+        });
+
+        test('astDoculisp should handle multiple ids in section-meta block', () => {
+            const doculispContent = '(section-meta\n    (title Test Title)\n    (id FirstId)\n    (id SecondId)\n)';
+            const result = toResult(doculispContent, buildProjectLocation('test.dlisp', 1, 1));
+            verifyAsJson(result);
+        });
+
+        test('astDoculisp should handle section id block with sub blocks', () => {
+            const doculispContent = '(section-meta\n    (title Test Title)\n    (id (sub-block Content))\n)';
+            const result = toResult(doculispContent, buildProjectLocation('test.dlisp', 1, 1));
+            verifyAsJson(result);
+        });
+
+        test('astDoculisp should handle section id block missing identifier text', () => {
+            const doculispContent = '(section-meta\n    (title Test Title)\n    (id)\n)';
+            const result = toResult(doculispContent, buildProjectLocation('test.dlisp', 1, 1));
+            verifyAsJson(result);
+        });
+
+        test('astDoculisp should handle duplicate section id usage', () => {
+            const doculispContent = '(section-meta\n    (title Test Title)\n    (id DuplicateId)\n)\n\nFirst section\n\n(section-meta\n    (title Another Title)\n    (id DuplicateId)\n)\n\nSecond section';
+            const result = toResult(doculispContent, buildProjectLocation('test.dlisp', 1, 1));
+            verifyAsJson(result);
+        });
+
+        test('astDoculisp should handle multiple toc blocks in content', () => {
+            const doculispContent = '(section-meta\n    (title Test Title)\n    (include (X external.md))\n)\n\n(content\n    (toc)\n    (toc)\n)';
+            const result = toResult(doculispContent, buildProjectLocation('test.dlisp', 1, 1));
+            verifyAsJson(result);
+        });
+
+        test('astDoculisp should handle content block with too many sub blocks', () => {
+            const doculispContent = '(section-meta\n    (title Test Title)\n    (include (X external.md))\n)\n\n(content\n    (toc\n        (label Test Label)\n        (style labeled)\n        (extra Invalid Block)\n    )\n)';
+            const result = toResult(doculispContent, buildProjectLocation('test.dlisp', 1, 1));
+            verifyAsJson(result);
+        });
+
+        test('astDoculisp should handle duplicate blocks in content toc', () => {
+            const doculispContent = '(section-meta\n    (title Test Title)\n    (include (X external.md))\n)\n\n(content\n    (toc\n        (label First Label)\n        (label Second Label)\n    )\n)';
+            const result = toResult(doculispContent, buildProjectLocation('test.dlisp', 1, 1));
+            verifyAsJson(result);
         });
     });
 });

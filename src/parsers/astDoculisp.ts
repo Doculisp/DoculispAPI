@@ -250,7 +250,7 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
                 }
     
                 if(1 < includes.length) {
-                    return util.fail(`The section-meta block at '${location.documentPath.fullName}' Line: ${location.line}, Char: ${location.char} has more then one include.`, current.documentPath);
+                    return util.fail(`Validation Error: The section-meta block at '${location.documentPath.fullName}' has more than one include (Line: ${location.line}, Char: ${location.char}).`, current.documentPath);
                 }
                 
                 const include = includes[0] as IdentifierAst;
@@ -260,7 +260,7 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
                 }
     
                 if(include.type === 'ast-command') {
-                    return util.fail(`The include block at '${include.location.documentPath.fullName}' Line: ${include.location.line}, Char: ${include.location.char} has unknown parameter '${include.parameter.value}'.`, location.documentPath);
+                    return util.fail(`Validation Error: The include block at '${include.location.documentPath.fullName}' has unknown parameter '${include.parameter.value}' (Line: ${include.location.line}, Char: ${include.location.char}).`, location.documentPath);
                 }
     
                 return parseSections(include.subStructure);
@@ -294,17 +294,17 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
                 }
                 
                 if(1 < ids.length) {
-                    return util.fail(`The section-meta block at '${location.documentPath.fullName}' Line: ${location.line}, Char: ${location.char} has more then one id.`, current.documentPath);
+                    return util.fail(`Validation Error: The section-meta block at '${location.documentPath.fullName}' has more than one id (Line: ${location.line}, Char: ${location.char}).`, current.documentPath);
                 }
 
                 const idIdentifier = ids[0] as IdentifierAst;
 
                 if(idIdentifier.type === 'ast-container') {
-                    return util.fail(`The section id block at '${idIdentifier.location.documentPath.fullName}' Line: ${idIdentifier.location.line}, Char: ${idIdentifier.location.char} contains sub blocks.`, current.documentPath);
+                    return util.fail(`Validation Error: The section id block at '${idIdentifier.location.documentPath.fullName}' contains sub blocks (Line: ${idIdentifier.location.line}, Char: ${idIdentifier.location.char}).`, current.documentPath);
                 }
 
                 if(idIdentifier.type === 'ast-identifier') {
-                    return util.fail(`The section id block at '${idIdentifier.location.documentPath.fullName}' Line: ${idIdentifier.location.line}, Char: ${idIdentifier.location.char} is missing identifier text parameter.`, current.documentPath);
+                    return util.fail(`Validation Error: The section id block at '${idIdentifier.location.documentPath.fullName}' is missing identifier text parameter (Line: ${idIdentifier.location.line}, Char: ${idIdentifier.location.char}).`, current.documentPath);
                 }
 
                 const id = idIdentifier.parameter.value;
@@ -325,7 +325,7 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
                     if(orig && orig.type === 'variable-id') {
                         msg = `\n\tOriginal us of Id was in '${orig.source.documentPath}' Line: ${orig.source.line}, Char: ${orig.source.char}.`;
                     }
-                    return util.fail(`Section id '${id}' at '${current.documentPath.fullName}' Line: ${idIdentifier.location.line}, Char: ${idIdentifier.location.char} has already been used.${msg}`, current.documentPath);
+                    return util.fail(`Validation Error: Section id '${id}' at '${current.documentPath.fullName}' has already been used (Line: ${idIdentifier.location.line}, Char: ${idIdentifier.location.char}).${msg}`, current.documentPath);
                 }
 
                 const destinationPath = (
@@ -453,7 +453,7 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
                 }
     
                 if(1 < tocs.length) {
-                    return util.fail(`The content block at '${location.documentPath.fullName}' Line: ${location.line}, Char: ${location.char} has more then one toc.`, location.documentPath);
+                    return util.fail(`Validation Error: The content block at '${location.documentPath.fullName}' has more than one toc (Line: ${location.line}, Char: ${location.char}).`, location.documentPath);
                 }
 
                 const toc = tocs[0] as IdentifierAst;
@@ -461,7 +461,7 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
                 if(toc.type === 'ast-container') {
                     if(2 < toc.subStructure.length) {
                         const err = toc.subStructure[toc.subStructure.length -1] as IdentifierAst;
-                        return util.fail(`The content block at '${location.documentPath.fullName} Line: ${err.location.line}, Char: ${err.location.char}' has ${toc.subStructure.length} block and can only have 0, 1, or 2 blocks`, location.documentPath);
+                        return util.fail(`Validation Error: The content block at '${location.documentPath.fullName}' has ${toc.subStructure.length} blocks and can only have 0, 1, or 2 blocks (Line: ${err.location.line}, Char: ${err.location.char}).`, location.documentPath);
                     }
 
                     const first = toc.subStructure[0] as IdentifierAst;
@@ -493,7 +493,7 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
                         }
 
                         if(first.value === second.value) {
-                            return util.fail(`The content block at '${location.documentPath.fullName}' Line ${location.line}, Char: ${location.line} has a duplicate '${first.value}' block at Line: ${second.location.line}, Char: ${second.location.char}.`, location.documentPath);
+                            return util.fail(`Validation Error: The content block at '${location.documentPath.fullName}' has a duplicate '${first.value}' block (Line: ${location.line}, Char: ${location.char}). First occurrence at (Line: ${second.location.line}, Char: ${second.location.char}).`, location.documentPath);
                         }
 
                         if(second.value === 'label') {
@@ -621,11 +621,11 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
             }
 
             if(pathIdBlock.type === 'ast-identifier') {
-                return util.fail(`get-path command at "${current.documentPath.fullName}" line: ${pathIdBlock.location.line}, char: ${pathIdBlock.location.char} is missing parameter.`, current.documentPath);
+                return util.fail(`Validation Error: get-path command at "${current.documentPath.fullName}" is missing parameter (Line: ${pathIdBlock.location.line}, Char: ${pathIdBlock.location.char}).`, current.documentPath);
             }
 
             if(pathIdBlock.type === 'ast-container') {
-                return util.fail(`get-path command at "${current.documentPath.fullName}" line: ${pathIdBlock.location.line}, char: ${pathIdBlock.location.char} contains unknown sub structure.`);
+                return util.fail(`Validation Error: get-path command at "${current.documentPath.fullName}" contains unknown sub structure (Line: ${pathIdBlock.location.line}, Char: ${pathIdBlock.location.char}).`);
             }
 
             return util.ok({
@@ -657,7 +657,7 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
 
         if(0 < remaining.remaining.length) {
             const next = remaining.remaining[0] as CoreAst;
-            return util.fail(`Unknown identifier '${next.value}' at '${next.location.documentPath.fullName}' Line: ${next.location.line}, Char: ${next.location.char}`, next.location.documentPath);
+            return util.fail(`Parse Error: Unknown identifier '${next.value}' at '${next.location.documentPath.fullName}' (Line: ${next.location.line}, Char: ${next.location.char}).`, next.location.documentPath);
         }
 
         return util.ok({

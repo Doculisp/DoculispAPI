@@ -1,0 +1,5 @@
+{
+  "documentPath": "./malformed.dlisp",
+  "message": "Validation Error: The include block at './malformed.dlisp' has unknown parameter 'unknownParameter' (Line: 4, Char: 6).",
+  "success": false
+}

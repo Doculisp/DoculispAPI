@@ -1,0 +1,5 @@
+{
+  "documentPath": "test.dlisp",
+  "message": "Validation Error: The content block at 'test.dlisp' has a duplicate 'label' block (Line: 6, Char: 2). First occurrence at (Line: 9, Char: 10).",
+  "success": false
+}

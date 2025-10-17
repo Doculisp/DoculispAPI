@@ -1,0 +1,5 @@
+{
+  "documentPath": "test.dlisp",
+  "message": "Validation Error: The content block at 'test.dlisp' has 3 blocks and can only have 0, 1, or 2 blocks (Line: 10, Char: 10).",
+  "success": false
+}

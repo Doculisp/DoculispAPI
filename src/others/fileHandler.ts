@@ -13,7 +13,7 @@ function buildLoader(utilBuilder: UtilBuilder, fs: any, pathConstructor: PathCon
             return util.ok(value);
         } catch (error) {
             const msg = (error && (error as any).message) ? (error as any).message : String(error);
-            return util.fail(`File load failed: ${msg} (Path: ${filePath.fullName})`, filePath);
+            return util.fail(`Validation Error: File load failed: ${msg} (Path: ${filePath.fullName}).`, filePath);
         }
     }
 
@@ -30,7 +30,7 @@ function buildLoader(utilBuilder: UtilBuilder, fs: any, pathConstructor: PathCon
         }
         catch(error) {
             const msg = (error && (error as any).message) ? (error as any).message : String(error);
-            return util.fail(`File write failed: ${msg} (Path: ${filePath.fullName})`, filePath);
+            return util.fail(`Validation Error: File write failed: ${msg} (Path: ${filePath.fullName}).`, filePath);
         }
     }
 
@@ -39,7 +39,7 @@ function buildLoader(utilBuilder: UtilBuilder, fs: any, pathConstructor: PathCon
             return util.ok(pathConstructor(process.cwd()));
         } catch (error) {
             const msg = (error && (error as any).message) ? (error as any).message : String(error);
-            return util.fail(`Working directory access failed: ${msg}`);
+            return util.fail(`Validation Error: Working directory access failed: ${msg}.`);
         }
     }
 
@@ -49,7 +49,7 @@ function buildLoader(utilBuilder: UtilBuilder, fs: any, pathConstructor: PathCon
             return util.ok(undefined);
         } catch(error) {
             const msg = (error && (error as any).message) ? (error as any).message : String(error);
-            return util.fail(`Working directory change failed: ${msg} (Path: ${directory.fullName})`, directory);
+            return util.fail(`Validation Error: Working directory change failed: ${msg} (Path: ${directory.fullName}).`, directory);
         }
     }
 

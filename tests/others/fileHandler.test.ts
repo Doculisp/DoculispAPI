@@ -39,7 +39,7 @@ describe('fileHandler error messages', () => {
             const result = fileHandler.load(fakePath);
             expect(result.success).toBe(false);
             const failResult = result as IFail;
-            expect(failResult.message).toMatch(/^File load failed:/);
+            expect(failResult.message).toMatch(/^Validation Error: File load failed:/);
             expect(failResult.message).toContain('/nonexistent/file.txt');
         });
     });
@@ -66,7 +66,7 @@ describe('fileHandler error messages', () => {
             const result = testFileHandler.write(fakePath, textResult);
             expect(result.success).toBe(false);
             const failResult = result as IFail;
-            expect(failResult.message).toMatch(/^File write failed:/);
+            expect(failResult.message).toMatch(/^Validation Error: File write failed:/);
             expect(failResult.message).toContain('/readonly/file.txt');
         });
     });
@@ -81,7 +81,7 @@ describe('fileHandler error messages', () => {
                 const result = fileHandler.getProcessWorkingDirectory();
                 expect(result.success).toBe(false);
                 const failResult = result as IFail;
-                expect(failResult.message).toMatch(/^Working directory access failed:/);
+                expect(failResult.message).toMatch(/^Validation Error: Working directory access failed:/);
             } finally {
                 process.cwd = originalCwd;
             }
@@ -101,7 +101,7 @@ describe('fileHandler error messages', () => {
             const result = fileHandler.setProcessWorkingDirectory(fakePath);
             expect(result.success).toBe(false);
             const failResult = result as IFail;
-            expect(failResult.message).toMatch(/^Working directory change failed:/);
+            expect(failResult.message).toMatch(/^Validation Error: Working directory change failed:/);
             expect(failResult.message).toContain('/nonexistent/directory');
         });
     });

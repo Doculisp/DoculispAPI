@@ -222,5 +222,34 @@ describe('controller',() => {
 
             verifyAsJson(getTestResult(result));
         });
+
+        it('should fail with standardized error when non-project file has no destination', () => {
+            const sourcePath = pathConstructor('./someFile.md');
+            const result = sut.compile(sourcePath, false);
+
+            expect(result.length).toBe(1);
+            expect(result[0]?.success).toBe(false);
+            expect((result[0] as any)?.message).toMatch(/^Validation Error: Must have a destination file\./);
+        });
+
+        it('should fail with standardized error when project file has destination path', () => {
+            const sourcePath = pathConstructor('./project.dlproj');
+            const destinationPath = pathConstructor('./README.md');
+            const result = sut.compile(sourcePath, destinationPath);
+
+            expect(result.length).toBe(1);
+            expect(result[0]?.success).toBe(false);
+            expect((result[0] as any)?.message).toMatch(/^Validation Error: A project file cannot have a destination path\./);
+        });
+    });
+
+    describe('test validation errors', () => {
+        it('should fail with standardized error when no source file is given', () => {
+            const result = sut.test(table);
+
+            expect(result.length).toBe(1);
+            expect(result[0]?.success).toBe(false);
+            expect((result[0] as any)?.message).toMatch(/^Validation Error: A source file must be given\./);
+        });
     });
 });

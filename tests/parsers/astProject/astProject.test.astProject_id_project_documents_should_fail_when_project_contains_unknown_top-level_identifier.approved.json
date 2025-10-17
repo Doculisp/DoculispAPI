@@ -1,0 +1,5 @@
+{
+  "documentPath": "./malformed.dlproj",
+  "message": "Parse Error: Unknown identifier 'unknownTopLevel' at './malformed.dlproj' (Line: 8, Char: 2).",
+  "success": false
+}

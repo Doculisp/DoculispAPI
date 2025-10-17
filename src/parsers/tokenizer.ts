@@ -264,7 +264,7 @@ function buildTokenize(doesIt: ILispSearches, internals: IInternals, util: IUtil
                 if (tokens.success) {
                     totalTokens.addTokens(tokens.value);
                 } else {
-                    return util.fail(tokens.message, documentPath);
+                    return util.fail(`Parse Error: Tokenization failed: ${tokens.message}`, documentPath);
                 }
             }
         }

@@ -268,16 +268,16 @@ function buildAstProject(internals: IInternals, util: IUtil, trimArray: ITrimArr
 
             if(0 < remaining.remaining.length) {
                 const bad = remaining.remaining[0] as CoreAst;
-                return util.fail(`Document block at '${current.documentPath}' Line: ${current.line}, Char: ${current.char} contains unknown block '${bad.value}' at Line: ${bad.location.line}, Char: ${bad.location.char}.`, current.documentPath);
+                return util.fail(`Parse Error: Unknown identifier '${bad.value}' at '${current.documentPath}' (Line: ${bad.location.line}, Char: ${bad.location.char}).`, current.documentPath);
             }
 
             if(result.length === 0) {
-                return util.fail(`Document block at '${current.documentPath}' Line: ${current.line}, Char: ${current.char} does not contain a source or output.`, current.documentPath);
+                return util.fail(`Parse Error: Document block does not contain source or output at '${current.documentPath}' (Line: ${current.line}, Char: ${current.char}).`, current.documentPath);
             }
 
             if(1 < result.length) {
                 const bad = result[0] as IProjectDocument;
-                return util.fail(`Duplicate block at '${current.documentPath.fullName}' Line: ${bad.location.line}, Char: ${bad.location.char}.`, current.documentPath);
+                return util.fail(`Parse Error: Duplicate source block at '${current.documentPath.fullName}' (Line: ${bad.location.line}, Char: ${bad.location.char}).`, current.documentPath);
             }
 
             const doc = result[0] as IProjectDocument;
@@ -301,7 +301,7 @@ function buildAstProject(internals: IInternals, util: IUtil, trimArray: ITrimArr
 
         if(0 < remaining.remaining.length) {
             const bad = remaining.remaining[0] as CoreAst;
-            return util.fail(`Unknown identifier at '${bad.location.documentPath.fullName}' Line: ${bad.location.line}, Char: ${bad.location.char} of '${bad.value}'.`, bad.location.documentPath);
+            return util.fail(`Parse Error: Unknown identifier '${bad.value}' at '${bad.location.documentPath.fullName}' (Line: ${bad.location.line}, Char: ${bad.location.char}).`, bad.location.documentPath);
         }
 
         if(0 === result.length) {
@@ -316,7 +316,7 @@ function buildAstProject(internals: IInternals, util: IUtil, trimArray: ITrimArr
 
         if(1 < result.length) {
             const bad = result[1] as IProjectDocuments;
-            return util.fail(`Project file may only contain a single documents block. Duplicate documents block detected at '${bad.location.documentPath.fullName}' Line: ${bad.location.line}, Char: ${bad.location.char}.`, bad.location.documentPath);
+            return util.fail(`Parse Error: Duplicate documents block detected at '${bad.location.documentPath.fullName}' (Line: ${bad.location.line}, Char: ${bad.location.char}). Project file may only contain a single documents block.`, bad.location.documentPath);
         }
 
         return util.ok(result[0] as IProjectDocuments);

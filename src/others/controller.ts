@@ -108,11 +108,11 @@ function buildLoader(util: IUtil, handler: IFileWriter, astBuilder: IIncludeBuil
 
     function compile(sourcePath: IPath, destinationPath: IPath | false = false): Result<string>[] {
         if(sourcePath.extension !== '.dlproj' && !destinationPath) {
-            return [util.fail(`Must have a destination file.`, sourcePath)];
+            return [util.fail(`Validation Error: Must have a destination file.`, sourcePath)];
         }
 
         if(sourcePath.extension === '.dlproj' && destinationPath) {
-            return [util.fail('A project file cannot have a destination path', sourcePath)];
+            return [util.fail('Validation Error: A project file cannot have a destination path.', sourcePath)];
         }
 
         if(sourcePath.extension === '.dlproj') {
@@ -129,7 +129,7 @@ function buildLoader(util: IUtil, handler: IFileWriter, astBuilder: IIncludeBuil
 
     function test(variableTable: IVariableTable): Result<string | false>[] {
         if(!variableTable.hasKey(sourceKey)) {
-            return [util.fail('A source file must be given')];
+            return [util.fail('Validation Error: A source file must be given.')];
         }
 
         const sourcePath = (variableTable.getValue(sourceKey) as IVariablePath).value;

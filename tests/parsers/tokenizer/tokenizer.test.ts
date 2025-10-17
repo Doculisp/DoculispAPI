@@ -110,6 +110,46 @@ describe('tokenizer', () => {
 
             verifyAsJson(result);
         });
+
+        it('should provide standardized error when tokenization fails (mocked parser)', () => {
+            // Build a tokenizer that uses a mocked internals.createStringParser which always fails
+            const failingTokenizer = testable.token.parserBuilder(container, (environment: ITestableContainer) => {
+                const pathHandler: PathConstructor = function (filePath) {
+                    return buildPath(filePath);
+                };
+                environment.replaceValue(pathHandler, 'pathConstructor');
+
+                // Grab the real internals so we can base the mock on it
+                const originalInternals = environment.buildAs<any>('internals');
+                const mockInternals = {
+                    ...originalInternals,
+                    createStringParser: (..._args: any[]) => ({
+                        parse: () => ({ success: false, message: 'Simulated string parser failure' })
+                    })
+                };
+
+                environment.replaceValue(mockInternals, 'internals');
+
+                util = environment.buildAs<IUtil>('util');
+                getLocation = buildLocation(util);
+            });
+
+            const start: ILocation = getLocation(BASIC_SAMPLE_DOCUMENT, 0, 0, 1, 1);
+            const parseResult: Result<DocumentMap> = ok({
+                projectLocation: buildProjectLocation(BASIC_SAMPLE_DOCUMENT, 1, 1),
+                parts: [
+                    {
+                        type: 'lisp',
+                        location: start,
+                        text: '(unclosed (paren',
+                    }
+                ]
+            });
+
+            const result = failingTokenizer(parseResult);
+
+            verifyAsJson(result);
+        });
         
         it('should tokenize an single identifier with space after identifier', () => {
             const start: ILocation = getLocation(BASIC_SAMPLE_DOCUMENT, 0, 0, 4, 2);

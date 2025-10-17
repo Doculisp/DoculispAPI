@@ -1,0 +1,5 @@
+{
+  "documentPath": "test.dlisp",
+  "message": "Validation Error: The section-meta block at 'test.dlisp' has more than one id (Line: 0, Char: 0).",
+  "success": false
+}

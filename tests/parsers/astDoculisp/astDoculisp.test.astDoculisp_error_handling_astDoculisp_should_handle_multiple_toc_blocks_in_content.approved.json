@@ -1,0 +1,5 @@
+{
+  "documentPath": "test.dlisp",
+  "message": "Validation Error: The content block at 'test.dlisp' has more than one toc (Line: 6, Char: 2).",
+  "success": false
+}

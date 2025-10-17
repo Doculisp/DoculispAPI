@@ -1,0 +1,5 @@
+{
+  "documentPath": "test.dlisp",
+  "message": "Validation Error: The section-meta block at 'test.dlisp' contains unknown command 'unknown-param' (Line: 4, Char: 6).",
+  "success": false
+}
