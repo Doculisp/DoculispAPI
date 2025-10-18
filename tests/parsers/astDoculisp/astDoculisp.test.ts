@@ -1,6 +1,6 @@
 import { Options } from "approvals/lib/Core/Options";
 import { configure } from "approvals/lib/config";
-import { getVerifier } from "../../tools";
+import { getVerifiers } from "../../tools";
 import { containerPromise } from "../../../src/moduleLoader";
 import { IDoculisp, IDoculispParser, IEmptyDoculisp } from '../../../src/types/types.astDoculisp'
 import { IFail, IProjectLocation, ISuccess, IUtil, Result } from "../../../src/types/types.general";
@@ -13,6 +13,7 @@ import { IContainer } from "../../../src/types/types.containers";
 describe('astDoculisp', () => {
     let container: IContainer = null as any;
     let verifyAsJson: (data: any, options?: Options) => void;
+    let verifyWithGiven: (data: any, options?: Options, ...given: any[]) => void;
     let ok: (successfulValue: any) => ISuccess<any> = undefined as any;
     let fail: (message: string, documentPath?: IPath) => IFail = undefined as any;
     let util: IUtil = undefined as any;
@@ -20,7 +21,9 @@ describe('astDoculisp', () => {
     let variableTable: IVariableTestable = undefined as any;
 
     beforeAll(() => {
-        verifyAsJson = getVerifier(configure);
+        let verifiers = getVerifiers(configure);
+        verifyAsJson = verifiers.verifyAsJson;
+        verifyWithGiven = verifiers.verifyWithGiven;
     });
 
     beforeEach(async () => {
@@ -127,7 +130,7 @@ describe('astDoculisp', () => {
 -->`;
                 const result = toResult(contents, buildProjectLocation('S:/ome/file.md', 2, 1));
         
-                verifyAsJson(result);
+                verifyWithGiven(result, undefined, contents);
             });
         
             it('should not parse a header without a parameter', () => {
@@ -136,7 +139,7 @@ describe('astDoculisp', () => {
 -->`;
                 const result = toResult(contents, buildProjectLocation('S:/ome/file.md', 2, 3));
         
-                verifyAsJson(result);
+                verifyWithGiven(result, undefined, contents);
             });
             
             it('should parse a header with an id', () => {
@@ -145,7 +148,7 @@ describe('astDoculisp', () => {
 -->`;
                 const result = toResult(contents, buildProjectLocation('S:/ome/file.md', 2, 1));
         
-                verifyAsJson(result);
+                verifyWithGiven(result, undefined, contents);
             });
             
             it('should not parse a header with an id that contains uppercase letters', () => {
@@ -154,7 +157,7 @@ describe('astDoculisp', () => {
 -->`;
                 const result = toResult(contents, buildProjectLocation('S:/ome/file.md', 2, 1));
         
-                verifyAsJson(result);
+                verifyWithGiven(result, undefined, contents);
             });
             
             it('should not parse a header with an id that contains a symbol', () => {
@@ -163,7 +166,7 @@ describe('astDoculisp', () => {
 -->`;
                 const result = toResult(contents, buildProjectLocation('S:/ome/file.md', 2, 1));
         
-                verifyAsJson(result);
+                verifyWithGiven(result, undefined, contents);
             });
         });
 
@@ -259,7 +262,7 @@ A story of a misbehaving parser.
 
                 const result = toResult(content, buildProjectLocation('./_main.md', 1, 1));
 
-                verifyAsJson(result);
+                verifyWithGiven(result, undefined, content);
             });
 
             describe('title', () => {
@@ -466,7 +469,7 @@ A story of a misbehaving parser.
     -->`;
     
                     const result = toResult(content, buildProjectLocation('./_main.md', 1, 1));
-                    verifyAsJson(result);
+                    verifyWithGiven(result, undefined, content);
                 });
             });
 
@@ -650,7 +653,7 @@ A story of a misbehaving parser.
 `;
 
                     const result = toResult(contents, buildProjectLocation('main.md', 1, 1));
-                    verifyAsJson(result);
+                    verifyWithGiven(result, undefined, contents);
                 });
 
                 it('should not parse the id command it it contains capital letters', () => {
@@ -664,7 +667,7 @@ A story of a misbehaving parser.
 `;
 
                     const result = toResult(contents, buildProjectLocation('main.md', 1, 1));
-                    verifyAsJson(result);
+                    verifyWithGiven(result, undefined, contents);
                 });
 
                 it('should not parse the id command if it contains symbols.', () => {
@@ -678,7 +681,7 @@ A story of a misbehaving parser.
 `;
 
                     const result = toResult(contents, buildProjectLocation('main.md', 1, 1));
-                    verifyAsJson(result);
+                    verifyWithGiven(result, undefined, contents);
                 });
             });
         });
@@ -965,7 +968,11 @@ A story of a misbehaving parser.
 
                 const result = toResult(contribText, buildProjectLocation('../main.md', 2, 7));
 
-                verifyAsJson(result);
+                verifyWithGiven(result
+                    , undefined
+                    , { "table": variableTable }
+                    , { "../main.md": contribText }
+                );
             });
         });
     });

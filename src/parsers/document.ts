@@ -427,7 +427,8 @@ function getPartParsers(projectLocation: IProjectLocation, doesIt: IDocumentSear
     function isDoculisp(isOpen?: boolean): HandleStringValue<DocumentPart> {
         return function (toParse: string, starting: ILocation): StringStepParseResult<DocumentPart> {
             let depth = isOpen ? 1 : 0;
-            isOpen = false;
+                let contentStartLocation = starting; // Track where actual content starts
+                isOpen = false;
 
             function tryParseDoculispOpen(input: string, current: ILocation): StringStepParseResult<DocumentPart> {
                 if(doesIt.startWithDocuLisp.test(input)) {
@@ -438,11 +439,14 @@ function getPartParsers(projectLocation: IProjectLocation, doesIt: IDocumentSear
                     const parsed: string = (input.match(doesIt.startWithDocuLisp) as any)[0];
                     const rest = input.slice(parsed.length);
                     depth++;
+                    
+                    // Update content start location to after the discarded "(dl " part (including space)
+                    contentStartLocation = current.increaseChar(parsed.length);
     
                     return util.ok({
                         type: 'discard',
                         rest,
-                        location: current.increaseChar(parsed.length),
+                        location: contentStartLocation,
                     });
                 }
                 return internals.noResultFound();
@@ -550,10 +554,18 @@ function getPartParsers(projectLocation: IProjectLocation, doesIt: IDocumentSear
                     }));
                 }
     
+                // Determine the content start location from the first non-discard part
+                for(const p of parts) {
+                    if(p && p.type === 'text' && p.text.trim().length > 0) {
+                        contentStartLocation = p.location;
+                        break;
+                    }
+                }
                 let result = parts.map(p => p.text).join('').trim();
+
                 return util.ok(internals.buildStepParse(step, {
                     type: 'parse result',
-                    subResult: { location: starting, type: 'lisp', text: result },
+                    subResult: { location: contentStartLocation, type: 'lisp', text: result },
                 }));
             }
             return parsed;

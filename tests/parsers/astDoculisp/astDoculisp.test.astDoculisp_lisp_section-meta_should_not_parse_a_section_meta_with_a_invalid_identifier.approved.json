@@ -1,5 +1,8 @@
 {
-  "documentPath": "./_main.md",
-  "message": "Validation Error: The section-meta block at './_main.md' contains unknown command 'bad' (Line: 4, Char: 10).",
-  "success": false
+  "000_given": "<!--\n(dl\n    (section-meta\n        (title A Bad identifier)\n        (bad does stuff)\n        (include\n                (sample ./good.md)\n        )\n    )\n)\n-->\n\nA story of a misbehaving parser.\n\n",
+  "999_received": {
+    "documentPath": "./_main.md",
+    "message": "Validation Error: The section-meta block at './_main.md' contains unknown command 'bad' (Line: 5, Char: 10).",
+    "success": false
+  }
 }

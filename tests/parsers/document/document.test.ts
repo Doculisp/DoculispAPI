@@ -1,7 +1,7 @@
 import { containerPromise } from "../../../src/moduleLoader";
 import { configure } from "approvals/lib/config";
 import { Options } from "approvals/lib/Core/Options";
-import { getVerifier } from "../../tools";
+import { getVerifiers } from "../../tools";
 import { DocumentParser } from "../../../src/types/types.document";
 import { buildProjectLocation, testable } from "../../testHelpers";
 import { IContainer } from "../../../src/types/types.containers";
@@ -10,9 +10,12 @@ describe('document', () => {
     let container: IContainer = null as any;
     let parse: DocumentParser = undefined as any;
     let verifyAsJson: (data: any, options?: Options) => void;
+    let verifyWithGiven: (data: any, options?: Options | undefined, ...given: any[]) => void;
 
     beforeAll(() => {
-        verifyAsJson = getVerifier(configure);
+        let verifiers = getVerifiers(configure);
+        verifyAsJson = verifiers.verifyAsJson;
+        verifyWithGiven = verifiers.verifyWithGiven;
     });
 
     beforeEach(async () => {
@@ -238,7 +241,17 @@ describe('document', () => {
     
                 const result = parse(md, buildProjectLocation('_main.md', 3, 7));
     
-                verifyAsJson(result);
+                verifyWithGiven(result, undefined, md);
+            });
+
+            it('should parse a multiline doculisp block', () => {
+                const md = `<!--
+(dl (# My heading))
+-->`;
+    
+                const result = parse(md, buildProjectLocation('S:/ome/file.md', 2, 1));
+    
+                verifyWithGiven(result, undefined, md);
             });
             
             it('should parse a doculisp block in the middle of file', () => {
@@ -246,7 +259,7 @@ describe('document', () => {
     
                 const result = parse(md, buildProjectLocation('_main.md', 7, 5));
     
-                verifyAsJson(result);
+                verifyWithGiven(result, undefined, md);
             });
 
             it('should parse lisp outside an html tag as text', () => {
@@ -269,7 +282,7 @@ describe('document', () => {
                 const content = '<!-- (dl (# My \\(really awesome header)) -->';
     
                 const result = parse(content, buildProjectLocation('./_main.md', 2, 1));
-                verifyAsJson(result);
+                verifyWithGiven(result, undefined, content);
             });
 
             it('should parse Doculisp that contains a get-path in a link', () => {
@@ -283,7 +296,7 @@ describe('document', () => {
                 `;
 
                 const result = parse(text, buildProjectLocation('./_main.md', 2, 1));
-                verifyAsJson(result);
+                verifyWithGiven(result, undefined, text);
             });
         });
     });

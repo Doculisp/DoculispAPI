@@ -3,7 +3,7 @@ import { IContainer, IDictionary, ITestableContainer } from "../../../src/types/
 import { IFail, IProjectLocation, ISuccess, IUtil, Result } from "../../../src/types/types.general";
 import { IDoculisp, IEmptyDoculisp } from "../../../src/types/types.astDoculisp";
 import { IIncludeBuilder } from "../../../src/types/types.includeBuilder";
-import { getVerifier } from "../../tools";
+import { getVerifiers } from "../../tools";
 import { configure } from "approvals/lib/config";
 import { containerPromise } from "../../../src/moduleLoader";
 import { IDirectoryHandler, IFileLoader } from "../../../src/types/types.fileHandler";
@@ -13,6 +13,7 @@ import { IPath } from '../../../src/types/types.filePath';
 
 describe('includeBuilder', () => {
     let verifyAsJson: (data: any, options?: Options) => void;
+    let verifyWithGiven: (data: any, options?: Options, ...given: { path: string, document: string }[]) => void;
 
     let container: IContainer = null as any;
     let util: IUtil = undefined as any;
@@ -22,7 +23,9 @@ describe('includeBuilder', () => {
     let variableSaver: IVariableTestable = undefined as any;
 
     beforeAll(() => {
-        verifyAsJson = getVerifier(configure);
+        let verifiers = getVerifiers(configure);
+        verifyAsJson = verifiers.verifyAsJson;
+        verifyWithGiven = verifiers.verifyWithGiven;
     });
 
     function setup(environment: ITestableContainer) {
@@ -127,7 +130,12 @@ Hello world!
 (content (toc numbered-labeled))
 `;
 
-            verifyAsJson(toExternalResult(document, buildProjectLocation('C:/_main.dlisp', 1, 1)));
+            verifyWithGiven(
+                toExternalResult(document, buildProjectLocation('C:/_main.dlisp', 1, 1))
+                , undefined
+                , { "path": subDocumentPath, "sub": subDocument } as any
+                , { "path": "C:/_main.dlisp", "document": document } as any
+            );
         });
 
         it('should not an included document not a markdown or dlisp', () =>{
@@ -192,7 +200,11 @@ Sub document B text.
 `;
 
             const result = toExternalResult(doc, buildProjectLocation('_main.dlisp', 1, 1));
-            verifyAsJson(result);
+            verifyWithGiven(result, undefined,
+                { "path": subAPath, "subA": subA } as any,
+                { "path": subBPath, "subB": subB } as any,
+                { "path": "_main.dlisp", "document": doc } as any
+            );
         });
 
         it('should parse a sub document containing a sub document', () => {
@@ -243,15 +255,22 @@ Hello World!
 (content)
 `;
 
-            const result = toExternalResult(doc, buildProjectLocation('_main.md', 1, 1));
-            verifyAsJson(result);
+            const docPath = './_main.md';
+            const result = toExternalResult(doc, buildProjectLocation(docPath, 1, 1));
+            verifyWithGiven(result
+                , undefined
+                , { [grandChildPath]: grandChildDocument } as any
+                , { [childPath]: childDoc } as any
+                , { [docPath]: `${doc}` } as any
+            );
         });
     });
 
     describe('parse', () => {
         let toResult: (filePath: string) => Result<IDoculisp | IEmptyDoculisp> = undefined as any
 
-        beforeEach(() => {
+        beforeEach(async () => {
+            container = await containerPromise;
             const builder = testable.include.resultBuilder(container, setup);
             toResult = (filePath) => builder(buildPath(filePath));
         });
@@ -327,7 +346,11 @@ hello from the child
 
             const result = toResult(docPath);
 
-            verifyAsJson(result);
+            verifyWithGiven(result, undefined, 
+                { "path": grandChildPath, "grandchild": grandchild } as any,
+                { "path": childPath, "child": child } as any,
+                { "path": docPath, "document": doc } as any
+            );
         });
     });
 });

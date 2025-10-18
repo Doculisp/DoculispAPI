@@ -218,7 +218,7 @@ describe('ast', () => {
 -->`;
             const result = toResult(contents, buildProjectLocation('S:/ome/file.md',2, 1));
     
-            verifyAsJson(result);
+            verifyWithGiven(result, undefined, contents);
         });
 
         it('should parse a basic identifier', () => {
@@ -267,7 +267,7 @@ describe('ast', () => {
 `;
 
             const result = toResult(text, buildProjectLocation('./_main.md', 1, 6));
-            verifyAsJson(result);
+            verifyWithGiven(result, undefined, text);
         });
 
         it('should parse a document with all the parts', () => {
