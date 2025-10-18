@@ -7,14 +7,14 @@
 
 # Changelog #
 
-1. Unreleased: [Unreleased](#unreleased)
+1. Unreleased: [[Unreleased]](#unreleased)
 2. Release: [[2.1.0] - 2025-10-18](#210---2025-10-18)
 3. Release: [[2.0.0] - 2025-10-18](#200---2025-10-18)
 4. Release: [[1.0.1] - 2025-10-14](#101---2025-10-14)
 5. Release: [[1.0.0] - 2025-10-14](#100---2025-10-14)
 6. History: [CLI Version History (Pre-API Extraction)](#cli-version-history-pre-api-extraction)
 
-## Unreleased ##
+## [Unreleased] ##
 
 ### Breaking Changes ###
 
@@ -34,6 +34,19 @@
 
 ### Improved ###
 
+- **Parser Location Tracking**: Enhanced Doculisp content location precision
+  - **Content Location Accuracy**: Parser now tracks precise Doculisp content location instead of HTML comment markers
+    - **Accurate Error Reporting**: Error messages now point to exact Doculisp syntax location rather than comment start
+    - **Debugging Enhancement**: Location information points to actual content for better debugging experience
+    - **AST Location Precision**: Abstract syntax tree nodes contain precise content locations
+  - **Implementation Details**: Improved `isDoculisp` parser function in document parser
+    - **Content Start Tracking**: Added `contentStartLocation` variable to track actual content beginning
+    - **Location Calculation**: Updates location to skip over discarded `(dl ` prefix markers
+    - **First Content Detection**: Locates first meaningful text content for accurate positioning
+  - **Test Coverage**: Updated all approval tests to reflect corrected location tracking
+    - **Location Verification**: All test baselines updated with precise content character positions
+    - **Comprehensive Coverage**: 27+ test files updated across AST, Doculisp, document, and include parsers
+    - **Test Accuracy**: Tests now verify exact content location rather than comment location
 - **IDE Integration**: Enhanced language server capabilities with precise block tracking
   - **Code Navigation**: Better jump-to-definition and find-references functionality
   - **Error Highlighting**: More precise error underlining for malformed blocks
@@ -73,6 +86,9 @@
 
 - **Enhanced Development Experience**: Developers working with Doculisp ASTs gain access to precise block boundaries
 - **Better Error Reporting**: Tools can now highlight exact problem areas within blocks
+  - **Precise Error Location**: Error messages point to exact Doculisp syntax rather than HTML comments
+  - **Improved Debugging**: Location information helps developers quickly identify problematic code sections
+  - **Enhanced IDE Features**: Language servers can provide more accurate syntax highlighting and error indicators
 - **IDE Feature Support**: Language servers can provide more sophisticated editing features
 - **Future Extensibility**: Foundation for advanced features like block-level refactoring and manipulation
 - **Debugging Improvements**: Easier debugging with exact block boundary information
