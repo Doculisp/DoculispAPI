@@ -14,6 +14,22 @@
           },
           "subStructure": [
             {
+              "blockRange": {
+                "end": {
+                  "char": 30,
+                  "documentDepth": 1,
+                  "documentIndex": 6,
+                  "documentPath": "./_main.md",
+                  "line": 3
+                },
+                "start": {
+                  "char": 5,
+                  "documentDepth": 1,
+                  "documentIndex": 6,
+                  "documentPath": "./_main.md",
+                  "line": 3
+                }
+              },
               "location": {
                 "char": 6,
                 "documentDepth": 1,
@@ -51,6 +67,22 @@
           "value": "[back]("
         },
         {
+          "blockRange": {
+            "end": {
+              "char": 33,
+              "documentDepth": 1,
+              "documentIndex": 6,
+              "documentPath": "./_main.md",
+              "line": 7
+            },
+            "start": {
+              "char": 17,
+              "documentDepth": 1,
+              "documentIndex": 6,
+              "documentPath": "./_main.md",
+              "line": 7
+            }
+          },
           "location": {
             "char": 18,
             "documentDepth": 1,

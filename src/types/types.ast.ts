@@ -19,6 +19,7 @@ export interface IAstCommand {
     readonly location: ILocation;
     readonly parameter: IAstParameter;
     readonly type: 'ast-command'
+    readonly blockRange: IRange;
 };
 
 export interface IAstContainer {

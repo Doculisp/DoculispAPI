@@ -31,12 +31,13 @@ function buildAstParser(util: IUtil, internals: IInternals, trimArray: ITrimArra
         }
     }
 
-    function parseCommandToken(identifier: IdentifierToken, parameter: ParameterToken): IAstCommand {
+    function parseCommandToken(identifier: IdentifierToken, parameter: ParameterToken, blockRange: IRange): IAstCommand {
         return {
             type: 'ast-command',
             value: identifier.text,
             parameter: parseParameterToken(parameter),
-            location: identifier.location
+            location: identifier.location,
+            blockRange: blockRange
         }
     }
 
@@ -67,7 +68,7 @@ function buildAstParser(util: IUtil, internals: IInternals, trimArray: ITrimArra
 
         return util.ok({
             type: 'parse result',
-            subResult: parseIdentifierToken(identifier, { start: current.increaseChar(-1), end: close.location }),
+            subResult: parseIdentifierToken(identifier, { start: identifier.location.increaseChar(-1), end: close.location }),
             location: current,
             rest: trimArray.trim(2, input),
         });
@@ -115,7 +116,7 @@ function buildAstParser(util: IUtil, internals: IInternals, trimArray: ITrimArra
 
         return util.ok({
             type: 'parse result',
-            subResult: parseCommandToken(command, parameter),
+            subResult: parseCommandToken(command, parameter, { start: command.location.increaseChar(-1), end: closeCommand.location }),
             location: current,
             rest: trimArray.trim(3, input),
         });

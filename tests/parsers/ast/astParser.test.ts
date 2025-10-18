@@ -253,7 +253,7 @@ describe('ast', () => {
 `;
 
             const result = toResult(text, buildProjectLocation('./_main.dlisp', 1, 6));
-            verifyAsJson(result);
+            verifyWithGiven(result, undefined, text);
         });
 
         it('should parse a file with a get-path', () => {
@@ -292,7 +292,7 @@ describe('ast', () => {
 
             const result = toResult(text, buildProjectLocation('./_main.dlisp', 4, 7));
 
-            verifyAsJson(result);
+            verifyWithGiven(result, undefined, text);
         });
 
         it('should fail when command is missing closing parenthesis', () => {

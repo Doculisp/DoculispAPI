@@ -1,48 +1,67 @@
 {
-  "success": true,
-  "value": {
-    "ast": [
-      {
-        "location": {
-          "char": 2,
-          "documentDepth": 1,
-          "documentIndex": 6,
-          "documentPath": "./_main.dlisp",
-          "line": 2
-        },
-        "subStructure": [
-          {
-            "location": {
-              "char": 6,
-              "documentDepth": 1,
-              "documentIndex": 6,
-              "documentPath": "./_main.dlisp",
-              "line": 3
-            },
-            "parameter": {
+  "000_given": "\n(section-meta\n    (title Doculisp)\n)\n",
+  "999_received": {
+    "success": true,
+    "value": {
+      "ast": [
+        {
+          "location": {
+            "char": 2,
+            "documentDepth": 1,
+            "documentIndex": 6,
+            "documentPath": "./_main.dlisp",
+            "line": 2
+          },
+          "subStructure": [
+            {
+              "blockRange": {
+                "end": {
+                  "char": 20,
+                  "documentDepth": 1,
+                  "documentIndex": 6,
+                  "documentPath": "./_main.dlisp",
+                  "line": 3
+                },
+                "start": {
+                  "char": 5,
+                  "documentDepth": 1,
+                  "documentIndex": 6,
+                  "documentPath": "./_main.dlisp",
+                  "line": 3
+                }
+              },
               "location": {
-                "char": 12,
+                "char": 6,
                 "documentDepth": 1,
                 "documentIndex": 6,
                 "documentPath": "./_main.dlisp",
                 "line": 3
               },
-              "type": "ast-Parameter",
-              "value": "Doculisp"
-            },
-            "type": "ast-command",
-            "value": "title"
-          }
-        ],
-        "type": "ast-container",
-        "value": "section-meta"
-      }
-    ],
-    "location": {
-      "documentDepth": 1,
-      "documentIndex": 6,
-      "documentPath": "./_main.dlisp"
-    },
-    "type": "RootAst"
+              "parameter": {
+                "location": {
+                  "char": 12,
+                  "documentDepth": 1,
+                  "documentIndex": 6,
+                  "documentPath": "./_main.dlisp",
+                  "line": 3
+                },
+                "type": "ast-Parameter",
+                "value": "Doculisp"
+              },
+              "type": "ast-command",
+              "value": "title"
+            }
+          ],
+          "type": "ast-container",
+          "value": "section-meta"
+        }
+      ],
+      "location": {
+        "documentDepth": 1,
+        "documentIndex": 6,
+        "documentPath": "./_main.dlisp"
+      },
+      "type": "RootAst"
+    }
   }
 }
