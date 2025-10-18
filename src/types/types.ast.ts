@@ -27,6 +27,7 @@ export interface IAstContainer {
     readonly location: ILocation;
     readonly subStructure: IdentifierAst[]
     readonly type: 'ast-container'
+    readonly blockRange: IRange;
 };
 
 export interface IAstValue {

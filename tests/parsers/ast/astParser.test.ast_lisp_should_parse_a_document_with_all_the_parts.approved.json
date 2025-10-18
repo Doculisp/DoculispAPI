@@ -5,6 +5,22 @@
     "value": {
       "ast": [
         {
+          "blockRange": {
+            "end": {
+              "char": 1,
+              "documentDepth": 4,
+              "documentIndex": 7,
+              "documentPath": "./_main.dlisp",
+              "line": 13
+            },
+            "start": {
+              "char": 1,
+              "documentDepth": 4,
+              "documentIndex": 7,
+              "documentPath": "./_main.dlisp",
+              "line": 2
+            }
+          },
           "location": {
             "char": 2,
             "documentDepth": 4,
@@ -52,6 +68,22 @@
               "value": "title"
             },
             {
+              "blockRange": {
+                "end": {
+                  "char": 5,
+                  "documentDepth": 4,
+                  "documentIndex": 7,
+                  "documentPath": "./_main.dlisp",
+                  "line": 12
+                },
+                "start": {
+                  "char": 5,
+                  "documentDepth": 4,
+                  "documentIndex": 7,
+                  "documentPath": "./_main.dlisp",
+                  "line": 4
+                }
+              },
               "location": {
                 "char": 6,
                 "documentDepth": 4,
@@ -373,6 +405,22 @@
           "value": "##"
         },
         {
+          "blockRange": {
+            "end": {
+              "char": 32,
+              "documentDepth": 4,
+              "documentIndex": 7,
+              "documentPath": "./_main.dlisp",
+              "line": 17
+            },
+            "start": {
+              "char": 1,
+              "documentDepth": 4,
+              "documentIndex": 7,
+              "documentPath": "./_main.dlisp",
+              "line": 17
+            }
+          },
           "location": {
             "char": 2,
             "documentDepth": 4,

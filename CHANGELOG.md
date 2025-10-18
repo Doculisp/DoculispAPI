@@ -18,20 +18,21 @@
 
 ### Breaking Changes ###
 
-- **AST Block Range Tracking**: Enhanced AST identifiers and commands with precise block range information
+- **AST Block Range Tracking**: Enhanced AST identifiers, commands, and containers with precise block range information
   - **Type System Breaking Change**: New required `blockRange` property added to existing interfaces
-    - **TypeScript Impact**: `IAstIdentifier` and `IAstCommand` interfaces now require `blockRange` property
+    - **TypeScript Impact**: `IAstIdentifier`, `IAstCommand`, and `IAstContainer` interfaces now require `blockRange` property
     - **Compilation Requirement**: TypeScript consumers must handle the new required field for successful compilation
     - **Runtime Safety**: API always populates this data - no undefined values or runtime errors
     - **Purely Additive**: New functionality that extends existing capabilities without removing features
-  - **Range Information**: AST identifiers and commands now include required `blockRange` property containing start and end locations
+  - **Range Information**: AST identifiers, commands, and containers now include required `blockRange` property containing start and end locations
     - **Start Location**: Precise character position where the opening parenthesis begins
     - **End Location**: Precise character position where the closing parenthesis ends
     - **Full Block Coverage**: Range spans the entire block from opening to closing parenthesis
-  - **Parser Enhancement**: AST parser now calculates and stores block ranges during identifier and command parsing
+  - **Parser Enhancement**: AST parser now calculates and stores block ranges during identifier, command, and container parsing
     - **Location Calculation**: Uses `identifier.location.increaseChar(-1)` for accurate opening parenthesis position
     - **Closing Location**: Captures exact closing parenthesis location from tokens
     - **Range Construction**: Creates `IRange` objects with start and end coordinates
+    - **Container Support**: AST containers now track their complete block range from opening to closing parenthesis
   - **Type System Support**: Added `IRange` interface to general types for location coordinate pairs
     - **Range Definition**: Contains `start` and `end` location coordinates
     - **Location Coordinates**: Uses existing `ILocationCoordinates` interface
@@ -64,12 +65,12 @@
 
 ### Technical Details ###
 
-- **Type System Changes**: Required `blockRange` property in AST identifier and command interfaces
-  - **Required Property**: `blockRange` is now required for all AST identifiers and commands
+- **Type System Changes**: Required `blockRange` property in AST identifier, command, and container interfaces
+  - **Required Property**: `blockRange` is now required for all AST identifiers, commands, and containers
   - **TypeScript Breaking Change**: Interface changes require TypeScript consumers to update type handling
   - **JavaScript Compatibility**: JavaScript consumers continue to work without changes (additional property ignored)
   - **Type Safety**: TypeScript consumers gain enhanced type information with guaranteed block range data
-  - **Command Enhancement**: AST commands (`IAstCommand`) now include block range tracking alongside identifiers
+  - **Complete AST Coverage**: All AST node types (`IAstIdentifier`, `IAstCommand`, `IAstContainer`) now include block range tracking
   - **Migration Impact**: Mock objects and test fixtures need to include new `blockRange` property
 - **Parser Performance**: Minimal performance impact with efficient range calculation
   - **Single Pass**: Range calculation integrated into existing parsing logic
@@ -104,13 +105,35 @@
 ### Migration Guide ###
 
 **For TypeScript Consumers:**
-- **Interface Updates**: `IAstIdentifier` and `IAstCommand` now include required `blockRange: IRange` property
+- **Interface Updates**: `IAstIdentifier`, `IAstCommand`, and `IAstContainer` now include required `blockRange: IRange` property
 - **Mock Objects**: Update test fixtures and mock data to include `blockRange` property:
   ```typescript
   const mockIdentifier: IAstIdentifier = {
-    value: "title",
+    value: "content",
     location: someLocation,
     type: "ast-identifier",
+    blockRange: {
+      start: startLocation,
+      end: endLocation
+    }
+  };
+
+  const mockCommand: IAstCommand = {
+    value: "title",
+    location: someLocation,
+    type: "ast-command",
+    parameter: someParameter,
+    blockRange: {
+      start: startLocation,
+      end: endLocation
+    }
+  };
+
+  const mockContainer: IAstContainer = {
+    value: "section-meta",
+    location: someLocation,
+    type: "ast-container",
+    subStructure: [],
     blockRange: {
       start: startLocation,
       end: endLocation

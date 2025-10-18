@@ -41,12 +41,13 @@ function buildAstParser(util: IUtil, internals: IInternals, trimArray: ITrimArra
         }
     }
 
-    function parseContainerToken(command: IdentifierToken, ast: IdentifierAst[]): IAstContainer {
+    function parseContainerToken(command: IdentifierToken, ast: IdentifierAst[], blockRange: IRange): IAstContainer {
         return {
             type: 'ast-container',
             subStructure: ast,
             location: command.location,
             value: command.text,
+            blockRange: blockRange
         };
     }
 
@@ -155,7 +156,7 @@ function buildAstParser(util: IUtil, internals: IInternals, trimArray: ITrimArra
 
         return util.ok({
             type: 'parse result',
-            subResult: parseContainerToken(container, subAst),
+            subResult: parseContainerToken(container, subAst, { start: container.location.increaseChar(-1), end: close.location }),
             location: current,
             rest: trimArray.trim(1, remaining.remaining),
         });
