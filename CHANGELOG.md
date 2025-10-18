@@ -7,12 +7,12 @@
 
 # Changelog #
 
-1. Release: [[2.0.0] - TBD](#200---tbd)
+1. Release: [[2.0.0] - 2025-10-18](#200---2025-10-18)
 2. Release: [[1.0.1] - 2025-10-14](#101---2025-10-14)
 3. Release: [[1.0.0] - 2025-10-14](#100---2025-10-14)
 4. History: [CLI Version History (Pre-API Extraction)](#cli-version-history-pre-api-extraction)
 
-## [2.0.0] - TBD ##
+## [2.0.0] - 2025-10-18 ##
 
 ### Breaking Changes ###
 
