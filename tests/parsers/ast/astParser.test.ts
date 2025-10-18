@@ -1,6 +1,6 @@
 import { Options } from "approvals/lib/Core/Options";
 import { configure } from "approvals/lib/config";
-import { getVerifier } from "../../tools";
+import { getVerifiers } from "../../tools";
 import { containerPromise } from "../../../src/moduleLoader";
 import { IFail, IProjectLocation, ISuccess, IUtil, Result } from "../../../src/types/types.general";
 import { TokenizedDocument } from "../../../src/types/types.tokens";
@@ -12,13 +12,16 @@ import { IContainer } from "../../../src/types/types.containers";
 describe('ast', () => {
     let container: IContainer = undefined as any;
     let verifyAsJson: (data: any, options?: Options) => void;
+    let verifyWithGiven: (data: any, options?: Options | undefined, ...given: any[]) => void;
     let ok: (successfulValue: any) => ISuccess<any> = undefined as any;
     let fail: (message: string, documentPath?: IPath) => IFail = undefined as any;
     let util: IUtil = undefined as any;
     let toResult: (text: string, projectLocation: IProjectLocation) => Result<RootAst | IAstEmpty> = undefined as any;
 
     beforeAll(() => {
-        verifyAsJson = getVerifier(configure);
+        let verifiers = getVerifiers(configure);
+        verifyAsJson = verifiers.verifyAsJson;
+        verifyWithGiven = verifiers.verifyWithGiven;
     });
 
     beforeEach(async() => {
@@ -221,13 +224,25 @@ describe('ast', () => {
         it('should parse a basic identifier', () => {
             const text = '(content)';
             const result = toResult(text, buildProjectLocation('./_main.dlisp', 1, 1));
-            verifyAsJson(result);
+            verifyWithGiven(result, undefined, text);
+        });
+
+        it('should parse a basic identifier with close on new line', () => {
+            const text = '(content\n         )';
+            const result = toResult(text, buildProjectLocation('./_main.dlisp', 1, 1));
+            verifyWithGiven(result, undefined, text);
         });
 
         it('should parse a container with a basic identifier', () => {
             const text = '(section-meta (title))';
             const result = toResult(text, buildProjectLocation('./_main.dlisp', 1, 1));
-            verifyAsJson(result);
+            verifyWithGiven(result, undefined, text);
+        });
+
+        it('should parse a container with a basic identifier and new lines', () => {
+            const text = '(section-meta\n    (title\n    )\n)';
+            const result = toResult(text, buildProjectLocation('./_main.dlisp', 1, 1));
+            verifyWithGiven(result, undefined, text);
         });
 
         it('should parse a container with a command', () => {

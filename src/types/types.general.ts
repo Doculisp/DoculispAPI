@@ -29,6 +29,11 @@ export interface ILocation extends IProjectLocation, ILocationCoordinates, IComp
     increaseChar(by?: number|undefined): ILocation;
 };
 
+export interface IRange {
+    readonly start: ILocationCoordinates;
+    readonly end: ILocationCoordinates;
+}
+
 export interface ISuccess<T> {
     readonly value: T;
     readonly success: true;

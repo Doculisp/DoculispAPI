@@ -39,6 +39,17 @@ function verifyJsonObject(data: any, options?: Options): void {
     verifyAsJson(order(data), options);
 }
 
+function verifyWithGiven(data: any, options?: Options | undefined, ...given: any[]): void {
+    const combined: any = {
+        "999_received": data,
+    };
+    given.forEach((givenItem, index) => {
+        combined[`${index.toString().padStart(3, '0')}_given`] = givenItem;
+    });
+
+    verifyAsJson(order(combined), options);
+}
+
 function verifyMarkdownObject(text: string, options?: Options): void {
   options = options || new Options();
   options = options.forFile().withFileExtention(".md");
@@ -73,6 +84,7 @@ export function getVerifiers(configure: (overrideOptions?: Partial<Config> | und
     
     return {
         verifyAsJson: verifyJsonObject,
+        verifyWithGiven: verifyWithGiven,
         verifyMarkdown: verifyMarkdownObject,
         verifyText
     };

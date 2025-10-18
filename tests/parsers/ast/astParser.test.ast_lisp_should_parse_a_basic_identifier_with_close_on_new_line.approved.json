@@ -1,5 +1,5 @@
 {
-  "000_given": "(content)",
+  "000_given": "(content\n         )",
   "999_received": {
     "success": true,
     "value": {
@@ -7,11 +7,11 @@
         {
           "blockRange": {
             "end": {
-              "char": 9,
+              "char": 10,
               "documentDepth": 1,
               "documentIndex": 1,
               "documentPath": "./_main.dlisp",
-              "line": 1
+              "line": 2
             },
             "start": {
               "char": 1,

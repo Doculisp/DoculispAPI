@@ -1,5 +1,5 @@
 {
-  "000_given": "(section-meta (title))",
+  "000_given": "(section-meta\n    (title\n    )\n)",
   "999_received": {
     "success": true,
     "value": {
@@ -16,11 +16,11 @@
             {
               "blockRange": {
                 "end": {
-                  "char": 21,
+                  "char": 5,
                   "documentDepth": 1,
                   "documentIndex": 1,
                   "documentPath": "./_main.dlisp",
-                  "line": 1
+                  "line": 3
                 },
                 "start": {
                   "char": 1,
@@ -31,11 +31,11 @@
                 }
               },
               "location": {
-                "char": 16,
+                "char": 6,
                 "documentDepth": 1,
                 "documentIndex": 1,
                 "documentPath": "./_main.dlisp",
-                "line": 1
+                "line": 2
               },
               "type": "ast-identifier",
               "value": "title"

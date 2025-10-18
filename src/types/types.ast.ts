@@ -1,10 +1,11 @@
-import { ILocation, IProjectLocation, Result } from "./types.general";
+import { ILocation, IProjectLocation, IRange, Result } from "./types.general";
 import { TokenizedDocument } from "./types.tokens";
 
 export interface IAstIdentifier {
     readonly value: string;
     readonly location: ILocation;
     readonly type: 'ast-identifier';
+    readonly blockRange: IRange;
 };
 
 export interface IAstParameter {

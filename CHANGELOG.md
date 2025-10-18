@@ -7,11 +7,76 @@
 
 # Changelog #
 
-1. Release: [[2.1.0] - 2025-10-18](#210---2025-10-18)
-2. Release: [[2.0.0] - 2025-10-18](#200---2025-10-18)
-3. Release: [[1.0.1] - 2025-10-14](#101---2025-10-14)
-4. Release: [[1.0.0] - 2025-10-14](#100---2025-10-14)
-5. History: [CLI Version History (Pre-API Extraction)](#cli-version-history-pre-api-extraction)
+1. Unreleased: [Unreleased](#unreleased)
+2. Release: [[2.1.0] - 2025-10-18](#210---2025-10-18)
+3. Release: [[2.0.0] - 2025-10-18](#200---2025-10-18)
+4. Release: [[1.0.1] - 2025-10-14](#101---2025-10-14)
+5. Release: [[1.0.0] - 2025-10-14](#100---2025-10-14)
+6. History: [CLI Version History (Pre-API Extraction)](#cli-version-history-pre-api-extraction)
+
+## Unreleased ##
+
+### Breaking Changes ###
+
+- **AST Block Range Tracking**: Enhanced AST identifiers with precise block range information
+  - **Range Information**: AST identifiers now include required `blockRange` property containing start and end locations
+    - **Start Location**: Precise character position where the opening parenthesis begins
+    - **End Location**: Precise character position where the closing parenthesis ends
+    - **Full Block Coverage**: Range spans the entire block from opening to closing parenthesis
+  - **Parser Enhancement**: AST parser now calculates and stores block ranges during identifier parsing
+    - **Location Calculation**: Uses `current.increaseChar(-1)` for opening parenthesis position
+    - **Closing Location**: Captures exact closing parenthesis location from tokens
+    - **Range Construction**: Creates `IRange` objects with start and end coordinates
+  - **Type System Support**: Added `IRange` interface to general types for location coordinate pairs
+    - **Range Definition**: Contains `start` and `end` location coordinates
+    - **Location Coordinates**: Uses existing `ILocationCoordinates` interface
+    - **Type Integration**: Seamlessly integrates with existing location tracking system
+
+### Improved ###
+
+- **IDE Integration**: Enhanced language server capabilities with precise block tracking
+  - **Code Navigation**: Better jump-to-definition and find-references functionality
+  - **Error Highlighting**: More precise error underlining for malformed blocks
+  - **Refactoring Support**: Enhanced block selection and manipulation capabilities
+  - **Debugging Support**: Improved debugging information with exact block boundaries
+- **Testing Infrastructure**: Enhanced test verification system with given-received pattern
+  - **Approval Testing**: New `verifyWithGiven` function for comprehensive test validation
+    - **Given Context**: Tests now capture original input alongside parsed results
+    - **Result Comparison**: Enhanced approval testing with input/output correlation
+    - **Test Clarity**: Better understanding of test cases with visible input data
+  - **Test Coverage**: Expanded AST parser test suite with new multiline scenarios
+    - **Multiline Parsing**: New tests for identifiers with closing parentheses on new lines
+    - **Container Parsing**: Enhanced tests for nested structures with complex formatting
+    - **Test Organization**: Improved test structure with comprehensive given-received validation
+
+### Technical Details ###
+
+- **Breaking Change**: Required `blockRange` property in AST identifier interface
+  - **Required Property**: `blockRange` is now required for all AST identifiers
+  - **API Impact**: Existing code consuming AST identifiers must handle the new required property
+  - **Type Safety**: TypeScript consumers gain enhanced type information with guaranteed block range data
+- **Parser Performance**: Minimal performance impact with efficient range calculation
+  - **Single Pass**: Range calculation integrated into existing parsing logic
+  - **Memory Efficient**: Range objects created only when needed during parsing
+  - **Location Reuse**: Leverages existing location tracking infrastructure
+- **Implementation Details**: Clean integration with existing parser architecture
+  - **Handler Pattern**: Uses established parser handler signature patterns
+  - **Location Tracking**: Builds on existing `ILocation` and coordinate system
+  - **Type Hierarchy**: Extends `IAstIdentifier` interface without breaking changes
+- **Test Framework Enhancement**: Improved testing capabilities for parser validation
+  - **Tool Functions**: New `verifyWithGiven` helper for enhanced approval testing
+  - **Test Organization**: Better separation of input data and expected results
+  - **Approval Baselines**: Updated test baselines with given-received format
+  - **Test Utilities**: Enhanced `getVerifiers` function with additional verification methods
+
+### Benefits ###
+
+- **Enhanced Development Experience**: Developers working with Doculisp ASTs gain access to precise block boundaries
+- **Better Error Reporting**: Tools can now highlight exact problem areas within blocks
+- **IDE Feature Support**: Language servers can provide more sophisticated editing features
+- **Future Extensibility**: Foundation for advanced features like block-level refactoring and manipulation
+- **Debugging Improvements**: Easier debugging with exact block boundary information
+- **Testing Quality**: Enhanced test coverage and validation with given-received pattern testing
 
 ## [2.1.0] - 2025-10-18 ##
 

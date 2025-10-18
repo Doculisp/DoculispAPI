@@ -1,6 +1,6 @@
 import { IdentifierAst, IAstContainer, IAstParser, IAstIdentifier, IAstCommand, IAstEmpty, IAstParameter, IAstValue, RootAst, CoreAst } from "../types/types.ast";
 import { IRegisterable } from "../types/types.containers";
-import { ILocation, IUtil, Result } from "../types/types.general";
+import { ILocation, IRange, IUtil, Result } from "../types/types.general";
 import { IInternals, StepParseResult } from "../types/types.internal";
 import { IdentifierToken, ParameterToken, TextToken, Token, TokenizedDocument } from "../types/types.tokens";
 import { ITrimArray } from "../types/types.trimArray";
@@ -22,11 +22,12 @@ function buildAstParser(util: IUtil, internals: IInternals, trimArray: ITrimArra
         };
     }
 
-    function parseIdentifierToken(identifier: IdentifierToken): IAstIdentifier {
+    function parseIdentifierToken(identifier: IdentifierToken, blockRange: IRange): IAstIdentifier {
         return {
             type: 'ast-identifier',
             location: identifier.location,
             value: identifier.text,
+            blockRange: blockRange,
         }
     }
 
@@ -66,7 +67,7 @@ function buildAstParser(util: IUtil, internals: IInternals, trimArray: ITrimArra
 
         return util.ok({
             type: 'parse result',
-            subResult: parseIdentifierToken(identifier),
+            subResult: parseIdentifierToken(identifier, { start: current.increaseChar(-1), end: close.location }),
             location: current,
             rest: trimArray.trim(2, input),
         });
