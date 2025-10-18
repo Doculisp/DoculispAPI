@@ -7,10 +7,63 @@
 
 # Changelog #
 
-1. Release: [[2.0.0] - 2025-10-18](#200---2025-10-18)
-2. Release: [[1.0.1] - 2025-10-14](#101---2025-10-14)
-3. Release: [[1.0.0] - 2025-10-14](#100---2025-10-14)
-4. History: [CLI Version History (Pre-API Extraction)](#cli-version-history-pre-api-extraction)
+1. Release: [[2.1.0] - 2025-10-18](#210---2025-10-18)
+2. Release: [[2.0.0] - 2025-10-18](#200---2025-10-18)
+3. Release: [[1.0.1] - 2025-10-14](#101---2025-10-14)
+4. Release: [[1.0.0] - 2025-10-14](#100---2025-10-14)
+5. History: [CLI Version History (Pre-API Extraction)](#cli-version-history-pre-api-extraction)
+
+## [2.1.0] - 2025-10-18 ##
+
+### Improved ###
+
+- **Development Infrastructure**: Upgraded TypeScript compiler and toolchain
+  - **TypeScript**: Updated from version 4.4.4 to 5.9.3 (latest stable)
+    - Gained 1.5 years of TypeScript improvements and bug fixes
+    - Enhanced type inference and checking capabilities
+    - Improved compilation performance and developer tooling
+    - Access to modern TypeScript language features
+    - Better IDE support and error messages during development
+  - **TypeScript Related Dependencies**: Updated for compatibility
+    - **ts-jest**: Updated from 29.0.5 to 29.1.2 for Jest integration
+    - All TypeScript tooling now uses consistent version 5.9.3
+    - Maintained backward compatibility with existing API consumers
+  - **Compilation Verification**: Full testing and validation completed
+    - All 293 existing tests continue to pass
+    - No breaking changes introduced to public API
+    - Generated declaration files remain fully compatible
+    - Build process and CI/CD pipeline verified
+    - API functionality confirmed with comprehensive testing
+
+### Technical Details ###
+
+- **Backward Compatibility**: Zero breaking changes for API consumers
+  - Consumer projects can continue using any TypeScript version 4.0+
+  - JavaScript projects require no changes
+  - Generated declaration files use standard TypeScript syntax
+  - Compiled JavaScript output remains ES2022 compatible
+- **Development Benefits**: Enhanced development experience for contributors
+  - Improved error messages and debugging information
+  - Better IDE integration and IntelliSense support
+  - Access to modern TypeScript features for internal development
+  - Enhanced build tooling and compiler performance
+  - Future-ready for upcoming TypeScript and Node.js versions
+- **Quality Assurance**: Comprehensive validation process
+  - Incremental upgrade approach from 4.x → 5.0.2 → 5.9.3
+  - Full test suite execution at each upgrade step
+  - API functionality verification with document compilation testing
+  - Declaration file generation and compatibility verification
+  - No compilation errors or type checking issues
+
+### Migration Guide ###
+
+**No action required for API consumers.** This upgrade affects only the internal development toolchain and provides no breaking changes to the public API.
+
+For contributors and developers working on the DoculispAPI codebase:
+- **Development Environment**: Consider updating to TypeScript 5.x for optimal development experience
+- **Build Tools**: Ensure your development environment supports modern TypeScript versions
+- **IDE Support**: Update TypeScript language server for enhanced IntelliSense and error detection
+- **Testing**: All existing tests and development workflows remain unchanged
 
 ## [2.0.0] - 2025-10-18 ##
 
