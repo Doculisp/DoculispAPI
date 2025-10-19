@@ -7,7 +7,12 @@ import { IProjectDocuments, IProjectParser } from "../../../src/types/types.astP
 import { IProjectLocation, IUtil, Result } from "../../../src/types/types.general";
 import { IVariableTable } from "../../../src/types/types.variableTable";
 
-describe('astProject', () => {
+/**
+ * Test suite for Project AST Parser functionality.
+ * Tests the parsing of .dlproj project files that define batch document compilation configurations.
+ * Covers basic project structure validation, document parsing, and identified document processing.
+ */
+describe('Project AST Parser', () => {
     let resultBuilder: (text: string, projectLocation: IProjectLocation) => Result<IProjectDocuments>;
     let verifyAsJson: (data: any, options?: Options) => void;
     let verifyWithGiven: (data: any, options?: any, ...given: any[]) => void;
@@ -33,40 +38,69 @@ describe('astProject', () => {
         });
     });
 
-    it('should handle an empty project file', () => {
-        const result = resultBuilder('', buildProjectLocation('./test.dlproj'));
+    /**
+     * Tests for basic project structure validation and parsing.
+     * Covers empty input handling, error propagation, and structure validation.
+     */
+    describe('Basic Project Structure', () => {
+        /**
+         * Tests handling of empty or minimal project input scenarios.
+         */
+        describe('Empty Input Handling', () => {
+            it('empty project file produces empty project', () => {
+                const result = resultBuilder('', buildProjectLocation('./test.dlproj'));
 
-        verifyWithGiven(result, undefined, '');
-    });
+                verifyWithGiven(result, undefined, '');
+            });
 
-    it('should handle an empty documents block', () => {
-        const text = '(documents)';
-        const result = resultBuilder(text, buildProjectLocation('./test.dlproj'));
+            it('empty documents block produces empty documents', () => {
+                const text = '(documents)';
+                const result = resultBuilder(text, buildProjectLocation('./test.dlproj'));
 
-        verifyWithGiven(result, undefined, text);
-    });
+                verifyWithGiven(result, undefined, text);
+            });
+        });
 
-    it('should return an error when given an error', () => {
-        const tokenResults = util.fail('No good.');
-        const result = parser.parse(tokenResults, variableTable);
+        /**
+         * Tests that parsing errors are properly propagated through the system.
+         */
+        describe('Error Propagation', () => {
+            it('failed input parsing propagates error', () => {
+                const tokenResults = util.fail('No good.');
+                const result = parser.parse(tokenResults, variableTable);
 
-        expect(result).toBe(tokenResults);
-    });
+                expect(result).toBe(tokenResults);
+            });
+        });
 
-    it('should enforce only a single documents block', () => {
-        const project = `
+        /**
+         * Tests validation of project file structure and syntax rules.
+         */
+        describe('Structure Validation', () => {
+            it('duplicate documents blocks produce error', () => {
+                const project = `
 (documents)
 (documents)
 `;
 
-        const result = resultBuilder(project, buildProjectLocation('./myBad.dlproj'));
+                const result = resultBuilder(project, buildProjectLocation('./myBad.dlproj'));
 
-        verifyAsJson(result);
+                verifyAsJson(result);
+            });
+        });
     });
 
-    describe('basic project documents', () => {
-        it('should parse a single document', () => {
-            const project = `
+    /**
+     * Tests for parsing and processing document structures within project files.
+     * Covers single documents, multiple documents, and document validation.
+     */
+    describe('Document Structure Processing', () => {
+        /**
+         * Tests parsing of single document configurations.
+         */
+        describe('Single Document', () => {
+            it('source and output block creates document', () => {
+                const project = `
 (documents
     (document
         (source ./myReadme.md)
@@ -74,13 +108,18 @@ describe('astProject', () => {
     )
 )
 `;
-            const result = resultBuilder(project, buildProjectLocation('./myProject.dlproj'));
+                const result = resultBuilder(project, buildProjectLocation('./myProject.dlproj'));
 
-            verifyWithGiven(result, undefined, project);
+                verifyWithGiven(result, undefined, project);
+            });
         });
-        
-        it('should parse a two document', () => {
-            const project = `
+
+        /**
+         * Tests parsing of multiple document configurations in a single project.
+         */
+        describe('Multiple Documents', () => {
+            it('two documents create ordered document list', () => {
+                const project = `
 (documents
     (document
         (source ./myReadme.md)
@@ -92,13 +131,18 @@ describe('astProject', () => {
     )
 )
 `;
-            const result = resultBuilder(project, buildProjectLocation('./myProject.dlproj'));
+                const result = resultBuilder(project, buildProjectLocation('./myProject.dlproj'));
 
-            verifyWithGiven(result, undefined, project);
+                verifyWithGiven(result, undefined, project);
+            });
         });
 
-        it('should fail if document block is missing the source block', () => {
-            const project = `
+        /**
+         * Tests validation of required document fields and structure.
+         */
+        describe('Document Validation', () => {
+            it('missing source block produces error', () => {
+                const project = `
 (documents
     (document
         (output ./README.md)
@@ -106,13 +150,13 @@ describe('astProject', () => {
 )
 `;
 
-            const result = resultBuilder(project, buildProjectLocation('./project.dlproj'));
+                const result = resultBuilder(project, buildProjectLocation('./project.dlproj'));
 
-            verifyAsJson(result);
-        });
+                verifyAsJson(result);
+            });
 
-        it('should fail if document block is missing the output block', () => {
-            const project = `
+            it('missing output block produces error', () => {
+                const project = `
 (documents
     (document
         (source ./myReadme.md)
@@ -120,15 +164,24 @@ describe('astProject', () => {
 )
 `;
 
-            const result = resultBuilder(project, buildProjectLocation('./project.dlproj'));
+                const result = resultBuilder(project, buildProjectLocation('./project.dlproj'));
 
-            verifyAsJson(result);
+                verifyAsJson(result);
+            });
         });
     });
 
-    describe('id project documents', () => {
-        it('should parse a single document', () => {
-            const project = `
+    /**
+     * Tests for processing documents with custom identifiers.
+     * Covers basic ID documents, validation, format checking, and error handling.
+     */
+    describe('Identified Document Processing', () => {
+        /**
+         * Tests basic parsing of documents with custom identifiers.
+         */
+        describe('Basic ID Documents', () => {
+            it('single document with id creates identified document', () => {
+                const project = `
 (documents
     (document
         (readmeβ
@@ -139,13 +192,13 @@ describe('astProject', () => {
 )
 `;
 
-            const result = resultBuilder(project, buildProjectLocation('/docs.dlproj'));
+                const result = resultBuilder(project, buildProjectLocation('/docs.dlproj'));
 
-            verifyWithGiven(result, undefined, project);
-        });
-        
-        it('should parse a two documents', () => {
-            const project = `
+                verifyWithGiven(result, undefined, project);
+            });
+            
+            it('two identified documents create document list', () => {
+                const project = `
 (documents
     (document
         (readme
@@ -162,13 +215,13 @@ describe('astProject', () => {
 )
 `;
 
-            const result = resultBuilder(project, buildProjectLocation('/docs.dlproj'));
+                const result = resultBuilder(project, buildProjectLocation('/docs.dlproj'));
 
-            verifyWithGiven(result, undefined, project);
-        });
-        
-        it('should parse a two documents one simple', () => {
-            const project = `
+                verifyWithGiven(result, undefined, project);
+            });
+            
+            it('mixed identified and simple documents work together', () => {
+                const project = `
 (documents
     (document
         (readme
@@ -183,13 +236,18 @@ describe('astProject', () => {
 )
 `;
 
-            const result = resultBuilder(project, buildProjectLocation('/docs.dlproj'));
+                const result = resultBuilder(project, buildProjectLocation('/docs.dlproj'));
 
-            verifyWithGiven(result, undefined, project);
+                verifyWithGiven(result, undefined, project);
+            });
         });
-        
-        it('should fail if missing source', () => {
-            const project = `
+
+        /**
+         * Tests validation rules for documents with identifiers.
+         */
+        describe('ID Document Validation', () => {
+            it('missing source in identified document produces error', () => {
+                const project = `
 (documents
     (document
         (readme
@@ -199,13 +257,13 @@ describe('astProject', () => {
 )
 `;
 
-            const result = resultBuilder(project, buildProjectLocation('/docs.dlproj'));
+                const result = resultBuilder(project, buildProjectLocation('/docs.dlproj'));
 
-            verifyAsJson(result);
-        });
-        
-        it('should fail if missing output', () => {
-            const project = `
+                verifyAsJson(result);
+            });
+            
+            it('missing output in identified document produces error', () => {
+                const project = `
 (documents
     (document
         (readme
@@ -215,13 +273,13 @@ describe('astProject', () => {
 )
 `;
 
-            const result = resultBuilder(project, buildProjectLocation('/docs.dlproj'));
+                const result = resultBuilder(project, buildProjectLocation('/docs.dlproj'));
 
-            verifyAsJson(result);
-        });
-        
-        it('should fail if identifier is not unique', () => {
-            const project = `
+                verifyAsJson(result);
+            });
+            
+            it('duplicate document ids produce error', () => {
+                const project = `
 (documents
     (document
         (readme
@@ -238,13 +296,18 @@ describe('astProject', () => {
 )
 `;
 
-            const result = resultBuilder(project, buildProjectLocation('/docs.dlproj'));
+                const result = resultBuilder(project, buildProjectLocation('/docs.dlproj'));
 
-            verifyAsJson(result);
+                verifyAsJson(result);
+            });
         });
 
-        it('should not parse a document with a capitalized id', () => {
-            const project = `
+        /**
+         * Tests validation of identifier format rules and character restrictions.
+         */
+        describe('ID Format Validation', () => {
+            it('capitalized document id produces error', () => {
+                const project = `
 (documents
     (document
         (Readme
@@ -254,12 +317,12 @@ describe('astProject', () => {
     )
 )
 `;
-            const result = resultBuilder(project, buildProjectLocation('/docs.dlproj'));
-            verifyAsJson(result);
-        });
+                const result = resultBuilder(project, buildProjectLocation('/docs.dlproj'));
+                verifyAsJson(result);
+            });
 
-        it('should not parse a document with an id that contains a symbol', () => {
-            const project = `
+            it('symbol in document id produces error', () => {
+                const project = `
 (documents
     (document
         (readmeϐ
@@ -269,12 +332,17 @@ describe('astProject', () => {
     )
 )
 `;
-            const result = resultBuilder(project, buildProjectLocation('/docs.dlproj'));
-            verifyAsJson(result);
+                const result = resultBuilder(project, buildProjectLocation('/docs.dlproj'));
+                verifyAsJson(result);
+            });
         });
 
-        it('should fail when documents block contains unknown identifier', () => {
-            const project = `
+        /**
+         * Tests comprehensive error handling for various malformed document structures.
+         */
+        describe('Structure Error Handling', () => {
+            it('unknown identifier in documents block produces error', () => {
+                const project = `
 (documents
     (document
         (source ./readme.md)
@@ -283,12 +351,12 @@ describe('astProject', () => {
     (unknownIdentifier some-value)
 )
 `;
-            const result = resultBuilder(project, buildProjectLocation('./malformed.dlproj'));
-            verifyAsJson(result);
-        });
+                const result = resultBuilder(project, buildProjectLocation('./malformed.dlproj'));
+                verifyAsJson(result);
+            });
 
-        it('should fail when document structure contains unknown identifier', () => {
-            const project = `
+            it('unknown identifier in document produces error', () => {
+                const project = `
 (documents
     (document
         (source ./readme.md)
@@ -297,12 +365,12 @@ describe('astProject', () => {
     )
 )
 `;
-            const result = resultBuilder(project, buildProjectLocation('./malformed.dlproj'));
-            verifyAsJson(result);
-        });
+                const result = resultBuilder(project, buildProjectLocation('./malformed.dlproj'));
+                verifyAsJson(result);
+            });
 
-        it('should fail when document has duplicate source blocks', () => {
-            const project = `
+            it('duplicate source blocks produce error', () => {
+                const project = `
 (documents
     (document
         (source ./readme.md)
@@ -311,12 +379,12 @@ describe('astProject', () => {
     )
 )
 `;
-            const result = resultBuilder(project, buildProjectLocation('./malformed.dlproj'));
-            verifyAsJson(result);
-        });
+                const result = resultBuilder(project, buildProjectLocation('./malformed.dlproj'));
+                verifyAsJson(result);
+            });
 
-        it('should fail when document has duplicate output blocks', () => {
-            const project = `
+            it('duplicate output blocks produce error', () => {
+                const project = `
 (documents
     (document
         (source ./readme.md)
@@ -325,12 +393,12 @@ describe('astProject', () => {
     )
 )
 `;
-            const result = resultBuilder(project, buildProjectLocation('./malformed.dlproj'));
-            verifyAsJson(result);
-        });
+                const result = resultBuilder(project, buildProjectLocation('./malformed.dlproj'));
+                verifyAsJson(result);
+            });
 
-        it('should fail when document block contains unknown block', () => {
-            const project = `
+            it('unknown block in document produces error', () => {
+                const project = `
 (documents
     (document
         (source ./readme.md)
@@ -339,23 +407,23 @@ describe('astProject', () => {
     )
 )
 `;
-            const result = resultBuilder(project, buildProjectLocation('./malformed.dlproj'));
-            verifyAsJson(result);
-        });
+                const result = resultBuilder(project, buildProjectLocation('./malformed.dlproj'));
+                verifyAsJson(result);
+            });
 
-        it('should fail when document block does not contain source or output', () => {
-            const project = `
+            it('empty document block produces error', () => {
+                const project = `
 (documents
     (document
     )
 )
 `;
-            const result = resultBuilder(project, buildProjectLocation('./malformed.dlproj'));
-            verifyAsJson(result);
-        });
+                const result = resultBuilder(project, buildProjectLocation('./malformed.dlproj'));
+                verifyAsJson(result);
+            });
 
-        it('should fail when document has duplicate unknown blocks', () => {
-            const project = `
+            it('duplicate unknown blocks produce error', () => {
+                const project = `
 (documents
     (document
         (source ./readme.md)
@@ -364,12 +432,12 @@ describe('astProject', () => {
     )
 )
 `;
-            const result = resultBuilder(project, buildProjectLocation('./malformed.dlproj'));
-            verifyAsJson(result);
-        });
+                const result = resultBuilder(project, buildProjectLocation('./malformed.dlproj'));
+                verifyAsJson(result);
+            });
 
-        it('should fail when project contains unknown top-level identifier', () => {
-            const project = `
+            it('unknown top level identifier produces error', () => {
+                const project = `
 (documents
     (document
         (source ./readme.md)
@@ -378,8 +446,9 @@ describe('astProject', () => {
 )
 (unknownTopLevel ./something)
 `;
-            const result = resultBuilder(project, buildProjectLocation('./malformed.dlproj'));
-            verifyAsJson(result);
+                const result = resultBuilder(project, buildProjectLocation('./malformed.dlproj'));
+                verifyAsJson(result);
+            });
         });
     });
 });
