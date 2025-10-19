@@ -22,7 +22,7 @@ This meta execution plan provides systematic instructions for an AI assistant to
    - `.github/AI-Testing-Codex.md` (full document)
    - `.github/AI-Assistant-Codex.md` (full document)  
    - `.github/.copilot-instructions.md` (commit notation and guidelines)
-   - `TEST_REORGANIZATION_METAPLAN.md` (for context and background)
+   - `_TEST_REORGANIZATION_METAPLAN.md` (for context and background)
 
 2. **Understand the execution context:**
    - This is a systematic execution of pre-created reorganization plans
