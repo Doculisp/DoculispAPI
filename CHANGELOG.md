@@ -40,6 +40,24 @@
 
 ### Improved ###
 
+- **Tokenizer Error Handling**: Enhanced whitespace validation after opening parenthesis
+  - **Syntax Error Detection**: Tokenizer now properly rejects whitespace characters immediately following opening parentheses
+    - **Error Prevention**: Prevents malformed Doculisp syntax like `( identifier)` from being tokenized
+    - **Clear Error Messages**: Provides specific error messages for different whitespace types (space, newline, tab)
+    - **Context Awareness**: Only applies validation when tokenizer is in parameter/identifier parsing state
+  - **Whitespace Types Detected**: Comprehensive validation for all whitespace scenarios
+    - **Space Characters**: Detects and rejects space characters after opening parenthesis
+    - **Newline Characters**: Handles both Windows (`\r\n`) and Unix (`\n`) line endings
+    - **Tab Characters**: Detects and rejects tab characters following opening parenthesis
+    - **Mixed Whitespace**: Properly handles multiple consecutive whitespace characters
+  - **Parser State Integration**: Validation respects tokenizer state machine behavior
+    - **State-Aware Validation**: Only validates whitespace when `isToken` flag indicates parameter/identifier context
+    - **Syntax Preservation**: Valid syntax like text content with spaces remains unaffected
+    - **Error Context**: Provides precise location information for whitespace errors
+  - **Comprehensive Test Coverage**: Added 11 comprehensive test cases for whitespace error scenarios
+    - **Error Cases**: Tests for space, newline, tab, multiple whitespace, and Windows line endings
+    - **Success Cases**: Validates that valid syntax continues to work correctly
+    - **Nested Contexts**: Tests whitespace handling in nested container structures
 - **Parser Location Tracking**: Enhanced Doculisp content location precision
   - **Content Location Accuracy**: Parser now tracks precise Doculisp content location instead of HTML comment markers
     - **Accurate Error Reporting**: Error messages now point to exact Doculisp syntax location rather than comment start
