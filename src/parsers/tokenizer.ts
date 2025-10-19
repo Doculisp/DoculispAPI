@@ -33,6 +33,9 @@ function buildTokenize(doesIt: ILispSearches, internals: IInternals, util: IUtil
     
         function tokenizeWhiteSpace(input: string, current: ILocation): StringStepParseResult<Token> {
             if(doesIt.startWithWindowsNewline.test(input)) {
+                if(isToken) {
+                    return util.fail(`Unexpected whitespace after opening parenthesis at '${current.documentPath}' (Line: ${current.line}, Char: ${current.char}).`);
+                }
                 isToken = false;
                 const newLine = (input.match(doesIt.startWithWindowsNewline) as any)[0] as string;
                 input = input.slice(newLine.length);
@@ -44,6 +47,9 @@ function buildTokenize(doesIt: ILispSearches, internals: IInternals, util: IUtil
             }
     
             if(doesIt.startWithAnyNewline.test(input)) {
+                if(isToken) {
+                    return util.fail(`Unexpected whitespace after opening parenthesis at '${current.documentPath}' (Line: ${current.line}, Char: ${current.char}).`);
+                }
                 const newLine = (input.match(doesIt.startWithLinuxNewline) as any)[0] as string;
                 input = input.slice(newLine.length);
                 return util.ok({
@@ -54,6 +60,9 @@ function buildTokenize(doesIt: ILispSearches, internals: IInternals, util: IUtil
             }
     
             if(doesIt.startWithNonNewLineWhiteSpace.test(input)) {
+                if(isToken) {
+                    return util.fail(`Unexpected whitespace after opening parenthesis at '${current.documentPath}' (Line: ${current.line}, Char: ${current.char}).`);
+                }
                 const space = (input.match(doesIt.startWithNonNewLineWhiteSpace) as any)[0] as string;
                 input = input.slice(space.length);
                 return util.ok({
