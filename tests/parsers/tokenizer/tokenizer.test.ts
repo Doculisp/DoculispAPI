@@ -1,10 +1,10 @@
 import { containerPromise } from "../../../src/moduleLoader";
 import { configure } from "approvals/lib/config";
-import { getVerifier } from "../../tools";
+import { getVerifiers } from "../../tools";
 import { Options } from "approvals/lib/Core/Options";
 import { IContainer, ITestableContainer } from "../../../src/types/types.containers";
-import { TokenFunction } from '../../../src/types/types.tokens';
-import { IFail, ILocation, ISuccess, IUtil, Result } from "../../../src/types/types.general";
+import { TokenFunction, TokenizedDocument } from '../../../src/types/types.tokens';
+import { IFail, ILocation, ISuccess, IUtil, Result, IProjectLocation } from "../../../src/types/types.general";
 import { DocumentMap } from "../../../src/types/types.document";
 import { buildProjectLocation, testable, buildPath, buildLocation } from "../../testHelpers";
 import { IPath, PathConstructor } from "../../../src/types/types.filePath";
@@ -15,13 +15,16 @@ describe('tokenizer', () => {
     let container: IContainer = null as any;
     let tokenizer: TokenFunction = undefined as any;
     let verifyAsJson: (data: any, options?: Options) => void = undefined as any;
+    let verifyWithGiven: (data: any, options?: Options | undefined, ...given: any[]) => void = undefined as any;
     let ok: (successfulValue: any) => ISuccess<any> = undefined as any;
     let fail: (message: string, documentPath?: IPath) => IFail = undefined as any;
     let util: IUtil = undefined as any;
     let getLocation: (path: string, depth: number, index: number, line: number, char: number, extension?: string | false) => ILocation = undefined as any;
 
     beforeAll(() => {
-        verifyAsJson = getVerifier(configure);
+        const verifiers = getVerifiers(configure);
+        verifyAsJson = verifiers.verifyAsJson;
+        verifyWithGiven = verifiers.verifyWithGiven;
     });
 
     beforeEach(async () => {
@@ -347,6 +350,30 @@ describe('tokenizer', () => {
             const result = tokenizer(parseResult);
 
             verifyAsJson(result);
+        });
+    });
+
+    describe('whitespace error handling', () => {
+        let toResult: (text: string, location: IProjectLocation) => Result<TokenizedDocument>;
+
+        beforeEach(() => {
+            toResult = testable.token.resultBuilder(container, environment => {
+                const pathHandler: PathConstructor = function (filePath) {
+                    return buildPath(filePath);
+                };
+                environment.replaceValue(pathHandler, 'pathConstructor');
+                util = environment.buildAs<IUtil>('util');
+                getLocation = buildLocation(util);
+            });
+        });
+
+        it('should fail when space follows opening parenthesis', () => {
+            const input = '<!-- (dl ( identifier)) -->';
+            const location = buildProjectLocation(BASIC_SAMPLE_DOCUMENT, 1, 1);
+            
+            const result = toResult(input, location);
+            
+            verifyWithGiven(result, undefined, input);
         });
     });
 });
