@@ -21,6 +21,22 @@
       },
       "documents": [
         {
+          "blockRange": {
+            "end": {
+              "char": 5,
+              "documentDepth": 1,
+              "documentIndex": 1,
+              "documentPath": "./myProject.dlproj",
+              "line": 6
+            },
+            "start": {
+              "char": 5,
+              "documentDepth": 1,
+              "documentIndex": 1,
+              "documentPath": "./myProject.dlproj",
+              "line": 3
+            }
+          },
           "destinationPath": "./README.md",
           "location": {
             "char": 6,

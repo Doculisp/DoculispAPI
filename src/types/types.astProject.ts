@@ -9,6 +9,7 @@ export interface IProjectDocument {
     destinationPath: IPath;
     location: ILocation;
     type: 'project-document';
+    blockRange: IRange;
 };
 
 export interface IProjectDocuments {

@@ -90,7 +90,7 @@
   - **JavaScript Compatibility**: JavaScript consumers continue to work without changes (additional property ignored)
   - **Type Safety**: TypeScript consumers gain enhanced type information with guaranteed block range data
   - **Complete AST Coverage**: All AST node types (`IAstIdentifier`, `IAstCommand`, `IAstContainer`) now include block range tracking
-  - **Project AST Integration**: `IProjectDocuments` interface now includes required `blockRange` property for project structure tracking
+  - **Project AST Integration**: `IProjectDocuments` and `IProjectDocument` interfaces now include required `blockRange` property for complete project structure tracking
   - **Migration Impact**: Mock objects and test fixtures need to include new `blockRange` property
 - **Parser Performance**: Minimal performance impact with efficient range calculation
   - **Single Pass**: Range calculation integrated into existing parsing logic
@@ -126,7 +126,7 @@
 ### Migration Guide ###
 
 **For TypeScript Consumers:**
-- **Interface Updates**: `IAstIdentifier`, `IAstCommand`, `IAstContainer`, and `IProjectDocuments` now include required `blockRange: IRange` property
+- **Interface Updates**: `IAstIdentifier`, `IAstCommand`, `IAstContainer`, `IProjectDocuments`, and `IProjectDocument` now include required `blockRange: IRange` property
 - **Mock Objects**: Update test fixtures and mock data to include `blockRange` property:
   ```typescript
   const mockIdentifier: IAstIdentifier = {
@@ -165,6 +165,18 @@
     type: "project-documents",
     documents: [],
     location: someLocation,
+    blockRange: {
+      start: startLocation,
+      end: endLocation
+    }
+  };
+
+  const mockProjectDocument: IProjectDocument = {
+    id: "document-id",
+    sourcePath: sourcePath,
+    destinationPath: destinationPath,
+    location: someLocation,
+    type: "project-document",
     blockRange: {
       start: startLocation,
       end: endLocation
