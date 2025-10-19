@@ -143,7 +143,18 @@ After consolidation:
 - Clean consolidated test structure
 - Deletion committed
 
-#### Step 6: Plan Completion and Documentation
+#### Step 6: Cleanup Backup Files
+- [ ] **[PENDING]** Delete backup files created during consolidation
+- [ ] **[PENDING]** Remove any temporary files or directories created during process
+- [ ] **[PENDING]** Verify no backup files remain in working directory
+- [ ] **[PENDING]** Commit cleanup with message: `". d Removes backup files after AST Doculisp dlproj test consolidation"`
+
+**Expected Outcomes**:
+- All backup files removed
+- Clean working directory
+- Cleanup commit created
+
+#### Step 7: Plan Completion and Documentation
 - [ ] **[PENDING]** Mark this plan as `[COMPLETED]`
 - [ ] **[PENDING]** Document what tests were migrated vs. removed as duplicates
 - [ ] **[PENDING]** Provide summary of consolidation results

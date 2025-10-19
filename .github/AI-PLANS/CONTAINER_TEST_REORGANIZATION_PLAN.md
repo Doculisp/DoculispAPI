@@ -319,7 +319,18 @@ describe('Dependency Injection Container', () => {
 - Clean test structure
 - Final commit created
 
-#### Step 16: Plan Completion and Documentation
+#### Step 16: Cleanup Backup Files
+- [ ] **[PENDING]** Delete backup files created during reorganization
+- [ ] **[PENDING]** Remove any temporary files or directories created during process
+- [ ] **[PENDING]** Verify no backup files remain in working directory
+- [ ] **[PENDING]** Commit cleanup with message: `". d Removes backup files after container test reorganization"`
+
+**Expected Outcomes**:
+- All backup files removed
+- Clean working directory
+- Cleanup commit created
+
+#### Step 17: Plan Completion and Documentation
 - [ ] **[PENDING]** Mark this plan as `[COMPLETED]`
 - [ ] **[PENDING]** Document any deviations or lessons learned
 - [ ] **[PENDING]** Provide summary of changes made
