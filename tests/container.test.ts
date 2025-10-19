@@ -525,8 +525,8 @@ describe('the registry', () => {
         });
     });
 
-    describe('has a restore method that', () => {
-        it('call original method when replacement is restored.', () => {
+    describe('Restore Method', () => {
+        it('restored original method calls correctly', () => {
             const origValue = { original: true };
             let fnOrig = jest.fn();
             let registerable: IRegisterable = {
@@ -553,7 +553,7 @@ describe('the registry', () => {
             expect(result).toBe(origValue);
         });
 
-        it('uses cached value when restored', () => {
+        it('singleton restoration preserves cached value', () => {
             const origValue = { original: true };
             let registerable: IRegisterable = {
                 builder: function toDo() { return origValue; },
