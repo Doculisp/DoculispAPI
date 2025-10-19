@@ -724,8 +724,8 @@ describe('the registry', () => {
         });
     });
 
-    describe('has replacePackageValue method that', () => {
-        it('should replace a package with a value.', () => {
+    describe('Replace Package Value Method', () => {
+        it('package value replacement works correctly', () => {
             const expected = { real: 'you kidding me', name: 'child_process' };
             testable.replacePackageValue(expected);
 
@@ -734,11 +734,11 @@ describe('the registry', () => {
             expect(result).toBe(expected);
         });
 
-        it('should not replace a package with value that does not have a name if no name is provided as a parameter.', () => {
+        it('unnamed package value replacement produces error', () => {
             expect(() => testable.replacePackageValue({ bad: true })).toThrow('Replacement failed: Package value name must be provided either as a property or parameter.');
         });
 
-        it('should allow for a value without a name property if the name is passed as a parameter.', () => {
+        it('parameter-named package value replacement works correctly', () => {
             const fakeCrypto = { secure: 'Nope!' };
             testable.replacePackageValue(fakeCrypto, 'crypto');
 
