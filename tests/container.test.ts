@@ -412,20 +412,20 @@ describe('the registry', () => {
         });
     });
 
-    describe('when handling replacement', () => {
-        it('should not support replacement if not a testable.', () => {
+    describe('Replacement Functionality', () => {
+        it('non-testable container rejects replacement', () => {
             expect(environment.supportsReplace()).toBe(false);
         });
     
-        it('should support replacement if it is a testable', () => {
+        it('testable container supports replacement', () => {
             expect(testable.supportsReplace()).toBe(true);
         });
 
-        it('should not allow you to replace a module if it is not testable.', () => {
+        it('non-testable module replacement produces error', () => {
             // TODO: need a real module to test this.
         });
 
-        it('should allow you to replace a module if it is testable', () => {
+        it('testable module replacement works correctly', () => {
             let fn = jest.fn();
             let registerable: IRegisterable = {
                 builder: function getNumberTest() { fn(); return 'no number' },
@@ -441,7 +441,7 @@ describe('the registry', () => {
             expect(result).toBe('no number');
         });
 
-        it('should not let you replace a module that has not been registered', () => {
+        it('unregistered module replacement produces error', () => {
             let registerable: IRegisterable = {
                 builder: function getNumberTest() { },
                 name: 'getNumberTest',
@@ -450,7 +450,7 @@ describe('the registry', () => {
             expect(() => { testable.replace(registerable); }).toThrow('Replacement failed: Module \'getNumberTest\' is not registered.');
         });
 
-        it('should not let you replace a module that has been replaced', () => {
+        it('double replacement attempt produces error', () => {
             let registerable: IRegisterable = {
                 builder: function replaced() { },
                 name: 'replaced',
@@ -472,7 +472,7 @@ describe('the registry', () => {
             expect(() => testable.replace(bRegisterable)).toThrow('Replacement failed: Module \'replaced\' is not registered.');
         });
 
-        it('should allow you to replace a non singleton with a singleton', () => {
+        it('non-singleton to singleton replacement works correctly', () => {
             let original: IRegisterable = {
                 builder: function original() {},
                 name: 'original',
@@ -496,7 +496,7 @@ describe('the registry', () => {
             expect(fn).toHaveBeenCalledTimes(1);
         });
 
-        it('should allow the replacement of a singleton with non singleton.', () => {
+        it('singleton to non-singleton replacement works correctly', () => {
             let origValue = { some: 'original' };
             let registerable: IRegisterable = {
                 builder: function blah() { return origValue; },
