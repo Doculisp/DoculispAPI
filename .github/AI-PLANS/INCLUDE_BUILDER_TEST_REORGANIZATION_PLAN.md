@@ -32,6 +32,17 @@ This plan reorganizes `tests/parsers/includeBuilder/includeBuilder.test.ts` to f
 9. **Track Progress**: Update progress tracking after each completed step
 10. **Request Confirmation**: Ask for confirmation before proceeding to each major phase
 
+## Jest Testing Requirements
+
+**IMPORTANT**: All test commands in this plan use Jest directly via `npx jest` rather than `npm test`. This is because npm does not properly pass command-line arguments to Jest. 
+
+**Correct Commands:**
+- Run specific test file: `npx jest --testPathPattern=filename`
+- Run all tests: `npx jest`
+- Run tests with watch mode: `npx jest --watch`
+
+**DO NOT USE:** `npm test -- --testPathPattern=filename` (this will not work correctly)
+
 ## Periodic Re-reading Requirements
 
 **MANDATORY**: The copilot MUST re-read the following documents at these intervals:

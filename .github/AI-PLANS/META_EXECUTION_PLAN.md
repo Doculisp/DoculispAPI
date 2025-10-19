@@ -35,6 +35,19 @@ This meta execution plan provides systematic instructions for an AI assistant to
    - Ensure all tests pass before beginning any reorganization
    - Document baseline test count and status
 
+## Jest Testing Requirements
+
+**CRITICAL**: All test commands in this meta execution plan and all individual reorganization plans use Jest directly via `npx jest` rather than `npm test`. This is because npm does not properly pass command-line arguments to Jest.
+
+**Correct Commands:**
+- Run specific test file: `npx jest --testPathPattern=filename`
+- Run all tests: `npx jest`
+- Run tests with watch mode: `npx jest --watch`
+
+**DO NOT USE:** `npm test -- --testPathPattern=filename` (this will not work correctly)
+
+**Note**: Every individual reorganization plan includes this same Jest usage guidance.
+
 ## Execution Order: Easiest to Hardest
 
 The following execution order is designed to start with simpler test files and progress to more complex ones:

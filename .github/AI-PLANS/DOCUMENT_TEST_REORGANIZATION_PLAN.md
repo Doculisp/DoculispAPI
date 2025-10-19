@@ -19,6 +19,17 @@ This plan provides a systematic approach to reorganize and rename the `document.
 3. **Plan updates**: Update this plan document after each completed step by marking it `[COMPLETED]`
 4. **Approval file tracking**: Each step must include renaming associated approval files to match new test names
 
+## Jest Testing Requirements
+
+**IMPORTANT**: All test commands in this plan use Jest directly via `npx jest` rather than `npm test`. This is because npm does not properly pass command-line arguments to Jest. 
+
+**Correct Commands:**
+- Run specific test file: `npx jest --testPathPattern=filename`
+- Run all tests: `npx jest`
+- Run tests with watch mode: `npx jest --watch`
+
+**DO NOT USE:** `npm test -- --testPathPattern=filename` (this will not work correctly)
+
 ## Current State Analysis
 
 The current `document.test.ts` has these issues:

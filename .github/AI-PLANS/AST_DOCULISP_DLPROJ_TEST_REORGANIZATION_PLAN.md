@@ -22,6 +22,17 @@ This plan provides a systematic approach to consolidate and cleanup the `astDocu
 5. **Consolidation approach**: Move unique tests to astProject.test.ts, then delete this file
 6. **No approval file creation**: Since file will be deleted, focus on preserving functionality in the target file
 
+## Jest Testing Requirements
+
+**IMPORTANT**: All test commands in this plan use Jest directly via `npx jest` rather than `npm test`. This is because npm does not properly pass command-line arguments to Jest. 
+
+**Correct Commands:**
+- Run specific test file: `npx jest --testPathPattern=filename`
+- Run all tests: `npx jest`
+- Run tests with watch mode: `npx jest --watch`
+
+**DO NOT USE:** `npm test -- --testPathPattern=filename` (this will not work correctly)
+
 ## Periodic Re-reading Requirements
 
 **MANDATORY**: The copilot MUST re-read the following documents at these intervals:
