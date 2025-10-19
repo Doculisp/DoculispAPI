@@ -569,6 +569,7 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
             const content: IContentLocation = {
                 type: 'doculisp-content',
                 documentOrder: contentBlock.location,
+                blockRange: contentBlock.blockRange,
             }
     
             if(contentBlock.type === 'ast-identifier') {

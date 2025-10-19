@@ -192,7 +192,7 @@ describe('astDoculisp', () => {
 
             const result = toResult(text, buildProjectLocation('./_main.dlisp', 4, 7));
 
-            verifyAsJson(result);
+            verifyWithGiven(result, undefined, text);
         });
 
         describe('section-meta', () => {
@@ -701,7 +701,7 @@ A story of a misbehaving parser.
 
                 const result = toResult(text, buildProjectLocation('../main.dlisp', 2, 7));
 
-                verifyAsJson(result);
+                verifyWithGiven(result, undefined, text);
             });
 
             it('should not parse the content if it has a parameter text', () => {
@@ -798,7 +798,7 @@ A story of a misbehaving parser.
 
                 const result = toResult(text, buildProjectLocation('./itty.dlisp', 2, 1));
 
-                verifyAsJson(result);
+                verifyWithGiven(result, undefined, text);
             });
 
             it.each([
@@ -823,7 +823,7 @@ A story of a misbehaving parser.
 
                 const result = toResult(text, buildProjectLocation('./itty.dlisp', 2, 1));
 
-                verifyAsJson(result);
+                verifyWithGiven(result, undefined, text);
             });
 
             it('should not parse a content whith a sub command other then toc', () => {
@@ -877,7 +877,7 @@ A story of a misbehaving parser.
 
                 const result = toResult(text, buildProjectLocation('./itty.dlisp', 2, 1));
 
-                verifyAsJson(result);
+                verifyWithGiven(result, undefined, text);
             });
 
             it('should parse a table of contents with a style block', () => {
@@ -898,7 +898,7 @@ A story of a misbehaving parser.
 
                 const result = toResult(text, buildProjectLocation('./itty.dlisp', 2, 1));
 
-                verifyAsJson(result);
+                verifyWithGiven(result, undefined, text);
             });
 
             it('should parse a table of contents with both a style block and label', () => {
@@ -920,7 +920,7 @@ A story of a misbehaving parser.
 
                 const result = toResult(text, buildProjectLocation('./itty.dlisp', 2, 1));
 
-                verifyAsJson(result);
+                verifyWithGiven(result, undefined, text);
             });
 
             it('should parse a table of contents with both a style block and label reversed', () => {
@@ -942,7 +942,7 @@ A story of a misbehaving parser.
 
                 const result = toResult(text, buildProjectLocation('./itty.dlisp', 2, 1));
 
-                verifyAsJson(result);
+                verifyWithGiven(result, undefined, text);
             });
         })
 
