@@ -255,8 +255,8 @@ describe('the registry', () => {
         });
     });
 
-    describe('has a registerValue method that', () => {
-        it('should not allow registering two modules with the same name', () => {
+    describe('Value Registration', () => {
+        it('duplicate name registration produces error', () => {
             let blue: IRegisterable = {
                 builder: function blue() {},
                 name: 'blue',
@@ -271,7 +271,7 @@ describe('the registry', () => {
             expect(() => { testable.register(orange); }).toThrow('Registration failed: Module \'blue\' is already registered.');
         });
     
-        it('should allow for the registration of a value with a name property', () => {
+        it('named value registration works correctly', () => {
             const expected = {
                 name: 'expectedThing',
                 getValue: () => 44,
@@ -284,13 +284,13 @@ describe('the registry', () => {
             expect(result).toBe(expected);
         });
     
-        it('should not allow for registration of value without name prop or provided name', () => {
+        it('unnamed value registration produces error', () => {
             const value = { word: 'hello' };
     
             expect(() => { testable.registerValue(value); }).toThrow('Registration failed: Module name must be provided either as a property or parameter.');
         });
     
-        it('should allow value to be registered when given a name parameter.', () => {
+        it('parameter-named value registration works correctly', () => {
             const expected = 44;
     
             testable.registerValue(expected, 'fortyFour');
@@ -300,7 +300,7 @@ describe('the registry', () => {
             expect(result).toBe(expected);
         });
 
-        it('when given a name parameter and an object with a name it should take the parameter.', () => {
+        it('parameter name overrides object name property', () => {
             const expected = {
                 name: 'expectedThing',
                 getValue: () => 44,
