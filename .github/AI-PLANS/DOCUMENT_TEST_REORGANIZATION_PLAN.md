@@ -24,11 +24,23 @@ This plan provides a systematic approach to reorganize and rename the `document.
 **IMPORTANT**: All test commands in this plan use Jest directly via `npx jest` rather than `npm test`. This is because npm does not properly pass command-line arguments to Jest. 
 
 **Correct Commands:**
-- Run specific test file: `npx jest --testPathPattern=filename`
-- Run all tests: `npx jest`
-- Run tests with watch mode: `npx jest --watch`
+- Run specific test file: `npm run build && npx jest --testPathPattern=filename`
+- Run all tests: `npm run build && npx jest`
+- Run tests with watch mode: `npm run build && npx jest --watch`
 
 **DO NOT USE:** `npm test -- --testPathPattern=filename` (this will not work correctly)
+
+### CRITICAL BUILD REQUIREMENT
+
+Before running any tests, you MUST build the TypeScript project first. The Doculisp project uses a sophisticated dependency injection container that auto-discovers modules from the compiled `dist/` folder. If you run tests without building first, the DI container will fail to find required modules and tests will fail with module resolution errors.
+
+**Required workflow:**
+1. `npm run build` (compiles TypeScript to dist/)
+2. `npx jest [options] [testPathPattern]` (runs tests against compiled code)
+
+**Combined command pattern:** `npm run build && npx jest [options] [testPathPattern]`
+
+This build requirement applies to ALL test executions throughout this reorganization plan.
 
 ## Current State Analysis
 

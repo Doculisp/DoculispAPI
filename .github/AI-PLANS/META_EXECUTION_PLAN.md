@@ -31,6 +31,7 @@ This meta execution plan provides systematic instructions for an AI assistant to
    - Test logic must never be changed, only organization and naming
 
 3. **Verify test suite baseline:**
+   - **Build project first**: `npm run build` (REQUIRED - DI container needs compiled modules)
    - Run full test suite: `npx jest`
    - Ensure all tests pass before beginning any reorganization
    - Document baseline test count and status
@@ -46,7 +47,13 @@ This meta execution plan provides systematic instructions for an AI assistant to
 
 **DO NOT USE:** `npm test -- --testPathPattern=filename` (this will not work correctly)
 
-**Note**: Every individual reorganization plan includes this same Jest usage guidance.
+**CRITICAL BUILD REQUIREMENT**: The Doculisp project uses a dependency injection container that auto-discovers modules from the `dist/` folder. **You MUST run `npm run build` before any test execution** or tests will fail due to missing compiled dependencies.
+
+**Complete Test Workflow:**
+1. `npm run build` (compile TypeScript to dist/)
+2. `npx jest` or `npx jest --testPathPattern=filename`
+
+**Note**: Every individual reorganization plan includes this same Jest usage and build requirement guidance.
 
 ## Execution Order: Easiest to Hardest
 
@@ -176,7 +183,7 @@ The following execution order is designed to start with simpler test files and p
 #### **STEP A: Pre-Execution Setup**
 1. **Read the specific reorganization plan completely**
 2. **Modify the plan to add final step**: "Re-read META_EXECUTION_PLAN.md and update completion status"
-3. **Run baseline tests**: `npx jest --testPathPattern={test-file-name}`
+3. **Build and run baseline tests**: `npm run build && npx jest --testPathPattern={test-file-name}`
 4. **Confirm all tests pass** before proceeding
 5. **Request user confirmation** to begin this specific reorganization
 
@@ -187,8 +194,8 @@ The following execution order is designed to start with simpler test files and p
 4. **Stop immediately** if any test fails and report to user
 
 #### **STEP C: Post-Execution Validation**
-1. **Run the specific test file**: `npx jest --testPathPattern={test-file-name}`
-2. **Run the full test suite**: `npx jest` (to ensure no ripple effects)
+1. **Build and run the specific test file**: `npm run build && npx jest --testPathPattern={test-file-name}`
+2. **Build and run the full test suite**: `npm run build && npx jest` (to ensure no ripple effects)
 3. **Verify all tests pass** with new names and organization
 4. **Request user confirmation** that reorganization is complete and successful
 
@@ -258,7 +265,7 @@ The following execution order is designed to start with simpler test files and p
 ### **Before Starting Any Execution**
 - [ ] All prerequisite documents have been read completely
 - [ ] Fresh AI instance understands the systematic execution approach
-- [ ] Baseline test suite passes completely (`npx jest`)
+- [ ] Baseline test suite passes completely (`npm run build && npx jest`)
 - [ ] User has confirmed readiness to begin systematic execution
 
 ### **After Each Individual Plan Completion**
@@ -325,7 +332,7 @@ The following execution order is designed to start with simpler test files and p
 Upon completion of ALL 17 reorganization plans:
 
 ### **Comprehensive Validation**
-1. **Run complete test suite**: `npx jest`
+1. **Build and run complete test suite**: `npm run build && npx jest`
 2. **Verify test count consistency**: Ensure no tests were lost or duplicated
 3. **Review all approval files**: Confirm proper renaming and content preservation
 4. **Validate naming conventions**: Ensure consistent sentence structure patterns

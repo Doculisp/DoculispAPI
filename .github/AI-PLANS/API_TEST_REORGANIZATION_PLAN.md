@@ -23,10 +23,12 @@ This plan provides a systematic approach to reorganize and rename the `api.test.
 
 **IMPORTANT**: All test commands in this plan use Jest directly via `npx jest` rather than `npm test`. This is because npm does not properly pass command-line arguments to Jest. 
 
+**CRITICAL BUILD REQUIREMENT**: The Doculisp project uses a dependency injection container that auto-discovers modules from the `dist/` folder. **You MUST run `npm run build` before any test execution** or tests will fail due to missing compiled dependencies.
+
 **Correct Commands:**
-- Run specific test file: `npx jest --testPathPattern=filename`
-- Run all tests: `npx jest`
-- Run tests with watch mode: `npx jest --watch`
+- Build and run specific test file: `npm run build && npx jest --testPathPattern=filename`
+- Build and run all tests: `npm run build && npx jest`
+- Build and run tests with watch mode: `npm run build && npx jest --watch`
 
 **DO NOT USE:** `npm test -- --testPathPattern=filename` (this will not work correctly)
 
