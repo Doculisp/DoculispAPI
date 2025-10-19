@@ -72,7 +72,7 @@ The following execution order is designed to start with simpler test files and p
    - **File**: `tests/cli.test.ts` 
    - **Test Count**: 3 tests (REMOVAL PLAN)
    - **Complexity**: LOW - File removal and cleanup
-   - **Status**: ⏳ PENDING
+   - **Status**: ✅ COMPLETED (Oct 19, 2025)
 
 ### **PHASE 2: Straightforward Functional Tests (4 plans)**
 *Rationale: Medium test counts, clear functional boundaries, standard patterns*
@@ -97,7 +97,7 @@ The following execution order is designed to start with simpler test files and p
 
 6. **CONTAINER_TEST_REORGANIZATION_PLAN.md**
    - **File**: `tests/container.test.ts`
-   - **Test Count**: 6 tests
+   - **Test Count**: 48 tests (corrected count)
    - **Complexity**: MEDIUM - Dependency injection patterns
    - **Status**: ⏳ PENDING
 
