@@ -582,8 +582,8 @@ describe('the registry', () => {
         });
     });
 
-    describe('has a replaceBuilder method that', () => {
-        it('should replace a module with a builder function', () => {
+    describe('Replace Builder Method', () => {
+        it('builder function replacement works correctly', () => {
             let origFn = jest.fn();
             let registerable: IRegisterable = {
                 builder: function bang() { origFn(); },
@@ -602,7 +602,7 @@ describe('the registry', () => {
             expect(fakeFn).toHaveBeenCalled();
         });
 
-        it('should not allow you to replace using an anonymous function without using the name parameter.', () => {
+        it('anonymous function without name parameter produces error', () => {
             let registerable: IRegisterable = {
                 builder: function bang() { },
                 name: 'bang',
@@ -613,7 +613,7 @@ describe('the registry', () => {
             expect(() => { testable.replaceBuilder(() => {}, []); }).toThrow('Replacement failed: Builder name is required either on the function or as a parameter.');
         });
 
-        it('should allow replacement with anonymous function if name is passed', () => {
+        it('anonymous function with name parameter works correctly', () => {
             let origFn = jest.fn();
             let registerable: IRegisterable = {
                 builder: () => { origFn(); },
@@ -631,7 +631,7 @@ describe('the registry', () => {
             expect(fakeFn).toHaveBeenCalled();
         });
 
-        it('should allow for dependencies on replacement builder', () => {
+        it('replacement builder dependencies resolve correctly', () => {
             testable.registerBuilder(() => {}, [], 'cyan');
             let fnPurple = jest.fn()
             testable.registerBuilder(() => { fnPurple(); }, [], 'purple');
@@ -643,7 +643,7 @@ describe('the registry', () => {
             expect(fnPurple).toHaveBeenCalled();
         });
 
-        it('should replace a non singleton with a singleton', () => {
+        it('non-singleton to singleton builder replacement works correctly', () => {
             let origFn = jest.fn();
             testable.registerBuilder(() => { origFn(); return {}; }, [], 'teal');
 
