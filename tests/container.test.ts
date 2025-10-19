@@ -690,8 +690,8 @@ describe('the registry', () => {
         });
     });
 
-    describe('has replacePackageBuilder method that', () => {
-        it('should replace fs', () => {
+    describe('Replace Package Builder Method', () => {
+        it('node package replacement works correctly', () => {
             const fakeFs = { is: 'not fs' };
             function fs () { return fakeFs; }
             testable.replacePackageBuilder(fs);
@@ -701,16 +701,16 @@ describe('the registry', () => {
             expect(result).toBe(fakeFs);
         });
 
-        it('should not allow replacement of anonymous function if no name is given as a parameter', () => {
+        it('unnamed package builder replacement produces error', () => {
             expect(() => testable.replacePackageBuilder(() => { return {}; })).toThrow('Replacement failed: Package builder name is required either on the function or as a parameter.');
         });
 
-        it('should allow replacement of anonymous function if name is give as a parameter', () => {
+        it('named package builder replacement works correctly', () => {
             const fakePath = { isNot: 'a path' };
             testable.replacePackageBuilder(() => { return fakePath; }, 'path');
         });
 
-        it('should allow for a package to be replaced with a singleton', () => {
+        it('package singleton replacement works correctly', () => {
             const fakeBuffer = { iAm: 'not a buffer' };
             let fakeFn = jest.fn();
             testable.replacePackageBuilder(() => { fakeFn(); return fakeBuffer; }, 'buffer', true);
