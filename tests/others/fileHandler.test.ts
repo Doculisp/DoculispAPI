@@ -4,7 +4,7 @@ import { IFileHandler } from "../../src/types/types.fileHandler";
 import { IFail } from "../../src/types/types.general";
 import { IPath } from "../../src/types/types.filePath";
 
-describe('fileHandler error messages', () => {
+describe('File Handler Error Messages', () => {
     let testable: ITestableContainer = null as any;
     let fileHandler: IFileHandler = null as any;
 
@@ -26,8 +26,8 @@ describe('fileHandler error messages', () => {
         fileHandler = testable.buildAs<IFileHandler>('fileHandler');
     });
 
-    describe('load method', () => {
-        it('should provide clear error message when file does not exist', () => {
+    describe('File Load Operations', () => {
+        it('file does not exist produces clear error message', () => {
             const fakePath: IPath = {
                 fullName: '/nonexistent/file.txt',
                 extension: '.txt',
@@ -44,8 +44,8 @@ describe('fileHandler error messages', () => {
         });
     });
 
-    describe('write method', () => {
-        it('should provide clear error message when write fails', () => {
+    describe('File Write Operations', () => {
+        it('write permission denied produces clear error message', () => {
             // Mock fs to throw an error on writeFileSync
             const mockFs = {
                 writeFileSync: jest.fn(() => {
@@ -71,8 +71,8 @@ describe('fileHandler error messages', () => {
         });
     });
 
-    describe('getProcessWorkingDirectory method', () => {
-        it('should provide clear error message when getting working directory fails', () => {
+    describe('Working Directory Operations', () => {
+        it('getting working directory access denied produces clear error message', () => {
             const originalCwd = process.cwd;
             process.cwd = jest.fn(() => {
                 throw new Error('Access denied');
@@ -86,10 +86,8 @@ describe('fileHandler error messages', () => {
                 process.cwd = originalCwd;
             }
         });
-    });
 
-    describe('setProcessWorkingDirectory method', () => {
-        it('should provide clear error message when setting working directory fails', () => {
+        it('setting nonexistent directory produces clear error message', () => {
             const fakePath: IPath = {
                 fullName: '/nonexistent/directory',
                 extension: false,
