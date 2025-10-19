@@ -47,6 +47,22 @@
             "type": "doculisp-toc"
           },
           {
+            "blockRange": {
+              "end": {
+                "char": 15,
+                "documentDepth": 1,
+                "documentIndex": 1,
+                "documentPath": "./_main.dlisp",
+                "line": 9
+              },
+              "start": {
+                "char": 1,
+                "documentDepth": 1,
+                "documentIndex": 1,
+                "documentPath": "./_main.dlisp",
+                "line": 9
+              }
+            },
             "documentOrder": {
               "char": 2,
               "documentDepth": 1,
@@ -66,6 +82,22 @@
         },
         "include": [
           {
+            "blockRange": {
+              "end": {
+                "char": 29,
+                "documentDepth": 1,
+                "documentIndex": 1,
+                "documentPath": "./_main.dlisp",
+                "line": 5
+              },
+              "start": {
+                "char": 9,
+                "documentDepth": 1,
+                "documentIndex": 1,
+                "documentPath": "./_main.dlisp",
+                "line": 5
+              }
+            },
             "document": {
               "doculisp": [
                 {
@@ -93,6 +125,22 @@
                   "value": "hello from the child"
                 },
                 {
+                  "blockRange": {
+                    "end": {
+                      "char": 18,
+                      "documentDepth": 2,
+                      "documentIndex": 1,
+                      "documentPath": "./childDoc.md",
+                      "line": 14
+                    },
+                    "start": {
+                      "char": 10,
+                      "documentDepth": 2,
+                      "documentIndex": 1,
+                      "documentPath": "./childDoc.md",
+                      "line": 14
+                    }
+                  },
                   "documentOrder": {
                     "char": 11,
                     "documentDepth": 2,
@@ -112,6 +160,22 @@
               },
               "include": [
                 {
+                  "blockRange": {
+                    "end": {
+                      "char": 34,
+                      "documentDepth": 2,
+                      "documentIndex": 1,
+                      "documentPath": "./childDoc.md",
+                      "line": 7
+                    },
+                    "start": {
+                      "char": 13,
+                      "documentDepth": 2,
+                      "documentIndex": 1,
+                      "documentPath": "./childDoc.md",
+                      "line": 7
+                    }
+                  },
                   "document": {
                     "doculisp": [
                       {

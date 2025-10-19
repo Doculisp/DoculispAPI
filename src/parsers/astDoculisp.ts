@@ -235,6 +235,7 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
                             documentOrder: rawLoad.location,
                             path: pathConstructor(rawLoad.parameter.value),
                             sectionLabel: rawLoad.value.replaceAll('-', ' '),
+                            blockRange: rawLoad.blockRange,
                         }
                     });
 

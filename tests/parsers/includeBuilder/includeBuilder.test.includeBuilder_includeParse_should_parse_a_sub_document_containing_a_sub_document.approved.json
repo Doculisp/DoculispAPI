@@ -63,6 +63,22 @@
         },
         "include": [
           {
+            "blockRange": {
+              "end": {
+                "char": 30,
+                "documentDepth": 1,
+                "documentIndex": 1,
+                "documentPath": "./_main.md",
+                "line": 6
+              },
+              "start": {
+                "char": 13,
+                "documentDepth": 1,
+                "documentIndex": 1,
+                "documentPath": "./_main.md",
+                "line": 6
+              }
+            },
             "document": {
               "doculisp": [
                 {
@@ -110,6 +126,22 @@
               },
               "include": [
                 {
+                  "blockRange": {
+                    "end": {
+                      "char": 36,
+                      "documentDepth": 2,
+                      "documentIndex": 1,
+                      "documentPath": "./child.md",
+                      "line": 6
+                    },
+                    "start": {
+                      "char": 13,
+                      "documentDepth": 2,
+                      "documentIndex": 1,
+                      "documentPath": "./child.md",
+                      "line": 6
+                    }
+                  },
                   "document": {
                     "doculisp": [
                       {

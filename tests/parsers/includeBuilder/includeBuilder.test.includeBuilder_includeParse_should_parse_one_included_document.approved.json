@@ -43,6 +43,22 @@
             "type": "doculisp-toc"
           },
           {
+            "blockRange": {
+              "end": {
+                "char": 32,
+                "documentDepth": 1,
+                "documentIndex": 1,
+                "documentPath": "C:/_main.dlisp",
+                "line": 9
+              },
+              "start": {
+                "char": 1,
+                "documentDepth": 1,
+                "documentIndex": 1,
+                "documentPath": "C:/_main.dlisp",
+                "line": 9
+              }
+            },
             "documentOrder": {
               "char": 2,
               "documentDepth": 1,
@@ -62,6 +78,22 @@
         },
         "include": [
           {
+            "blockRange": {
+              "end": {
+                "char": 27,
+                "documentDepth": 1,
+                "documentIndex": 1,
+                "documentPath": "C:/_main.dlisp",
+                "line": 5
+              },
+              "start": {
+                "char": 9,
+                "documentDepth": 1,
+                "documentIndex": 1,
+                "documentPath": "C:/_main.dlisp",
+                "line": 5
+              }
+            },
             "document": {
               "doculisp": [
                 {

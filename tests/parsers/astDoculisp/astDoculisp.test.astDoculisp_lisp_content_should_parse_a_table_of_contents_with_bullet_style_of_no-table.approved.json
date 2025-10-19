@@ -59,6 +59,22 @@
         },
         "include": [
           {
+            "blockRange": {
+              "end": {
+                "char": 31,
+                "documentDepth": 2,
+                "documentIndex": 1,
+                "documentPath": "./itty.dlisp",
+                "line": 5
+              },
+              "start": {
+                "char": 9,
+                "documentDepth": 2,
+                "documentIndex": 1,
+                "documentPath": "./itty.dlisp",
+                "line": 5
+              }
+            },
             "document": false,
             "documentOrder": {
               "char": 10,

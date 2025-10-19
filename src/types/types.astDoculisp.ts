@@ -26,6 +26,7 @@ export interface ILoad extends ILocationSortable {
     readonly path: IPath;
     readonly sectionLabel: string;
     document: ISectionWriter | false;
+    blockRange: IRange;
 }
 
 export type DoculispBulletStyle = 

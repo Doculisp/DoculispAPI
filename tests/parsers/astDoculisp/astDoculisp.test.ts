@@ -209,7 +209,7 @@ describe('astDoculisp', () => {
 
                 const result = toResult(contents, buildProjectLocation('main.dlisp', 1, 4));
 
-                verifyAsJson(result);
+                verifyWithGiven(result, undefined, contents);
             });
 
             it('should not parse a section-meta that contains a section-meta', () => {
@@ -549,7 +549,7 @@ A story of a misbehaving parser.
 
                     const result = toResult(contents, buildProjectLocation('main.dlisp', 1, 4));
 
-                    verifyAsJson(result);
+                    verifyWithGiven(result, undefined, contents);
                 });
 
                 it('should parse include without section information', () => {
@@ -575,7 +575,7 @@ A story of a misbehaving parser.
 `;
                     const result = toResult(contents, buildProjectLocation('main.dlisp', 1, 4));
 
-                    verifyAsJson(result);
+                    verifyWithGiven(result, undefined, contents);
                 });
 
                 it('should handle them all put together', () => {
@@ -591,7 +591,7 @@ A story of a misbehaving parser.
 
                     const result = toResult(contents, buildProjectLocation('main.dlisp', 1, 4));
 
-                    verifyAsJson(result);
+                    verifyWithGiven(result, undefined, contents);
                 });
 
                 it('should fail when include contains unknown command', () => {

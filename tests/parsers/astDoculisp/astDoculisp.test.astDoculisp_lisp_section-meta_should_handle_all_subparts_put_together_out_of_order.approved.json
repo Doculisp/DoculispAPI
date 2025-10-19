@@ -1,64 +1,99 @@
 {
-  "success": true,
-  "value": {
-    "projectLocation": {
-      "documentDepth": 1,
-      "documentIndex": 4,
-      "documentPath": "main.dlisp"
-    },
-    "section": {
-      "doculisp": [
-        {
-          "documentOrder": {
-            "char": 2,
-            "documentDepth": 1,
-            "documentIndex": 4,
-            "documentPath": "main.dlisp",
-            "line": 8
-          },
-          "label": "# Doculisp is ✨ #",
-          "ref_link": "#doculisp_is_",
-          "title": "Doculisp is ✨",
-          "type": "doculisp-title"
-        }
-      ],
-      "documentOrder": {
-        "char": 1,
+  "000_given": "\n(section-meta\n(ref-link doculisp_is_)\n(include\n    (Section ./structure.md)\n    (Section ./doculisp.md)\n)\n(title Doculisp is ✨)\n)",
+  "999_received": {
+    "success": true,
+    "value": {
+      "projectLocation": {
         "documentDepth": 1,
         "documentIndex": 4,
-        "documentPath": "main.dlisp",
-        "line": 1
+        "documentPath": "main.dlisp"
       },
-      "include": [
-        {
-          "document": false,
-          "documentOrder": {
-            "char": 6,
-            "documentDepth": 1,
-            "documentIndex": 4,
-            "documentPath": "main.dlisp",
-            "line": 5
-          },
-          "path": "./structure.md",
-          "sectionLabel": "Section",
-          "type": "doculisp-load"
+      "section": {
+        "doculisp": [
+          {
+            "documentOrder": {
+              "char": 2,
+              "documentDepth": 1,
+              "documentIndex": 4,
+              "documentPath": "main.dlisp",
+              "line": 8
+            },
+            "label": "# Doculisp is ✨ #",
+            "ref_link": "#doculisp_is_",
+            "title": "Doculisp is ✨",
+            "type": "doculisp-title"
+          }
+        ],
+        "documentOrder": {
+          "char": 1,
+          "documentDepth": 1,
+          "documentIndex": 4,
+          "documentPath": "main.dlisp",
+          "line": 1
         },
-        {
-          "document": false,
-          "documentOrder": {
-            "char": 6,
-            "documentDepth": 1,
-            "documentIndex": 4,
-            "documentPath": "main.dlisp",
-            "line": 6
+        "include": [
+          {
+            "blockRange": {
+              "end": {
+                "char": 28,
+                "documentDepth": 1,
+                "documentIndex": 4,
+                "documentPath": "main.dlisp",
+                "line": 5
+              },
+              "start": {
+                "char": 5,
+                "documentDepth": 1,
+                "documentIndex": 4,
+                "documentPath": "main.dlisp",
+                "line": 5
+              }
+            },
+            "document": false,
+            "documentOrder": {
+              "char": 6,
+              "documentDepth": 1,
+              "documentIndex": 4,
+              "documentPath": "main.dlisp",
+              "line": 5
+            },
+            "path": "./structure.md",
+            "sectionLabel": "Section",
+            "type": "doculisp-load"
           },
-          "path": "./doculisp.md",
-          "sectionLabel": "Section",
-          "type": "doculisp-load"
-        }
-      ],
-      "type": "doculisp-section"
-    },
-    "type": "doculisp-root"
+          {
+            "blockRange": {
+              "end": {
+                "char": 27,
+                "documentDepth": 1,
+                "documentIndex": 4,
+                "documentPath": "main.dlisp",
+                "line": 6
+              },
+              "start": {
+                "char": 5,
+                "documentDepth": 1,
+                "documentIndex": 4,
+                "documentPath": "main.dlisp",
+                "line": 6
+              }
+            },
+            "document": false,
+            "documentOrder": {
+              "char": 6,
+              "documentDepth": 1,
+              "documentIndex": 4,
+              "documentPath": "main.dlisp",
+              "line": 6
+            },
+            "path": "./doculisp.md",
+            "sectionLabel": "Section",
+            "type": "doculisp-load"
+          }
+        ],
+        "type": "doculisp-section"
+      },
+      "type": "doculisp-root"
+    }
   }
 }

@@ -83,6 +83,22 @@
         },
         "include": [
           {
+            "blockRange": {
+              "end": {
+                "char": 32,
+                "documentDepth": 4,
+                "documentIndex": 7,
+                "documentPath": "./_main.dlisp",
+                "line": 5
+              },
+              "start": {
+                "char": 9,
+                "documentDepth": 4,
+                "documentIndex": 7,
+                "documentPath": "./_main.dlisp",
+                "line": 5
+              }
+            },
             "document": false,
             "documentOrder": {
               "char": 10,
@@ -96,6 +112,22 @@
             "type": "doculisp-load"
           },
           {
+            "blockRange": {
+              "end": {
+                "char": 31,
+                "documentDepth": 4,
+                "documentIndex": 7,
+                "documentPath": "./_main.dlisp",
+                "line": 6
+              },
+              "start": {
+                "char": 9,
+                "documentDepth": 4,
+                "documentIndex": 7,
+                "documentPath": "./_main.dlisp",
+                "line": 6
+              }
+            },
             "document": false,
             "documentOrder": {
               "char": 10,
@@ -109,6 +141,22 @@
             "type": "doculisp-load"
           },
           {
+            "blockRange": {
+              "end": {
+                "char": 35,
+                "documentDepth": 4,
+                "documentIndex": 7,
+                "documentPath": "./_main.dlisp",
+                "line": 7
+              },
+              "start": {
+                "char": 9,
+                "documentDepth": 4,
+                "documentIndex": 7,
+                "documentPath": "./_main.dlisp",
+                "line": 7
+              }
+            },
             "document": false,
             "documentOrder": {
               "char": 10,
@@ -122,6 +170,22 @@
             "type": "doculisp-load"
           },
           {
+            "blockRange": {
+              "end": {
+                "char": 30,
+                "documentDepth": 4,
+                "documentIndex": 7,
+                "documentPath": "./_main.dlisp",
+                "line": 8
+              },
+              "start": {
+                "char": 9,
+                "documentDepth": 4,
+                "documentIndex": 7,
+                "documentPath": "./_main.dlisp",
+                "line": 8
+              }
+            },
             "document": false,
             "documentOrder": {
               "char": 10,
@@ -135,6 +199,22 @@
             "type": "doculisp-load"
           },
           {
+            "blockRange": {
+              "end": {
+                "char": 31,
+                "documentDepth": 4,
+                "documentIndex": 7,
+                "documentPath": "./_main.dlisp",
+                "line": 9
+              },
+              "start": {
+                "char": 9,
+                "documentDepth": 4,
+                "documentIndex": 7,
+                "documentPath": "./_main.dlisp",
+                "line": 9
+              }
+            },
             "document": false,
             "documentOrder": {
               "char": 10,
@@ -148,6 +228,22 @@
             "type": "doculisp-load"
           },
           {
+            "blockRange": {
+              "end": {
+                "char": 30,
+                "documentDepth": 4,
+                "documentIndex": 7,
+                "documentPath": "./_main.dlisp",
+                "line": 10
+              },
+              "start": {
+                "char": 9,
+                "documentDepth": 4,
+                "documentIndex": 7,
+                "documentPath": "./_main.dlisp",
+                "line": 10
+              }
+            },
             "document": false,
             "documentOrder": {
               "char": 10,
@@ -161,6 +257,22 @@
             "type": "doculisp-load"
           },
           {
+            "blockRange": {
+              "end": {
+                "char": 31,
+                "documentDepth": 4,
+                "documentIndex": 7,
+                "documentPath": "./_main.dlisp",
+                "line": 11
+              },
+              "start": {
+                "char": 9,
+                "documentDepth": 4,
+                "documentIndex": 7,
+                "documentPath": "./_main.dlisp",
+                "line": 11
+              }
+            },
             "document": false,
             "documentOrder": {
               "char": 10,

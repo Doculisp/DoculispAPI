@@ -37,10 +37,13 @@
   - **Doculisp AST Parser Integration**: Enhanced Doculisp semantic parser with block range support for path references and content blocks
     - **Path ID Block Range**: `IPathId` interface now includes required `blockRange` property for precise `get-path` command tracking
     - **Content Block Range**: `IContentLocation` interface now includes required `blockRange` property for precise content block tracking
+    - **Include Statement Range**: `ILoad` interface now includes required `blockRange` property for precise include statement tracking
     - **Doculisp Path Parsing**: AST Doculisp parser `parsePath` function now preserves block range information from underlying AST nodes
     - **Doculisp Content Parsing**: AST Doculisp parser `parseContent` function now preserves block range information from underlying AST nodes
+    - **Include Statement Parsing**: AST Doculisp parser preserves block range information for include statements in section metadata
     - **Cross-Reference Tracking**: Path reference commands (`get-path`) now include precise block boundaries for enhanced tooling support
     - **Content Block Tracking**: Content placement blocks now include precise block boundaries for enhanced tooling support
+    - **Include Block Tracking**: Include statements in section metadata now include precise block boundaries for enhanced tooling support
     - **Semantic Layer Enhancement**: Block range information flows from core AST through Doculisp semantic layer to final output
   - **Type System Support**: Added `IRange` interface to general types for location coordinate pairs
     - **Range Definition**: Contains `start` and `end` location coordinates
@@ -99,7 +102,7 @@
   - **Type Safety**: TypeScript consumers gain enhanced type information with guaranteed block range data
   - **Complete AST Coverage**: All AST node types (`IAstIdentifier`, `IAstCommand`, `IAstContainer`) now include block range tracking
   - **Project AST Integration**: `IProjectDocuments` and `IProjectDocument` interfaces now include required `blockRange` property for complete project structure tracking
-  - **Doculisp Type Integration**: `IPathId` and `IContentLocation` interfaces in Doculisp AST types now include required `blockRange` property for comprehensive block tracking
+  - **Doculisp Type Integration**: `IPathId`, `IContentLocation`, and `ILoad` interfaces in Doculisp AST types now include required `blockRange` property for comprehensive block tracking
   - **Migration Impact**: Mock objects and test fixtures need to include new `blockRange` property
 - **Parser Performance**: Minimal performance impact with efficient range calculation
   - **Single Pass**: Range calculation integrated into existing parsing logic
@@ -139,6 +142,10 @@
   - **Content Highlighting**: Tools can now precisely highlight content placement blocks in editors
   - **Document Structure Navigation**: Enhanced support for navigation and manipulation of document structure
   - **Content Block Operations**: Foundation for advanced editing operations on content placement blocks
+- **Include Statement Enhancement**: Include statements in section metadata now provide precise block range information for improved modular document tooling
+  - **Include Highlighting**: Tools can now precisely highlight include statement blocks in editors
+  - **File Reference Navigation**: Enhanced support for jump-to-file and dependency analysis features
+  - **Include Block Operations**: Foundation for advanced editing operations on include statement blocks
 
 ### Migration Guide ###
 
@@ -212,6 +219,18 @@
 
   const mockContentLocation: IContentLocation = {
     type: "doculisp-content",
+    documentOrder: someLocation,
+    blockRange: {
+      start: startLocation,
+      end: endLocation
+    }
+  };
+
+  const mockLoad: ILoad = {
+    type: "doculisp-load",
+    path: somePath,
+    sectionLabel: "Section Label",
+    document: false,
     documentOrder: someLocation,
     blockRange: {
       start: startLocation,
