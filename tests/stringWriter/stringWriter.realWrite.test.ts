@@ -10,7 +10,7 @@ import { IVariableTestable } from "../../src/types/types.variableTable";
 import { IPath } from "../../src/types/types.filePath";
 import { ITestableContainer } from "../../src/types/types.containers";
 
-describe('when writing', () => {
+describe('String Writer Real Write', () => {
     let verifyAsJson: (data: any, options?: Options) => void;
     let verifyMarkdown: (sut: any, options?: Options) => void;
     let verifyText: (text: string, options?: Options) => void;
@@ -115,13 +115,13 @@ describe('when writing', () => {
         process.chdir(workingDir);
     });
     
-    describe('a file with a bad link', () => {
+    describe('Error Handling', () => {
         beforeEach(() => {
             changeDir('simpleBadLink');
             setupOutPut('readme.md');
         });
 
-        it('should return an error object', () => {
+        it('bad link references produce error result', () => {
             const filePath = './_main.dlisp';
             const doc: Result<string> = loadFile(filePath);
 
@@ -134,12 +134,12 @@ describe('when writing', () => {
         });
     });
 
-    describe('documents that cross reference each other', () => {
+    describe('Cross Reference Processing', () => {
         beforeEach(() => {
             changeDir('project');
         });
 
-        it('should correctly insert the path', () => {
+        it('document cross references resolve paths correctly', () => {
             const filePath = './project.dlproj';
             
             const results = pathToResult(buildProjectLocation(filePath, 1, 1).documentPath);
@@ -149,13 +149,13 @@ describe('when writing', () => {
         });
     });
 
-    describe('its own documentation', () => {
+    describe('Documentation Writing', () => {
         beforeEach(() => {
             changeDir('complex');
             setupOutPut('readme.md');
         });
 
-        it('should write the structure part of its own documentation', () => {
+        it('structure documentation renders correctly', () => {
             const filePath = './lang/structure.md';
             const doc: Result<string> = loadFile(filePath);
 
@@ -167,7 +167,7 @@ describe('when writing', () => {
             verifyMarkdownResult(result);
         });
 
-        it('should write the doculisp part of its own documentation', () => {
+        it('doculisp documentation renders correctly', () => {
             const filePath = './lang/doculisp.md';
             const doc: Result<string> = loadFile(filePath);
 
@@ -179,7 +179,7 @@ describe('when writing', () => {
             verifyMarkdownResult(result);
         });
 
-        it('should write the section-meta part of its own documentation', () => {
+        it('section-meta documentation renders correctly', () => {
             process.chdir('./lang/section-meta');
             const filePath = './_main.md';
             const doc: Result<string> = loadFile(filePath);
@@ -192,7 +192,7 @@ describe('when writing', () => {
             verifyMarkdownResult(result);
         });
 
-        it('should write the content part of its own documentation', () => {
+        it('content documentation renders correctly', () => {
             const filePath = './lang/content.md';
             const doc: Result<string> = loadFile(filePath);
 
@@ -204,7 +204,7 @@ describe('when writing', () => {
             verifyMarkdownResult(result);
         });
 
-        it('should write the headings part of its own documentation', () => {
+        it('headings documentation renders correctly', () => {
             const filePath = './lang/headings.md';
             const doc: Result<string> = loadFile(filePath);
 
@@ -216,7 +216,7 @@ describe('when writing', () => {
             verifyMarkdownResult(result);
         });
 
-        it('should write the comment part of its own documentation', () => {
+        it('comment documentation renders correctly', () => {
             const filePath = './lang/comment.md';
             const doc: Result<string> = loadFile(filePath);
 
@@ -228,7 +228,7 @@ describe('when writing', () => {
             verifyMarkdownResult(result);
         });
 
-        it('should write the keywords part of its own documentation', () => {
+        it('keywords documentation renders correctly', () => {
             const filePath = './lang/keywords.md';
             const doc: Result<string> = loadFile(filePath);
 
@@ -240,7 +240,7 @@ describe('when writing', () => {
             verifyMarkdownResult(result);
         });
 
-        it('should write the whole of its own documentation', () => {
+        it('complete documentation renders correctly', () => {
             const filePath = './_main.md';
             const doc: Result<string> = loadFile(filePath);
 

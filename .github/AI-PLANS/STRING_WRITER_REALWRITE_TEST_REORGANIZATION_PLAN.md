@@ -67,24 +67,41 @@ After reorganization:
 ### Phase 1: Setup and Preparation
 
 #### Step 1: Create Backup and Analyze Current Structure
-- [ ] **[PENDING]** Create backup of current test file and approval files
-- [ ] **[PENDING]** Document all current approval files and their mappings
-- [ ] **[PENDING]** Commit backup with message: `". d Creates backup before string writer real write test reorganization"`
+- [x] **[COMPLETED]** Create backup of current test file and approval files
+- [x] **[COMPLETED]** Document all current approval files and their mappings
+- [x] **[COMPLETED]** Commit backup with message: `". d Creates backup before string writer real write test reorganization"`
 
 **Expected Outcomes**: 
-- Backup files created
-- Current state documented
-- Safe starting point established
+- ✅ Backup files created (10 tests, 10 approval files)
+- ✅ Current state documented
+- ✅ Safe starting point established
 
 #### Step 2: Plan Test Name Mappings
-- [ ] **[PENDING]** Create mapping document showing old test names → new test names
-- [ ] **[PENDING]** Create mapping document showing old approval files → new approval files
-- [ ] **[PENDING]** Validate no naming conflicts exist
+- [x] **[COMPLETED]** Create mapping document showing old test names → new test names
+- [x] **[COMPLETED]** Create mapping document showing old approval files → new approval files  
+- [x] **[COMPLETED]** Validate no naming conflicts exist
+
+**Test Name Mappings**:
+**Error Handling**:
+- `'should return an error object'` → `'bad link references produce error result'`
+
+**Cross Reference Processing**:
+- `'should correctly insert the path'` → `'document cross references resolve paths correctly'`
+
+**Documentation Writing**:
+- `'should write the structure part of its own documentation'` → `'structure documentation renders correctly'`
+- `'should write the doculisp part of its own documentation'` → `'doculisp documentation renders correctly'`
+- `'should write the section-meta part of its own documentation'` → `'section-meta documentation renders correctly'`
+- `'should write the content part of its own documentation'` → `'content documentation renders correctly'`
+- `'should write the headings part of its own documentation'` → `'headings documentation renders correctly'`
+- `'should write the comment part of its own documentation'` → `'comment documentation renders correctly'`
+- `'should write the keywords part of its own documentation'` → `'keywords documentation renders correctly'`
+- `'should write the whole of its own documentation'` → `'complete documentation renders correctly'`
 
 **Expected Outcomes**:
-- Complete rename mapping documented
-- No conflicts identified
-- Clear path forward established
+- ✅ Complete rename mapping documented (10 tests total)
+- ✅ No conflicts identified
+- ✅ Clear path forward established
 
 ### Phase 2: Core Test Structure Reorganization
 
