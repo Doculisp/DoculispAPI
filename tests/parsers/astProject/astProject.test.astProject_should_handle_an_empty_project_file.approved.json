@@ -1,14 +1,33 @@
 {
-  "success": true,
-  "value": {
-    "documents": [],
-    "location": {
-      "char": 0,
-      "documentDepth": 1,
-      "documentIndex": 1,
-      "documentPath": "./test.dlproj",
-      "line": 0
-    },
-    "type": "project-documents"
+  "000_given": "",
+  "999_received": {
+    "success": true,
+    "value": {
+      "blockRange": {
+        "end": {
+          "char": 0,
+          "documentDepth": 1,
+          "documentIndex": 1,
+          "documentPath": "./test.dlproj",
+          "line": 0
+        },
+        "start": {
+          "char": 0,
+          "documentDepth": 1,
+          "documentIndex": 1,
+          "documentPath": "./test.dlproj",
+          "line": 0
+        }
+      },
+      "documents": [],
+      "location": {
+        "char": 0,
+        "documentDepth": 1,
+        "documentIndex": 1,
+        "documentPath": "./test.dlproj",
+        "line": 0
+      },
+      "type": "project-documents"
+    }
   }
 }

@@ -1,28 +1,47 @@
 {
-  "success": true,
-  "value": {
-    "documents": [
-      {
-        "destinationPath": "../README.md",
-        "id": "readmeβ",
-        "location": {
-          "char": 10,
+  "000_given": "\n(documents\n    (document\n        (readmeβ\n            (source ./_main.dlisp)\n            (output ../README.md)\n        )\n    )\n)\n",
+  "999_received": {
+    "success": true,
+    "value": {
+      "blockRange": {
+        "end": {
+          "char": 1,
           "documentDepth": 1,
           "documentIndex": 1,
           "documentPath": "/docs.dlproj",
-          "line": 4
+          "line": 9
         },
-        "sourcePath": "./_main.dlisp",
-        "type": "project-document"
-      }
-    ],
-    "location": {
-      "char": 2,
-      "documentDepth": 1,
-      "documentIndex": 1,
-      "documentPath": "/docs.dlproj",
-      "line": 2
-    },
-    "type": "project-documents"
+        "start": {
+          "char": 1,
+          "documentDepth": 1,
+          "documentIndex": 1,
+          "documentPath": "/docs.dlproj",
+          "line": 2
+        }
+      },
+      "documents": [
+        {
+          "destinationPath": "../README.md",
+          "id": "readmeβ",
+          "location": {
+            "char": 10,
+            "documentDepth": 1,
+            "documentIndex": 1,
+            "documentPath": "/docs.dlproj",
+            "line": 4
+          },
+          "sourcePath": "./_main.dlisp",
+          "type": "project-document"
+        }
+      ],
+      "location": {
+        "char": 2,
+        "documentDepth": 1,
+        "documentIndex": 1,
+        "documentPath": "/docs.dlproj",
+        "line": 2
+      },
+      "type": "project-documents"
+    }
   }
 }

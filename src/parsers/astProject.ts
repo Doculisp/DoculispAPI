@@ -31,6 +31,10 @@ function buildAstProject(internals: IInternals, util: IUtil, trimArray: ITrimArr
                 type: 'project-documents',
                 documents: [],
                 location: util.location(tokenResults.value.location.documentPath, tokenResults.value.location.documentDepth, tokenResults.value.location.documentIndex, 0, 0),
+                blockRange: {
+                    start: util.location(tokenResults.value.location.documentPath, tokenResults.value.location.documentDepth, tokenResults.value.location.documentIndex, 0, 0),
+                    end: util.location(tokenResults.value.location.documentPath, tokenResults.value.location.documentDepth, tokenResults.value.location.documentIndex, 0, 0)
+                }
             };
 
             return util.ok(empty);
@@ -52,6 +56,7 @@ function buildAstProject(internals: IInternals, util: IUtil, trimArray: ITrimArr
                     type: 'project-documents',
                     documents: [],
                     location: ast.location,
+                    blockRange: ast.blockRange,
                 };
 
                 return util.ok({
@@ -80,6 +85,7 @@ function buildAstProject(internals: IInternals, util: IUtil, trimArray: ITrimArr
                 type: 'project-documents',
                 documents: result,
                 location: ast.location,
+                blockRange: ast.blockRange,
             };
 
             return util.ok({
@@ -309,6 +315,10 @@ function buildAstProject(internals: IInternals, util: IUtil, trimArray: ITrimArr
                 type: 'project-documents',
                 documents: [],
                 location: util.location(tokenResults.value.location.documentPath, tokenResults.value.location.documentDepth, tokenResults.value.location.documentIndex, 0, 0),
+                blockRange: {
+                    start: util.location(tokenResults.value.location.documentPath, tokenResults.value.location.documentDepth, tokenResults.value.location.documentIndex, 0, 0),
+                    end: util.location(tokenResults.value.location.documentPath, tokenResults.value.location.documentDepth, tokenResults.value.location.documentIndex, 0, 0)
+                }
             };
 
             return util.ok(empty);

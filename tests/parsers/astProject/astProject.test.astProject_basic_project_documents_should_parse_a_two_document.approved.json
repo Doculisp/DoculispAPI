@@ -1,39 +1,58 @@
 {
-  "success": true,
-  "value": {
-    "documents": [
-      {
-        "destinationPath": "./README.md",
-        "location": {
-          "char": 6,
+  "000_given": "\n(documents\n    (document\n        (source ./myReadme.md)\n        (output ./README.md)\n    )\n    (document\n        (source ./howTo.md)\n        (output ./contrib.md)\n    )\n)\n",
+  "999_received": {
+    "success": true,
+    "value": {
+      "blockRange": {
+        "end": {
+          "char": 1,
           "documentDepth": 1,
           "documentIndex": 1,
           "documentPath": "./myProject.dlproj",
-          "line": 3
+          "line": 11
         },
-        "sourcePath": "./myReadme.md",
-        "type": "project-document"
+        "start": {
+          "char": 1,
+          "documentDepth": 1,
+          "documentIndex": 1,
+          "documentPath": "./myProject.dlproj",
+          "line": 2
+        }
       },
-      {
-        "destinationPath": "./contrib.md",
-        "location": {
-          "char": 6,
-          "documentDepth": 1,
-          "documentIndex": 1,
-          "documentPath": "./myProject.dlproj",
-          "line": 3
+      "documents": [
+        {
+          "destinationPath": "./README.md",
+          "location": {
+            "char": 6,
+            "documentDepth": 1,
+            "documentIndex": 1,
+            "documentPath": "./myProject.dlproj",
+            "line": 3
+          },
+          "sourcePath": "./myReadme.md",
+          "type": "project-document"
         },
-        "sourcePath": "./howTo.md",
-        "type": "project-document"
-      }
-    ],
-    "location": {
-      "char": 2,
-      "documentDepth": 1,
-      "documentIndex": 1,
-      "documentPath": "./myProject.dlproj",
-      "line": 2
-    },
-    "type": "project-documents"
+        {
+          "destinationPath": "./contrib.md",
+          "location": {
+            "char": 6,
+            "documentDepth": 1,
+            "documentIndex": 1,
+            "documentPath": "./myProject.dlproj",
+            "line": 3
+          },
+          "sourcePath": "./howTo.md",
+          "type": "project-document"
+        }
+      ],
+      "location": {
+        "char": 2,
+        "documentDepth": 1,
+        "documentIndex": 1,
+        "documentPath": "./myProject.dlproj",
+        "line": 2
+      },
+      "type": "project-documents"
+    }
   }
 }

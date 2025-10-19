@@ -16,6 +16,7 @@
     - **Closing Location**: Captures exact closing parenthesis location from tokens
     - **Range Construction**: Creates `IRange` objects with start and end coordinates
     - **Container Support**: AST containers now track their complete block range from opening to closing parenthesis
+    - **Project Parser Integration**: AST Project parser now includes block range support for project document structures
   - **Type System Support**: Added `IRange` interface to general types for location coordinate pairs
     - **Range Definition**: Contains `start` and `end` location coordinates
     - **Location Coordinates**: Uses existing `ILocationCoordinates` interface
@@ -70,6 +71,7 @@
   - **JavaScript Compatibility**: JavaScript consumers continue to work without changes (additional property ignored)
   - **Type Safety**: TypeScript consumers gain enhanced type information with guaranteed block range data
   - **Complete AST Coverage**: All AST node types (`IAstIdentifier`, `IAstCommand`, `IAstContainer`) now include block range tracking
+  - **Project AST Integration**: `IProjectDocuments` interface now includes required `blockRange` property for project structure tracking
   - **Migration Impact**: Mock objects and test fixtures need to include new `blockRange` property
 - **Parser Performance**: Minimal performance impact with efficient range calculation
   - **Single Pass**: Range calculation integrated into existing parsing logic
@@ -88,6 +90,7 @@
     - **Block Range Validation**: All AST parser tests now validate precise block range information
     - **Command Tests**: Enhanced test coverage for AST command block range tracking
     - **Location Accuracy**: Test baselines updated with corrected location calculations
+    - **Project Parser Tests**: AST Project parser tests updated with enhanced `verifyWithGiven` pattern and block range validation
 
 <!-- (dl (# Benefits)) -->
 - **Enhanced Development Experience**: Developers working with Doculisp ASTs gain access to precise block boundaries
@@ -102,7 +105,7 @@
 
 <!-- (dl (# Migration Guide)) -->
 **For TypeScript Consumers:**
-- **Interface Updates**: `IAstIdentifier`, `IAstCommand`, and `IAstContainer` now include required `blockRange: IRange` property
+- **Interface Updates**: `IAstIdentifier`, `IAstCommand`, `IAstContainer`, and `IProjectDocuments` now include required `blockRange: IRange` property
 - **Mock Objects**: Update test fixtures and mock data to include `blockRange` property:
   ```typescript
   const mockIdentifier: IAstIdentifier = {
@@ -131,6 +134,16 @@
     location: someLocation,
     type: "ast-container",
     subStructure: [],
+    blockRange: {
+      start: startLocation,
+      end: endLocation
+    }
+  };
+
+  const mockProjectDocuments: IProjectDocuments = {
+    type: "project-documents",
+    documents: [],
+    location: someLocation,
     blockRange: {
       start: startLocation,
       end: endLocation

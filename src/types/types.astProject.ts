@@ -1,6 +1,6 @@
 import { IAstEmpty, RootAst } from "./types.ast";
 import { IPath } from "./types.filePath"
-import { ILocation, Result } from "./types.general";
+import { ILocation, IRange, Result } from "./types.general";
 import { IVariableTable } from "./types.variableTable";
 
 export interface IProjectDocument {
@@ -15,6 +15,7 @@ export interface IProjectDocuments {
     documents: IProjectDocument[];
     location: ILocation;
     type: 'project-documents';
+    blockRange: IRange;
 };
 
 export interface IProjectParser {
