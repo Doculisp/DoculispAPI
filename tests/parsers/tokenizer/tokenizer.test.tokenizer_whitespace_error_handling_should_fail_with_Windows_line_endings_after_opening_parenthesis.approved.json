@@ -1,0 +1,8 @@
+{
+  "000_given": "<!-- (dl (\r\nidentifier)) -->",
+  "999_received": {
+    "documentPath": "D:/comments/simple.md",
+    "message": "Parse Error: Tokenization failed: Unexpected whitespace after opening parenthesis at 'D:/comments/simple.md' (Line: 2, Char: 1).",
+    "success": false
+  }
+}

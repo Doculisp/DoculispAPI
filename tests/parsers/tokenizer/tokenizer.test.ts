@@ -375,5 +375,95 @@ describe('tokenizer', () => {
             
             verifyWithGiven(result, undefined, input);
         });
+
+        it('should fail when newline follows opening parenthesis', () => {
+            const input = '<!-- (dl (\nidentifier)) -->';
+            const location = buildProjectLocation(BASIC_SAMPLE_DOCUMENT, 1, 1);
+            
+            const result = toResult(input, location);
+            
+            verifyWithGiven(result, undefined, input);
+        });
+
+        it('should fail when tab follows opening parenthesis', () => {
+            const input = '<!-- (dl (\tidentifier)) -->';
+            const location = buildProjectLocation(BASIC_SAMPLE_DOCUMENT, 1, 1);
+            
+            const result = toResult(input, location);
+            
+            verifyWithGiven(result, undefined, input);
+        });
+
+        it('should fail when multiple whitespace follows opening parenthesis', () => {
+            const input = '<!-- (dl ( \n\t identifier)) -->';
+            const location = buildProjectLocation(BASIC_SAMPLE_DOCUMENT, 1, 1);
+            
+            const result = toResult(input, location);
+            
+            verifyWithGiven(result, undefined, input);
+        });
+
+        it('should fail with Windows line endings after opening parenthesis', () => {
+            const input = '<!-- (dl (\r\nidentifier)) -->';
+            const location = buildProjectLocation(BASIC_SAMPLE_DOCUMENT, 1, 1);
+            
+            const result = toResult(input, location);
+            
+            verifyWithGiven(result, undefined, input);
+        });
+
+        it('should fail in nested context with whitespace', () => {
+            const input = '<!-- (dl (outer ( inner))) -->';
+            const location = buildProjectLocation(BASIC_SAMPLE_DOCUMENT, 1, 1);
+            
+            const result = toResult(input, location);
+            
+            verifyWithGiven(result, undefined, input);
+        });
+
+        it('should succeed when identifier immediately follows opening parenthesis', () => {
+            const input = '<!-- (dl (identifier)) -->';
+            const location = buildProjectLocation(BASIC_SAMPLE_DOCUMENT, 1, 1);
+            
+            const result = toResult(input, location);
+            
+            verifyWithGiven(result, undefined, input);
+        });
+
+        it('should succeed with whitespace before closing parenthesis', () => {
+            const input = '<!-- (dl (identifier )) -->';
+            const location = buildProjectLocation(BASIC_SAMPLE_DOCUMENT, 1, 1);
+            
+            const result = toResult(input, location);
+            
+            verifyWithGiven(result, undefined, input);
+        });
+
+        it('should succeed with whitespace in parameters', () => {
+            const input = '<!-- (dl (command parameter with spaces)) -->';
+            const location = buildProjectLocation(BASIC_SAMPLE_DOCUMENT, 1, 1);
+            
+            const result = toResult(input, location);
+            
+            verifyWithGiven(result, undefined, input);
+        });
+
+        it('should fail when tab follows opening parenthesis', () => {
+            const input = '<!-- (dl (\tidentifier)) -->';
+            const location = buildProjectLocation(BASIC_SAMPLE_DOCUMENT, 1, 1);
+            
+            const result = toResult(input, location);
+            
+            verifyWithGiven(result, undefined, input);
+        });
+
+        it('should fail when multiple whitespace follows opening parenthesis', () => {
+            const input = '<!-- (dl ( \n\t identifier)) -->';
+            const location = buildProjectLocation(BASIC_SAMPLE_DOCUMENT, 1, 1);
+            
+            const result = toResult(input, location);
+            
+            verifyWithGiven(result, undefined, input);
+        });
     });
 });
