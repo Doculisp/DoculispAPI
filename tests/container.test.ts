@@ -6,7 +6,7 @@ function getRandomNumber(max?: number, min?: number) {
     return Math.floor(Math.random() * (max ?? 100) + (min ?? 1));
 }
 
-describe('the registry', () => {
+describe('Dependency Injection Container', () => {
     let testable: ITestableContainer = null as any;
     const environment: ITestableContainer = registry as ITestableContainer;
 
@@ -14,15 +14,16 @@ describe('the registry', () => {
         testable = environment.buildTestable();
     });
 
-    it('should create a testable version for tests', () => {
-        expect(testable).not.toBe(environment);
-    });
+    describe('Basic Container Functionality', () => {
+        it('testable container creation works correctly', () => {
+            expect(testable).not.toBe(environment);
+        });
 
-    it('should throw an exception when building something that has not been registered', () => {
+        it('unregistered module build produces error', () => {
         expect(() => testable.build('bad module')).toThrow('Build failed: No module named \'bad module\' is registered.');
     });
 
-    it('should restoreAll replaced modules', () => {
+        it('module restoration restores all replaced modules', () => {
         let fnOne = jest.fn()
         let fnTwo = jest.fn()
         let fnThree = jest.fn();
@@ -54,7 +55,7 @@ describe('the registry', () => {
         expect(fnThree).toHaveBeenCalled();
     });
 
-    it('should return a list of all registered modules.', () => {
+        it('module list retrieval returns all registered modules', () => {
         const letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'x', 'y', 'z', ' ', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
         let holding: any[] = [];
         const numberOfNames = getRandomNumber(12);
@@ -91,10 +92,11 @@ describe('the registry', () => {
         });
     });
 
-    it('should be able to build a default node package', () => {
+        it('node package building works correctly', () => {
         let fst = testable.build('fs');
 
         expect(fst.constants.X_OK).toBe(fs.constants.X_OK);
+    });
     });
 
     describe('Module Registration', () => {
