@@ -660,8 +660,8 @@ describe('the registry', () => {
         });
     });
 
-    describe('has a replaceValue method that', () => {
-        it('should replace a module with a value', () => {
+    describe('Replace Value Method', () => {
+        it('value replacement works correctly', () => {
             let origFn = jest.fn();
             testable.registerBuilder(() => { origFn() ;return { original: false }; }, [], 'red');
             let expected = { original: false, name: 'red'};
@@ -673,13 +673,13 @@ describe('the registry', () => {
             expect(result).toBe(expected);
         });
 
-        it('should not allow a replacement with no name attribute or name parameter', () => {
+        it('unnamed value replacement produces error', () => {
             testable.registerBuilder(() => {}, [], 'grey');
 
             expect(() => testable.replaceValue({ orange: 'jam' })).toThrow('Replacement failed: Value name must be provided either as a property or parameter.');
         });
 
-        it('should allow replacement of module when name is passed as a parameter', () => {
+        it('parameter-named value replacement works correctly', () => {
             testable.registerBuilder(() => { return { isGrey: true } }, [], 'grey');
             const expected = { isGrey: false };
             testable.replaceValue(expected, 'grey');
