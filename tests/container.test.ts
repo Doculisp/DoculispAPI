@@ -6,7 +6,7 @@ function getRandomNumber(max?: number, min?: number) {
     return Math.floor(Math.random() * (max ?? 100) + (min ?? 1));
 }
 
-describe('the registry', () => {
+describe('Dependency Injection Container', () => {
     let testable: ITestableContainer = null as any;
     const environment: ITestableContainer = registry as ITestableContainer;
 
@@ -14,87 +14,89 @@ describe('the registry', () => {
         testable = environment.buildTestable();
     });
 
-    it('should create a testable version for tests', () => {
-        expect(testable).not.toBe(environment);
-    });
+    describe('Basic Container Functionality', () => {
+        it('testable container creation works correctly', () => {
+            expect(testable).not.toBe(environment);
+        });
 
-    it('should throw an exception when building something that has not been registered', () => {
-        expect(() => testable.build('bad module')).toThrow('Build failed: No module named \'bad module\' is registered.');
-    });
+        it('unregistered module build produces error', () => {
+            expect(() => testable.build('bad module')).toThrow('Build failed: No module named \'bad module\' is registered.');
+        });
 
-    it('should restoreAll replaced modules', () => {
-        let fnOne = jest.fn()
-        let fnTwo = jest.fn()
-        let fnThree = jest.fn();
+        it('module restoration restores original functionality', () => {
+            let fnOne = jest.fn()
+            let fnTwo = jest.fn()
+            let fnThree = jest.fn();
 
-        let fnFakeOne = jest.fn();
-        let fnFakeTwo = jest.fn();
-        let fnFakeThree = jest.fn();
+            let fnFakeOne = jest.fn();
+            let fnFakeTwo = jest.fn();
+            let fnFakeThree = jest.fn();
 
-        testable.
-            registerBuilder(() => { fnOne(); }, [], 'one').
-            registerBuilder(() => { fnTwo(); }, ['one'], 'two').
-            registerBuilder(() => { fnThree(); }, ['two'], 'three');
+            testable.
+                registerBuilder(() => { fnOne(); }, [], 'one').
+                registerBuilder(() => { fnTwo(); }, ['one'], 'two').
+                registerBuilder(() => { fnThree(); }, ['two'], 'three');
 
-        testable.
-            replaceBuilder(() => { fnFakeOne(); }, [], 'one').
-            replaceBuilder(() => { fnFakeTwo(); }, ['one'], 'two').
-            replaceBuilder(() => { fnFakeThree(); }, ['two'], 'three');
+            testable.
+                replaceBuilder(() => { fnFakeOne(); }, [], 'one').
+                replaceBuilder(() => { fnFakeTwo(); }, ['one'], 'two').
+                replaceBuilder(() => { fnFakeThree(); }, ['two'], 'three');
 
-        testable.restoreAll();
+            testable.restoreAll();
 
-        testable.build('three');
+            testable.build('three');
 
-        expect(fnFakeOne).not.toHaveBeenCalled();
-        expect(fnFakeTwo).not.toHaveBeenCalled();
-        expect(fnFakeThree).not.toHaveBeenCalled();
+            expect(fnFakeOne).not.toHaveBeenCalled();
+            expect(fnFakeTwo).not.toHaveBeenCalled();
+            expect(fnFakeThree).not.toHaveBeenCalled();
 
-        expect(fnOne).toHaveBeenCalled();
-        expect(fnTwo).toHaveBeenCalled();
-        expect(fnThree).toHaveBeenCalled();
-    });
+            expect(fnOne).toHaveBeenCalled();
+            expect(fnTwo).toHaveBeenCalled();
+            expect(fnThree).toHaveBeenCalled();
+        });
 
-    it('should return a list of all registered modules.', () => {
-        const letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'x', 'y', 'z', ' ', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
-        let holding: any[] = [];
-        const numberOfNames = getRandomNumber(12);
-        function randomName() {
-            const cnt = getRandomNumber(10);
-            let name = "";
-            for (let index = 0; index < cnt; index++) {
-                const letter = getRandomNumber(letters.length - 1, 0);
-                name+=letters[letter];
+        it('module list retrieval returns all registered modules', () => {
+            const letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'x', 'y', 'z', ' ', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+            let holding: any[] = [];
+            const numberOfNames = getRandomNumber(12);
+            function randomName() {
+                const cnt = getRandomNumber(10);
+                let name = "";
+                for (let index = 0; index < cnt; index++) {
+                    const letter = getRandomNumber(letters.length - 1, 0);
+                    name+=letters[letter];
+                }
+                return name;
             }
-            return name;
-        }
 
-        for (let index = 0; index < numberOfNames; index++) {
-            holding.push(randomName());
-        }
-
-        let names: string[] = [];
-
-        holding.forEach(name => {
-            if(!names.includes(name)) {
-                names.push(name);
+            for (let index = 0; index < numberOfNames; index++) {
+                holding.push(randomName());
             }
+
+            let names: string[] = [];
+
+            holding.forEach(name => {
+                if(!names.includes(name)) {
+                    names.push(name);
+                }
+            });
+
+            names.forEach(name => {
+                testable.registerBuilder(() => {return {};}, [], name);
+            });
+
+            let modules = testable.getModuleList();
+
+            names.forEach(name => {
+                expect(modules).toContain(name);
+            });
         });
 
-        names.forEach(name => {
-            testable.registerBuilder(() => {return {};}, [], name);
+        it('node package building works correctly', () => {
+            let fst = testable.build('fs');
+
+            expect(fst.constants.X_OK).toBe(fs.constants.X_OK);
         });
-
-        let modules = testable.getModuleList();
-
-        names.forEach(name => {
-            expect(modules).toContain(name);
-        });
-    });
-
-    it('should be able to build a default node package', () => {
-        let fst = testable.build('fs');
-
-        expect(fst.constants.X_OK).toBe(fs.constants.X_OK);
     });
 
     describe('has a register method that', () => {
