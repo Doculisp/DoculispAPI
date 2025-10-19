@@ -97,7 +97,7 @@ tests/others/fileHandler.test.ts (5 tests)
 ## Reorganization Steps
 
 ### Phase 1: Setup and Preparation
-- [ ] **[PENDING]** **Step 1**: Run all tests to establish baseline (`npm test -- --testPathPattern=fileHandler.test.ts`)
+- [ ] **[PENDING]** **Step 1**: Run all tests to establish baseline (`npx jest --testPathPattern=fileHandler.test.ts`)
 - [ ] **[PENDING]** **Step 2**: Create backup copy of current file for rollback safety
 
 ### Phase 2: Core Test Structure Reorganization
@@ -152,7 +152,7 @@ tests/others/fileHandler.test.ts (5 tests)
 
 ### After Each Phase
 - [ ] Human confirmation received before proceeding
-- [ ] Full test suite passes (`npm test -- --testPathPattern=fileHandler.test.ts`)
+- [ ] Full test suite passes (`npx jest --testPathPattern=fileHandler.test.ts`)
 - [ ] Test structure reflects intended organization
 - [ ] Commit made with appropriate Arlo's notation
 

@@ -21,7 +21,7 @@ This plan reorganizes `tests/parsers/includeBuilder/includeBuilder.test.ts` to f
 
 ## Plan Execution Rules
 
-1. **Test All Changes**: Run `npm test` after each step to ensure no regressions
+1. **Test All Changes**: Run `npx jest` after each step to ensure no regressions
 2. **Commit Frequently**: Use Arlo's notation for each step completion
 3. **Preserve Functionality**: All existing test logic must be maintained exactly
 4. **Follow Naming Conventions**: Use sentence structure with spaces for test names
@@ -107,7 +107,7 @@ describe('Include Builder')
 
 #### Step 1: Create Backup and Verify Current Tests
 - [ ] **Create backup**: Copy `includeBuilder.test.ts` to `includeBuilder.test.ts.backup`
-- [ ] **Run current tests**: Execute `npm test -- --testPathPattern=includeBuilder` to ensure all pass
+- [ ] **Run current tests**: Execute `npx jest --testPathPattern=includeBuilder` to ensure all pass
 - [ ] **Document current state**: List all current test names and approval files
 - [ ] **Verify approval files**: Confirm all 7 approval files are present and named correctly
 - [ ] **Commit backup**: `". d Creates backup of include builder tests before reorganization"`
@@ -186,11 +186,11 @@ describe('Include Builder')
 ### Phase 4: Final Validation and Cleanup
 
 #### Step 10: Final Test Execution and Approval File Validation
-- [ ] **Run complete test suite**: Execute `npm test -- --testPathPattern=includeBuilder` 
+- [ ] **Run complete test suite**: Execute `npx jest --testPathPattern=includeBuilder` 
 - [ ] **Verify all approval files**: Confirm all 7 approval files have been renamed correctly
 - [ ] **Check approval file content**: Ensure approval file content matches test expectations
 - [ ] **Test approval regeneration**: If needed, regenerate approval files with new names
-- [ ] **Run full test suite**: Execute `npm test` to ensure no regressions in other tests
+- [ ] **Run full test suite**: Execute `npx jest` to ensure no regressions in other tests
 - [ ] **Commit final state**: `"^ r Completes include builder test reorganization with validation"`
 
 #### Step 11: Cleanup and Documentation
