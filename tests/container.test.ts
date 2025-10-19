@@ -315,8 +315,8 @@ describe('the registry', () => {
         });
     });
 
-    describe('has a registerBuilder method that', () =>{
-        it('should call the builder when build is called.', () => {
+    describe('Builder Registration', () => {
+        it('registered builder execution works correctly', () => {
             let fn = jest.fn();
             function neon(...args: any[]){ fn(...args);  return 'blue'; }
 
@@ -328,11 +328,11 @@ describe('the registry', () => {
             expect(result).toBe('blue');
         });
 
-        it('should fail registration if function does not have name and no name is provided.', () => {
+        it('unnamed builder registration produces error', () => {
             expect(() => { testable.registerBuilder(() => 'black', []); }).toThrow('Registration failed: Function name is required either on the function or as a parameter.');
         });
 
-        it('should register the builder by the name parameter if provided.', () => {
+        it('parameter-named builder registration works correctly', () => {
             let fn = jest.fn();
             function neon(...args: any[]){ fn(...args);  return 65; }
 
@@ -345,7 +345,7 @@ describe('the registry', () => {
             expect(() => { testable.build('neon'); }).toThrow('Build failed: No module named \'neon\' is registered.');
         });
 
-        it('should build the dependencies when built', () => {
+        it('builder dependency resolution works correctly', () => {
             let redValue = {
                 red: true
             }
@@ -383,7 +383,7 @@ describe('the registry', () => {
             expect(result).toBe(greenValue);
         });
 
-        it('should call the builder function once if it is a singleton.', () => {
+        it('singleton builder executes only once', () => {
             let fn = jest.fn();
             function borg() { fn(); return {}; }
 
@@ -397,7 +397,7 @@ describe('the registry', () => {
             expect(fn).toHaveBeenCalledTimes(1);
         });
 
-        it('should call the builder multiple times if not a singleton.', () => {
+        it('non-singleton builder executes multiple times', () => {
             let fn = jest.fn();
             function borg() { fn(); return {}; }
 
