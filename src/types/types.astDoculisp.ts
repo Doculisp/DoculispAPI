@@ -1,6 +1,6 @@
 import { IAstEmpty, RootAst } from "./types.ast";
 import { IPath } from "./types.filePath";
-import { ILocation, IProjectLocation, Result } from "./types.general";
+import { ILocation, IProjectLocation, IRange, Result } from "./types.general";
 import { IVariableTable } from "./types.variableTable";
 
 export interface ILocationSortable {
@@ -67,6 +67,7 @@ export interface IContentLocation extends ILocationSortable {
 export interface IPathId extends ILocationSortable {
     readonly type: 'doculisp-path-id';
     readonly id: string;
+    readonly blockRange: IRange;
 }
 
 export type DoculispPart = IWrite | ITitle | ITableOfContents | IContentLocation | IHeader | IPathId;

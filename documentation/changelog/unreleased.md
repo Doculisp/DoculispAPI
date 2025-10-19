@@ -17,6 +17,11 @@
     - **Range Construction**: Creates `IRange` objects with start and end coordinates
     - **Container Support**: AST containers now track their complete block range from opening to closing parenthesis
     - **Project Parser Integration**: AST Project parser now includes block range support for project document structures
+  - **Doculisp AST Parser Integration**: Enhanced Doculisp semantic parser with block range support for path references
+    - **Path ID Block Range**: `IPathId` interface now includes required `blockRange` property for precise `get-path` command tracking
+    - **Doculisp Path Parsing**: AST Doculisp parser `parsePath` function now preserves block range information from underlying AST nodes
+    - **Cross-Reference Tracking**: Path reference commands (`get-path`) now include precise block boundaries for enhanced tooling support
+    - **Semantic Layer Enhancement**: Block range information flows from core AST through Doculisp semantic layer to final output
   - **Type System Support**: Added `IRange` interface to general types for location coordinate pairs
     - **Range Definition**: Contains `start` and `end` location coordinates
     - **Location Coordinates**: Uses existing `ILocationCoordinates` interface
@@ -72,6 +77,7 @@
   - **Type Safety**: TypeScript consumers gain enhanced type information with guaranteed block range data
   - **Complete AST Coverage**: All AST node types (`IAstIdentifier`, `IAstCommand`, `IAstContainer`) now include block range tracking
   - **Project AST Integration**: `IProjectDocuments` and `IProjectDocument` interfaces now include required `blockRange` property for complete project structure tracking
+  - **Doculisp Type Integration**: `IPathId` interface in Doculisp AST types now includes required `blockRange` property for path reference tracking
   - **Migration Impact**: Mock objects and test fixtures need to include new `blockRange` property
 - **Parser Performance**: Minimal performance impact with efficient range calculation
   - **Single Pass**: Range calculation integrated into existing parsing logic
@@ -102,6 +108,10 @@
 - **Future Extensibility**: Foundation for advanced features like block-level refactoring and manipulation
 - **Debugging Improvements**: Easier debugging with exact block boundary information
 - **Testing Quality**: Enhanced test coverage and validation with given-received pattern testing
+- **Path Reference Enhancement**: `get-path` commands now provide precise block range information for improved cross-reference tooling
+  - **Reference Highlighting**: Tools can now precisely highlight path reference blocks in editors
+  - **Cross-Reference Navigation**: Enhanced support for jump-to-definition and find-references features
+  - **Block-Level Operations**: Foundation for advanced editing operations on path reference blocks
 
 <!-- (dl (# Migration Guide)) -->
 **For TypeScript Consumers:**
@@ -156,6 +166,16 @@
     destinationPath: destinationPath,
     location: someLocation,
     type: "project-document",
+    blockRange: {
+      start: startLocation,
+      end: endLocation
+    }
+  };
+  
+  const mockPathId: IPathId = {
+    type: "doculisp-path-id",
+    id: "path-id",
+    documentOrder: someLocation,
     blockRange: {
       start: startLocation,
       end: endLocation

@@ -635,6 +635,7 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
                     type: 'doculisp-path-id',
                     id: pathIdBlock.parameter.value,
                     documentOrder: pathIdBlock.location,
+                    blockRange: pathIdBlock.blockRange,
                 },
                 rest: trimArray.trim(1, input),
             });
