@@ -7,45 +7,47 @@ describe('Simple Doculisp API', () => {
         api = await DoculispApi.create();
     });
 
-    describe('API initialization', () => {
-        it('should create API instance successfully', async () => {
+    describe('API Initialization', () => {
+        it('API instance creates successfully', async () => {
             expect(api).toBeDefined();
         });
+    });
 
-        it('should provide access to utility methods', () => {
+    describe('Component Access', () => {
+        it('utility methods access provides functionality', () => {
             const util = api.getUtil();
             expect(util).toBeDefined();
             expect(typeof util.ok).toBe('function');
             expect(typeof util.fail).toBe('function');
         });
 
-        it('should provide access to path constructor', () => {
+        it('path constructor access provides functionality', () => {
             const pathConstructor = api.getPathConstructor();
             expect(pathConstructor).toBeDefined();
             expect(typeof pathConstructor).toBe('function');
         });
 
-        it('should provide access to variable table factory', () => {
+        it('variable table factory access provides functionality', () => {
             const variableTable = api.createVariableTable();
             expect(variableTable).toBeDefined();
             expect(typeof variableTable.addValue).toBe('function');
         });
 
-        it('should provide access to AST builder', () => {
+        it('AST builder access provides functionality', () => {
             const astBuilder = api.getAstBuilder();
             expect(astBuilder).toBeDefined();
             expect(typeof astBuilder.parse).toBe('function');
         });
 
-        it('should provide access to string writer', () => {
+        it('string writer access provides functionality', () => {
             const stringWriter = api.getStringWriter();
             expect(stringWriter).toBeDefined();
             expect(typeof stringWriter.writeAst).toBe('function');
         });
     });
 
-    describe('path constructor functionality', () => {
-        it('should construct paths correctly', () => {
+    describe('Path Constructor Functionality', () => {
+        it('path construction creates valid paths', () => {
             const pathConstructor = api.getPathConstructor();
             const testPath = pathConstructor('./test.md');
             
@@ -55,8 +57,8 @@ describe('Simple Doculisp API', () => {
         });
     });
 
-    describe('util functionality', () => {
-        it('should create success results', () => {
+    describe('Util Functionality', () => {
+        it('success result creation works correctly', () => {
             const util = api.getUtil();
             const result = util.ok('test value');
             
@@ -64,7 +66,7 @@ describe('Simple Doculisp API', () => {
             expect(result.value).toBe('test value');
         });
 
-        it('should create failure results', () => {
+        it('failure result creation works correctly', () => {
             const util = api.getUtil();
             const result = util.fail('test error');
             
