@@ -33,7 +33,7 @@ type WriterConfig = {
     result?: Result<string> | undefined;
 };
 
-describe('controller',() => {
+describe('Controller',() => {
     let environment: ITestableContainer = null as any;
     
     let verifyAsJson: (data: any, options?: Options) => void;
@@ -156,8 +156,8 @@ describe('controller',() => {
         sut = testable.buildAs<IController>('controller');
     });
 
-    describe('test', () => {
-        it('should test handle a successful file', () => {
+    describe('Test Method', () => {
+        it('successful file processing completes correctly', () => {
             const sourcePath = pathConstructor('./someFile.md');
             table.addValue(sourceKey, { type: 'variable-path', value: sourcePath });
             sut.test(table);
@@ -165,7 +165,7 @@ describe('controller',() => {
             verifyAsJson(getTestResult());
         });
     
-        it('should fail a file that cannot parse an ast', () => {
+        it('ast parsing failure returns error', () => {
             const sourcePath = pathConstructor('./someFile.md');
             includeConfig.result = util.fail('A bad parse', sourcePath);
             table.addValue(sourceKey, { type: 'variable-path', value: sourcePath });
@@ -174,7 +174,7 @@ describe('controller',() => {
             verifyAsJson(getTestResult(result));
         });
     
-        it('should fail a file that cannot be converted to markdown', () => {
+        it('markdown conversion failure returns error', () => {
             const sourcePath = pathConstructor('./someFile.md');
             writerConfig.result = util.fail('Unable to write', sourcePath);
             table.addValue(sourceKey, { type: 'variable-path', value: sourcePath });
