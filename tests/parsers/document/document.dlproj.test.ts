@@ -5,6 +5,10 @@ import { getVerifier } from "../../tools";
 import { DocumentParser } from "../../../src/types/types.document";
 import { buildProjectLocation, testable } from "../../testHelpers";
 
+/**
+ * Tests for parsing .dlproj project files that define batch compilation configurations.
+ * These files specify multiple documents to be compiled together as a project.
+ */
 describe('Document Project File Parser', () => {
     let parse: DocumentParser = undefined as any;
     let verifyAsJson: (data: any, options?: Options) => void;
@@ -18,6 +22,9 @@ describe('Document Project File Parser', () => {
         parse = testable.document.resultBuilder(container);
     });
 
+    /**
+     * Tests parsing of .dlproj project files with various document configurations.
+     */
     describe('Project File Parsing', () => {
         it('single document project file parses successfully', () => {
         let dlisp = `

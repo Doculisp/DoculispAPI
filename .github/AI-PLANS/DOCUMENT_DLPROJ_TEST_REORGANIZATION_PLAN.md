@@ -96,10 +96,10 @@ After reorganization:
 ### Phase 2: Core Test Structure Reorganization
 
 #### Step 3: Reorganize Project File Parsing Test
-- [ ] **[PENDING]** Rename project file parsing test under `describe('Project File Parsing')`
-- [ ] **[PENDING]** Use pattern: `{content type} {verb} {scenario}`
-- [ ] **[PENDING]** Update associated approval file (1 file)
-- [ ] **[PENDING]** Run tests and commit if passing
+- [x] **[COMPLETED]** Rename project file parsing test under `describe('Project File Parsing')`
+- [x] **[COMPLETED]** Use pattern: `{content type} {verb} {scenario}`
+- [x] **[COMPLETED]** Update associated approval file (1 file)
+- [x] **[COMPLETED]** Run tests and commit if passing
 
 **Current Test to Rename**:
 - `should handle a project file with a single document` → `single document project file parses successfully`
