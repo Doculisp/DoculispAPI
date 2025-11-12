@@ -5,7 +5,7 @@ import { getVerifier } from "../../tools";
 import { DocumentParser } from "../../../src/types/types.document";
 import { buildProjectLocation, testable } from "../../testHelpers";
 
-describe('document parse dlproj file', () => {
+describe('Document Project File Parser', () => {
     let parse: DocumentParser = undefined as any;
     let verifyAsJson: (data: any, options?: Options) => void;
 
@@ -18,7 +18,8 @@ describe('document parse dlproj file', () => {
         parse = testable.document.resultBuilder(container);
     });
 
-    it('should handle a project file with a single document', () => {
+    describe('Project File Parsing', () => {
+        it('single document project file parses successfully', () => {
         let dlisp = `
 (documents
     (document
@@ -31,5 +32,6 @@ describe('document parse dlproj file', () => {
         let result = parse(dlisp, buildProjectLocation('C:/build.dlisp', 7, 1));
 
         verifyAsJson(result);
+        });
     });
 });
