@@ -16,6 +16,11 @@ import path from "path";
 import { IProjectDocuments } from "../../src/types/types.astProject";
 import { buildPath } from "../testHelpers";
 
+/**
+ * Tests for the Controller orchestration component that coordinates the entire
+ * document compilation pipeline from source files to final output.
+ */
+
 type FileConfig = {
     outputPath?: IPath | undefined;
     fileText?: Result<string> | undefined;
@@ -156,6 +161,9 @@ describe('Controller',() => {
         sut = testable.buildAs<IController>('controller');
     });
 
+    /**
+     * Tests the test method which validates document processing without writing output files.
+     */
     describe('Test Method', () => {
         it('successful file processing completes correctly', () => {
             const sourcePath = pathConstructor('./someFile.md');
@@ -184,6 +192,9 @@ describe('Controller',() => {
         });
     });
 
+    /**
+     * Tests the compile method which processes documents and writes output files.
+     */
     describe('Compile Method', () => {
         it('successful compilation completes correctly', () => {
             const sourcePath = pathConstructor('./someFile.md');
@@ -225,6 +236,9 @@ describe('Controller',() => {
 
     });
 
+    /**
+     * Tests input validation scenarios that should produce standardized error messages.
+     */
     describe('Validation Errors', () => {
         it('missing destination path produces validation error', () => {
             const sourcePath = pathConstructor('./someFile.md');
