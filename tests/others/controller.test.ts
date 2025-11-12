@@ -184,8 +184,8 @@ describe('Controller',() => {
         });
     });
 
-    describe('compile', () => {
-        it('should be successful if everything is successful', () => {
+    describe('Compile Method', () => {
+        it('successful compilation completes correctly', () => {
             const sourcePath = pathConstructor('./someFile.md');
             const destinationPath = pathConstructor('./README.md');
             sut.compile(sourcePath, destinationPath);
@@ -193,7 +193,7 @@ describe('Controller',() => {
             verifyAsJson(getTestResult());
         });
 
-        it('should fail if a file cannot parse an ast', () => {
+        it('ast parsing failure returns error', () => {
             const sourcePath = pathConstructor('./someFile.md');
             const destinationPath = pathConstructor('./README.md');
             includeConfig.result = util.fail('Unable to parse ast', sourcePath);
@@ -203,7 +203,7 @@ describe('Controller',() => {
             verifyAsJson(getTestResult(result));
         });
     
-        it('should fail a file that cannot be converted to markdown', () => {
+        it('markdown conversion failure returns error', () => {
             const sourcePath = pathConstructor('./someFile.md');
             const destinationPath = pathConstructor('./README.md');
             writerConfig.result = util.fail('Unable to write', sourcePath);
@@ -213,7 +213,7 @@ describe('Controller',() => {
             verifyAsJson(getTestResult(result));
         });
 
-        it('should fail if writing the file fails', () => {
+        it('file writing failure returns error', () => {
             const sourcePath = pathConstructor('./someFile.md');
             const destinationPath = pathConstructor('./README.md');
             fileConfig.result = util.fail('Unable to write file', destinationPath);
@@ -223,7 +223,10 @@ describe('Controller',() => {
             verifyAsJson(getTestResult(result));
         });
 
-        it('should fail with standardized error when non-project file has no destination', () => {
+    });
+
+    describe('Validation Errors', () => {
+        it('missing destination path produces validation error', () => {
             const sourcePath = pathConstructor('./someFile.md');
             const result = sut.compile(sourcePath, false);
 
@@ -232,7 +235,7 @@ describe('Controller',() => {
             expect((result[0] as any)?.message).toMatch(/^Validation Error: Must have a destination file\./);
         });
 
-        it('should fail with standardized error when project file has destination path', () => {
+        it('project file with destination produces validation error', () => {
             const sourcePath = pathConstructor('./project.dlproj');
             const destinationPath = pathConstructor('./README.md');
             const result = sut.compile(sourcePath, destinationPath);
@@ -241,10 +244,8 @@ describe('Controller',() => {
             expect(result[0]?.success).toBe(false);
             expect((result[0] as any)?.message).toMatch(/^Validation Error: A project file cannot have a destination path\./);
         });
-    });
 
-    describe('test validation errors', () => {
-        it('should fail with standardized error when no source file is given', () => {
+        it('missing source file produces validation error', () => {
             const result = sut.test(table);
 
             expect(result.length).toBe(1);
