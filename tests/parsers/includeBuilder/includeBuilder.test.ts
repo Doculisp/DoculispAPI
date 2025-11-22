@@ -61,7 +61,7 @@ describe('includeBuilder', () => {
         environment.replaceValue(buildPath, 'pathConstructor');
     }
 
-    describe('includeParse', () => {
+    describe('External Document Processing', () => {
         let toExternalResult: (text: string, projectLocation: IProjectLocation) => Result<IDoculisp | IEmptyDoculisp> = undefined as any;
 
         beforeEach(async () => {
@@ -266,7 +266,7 @@ Hello World!
         });
     });
 
-    describe('parse', () => {
+    describe('Direct File Processing', () => {
         let toResult: (filePath: string) => Result<IDoculisp | IEmptyDoculisp> = undefined as any
 
         beforeEach(async () => {
