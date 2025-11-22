@@ -69,19 +69,19 @@ describe('includeBuilder', () => {
             toExternalResult = testable.include.includeResultBuilder(container, setup);
         });
 
-        it('should handle an empty ast', () => {
+        it('empty document handling produces empty result', () => {
             const result = toExternalResult("", buildProjectLocation('C:/_main.dlisp', 1, 1));
             verifyAsJson(result);
         });
 
-        it('should return an error if given an error', () => {
+        it('parse errors propagate through chain', () => {
             const builder: IIncludeBuilder = testable.include.parserBuilder(container, setup);
 
             const expectedResult = fail('This is a failure',  buildPath('M:/y/pah.md'));
             expect(builder.parseExternals(expectedResult, variableSaver)).toBe(expectedResult);
         });
 
-        it('should return an error if there is a file error', () => {
+        it('file system errors propagate correctly', () => {
             const badPath = buildPath('B:/add.md');
             const expectedResult = fail('baad file error', badPath);
             addPathResult(badPath.fullName, expectedResult);
@@ -104,7 +104,7 @@ describe('includeBuilder', () => {
             expect(result).toBe(expectedResult);
         });
 
-        it('should parse one included document', () =>{
+        it('single document inclusion resolves correctly', () =>{
             const subDocument = `<!--
 (dl
     (section-meta
@@ -138,7 +138,7 @@ Hello world!
             );
         });
 
-        it('should not an included document not a markdown or dlisp', () =>{
+        it('non-markdown and non-dlisp files rejected properly', () =>{
             const subDocument = `<h1>Hello World</h1>`;
             const subDocumentPath = 'C:/sub.docx';
 
@@ -158,7 +158,7 @@ Hello world!
             verifyAsJson(toExternalResult(document, buildProjectLocation('C:/_main.dlisp', 1, 1)));
         });
 
-        it('should parse two sub documents', () => {
+        it('multiple document inclusion combines properly', () => {
             const subA = `<!--
 (dl
     (section-meta
@@ -207,7 +207,7 @@ Sub document B text.
             );
         });
 
-        it('should parse a sub document containing a sub document', () => {
+        it('nested document inclusion processes hierarchy', () => {
             const grandChildDocument = `<!--
 (dl
     (section-meta
@@ -275,7 +275,7 @@ Hello World!
             toResult = (filePath) => builder(buildPath(filePath));
         });
 
-        it('should return file error if there is one', () => {
+        it('file system errors return correctly', () => {
             const docPath = 'C:/bad.md';
 
             const expectedResult = fail('baad file', buildPath(docPath));
@@ -286,7 +286,7 @@ Hello World!
             expect(result).toBe(expectedResult);
         });
 
-        it('should parse an empty file', () => {
+        it('empty file processing produces empty result', () => {
             const doc = '';
             const docPath = 'empty.md';
             
@@ -296,7 +296,7 @@ Hello World!
             verifyAsJson(result);
         });
 
-        it('should parse a document with a child and grand child', () => {
+        it('complex document hierarchy resolves completely', () => {
             const grandChildPath = './grandchild.md'
             const grandchild = `
 <!--
