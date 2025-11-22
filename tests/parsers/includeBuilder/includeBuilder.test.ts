@@ -69,7 +69,7 @@ describe('includeBuilder', () => {
             toExternalResult = testable.include.includeResultBuilder(container, setup);
         });
 
-        it('should handle an empty ast', () => {
+        it('empty document handling produces empty result', () => {
             const result = toExternalResult("", buildProjectLocation('C:/_main.dlisp', 1, 1));
             verifyAsJson(result);
         });
@@ -104,7 +104,7 @@ describe('includeBuilder', () => {
             expect(result).toBe(expectedResult);
         });
 
-        it('should parse one included document', () =>{
+        it('single document inclusion resolves correctly', () =>{
             const subDocument = `<!--
 (dl
     (section-meta
@@ -158,7 +158,7 @@ Hello world!
             verifyAsJson(toExternalResult(document, buildProjectLocation('C:/_main.dlisp', 1, 1)));
         });
 
-        it('should parse two sub documents', () => {
+        it('multiple document inclusion combines properly', () => {
             const subA = `<!--
 (dl
     (section-meta
