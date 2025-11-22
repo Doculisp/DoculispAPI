@@ -207,7 +207,7 @@ Sub document B text.
             );
         });
 
-        it('should parse a sub document containing a sub document', () => {
+        it('nested document inclusion processes hierarchy', () => {
             const grandChildDocument = `<!--
 (dl
     (section-meta
@@ -296,7 +296,7 @@ Hello World!
             verifyAsJson(result);
         });
 
-        it('should parse a document with a child and grand child', () => {
+        it('complex document hierarchy resolves completely', () => {
             const grandChildPath = './grandchild.md'
             const grandchild = `
 <!--
