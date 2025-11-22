@@ -74,14 +74,14 @@ describe('includeBuilder', () => {
             verifyAsJson(result);
         });
 
-        it('should return an error if given an error', () => {
+        it('parse errors propagate through chain', () => {
             const builder: IIncludeBuilder = testable.include.parserBuilder(container, setup);
 
             const expectedResult = fail('This is a failure',  buildPath('M:/y/pah.md'));
             expect(builder.parseExternals(expectedResult, variableSaver)).toBe(expectedResult);
         });
 
-        it('should return an error if there is a file error', () => {
+        it('file system errors propagate correctly', () => {
             const badPath = buildPath('B:/add.md');
             const expectedResult = fail('baad file error', badPath);
             addPathResult(badPath.fullName, expectedResult);
@@ -138,7 +138,7 @@ Hello world!
             );
         });
 
-        it('should not an included document not a markdown or dlisp', () =>{
+        it('non-markdown and non-dlisp files rejected properly', () =>{
             const subDocument = `<h1>Hello World</h1>`;
             const subDocumentPath = 'C:/sub.docx';
 
@@ -275,7 +275,7 @@ Hello World!
             toResult = (filePath) => builder(buildPath(filePath));
         });
 
-        it('should return file error if there is one', () => {
+        it('main file load errors propagate correctly', () => {
             const docPath = 'C:/bad.md';
 
             const expectedResult = fail('baad file', buildPath(docPath));
@@ -286,7 +286,7 @@ Hello World!
             expect(result).toBe(expectedResult);
         });
 
-        it('should parse an empty file', () => {
+        it('empty file processing produces empty result', () => {
             const doc = '';
             const docPath = 'empty.md';
             
