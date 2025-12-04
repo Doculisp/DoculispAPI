@@ -1,5 +1,7 @@
 {
   "documentPath": "main.dlisp",
-  "message": "Validation Error: Unknown block 'link-ref' in subtitle block at 'main.dlisp' (Line: 4, Char: 6). Found at (Line: 4, Char: 16).",
+  "failureCategory": "Validation Error",
+  "message": "Unknown block 'link-ref' in subtitle block at 'main.dlisp' (Line: 4, Char: 6). Found at (Line: 4, Char: 16).",
+  "processingStep": "Doculisp AST Parsing",
   "success": false
 }

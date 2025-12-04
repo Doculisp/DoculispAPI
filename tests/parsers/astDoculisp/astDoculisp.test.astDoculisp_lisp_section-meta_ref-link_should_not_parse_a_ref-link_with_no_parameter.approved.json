@@ -1,5 +1,7 @@
 {
   "documentPath": "main.dlisp",
-  "message": "Validation Error: Missing ref-link text in ref-link block at 'main.dlisp' (Line: 3, Char: 6).",
+  "failureCategory": "Validation Error",
+  "message": "Missing ref-link text in ref-link block at 'main.dlisp' (Line: 3, Char: 6).",
+  "processingStep": "Doculisp AST Parsing",
   "success": false
 }

@@ -1,5 +1,7 @@
 {
   "documentPath": "main.dlisp",
-  "message": "Validation Error: Unknown block 'bad' in title block at 'main.dlisp' (Line: 1, Char: 16). Found at (Line: 1, Char: 23).",
+  "failureCategory": "Validation Error",
+  "message": "Unknown block 'bad' in title block at 'main.dlisp' (Line: 1, Char: 16). Found at (Line: 1, Char: 23).",
+  "processingStep": "Doculisp AST Parsing",
   "success": false
 }

@@ -1,5 +1,7 @@
 {
   "documentPath": "test.dlisp",
-  "message": "Validation Error: The section-meta block at 'test.dlisp' has more than one include (Line: 0, Char: 0).",
+  "failureCategory": "Validation Error",
+  "message": "The section-meta block at 'test.dlisp' has more than one include (Line: 0, Char: 0).",
+  "processingStep": "Doculisp AST Parsing",
   "success": false
 }

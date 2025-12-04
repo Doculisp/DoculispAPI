@@ -1,5 +1,7 @@
 {
   "documentPath": "main.dlisp",
-  "message": "Validation Error: Missing subtitle text in subtitle block at 'main.dlisp' (Line: 4, Char: 6).",
+  "failureCategory": "Validation Error",
+  "message": "Missing subtitle text in subtitle block at 'main.dlisp' (Line: 4, Char: 6).",
+  "processingStep": "Doculisp AST Parsing",
   "success": false
 }

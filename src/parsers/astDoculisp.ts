@@ -147,7 +147,7 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
         
                 if(title.type === 'ast-container') {
                     const next = title.subStructure[0] as IdentifierAst;
-                    return util.fail(`Validation Error: Unknown block '${next.value}' in title block at '${title.location.documentPath.fullName}' (Line: ${title.location.line}, Char: ${title.location.char}). Found at (Line: ${next.location.line}, Char: ${next.location.char}).`, current.documentPath);
+                    return validationFailure(`Unknown block '${next.value}' in title block at '${title.location.documentPath.fullName}' (Line: ${title.location.line}, Char: ${title.location.char}). Found at (Line: ${next.location.line}, Char: ${next.location.char}).`, current.documentPath);
                 }
     
                 let linkText = getLinkText(title, refLink);
@@ -178,18 +178,18 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
                 }
     
                 if(1 < subtitles.length) {
-                    return util.fail(`Validation Error: Multiple subtitle blocks found in section-meta at '${location.documentPath.fullName}' (Line: ${location.line}, Char: ${location.char}). Only one subtitle block allowed per section-meta.`, current.documentPath);
+                    return validationFailure(`Multiple subtitle blocks found in section-meta at '${location.documentPath.fullName}' (Line: ${location.line}, Char: ${location.char}). Only one subtitle block allowed per section-meta.`, current.documentPath);
                 }
     
                 const subtitle = subtitles[0] as IdentifierAst;
     
                 if(subtitle.type === 'ast-identifier') {
-                    return util.fail(`Validation Error: Missing subtitle text in subtitle block at '${subtitle.location.documentPath.fullName}' (Line: ${subtitle.location.line}, Char: ${subtitle.location.char}).`, current.documentPath);
+                    return validationFailure(`Missing subtitle text in subtitle block at '${subtitle.location.documentPath.fullName}' (Line: ${subtitle.location.line}, Char: ${subtitle.location.char}).`, current.documentPath);
                 }
     
                 if(subtitle.type === 'ast-container') {
                     const next = subtitle.subStructure[0] as IdentifierAst;
-                    return util.fail(`Validation Error: Unknown block '${next.value}' in subtitle block at '${subtitle.location.documentPath.fullName}' (Line: ${subtitle.location.line}, Char: ${subtitle.location.char}). Found at (Line: ${next.location.line}, Char: ${next.location.char}).`, current.documentPath);
+                    return validationFailure(`Unknown block '${next.value}' in subtitle block at '${subtitle.location.documentPath.fullName}' (Line: ${subtitle.location.line}, Char: ${subtitle.location.char}). Found at (Line: ${next.location.line}, Char: ${next.location.char}).`, current.documentPath);
                 }
     
                 return util.ok(headerize(depth, subtitle.parameter.value));
@@ -203,18 +203,18 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
                 }
     
                 if(1 < refLinks.length) {
-                    return util.fail(`Validation Error: Multiple ref-link blocks found in section-meta at '${location.documentPath.fullName}' (Line: ${location.line}, Char: ${location.char}). Only one ref-link block allowed per section-meta.`, current.documentPath);
+                    return validationFailure(`Multiple ref-link blocks found in section-meta at '${location.documentPath.fullName}' (Line: ${location.line}, Char: ${location.char}). Only one ref-link block allowed per section-meta.`, current.documentPath);
                 }
     
                 const refLink = refLinks[0] as IdentifierAst;
     
                 if(refLink.type === 'ast-identifier') {
-                    return util.fail(`Validation Error: Missing ref-link text in ref-link block at '${refLink.location.documentPath.fullName}' (Line: ${refLink.location.line}, Char: ${refLink.location.char}).`, current.documentPath);
+                    return validationFailure(`Missing ref-link text in ref-link block at '${refLink.location.documentPath.fullName}' (Line: ${refLink.location.line}, Char: ${refLink.location.char}).`, current.documentPath);
                 }
     
                 if(refLink.type === 'ast-container') {
                     const next = refLink.subStructure[0] as IdentifierAst;
-                    return util.fail(`Validation Error: The ref-link block at '${refLink.location.documentPath.fullName}' contains unknown block '${next.value}' (Line: ${next.location.line}, Char: ${next.location.char}).`, current.documentPath);
+                    return validationFailure(`The ref-link block at '${refLink.location.documentPath.fullName}' contains unknown block '${next.value}' (Line: ${next.location.line}, Char: ${next.location.char}).`, current.documentPath);
                 }
     
                 return util.ok(refLink.parameter.value);
@@ -226,7 +226,7 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
     
                     if(0 < bad.length) {
                         const next = bad[0] as IdentifierAst;
-                        return util.fail(`Parse Error: Include contains unknown command '${next.value}' at '${next.location.documentPath.fullName}' (Line: ${next.location.line}, Char: ${next.location.char}).`, location.documentPath);
+                        return parseFailure(`Include contains unknown command '${next.value}' at '${next.location.documentPath.fullName}' (Line: ${next.location.line}, Char: ${next.location.char}).`, location.documentPath);
                     }
     
                     const commands = ast as IAstCommand[];
@@ -254,7 +254,7 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
                 }
     
                 if(1 < includes.length) {
-                    return util.fail(`Validation Error: The section-meta block at '${location.documentPath.fullName}' has more than one include (Line: ${location.line}, Char: ${location.char}).`, current.documentPath);
+                    return validationFailure(`The section-meta block at '${location.documentPath.fullName}' has more than one include (Line: ${location.line}, Char: ${location.char}).`, current.documentPath);
                 }
                 
                 const include = includes[0] as IdentifierAst;
@@ -264,7 +264,7 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
                 }
     
                 if(include.type === 'ast-command') {
-                    return util.fail(`Validation Error: The include block at '${include.location.documentPath.fullName}' has unknown parameter '${include.parameter.value}' (Line: ${include.location.line}, Char: ${include.location.char}).`, location.documentPath);
+                    return validationFailure(`The include block at '${include.location.documentPath.fullName}' has unknown parameter '${include.parameter.value}' (Line: ${include.location.line}, Char: ${include.location.char}).`, location.documentPath);
                 }
     
                 return parseSections(include.subStructure);
@@ -276,12 +276,12 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
                 for (let index = 0; index < authors.length; index++) {
                     const author = authors[index] as IdentifierAst;
                     if(author.type === 'ast-identifier') {
-                        return util.fail(`Validation Error: Author block at '${author.location.documentPath.fullName}' does not contain the author's name (Line: ${author.location.line}, Char: ${author.location.char}).`, location.documentPath);
+                        return validationFailure(`Author block at '${author.location.documentPath.fullName}' does not contain the author's name (Line: ${author.location.line}, Char: ${author.location.char}).`, location.documentPath);
                     }
 
                     if(author.type === 'ast-container') {
                         const child = author.subStructure[0] as IdentifierAst;
-                        return util.fail(`Validation Error: Author block at '${author.location.documentPath.fullName}' contains unknown child block '${child.value}' (Line: ${child.location.line}, Char: ${child.location.char}).`, location.documentPath);
+                        return validationFailure(`Author block at '${author.location.documentPath.fullName}' contains unknown child block '${child.value}' (Line: ${child.location.line}, Char: ${child.location.char}).`, location.documentPath);
                     }
 
                     variableTable.addValueToStringList('author', { value: author.parameter.value, type: 'variable-string' });
@@ -298,7 +298,7 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
                 }
                 
                 if(1 < ids.length) {
-                    return util.fail(`Validation Error: The section-meta block at '${location.documentPath.fullName}' has more than one id (Line: ${location.line}, Char: ${location.char}).`, current.documentPath);
+                    return validationFailure(`The section-meta block at '${location.documentPath.fullName}' has more than one id (Line: ${location.line}, Char: ${location.char}).`, current.documentPath);
                 }
 
                 const idIdentifier = ids[0] as IdentifierAst;
