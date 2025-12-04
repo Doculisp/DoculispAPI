@@ -304,7 +304,7 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
                 const idIdentifier = ids[0] as IdentifierAst;
 
                 if(idIdentifier.type === 'ast-container') {
-                    return util.fail(`Validation Error: The section id block at '${idIdentifier.location.documentPath.fullName}' contains sub blocks (Line: ${idIdentifier.location.line}, Char: ${idIdentifier.location.char}).`, current.documentPath);
+                    return validationFailure(`The section id block at '${idIdentifier.location.documentPath.fullName}' contains sub blocks (Line: ${idIdentifier.location.line}, Char: ${idIdentifier.location.char}).`, current.documentPath);
                 }
 
                 if(idIdentifier.type === 'ast-identifier') {
