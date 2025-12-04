@@ -11,6 +11,7 @@ import { IPath } from "../types/types.filePath";
 import { IProjectDocuments, IProjectParser } from "../types/types.astProject";
 
 function buildAstBuilder(util: IUtil, doculispParser: IDoculispParser, documentParse: DocumentParser, tokenizer: TokenFunction, fileHandler: IFileHandler, astParser: IAstParser, astProjectParse: IProjectParser) : IIncludeBuilder {
+    const failureBuilder = util.failAlt('Include Processing')('Include Error');
 
     function _parse(filePath: IPath, location: IProjectLocation, variableTable: IVariableTable): Result<IDoculisp | IEmptyDoculisp> {
         const workingDir = fileHandler.getProcessWorkingDirectory();
@@ -62,7 +63,7 @@ function buildAstBuilder(util: IUtil, doculispParser: IDoculispParser, documentP
             }
 
             if(load.path.extension !== '.md' && load.path.extension !== '.dlisp') {
-                return util.fail(`Validation Error: Invalid file type in include block at '${doculisp.documentOrder.documentPath}' (Line: ${load.documentOrder.line}, Char: ${load.documentOrder.char}). Included files must be markdown or dlisp files.`);
+                return failureBuilder(`Invalid file type in include block at '${doculisp.documentOrder.documentPath}' (Line: ${load.documentOrder.line}, Char: ${load.documentOrder.char}). Included files must be markdown or dlisp files.`, doculisp.documentOrder.documentPath);
             }
 
             const astResult = _parse(load.path, { documentDepth: doculisp.documentOrder.documentDepth + 1, documentIndex: index + 1, documentPath: load.path}, variableTable);
