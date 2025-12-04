@@ -80,7 +80,7 @@ export type UtilBuilder = () => IUtil;
 export interface IUtil {
     ok<T>(successfulValue: T): ISuccess<T>;
     fail(message: string, documentPath?: IPath): IFail;
-    failAlt(step: ProcessingStep) : (message: string, category: FailureCategory, documentPath?: IPath) => IFailAlt;
+    failAlt(step: ProcessingStep) : (category: FailureCategory) => (message: string, documentPath?: IPath) => IFailAlt;
     location: (documentPath: IPath, documentDepth: number, documentIndex: number, line: number, char: number) => ILocation;
     toLocation: (projectLocation: IProjectLocation, line: number, char: number) => ILocation;
     getProjectLocation: (location: ILocation) => IProjectLocation;

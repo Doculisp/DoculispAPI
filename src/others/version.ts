@@ -10,7 +10,7 @@ function buildVersion(util: IUtil, pathConstructor: PathConstructor): IVersion {
         const file = require('../../package.json');
 
         if(!file || !file['version']) {
-            return failureBuilder('Could not find the version in package.json.', 'Validation Error', pathConstructor('../../package.json'));
+            return failureBuilder('Validation Error')('Could not find the version in package.json.', pathConstructor('../../package.json'));
         }
 
         return util.ok(file['version'] as string);

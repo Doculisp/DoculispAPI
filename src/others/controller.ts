@@ -17,7 +17,7 @@ type CompileResult = {
 };
 
 function buildLoader(util: IUtil, handler: IFileWriter, astBuilder: IIncludeBuilder, stringWrter: IStringWriter, variableTable: IVariableTable): IController {
-    const failureBuilder = util.failAlt('Input Validation');
+    const failureBuilder = util.failAlt('Input Validation')('Validation Error');
     
     function _write(doculisp: Result<IDoculisp | IEmptyDoculisp>, variableTable: IVariableTable): Result<string | false> {
         const document = stringWrter.writeAst(doculisp, variableTable);
@@ -110,11 +110,11 @@ function buildLoader(util: IUtil, handler: IFileWriter, astBuilder: IIncludeBuil
 
     function compile(sourcePath: IPath, destinationPath: IPath | false = false): Result<string>[] {
         if(sourcePath.extension !== '.dlproj' && !destinationPath) {
-            return [failureBuilder(`Must have a destination file.`, 'Validation Error', sourcePath)];
+            return [failureBuilder(`Must have a destination file.`, sourcePath)];
         }
 
         if(sourcePath.extension === '.dlproj' && destinationPath) {
-            return [failureBuilder('A project file cannot have a destination path.', 'Validation Error', sourcePath)];
+            return [failureBuilder('A project file cannot have a destination path.', sourcePath)];
         }
 
         if(sourcePath.extension === '.dlproj') {
@@ -131,7 +131,7 @@ function buildLoader(util: IUtil, handler: IFileWriter, astBuilder: IIncludeBuil
 
     function test(variableTable: IVariableTable): Result<string | false>[] {
         if(!variableTable.hasKey(sourceKey)) {
-            return [failureBuilder('A source file must be given.', 'Validation Error')];
+            return [failureBuilder('A source file must be given.')];
         }
 
         const sourcePath = (variableTable.getValue(sourceKey) as IVariablePath).value;

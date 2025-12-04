@@ -141,14 +141,16 @@ function buildGeneral(): IUtil {
         };
     };
 
-    function failAlt(step: ProcessingStep) : (message: string, category: FailureCategory, documentPath?: IPath) => IFailAlt {
-        return (message: string, category: FailureCategory, documentPath?: IPath) : IFailAlt => {
-            return {
-                message,
-                documentPath,
-                success: false,
-                failureCategory: category,
-                processingStep: step,
+    function failAlt(step: ProcessingStep) : (category: FailureCategory) => (message: string, documentPath?: IPath) => IFailAlt {
+        return (category: FailureCategory) => {
+            return (message: string, documentPath?: IPath) : IFailAlt => {
+                return {
+                    message,
+                    documentPath,
+                    success: false,
+                    failureCategory: category,
+                    processingStep: step,
+                };
             };
         };
     };
