@@ -6,6 +6,8 @@ import { IdentifierToken, ParameterToken, TextToken, Token, TokenizedDocument } 
 import { ITrimArray } from "../types/types.trimArray";
 
 function buildAstParser(util: IUtil, internals: IInternals, trimArray: ITrimArray): IAstParser {
+    const failureBuilder = util.failAlt('AST Parsing')('Parse Error');
+    
     function parseTextToken(token: TextToken): IAstValue {
         return {
             type: 'ast-value',
@@ -112,7 +114,7 @@ function buildAstParser(util: IUtil, internals: IInternals, trimArray: ITrimArra
         }
 
         if(closeCommand.type !== 'token - close parenthesis') {
-            return util.fail(`Parse Error: Malformed lisp expression at '${closeCommand.location.documentPath.fullName}' (Line: ${closeCommand.location.line}, Char: ${closeCommand.location.char}).`, closeCommand.location.documentPath);
+            return failureBuilder(`Malformed lisp expression at '${closeCommand.location.documentPath.fullName}' (Line: ${closeCommand.location.line}, Char: ${closeCommand.location.char}).`, closeCommand.location.documentPath);
         }
 
         return util.ok({
@@ -151,7 +153,7 @@ function buildAstParser(util: IUtil, internals: IInternals, trimArray: ITrimArra
         const close = remaining.remaining[0] as Token;
 
         if(remaining.remaining.length === 0 || close.type !== 'token - close parenthesis') {
-            return util.fail(`Parse Error: Malformed lisp expression at '${remaining.location.documentPath.fullName}' (Line: ${remaining.location.line}, Char: ${remaining.location.char}).`, remaining.location.documentPath);
+            return failureBuilder(`Malformed lisp expression at '${remaining.location.documentPath.fullName}' (Line: ${remaining.location.line}, Char: ${remaining.location.char}).`, remaining.location.documentPath);
         }
 
         return util.ok({
@@ -187,7 +189,7 @@ function buildAstParser(util: IUtil, internals: IInternals, trimArray: ITrimArra
         if(0 < leftovers.remaining.length) {
             const token: Token = leftovers.remaining[0] as Token;
             const tokenText = token.type === 'token - close parenthesis' ? ')' : (token as any).text;
-            return util.fail(`Parse Error: Unknown token '${tokenText}' at '${token.location.documentPath.fullName}' (Line: ${token.location.line}, Char: ${token.location.char}).`, token.location.documentPath)
+            return failureBuilder(`Unknown token '${tokenText}' at '${token.location.documentPath.fullName}' (Line: ${token.location.line}, Char: ${token.location.char}).`, token.location.documentPath)
         }
         
         return util.ok({
