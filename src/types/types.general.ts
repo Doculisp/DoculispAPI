@@ -45,7 +45,33 @@ export interface IFail {
     readonly success: false;
 };
 
-export type Result<T> = ISuccess<T> | IFail;
+export type FailureCategory = 
+    | 'Parse Error'
+    | 'Validation Error'
+    | 'File System Error'
+    | 'Include Error';
+
+export type ProcessingStep = 
+    | 'Document Parsing'
+    | 'Tokenization'
+    | 'AST Parsing'
+    | 'Doculisp AST Parsing'
+    | 'Project AST Parsing'
+    | 'Include Processing'
+    | 'Building Document'
+    | 'File Operations'
+    | 'Package Information Retrieval'
+    | 'Input Validation';
+
+export interface IFailAlt {
+    readonly message: string;
+    readonly documentPath?: IPath | undefined;
+    readonly success: false;
+    readonly failureCategory: FailureCategory;
+    readonly processingStep: ProcessingStep;
+};
+
+export type Result<T> = ISuccess<T> | IFail | IFailAlt;
 
 export type LocationBuilder = (line: number, char: number) => ILocation;
 
@@ -54,6 +80,7 @@ export type UtilBuilder = () => IUtil;
 export interface IUtil {
     ok<T>(successfulValue: T): ISuccess<T>;
     fail(message: string, documentPath?: IPath): IFail;
+    failAlt(step: ProcessingStep) : (message: string, category: FailureCategory, documentPath?: IPath) => IFailAlt;
     location: (documentPath: IPath, documentDepth: number, documentIndex: number, line: number, char: number) => ILocation;
     toLocation: (projectLocation: IProjectLocation, line: number, char: number) => ILocation;
     getProjectLocation: (location: ILocation) => IProjectLocation;

@@ -4,11 +4,13 @@ import { IVersion } from "../types/types.version";
 import { PathConstructor } from "../types/types.filePath";
 
 function buildVersion(util: IUtil, pathConstructor: PathConstructor): IVersion {
+    const failureBuilder = util.failAlt('Package Information Retrieval');
+    
     function getVersion(): Result<string> {
         const file = require('../../package.json');
 
         if(!file || !file['version']) {
-            return util.fail('Validation Error: Could not find the version in package.json.', pathConstructor('../../package.json'));
+            return failureBuilder('Could not find the version in package.json.', 'Validation Error', pathConstructor('../../package.json'));
         }
 
         return util.ok(file['version'] as string);

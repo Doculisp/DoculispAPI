@@ -123,6 +123,26 @@
     - **Location Accuracy**: Test baselines updated with corrected location calculations
     - **Project Parser Tests**: AST Project parser tests updated with enhanced `verifyWithGiven` pattern and block range validation
 
+### New Features ###
+
+- **Enhanced Error Handling**: Introduced advanced error categorization and processing step tracking
+  - **Extended Error Interface**: New `IFailAlt` interface provides enhanced error information beyond basic failure messages
+    - **Failure Categories**: Errors now classified into logical categories (`Parse Error`, `Validation Error`, `File System Error`, `Include Error`)
+    - **Processing Steps**: Detailed tracking of where in the pipeline errors occur (`Document Parsing`, `Tokenization`, `AST Parsing`, etc.)
+    - **Enhanced Debugging**: Developers can now understand both what went wrong and where it happened in the processing pipeline
+  - **Parallel Error System**: New error handling system runs alongside existing error handling for gradual migration
+    - **Backward Compatibility**: Existing `IFail` interface remains fully functional and unchanged
+    - **Enhanced Result Types**: `Result<T>` now supports both traditional and enhanced error types
+    - **Gradual Adoption**: Teams can migrate to enhanced error handling incrementally without breaking changes
+  - **Improved Error Builder**: New `failAlt()` method provides structured error creation
+    - **Curried Interface**: `util.failAlt(step)(message, category, path)` enables step-specific error builders
+    - **Consistent Categorization**: Enforces proper error classification at the point of creation
+    - **Clean Message Format**: Error messages no longer require category prefixes - handled automatically by the interface
+  - **Version Package Integration**: Package information retrieval now uses enhanced error handling as the first migration target
+    - **Processing Step Tracking**: Version errors now properly categorized under 'Package Information Retrieval' step
+    - **Validation Error Classification**: Package.json access failures properly classified as 'Validation Error' category
+    - **Foundation Pattern**: Establishes the migration pattern for other components to follow
+
 ### Benefits ###
 
 - **Enhanced Development Experience**: Developers working with Doculisp ASTs gain access to precise block boundaries

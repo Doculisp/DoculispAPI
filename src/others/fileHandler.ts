@@ -6,6 +6,7 @@ import { Result, UtilBuilder } from "../types/types.general";
 function buildLoader(utilBuilder: UtilBuilder, fs: any, pathConstructor: PathConstructor): IFileHandler {
 
     const util = utilBuilder();
+    const failureBuilder = util.failAlt('File Operations');
 
     function load(filePath: IPath): Result<string> {
         try {
@@ -13,7 +14,7 @@ function buildLoader(utilBuilder: UtilBuilder, fs: any, pathConstructor: PathCon
             return util.ok(value);
         } catch (error) {
             const msg = (error && (error as any).message) ? (error as any).message : String(error);
-            return util.fail(`Validation Error: File load failed: ${msg} (Path: ${filePath.fullName}).`, filePath);
+            return failureBuilder(`File load failed: ${msg} (Path: ${filePath.fullName}).`, 'File System Error', filePath);
         }
     }
 
@@ -30,7 +31,7 @@ function buildLoader(utilBuilder: UtilBuilder, fs: any, pathConstructor: PathCon
         }
         catch(error) {
             const msg = (error && (error as any).message) ? (error as any).message : String(error);
-            return util.fail(`Validation Error: File write failed: ${msg} (Path: ${filePath.fullName}).`, filePath);
+            return failureBuilder(`File write failed: ${msg} (Path: ${filePath.fullName}).`, 'File System Error', filePath);
         }
     }
 
@@ -39,7 +40,7 @@ function buildLoader(utilBuilder: UtilBuilder, fs: any, pathConstructor: PathCon
             return util.ok(pathConstructor(process.cwd()));
         } catch (error) {
             const msg = (error && (error as any).message) ? (error as any).message : String(error);
-            return util.fail(`Validation Error: Working directory access failed: ${msg}.`);
+            return failureBuilder(`Working directory access failed: ${msg}.`, 'File System Error');
         }
     }
 
@@ -49,7 +50,7 @@ function buildLoader(utilBuilder: UtilBuilder, fs: any, pathConstructor: PathCon
             return util.ok(undefined);
         } catch(error) {
             const msg = (error && (error as any).message) ? (error as any).message : String(error);
-            return util.fail(`Validation Error: Working directory change failed: ${msg} (Path: ${directory.fullName}).`, directory);
+            return failureBuilder(`Working directory change failed: ${msg} (Path: ${directory.fullName}).`, 'File System Error', directory);
         }
     }
 
