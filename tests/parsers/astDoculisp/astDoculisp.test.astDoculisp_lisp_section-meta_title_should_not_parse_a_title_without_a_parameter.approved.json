@@ -1,5 +1,7 @@
 {
   "documentPath": "main.dlisp",
-  "message": "Validation Error: Missing title text in title block at 'main.dlisp' (Line: 1, Char: 16).",
+  "failureCategory": "Validation Error",
+  "message": "Missing title text in title block at 'main.dlisp' (Line: 1, Char: 16).",
+  "processingStep": "Doculisp AST Parsing",
   "success": false
 }

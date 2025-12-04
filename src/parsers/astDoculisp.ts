@@ -27,6 +27,9 @@ function getSymbolErrorMessage<T extends Ast>(typeId: string, word: string, curr
 }
 
 function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArray, pathConstructor: PathConstructor, textHelper: TextHelper): IDoculispParser {
+    const parseFailure = util.failAlt('Doculisp AST Parsing')('Parse Error');
+    const validationFailure = util.failAlt('Doculisp AST Parsing')('Validation Error');
+    
     function parse(astResult: Result<RootAst | IAstEmpty>, variableTable: IVariableTable): Result<IDoculisp | IEmptyDoculisp> {
         if(!astResult.success) {
             return astResult;
@@ -63,7 +66,7 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
             }
     
             if(ast.type !== 'ast-command') {
-                return util.fail(`Validation Error: Missing header text in dynamic header at '${ast.location.documentPath.fullName}' (Line: ${ast.location.line}, Char: ${ast.location.char}).`, current.documentPath);
+                return validationFailure(`Missing header text in dynamic header at '${ast.location.documentPath.fullName}' (Line: ${ast.location.line}, Char: ${ast.location.char}).`, current.documentPath);
             }
 
             const id = ast.value.replace(/^#+/, '');
@@ -71,11 +74,11 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
             if(0 < id.length) {
                 let errorMsg = getSymbolErrorMessage('heading', id, current, ast, textHelper);
                 if(errorMsg) {
-                    return util.fail(errorMsg, current.documentPath);
+                    return validationFailure(errorMsg, current.documentPath);
                 }
 
                 if(!textHelper.isLowercase(id)) {
-                    return util.fail(`Validation Error: Heading ID must be lowercase at '${current.documentPath.fullName}' (Line: ${ast.location.line}, Char: ${ast.location.char}). Did you mean '${id.toLocaleLowerCase()}'?`)
+                    return validationFailure(`Heading ID must be lowercase at '${current.documentPath.fullName}' (Line: ${ast.location.line}, Char: ${ast.location.char}). Did you mean '${id.toLocaleLowerCase()}'?`)
                 }
 
                 if(variableTable.hasKey(id)) {
@@ -85,7 +88,7 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
                     if(orig && orig.type === 'variable-id') {
                         msg = `\n  Original use of ID was at '${orig.source.documentPath}' (Line: ${orig.source.line}, Char: ${orig.source.char}).`;
                     }
-                    return util.fail(`Validation Error: Duplicate heading ID '${id}' at '${current.documentPath.fullName}' (Line: ${ast.location.line}, Char: ${ast.location.char}).${msg}`, current.documentPath);
+                    return validationFailure(`Duplicate heading ID '${id}' at '${current.documentPath.fullName}' (Line: ${ast.location.line}, Char: ${ast.location.char}).${msg}`, current.documentPath);
                 }
 
                 const destinationPath = (
@@ -127,19 +130,19 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
                 const titles = ast.filter(s => s.value === 'title');
         
                 if(1 < titles.length) {
-                    return util.fail(`Validation Error: Multiple title blocks found in section-meta at '${location.documentPath.fullName}' (Line: ${location.line}, Char: ${location.char}). Only one title block allowed per section-meta.`, current.documentPath);
+                    return validationFailure(`Multiple title blocks found in section-meta at '${location.documentPath.fullName}' (Line: ${location.line}, Char: ${location.char}). Only one title block allowed per section-meta.`, current.documentPath);
                 }
     
                 if(titles.length === 0) {
                     if(!hasSectionMeta) {
-                    return util.fail(`Parse Error: Section-meta missing title block at '${location.documentPath.fullName}' (Line: ${location.line}, Char: ${location.char}).`, current.documentPath);
-                }
+                        return parseFailure(`Section-meta missing title block at '${location.documentPath.fullName}' (Line: ${location.line}, Char: ${location.char}).`, current.documentPath);
+                    }
                 }
 
                 const title = titles[0] as IdentifierAst;
 
                 if(title.type === 'ast-identifier') {
-                    return util.fail(`Validation Error: Missing title text in title block at '${title.location.documentPath.fullName}' (Line: ${title.location.line}, Char: ${title.location.char}).`, current.documentPath);
+                    return validationFailure(`Missing title text in title block at '${title.location.documentPath.fullName}' (Line: ${title.location.line}, Char: ${title.location.char}).`, current.documentPath);
                 }
         
                 if(title.type === 'ast-container') {

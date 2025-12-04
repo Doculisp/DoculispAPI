@@ -1,5 +1,7 @@
 {
   "documentPath": "test.dlisp",
-  "message": "Parse Error: Unknown token 'First section' at 'test.dlisp' (Line: 6, Char: 1).",
+  "failureCategory": "Parse Error",
+  "message": "Unknown token 'First section' at 'test.dlisp' (Line: 6, Char: 1).",
+  "processingStep": "AST Parsing",
   "success": false
 }

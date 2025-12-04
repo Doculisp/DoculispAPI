@@ -2,7 +2,9 @@
   "000_given": "<!--\n(dl (#F|rst My heading))\n-->",
   "999_received": {
     "documentPath": "S:/ome/file.md",
+    "failureCategory": "Validation Error",
     "message": "Validation Error: Symbol(s) in heading id 'F|rst' at 'S:/ome/file.md' (Line: 2, Char: 6).\n'|' @ id char 2",
+    "processingStep": "Doculisp AST Parsing",
     "success": false
   }
 }

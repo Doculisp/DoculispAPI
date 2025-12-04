@@ -1,7 +1,7 @@
 import { IDictionary, ITestableContainer } from "../../src/types/types.containers";
 import { IFileWriter } from "../../src/types/types.fileHandler";
 import { IPath, PathConstructor } from "../../src/types/types.filePath";
-import { IUtil, Result } from "../../src/types/types.general";
+import { IFailAlt, IUtil, Result } from "../../src/types/types.general";
 import { IIncludeBuilder } from "../../src/types/types.includeBuilder";
 import { IDoculisp, IEmptyDoculisp } from "../../src/types/types.astDoculisp";
 import { IVariablePath, IVariableTable, sourceKey } from "../../src/types/types.variableTable";
@@ -246,7 +246,10 @@ describe('Controller',() => {
 
             expect(result.length).toBe(1);
             expect(result[0]?.success).toBe(false);
-            expect((result[0] as any)?.message).toMatch(/^Validation Error: Must have a destination file\./);
+            const failure = result[0] as IFailAlt;
+            expect(failure.message).toMatch(/^Must have a destination file\./);
+            expect(failure.failureCategory).toBe('Validation Error');
+            expect(failure.processingStep).toBe('Input Validation');
         });
 
         it('project file with destination produces validation error', () => {
@@ -256,7 +259,10 @@ describe('Controller',() => {
 
             expect(result.length).toBe(1);
             expect(result[0]?.success).toBe(false);
-            expect((result[0] as any)?.message).toMatch(/^Validation Error: A project file cannot have a destination path\./);
+            const failure = result[0] as IFailAlt;
+            expect(failure.message).toMatch(/^A project file cannot have a destination path\./);
+            expect(failure.failureCategory).toBe('Validation Error');
+            expect(failure.processingStep).toBe('Input Validation');
         });
 
         it('missing source file produces validation error', () => {
@@ -264,7 +270,10 @@ describe('Controller',() => {
 
             expect(result.length).toBe(1);
             expect(result[0]?.success).toBe(false);
-            expect((result[0] as any)?.message).toMatch(/^Validation Error: A source file must be given\./);
+            const failure = result[0] as IFailAlt;
+            expect(failure.message).toMatch(/^A source file must be given\./);
+            expect(failure.failureCategory).toBe('Validation Error');
+            expect(failure.processingStep).toBe('Input Validation');
         });
     });
 });

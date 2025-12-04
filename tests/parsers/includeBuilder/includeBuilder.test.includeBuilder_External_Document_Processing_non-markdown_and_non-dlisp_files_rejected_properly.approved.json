@@ -1,4 +1,7 @@
 {
-  "message": "Validation Error: Invalid file type in include block at 'C:/_main.dlisp' (Line: 5, Char: 10). Included files must be markdown or dlisp files.",
+  "documentPath": "C:/_main.dlisp",
+  "failureCategory": "Include Error",
+  "message": "Invalid file type in include block at 'C:/_main.dlisp' (Line: 5, Char: 10). Included files must be markdown or dlisp files.",
+  "processingStep": "Include Processing",
   "success": false
 }

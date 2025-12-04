@@ -1,5 +1,7 @@
 {
   "documentPath": "./malformed.dlisp",
-  "message": "Parse Error: Malformed lisp expression at './malformed.dlisp' (Line: 1, Char: 2).",
+  "failureCategory": "Parse Error",
+  "message": "Malformed lisp expression at './malformed.dlisp' (Line: 1, Char: 2).",
+  "processingStep": "AST Parsing",
   "success": false
 }

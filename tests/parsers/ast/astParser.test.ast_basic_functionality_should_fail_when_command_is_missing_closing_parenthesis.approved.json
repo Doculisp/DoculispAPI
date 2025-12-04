@@ -1,5 +1,7 @@
 {
   "documentPath": "./malformed.dlisp",
-  "message": "Parse Error: Unknown token 'title' at './malformed.dlisp' (Line: 1, Char: 2).",
+  "failureCategory": "Parse Error",
+  "message": "Unknown token 'title' at './malformed.dlisp' (Line: 1, Char: 2).",
+  "processingStep": "AST Parsing",
   "success": false
 }

@@ -1,5 +1,7 @@
 {
   "documentPath": "./malformed.dlisp",
-  "message": "Parse Error: Unknown token '@invalid' at './malformed.dlisp' (Line: 1, Char: 13).",
+  "failureCategory": "Parse Error",
+  "message": "Unknown token '@invalid' at './malformed.dlisp' (Line: 1, Char: 13).",
+  "processingStep": "AST Parsing",
   "success": false
 }

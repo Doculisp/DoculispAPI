@@ -2,7 +2,9 @@
   "000_given": "<!--\n(dl (#))\n-->",
   "999_received": {
     "documentPath": "S:/ome/file.md",
-    "message": "Validation Error: Missing header text in dynamic header at 'S:/ome/file.md' (Line: 2, Char: 6).",
+    "failureCategory": "Validation Error",
+    "message": "Missing header text in dynamic header at 'S:/ome/file.md' (Line: 2, Char: 6).",
+    "processingStep": "Doculisp AST Parsing",
     "success": false
   }
 }

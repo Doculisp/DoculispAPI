@@ -1,7 +1,9 @@
 {
   "000_given": "<!--\n(dl (#First My heading))\n-->",
   "999_received": {
-    "message": "Validation Error: Heading ID must be lowercase at 'S:/ome/file.md' (Line: 2, Char: 6). Did you mean 'first'?",
+    "failureCategory": "Validation Error",
+    "message": "Heading ID must be lowercase at 'S:/ome/file.md' (Line: 2, Char: 6). Did you mean 'first'?",
+    "processingStep": "Doculisp AST Parsing",
     "success": false
   }
 }
