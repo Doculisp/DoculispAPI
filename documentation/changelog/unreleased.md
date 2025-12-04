@@ -135,6 +135,14 @@
       - **Two-Stage Currying**: `util.failAlt(step)(category)(message, path)` enables flexible builder patterns
       - **Category Pre-specification**: Allows creating category-specific builders to reduce repetition
       - **Mixed Category Support**: Handles files with multiple error categories through multiple builders
+    - **Doculisp AST Parser Migration**: Core Doculisp semantic validation migrated to enhanced error handling
+      - **Processing Step Tracking**: Doculisp parsing errors properly categorized under 'Doculisp AST Parsing' step
+      - **Error Category Classification**: Parse errors vs validation errors now cleanly separated with dedicated builders
+      - **Systematic Migration Progress**: 17 of 40 util.fail calls successfully migrated using parallel change pattern
+      - **Validation Error Cleanup**: Removed redundant "Validation Error:" prefixes since category is now structured metadata
+      - **Parse vs Validation Separation**: Clear distinction between parsing failures and semantic validation failures
+      - **Builder Pattern Implementation**: Category-specific builders (`parseFailure`, `validationFailure`) reduce code duplication
+      - **Test Coverage Maintenance**: All approval tests updated to expect new IFailAlt error structure with processingStep and failureCategory fields
 
 <!-- (dl (# Benefits)) -->
 - **Enhanced Development Experience**: Developers working with Doculisp ASTs gain access to precise block boundaries
