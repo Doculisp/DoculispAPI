@@ -1,5 +1,7 @@
 {
   "documentPath": "C:/markdown/multiline.md",
-  "message": "Parse Error: Unclosed multiline code block at 'C:/markdown/multiline.md' (Line: 2, Char: 5).",
+  "failureCategory": "Parse Error",
+  "message": "Unclosed multiline code block at 'C:/markdown/multiline.md' (Line: 2, Char: 5).",
+  "processingStep": "Document Parsing",
   "success": false
 }

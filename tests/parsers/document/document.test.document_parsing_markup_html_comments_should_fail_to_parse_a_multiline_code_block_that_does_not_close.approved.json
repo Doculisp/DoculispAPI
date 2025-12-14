@@ -1,5 +1,7 @@
 {
   "documentPath": "C:/bad/examples/multiline.md",
-  "message": "Parse Error: Unclosed multiline code block at 'C:/bad/examples/multiline.md' (Line: 1, Char: 1).",
+  "failureCategory": "Parse Error",
+  "message": "Unclosed multiline code block at 'C:/bad/examples/multiline.md' (Line: 1, Char: 1).",
+  "processingStep": "Document Parsing",
   "success": false
 }

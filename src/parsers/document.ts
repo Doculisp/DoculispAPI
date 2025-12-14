@@ -25,6 +25,8 @@ type ParesBuilder = {
 };
 
 function getPartParsers(projectLocation: IProjectLocation, doesIt: IDocumentSearches, internals: IInternals, util: IUtil): ParesBuilder {
+    const parseFailure = util.failAlt('Document Parsing')('Parse Error');
+    
     function isStopParsingWhiteSpace(input: string, _current: ILocation): Result<'stop' | false> {
         const regex = /^\S+/;
         if(regex.test(input)) {
@@ -298,7 +300,7 @@ function getPartParsers(projectLocation: IProjectLocation, doesIt: IDocumentSear
     
             if(parsed.success) {
                 if(opened) {
-                    return util.fail(`Parse Error: Unclosed multiline code block at '${starting.documentPath.fullName}' (Line: ${starting.line}, Char: ${starting.char}).`, projectLocation.documentPath);
+                    return parseFailure(`Unclosed multiline code block at '${starting.documentPath.fullName}' (Line: ${starting.line}, Char: ${starting.char}).`, projectLocation.documentPath);
                 }
                 
                 const [pieces, leftover] = parsed.value;
