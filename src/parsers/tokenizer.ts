@@ -62,7 +62,7 @@ function buildTokenize(doesIt: ILispSearches, internals: IInternals, util: IUtil
     
             if(doesIt.startWithNonNewLineWhiteSpace.test(input)) {
                 if(isToken) {
-                    return util.fail(`Unexpected whitespace after opening parenthesis at '${current.documentPath}' (Line: ${current.line}, Char: ${current.char}).`);
+                    return parseFailure(`Unexpected whitespace after opening parenthesis at '${current.documentPath}' (Line: ${current.line}, Char: ${current.char}).`);
                 }
                 const space = (input.match(doesIt.startWithNonNewLineWhiteSpace) as any)[0] as string;
                 input = input.slice(space.length);
