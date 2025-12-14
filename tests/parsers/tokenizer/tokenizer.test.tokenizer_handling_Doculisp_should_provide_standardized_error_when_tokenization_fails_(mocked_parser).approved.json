@@ -1,5 +1,7 @@
 {
   "documentPath": "D:/comments/simple.md",
-  "message": "Parse Error: Tokenization failed: Simulated string parser failure",
+  "failureCategory": "Parse Error",
+  "message": "Tokenization failed: Simulated string parser failure",
+  "processingStep": "Tokenization",
   "success": false
 }
