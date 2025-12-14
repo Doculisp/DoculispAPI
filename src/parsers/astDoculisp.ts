@@ -315,7 +315,7 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
 
                 const errorMsg = getSymbolErrorMessage('section', id, current, idIdentifier, textHelper);
                 if(errorMsg) {
-                    return util.fail(errorMsg, current.documentPath);
+                    return validationFailure(errorMsg.replace(/^Validation Error: /, ''), current.documentPath);
                 }
 
                 if(!textHelper.isLowercase(id)) {
