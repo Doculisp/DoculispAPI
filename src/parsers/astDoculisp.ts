@@ -319,7 +319,7 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
                 }
 
                 if(!textHelper.isLowercase(id)) {
-                    return util.fail(`Validation Error: Section id '${id}' at '${current.documentPath.fullName}' must be lowercase (Line: ${idIdentifier.location.line}, Char: ${idIdentifier.location.char}). Did you mean '${id.toLocaleLowerCase()}'?`, current.documentPath)
+                    return validationFailure(`Section id '${id}' at '${current.documentPath.fullName}' must be lowercase (Line: ${idIdentifier.location.line}, Char: ${idIdentifier.location.char}). Did you mean '${id.toLocaleLowerCase()}'?`, current.documentPath)
                 }
 
                 if(variableTable.hasKey(id)) {

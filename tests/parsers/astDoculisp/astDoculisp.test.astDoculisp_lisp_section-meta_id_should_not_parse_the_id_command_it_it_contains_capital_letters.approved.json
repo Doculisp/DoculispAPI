@@ -2,7 +2,9 @@
   "000_given": "\n<!-- (dl\n(section-meta\n    (title The use of IDs)\n    (id my-Id)\n)\n) -->\n",
   "999_received": {
     "documentPath": "main.md",
-    "message": "Validation Error: Section id 'my-Id' at 'main.md' must be lowercase (Line: 5, Char: 6). Did you mean 'my-id'?",
+    "failureCategory": "Validation Error",
+    "message": "Section id 'my-Id' at 'main.md' must be lowercase (Line: 5, Char: 6). Did you mean 'my-id'?",
+    "processingStep": "Doculisp AST Parsing",
     "success": false
   }
 }
