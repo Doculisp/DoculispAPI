@@ -5,7 +5,7 @@
 (section-meta
     (title Changelog)
     (include
-        (Unreleased ./unreleased.md)
+        (Release ./3_0_0.md)
         (Release ./2_1_0.md)
         (Release ./2_0_0.md)
         (Release ./1_0_1.md)
