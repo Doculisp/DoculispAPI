@@ -11,7 +11,7 @@ import { IPath } from "../types/types.filePath";
 import { IProjectDocuments, IProjectParser } from "../types/types.astProject";
 
 function buildAstBuilder(util: IUtil, doculispParser: IDoculispParser, documentParse: DocumentParser, tokenizer: TokenFunction, fileHandler: IFileHandler, astParser: IAstParser, astProjectParse: IProjectParser) : IIncludeBuilder {
-    const failureBuilder = util.failAlt('Include Processing')('Include Error');
+    const failureBuilder = util.fail('Include Processing')('Include Error');
 
     function _parse(filePath: IPath, location: IProjectLocation, variableTable: IVariableTable): Result<IDoculisp | IEmptyDoculisp> {
         const workingDir = fileHandler.getProcessWorkingDirectory();

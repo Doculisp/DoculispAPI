@@ -4,7 +4,7 @@ import { getVerifiers } from "../../tools";
 import { Options } from "approvals/lib/Core/Options";
 import { IContainer, ITestableContainer } from "../../../src/types/types.containers";
 import { TokenFunction, TokenizedDocument } from '../../../src/types/types.tokens';
-import { IFailAlt, ILocation, ISuccess, IUtil, Result, IProjectLocation } from "../../../src/types/types.general";
+import { IFail, ILocation, ISuccess, IUtil, Result, IProjectLocation } from "../../../src/types/types.general";
 import { DocumentMap } from "../../../src/types/types.document";
 import { buildProjectLocation, testable, buildPath, buildLocation } from "../../testHelpers";
 import { IPath, PathConstructor } from "../../../src/types/types.filePath";
@@ -17,7 +17,7 @@ describe('tokenizer', () => {
     let verifyAsJson: (data: any, options?: Options) => void = undefined as any;
     let verifyWithGiven: (data: any, options?: Options | undefined, ...given: any[]) => void = undefined as any;
     let ok: (successfulValue: any) => ISuccess<any> = undefined as any;
-    let fail: (message: string, documentPath?: IPath) => IFailAlt = undefined as any;
+    let fail: (message: string, documentPath?: IPath) => IFail = undefined as any;
     let util: IUtil = undefined as any;
     let getLocation: (path: string, depth: number, index: number, line: number, char: number, extension?: string | false) => ILocation = undefined as any;
 
@@ -39,7 +39,7 @@ describe('tokenizer', () => {
         });
 
         ok = util.ok;
-        fail = util.failAlt('Tokenization')('Parse Error');
+        fail = util.fail('Tokenization')('Parse Error');
     });
 
     it('should fail if document parsing failed', () => {

@@ -4,7 +4,7 @@ import { IVersion } from "../types/types.version";
 import { PathConstructor } from "../types/types.filePath";
 
 function buildVersion(util: IUtil, pathConstructor: PathConstructor): IVersion {
-    const failureBuilder = util.failAlt('Package Information Retrieval');
+    const failureBuilder = util.fail('Package Information Retrieval');
     
     function getVersion(): Result<string> {
         const file = require('../../package.json');

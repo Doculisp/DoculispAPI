@@ -25,7 +25,7 @@ type ParesBuilder = {
 };
 
 function getPartParsers(projectLocation: IProjectLocation, doesIt: IDocumentSearches, internals: IInternals, util: IUtil): ParesBuilder {
-    const parseFailure = util.failAlt('Document Parsing')('Parse Error');
+    const parseFailure = util.fail('Document Parsing')('Parse Error');
     
     function isStopParsingWhiteSpace(input: string, _current: ILocation): Result<'stop' | false> {
         const regex = /^\S+/;
@@ -854,8 +854,8 @@ function lineBuilder(util: IUtil, trimArray: ITrimArray): HandleValue<DocumentPa
 
 function documentParse(doesIt: IDocumentSearches, parserBuilder: IInternals, util: IUtil, trimArray: ITrimArray): Valid<DocumentParser> {    
     return function (documentText: string, projectLocation: IProjectLocation): Result<DocumentMap> {
-        const parseFailure = util.failAlt('Document Parsing')('Parse Error');
-        const validationFailure = util.failAlt('Document Parsing')('Validation Error');
+        const parseFailure = util.fail('Document Parsing')('Parse Error');
+        const validationFailure = util.fail('Document Parsing')('Validation Error');
         if(projectLocation.documentDepth <= 0) {
             return validationFailure(`Document depth must be a value of 1 or larger.`, projectLocation.documentPath);
         }

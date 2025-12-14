@@ -57,7 +57,7 @@ export type ProcessingStep =
     | 'Package Information Retrieval'
     | 'Input Validation';
 
-export interface IFailAlt {
+export interface IFail {
     readonly message: string;
     readonly documentPath?: IPath | undefined;
     readonly success: false;
@@ -65,7 +65,7 @@ export interface IFailAlt {
     readonly processingStep: ProcessingStep;
 };
 
-export type Result<T> = ISuccess<T> | IFailAlt;
+export type Result<T> = ISuccess<T> | IFail;
 
 export type LocationBuilder = (line: number, char: number) => ILocation;
 
@@ -73,7 +73,7 @@ export type UtilBuilder = () => IUtil;
 
 export interface IUtil {
     ok<T>(successfulValue: T): ISuccess<T>;
-    failAlt(step: ProcessingStep) : (category: FailureCategory) => (message: string, documentPath?: IPath) => IFailAlt;
+    fail(step: ProcessingStep) : (category: FailureCategory) => (message: string, documentPath?: IPath) => IFail;
     location: (documentPath: IPath, documentDepth: number, documentIndex: number, line: number, char: number) => ILocation;
     toLocation: (projectLocation: IProjectLocation, line: number, char: number) => ILocation;
     getProjectLocation: (location: ILocation) => IProjectLocation;

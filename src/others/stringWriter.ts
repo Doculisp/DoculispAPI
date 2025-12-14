@@ -8,7 +8,7 @@ import { destKey, IStringArray, IVariableEmptyId, IVariableId, IVariablePath, IV
 function buildWriter(util: IUtil, stringBuilderConstructor: StringBuilderConstructor) : IStringWriter {
 
     // Structured error handling helpers
-    const validationFailure = util.failAlt('Building Document')('Validation Error');
+    const validationFailure = util.fail('Building Document')('Validation Error');
 
     function writeAstWrite(astWrite: IWrite) : string {
         return astWrite.value;

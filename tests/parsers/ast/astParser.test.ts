@@ -2,7 +2,7 @@ import { Options } from "approvals/lib/Core/Options";
 import { configure } from "approvals/lib/config";
 import { getVerifiers } from "../../tools";
 import { containerPromise } from "../../../src/moduleLoader";
-import { IFailAlt, IProjectLocation, ISuccess, IUtil, Result } from "../../../src/types/types.general";
+import { IFail, IProjectLocation, ISuccess, IUtil, Result } from "../../../src/types/types.general";
 import { TokenizedDocument } from "../../../src/types/types.tokens";
 import { buildPath, buildProjectLocation, testable } from "../../testHelpers";
 import { IAstParser, IAstEmpty, RootAst } from '../../../src/types/types.ast';
@@ -14,7 +14,7 @@ describe('ast', () => {
     let verifyAsJson: (data: any, options?: Options) => void;
     let verifyWithGiven: (data: any, options?: Options | undefined, ...given: any[]) => void;
     let ok: (successfulValue: any) => ISuccess<any> = undefined as any;
-    let fail: (message: string, documentPath?: IPath) => IFailAlt = undefined as any;
+    let fail: (message: string, documentPath?: IPath) => IFail = undefined as any;
     let util: IUtil = undefined as any;
     let toResult: (text: string, projectLocation: IProjectLocation) => Result<RootAst | IAstEmpty> = undefined as any;
 
@@ -31,7 +31,7 @@ describe('ast', () => {
         });
         
         ok = util.ok;
-        fail = util.failAlt('AST Parsing')('Parse Error');
+        fail = util.fail('AST Parsing')('Parse Error');
     });
 
     describe('basic functionality', () => {

@@ -1,7 +1,7 @@
 import { IDictionary, ITestableContainer } from "../../src/types/types.containers";
 import { IFileWriter } from "../../src/types/types.fileHandler";
 import { IPath, PathConstructor } from "../../src/types/types.filePath";
-import { IFailAlt, IUtil, Result } from "../../src/types/types.general";
+import { IFail, IUtil, Result } from "../../src/types/types.general";
 import { IIncludeBuilder } from "../../src/types/types.includeBuilder";
 import { IDoculisp, IEmptyDoculisp } from "../../src/types/types.astDoculisp";
 import { IVariablePath, IVariableTable, sourceKey } from "../../src/types/types.variableTable";
@@ -175,7 +175,7 @@ describe('Controller',() => {
     
         it('ast parsing failure returns error', () => {
             const sourcePath = pathConstructor('./someFile.md');
-            includeConfig.result = util.failAlt('Doculisp AST Parsing')('Parse Error')('A bad parse', sourcePath);
+            includeConfig.result = util.fail('Doculisp AST Parsing')('Parse Error')('A bad parse', sourcePath);
             table.addValue(sourceKey, { type: 'variable-path', value: sourcePath });
             const result = sut.test(table);
     
@@ -184,7 +184,7 @@ describe('Controller',() => {
     
         it('markdown conversion failure returns error', () => {
             const sourcePath = pathConstructor('./someFile.md');
-            writerConfig.result = util.failAlt('Doculisp AST Parsing')('Parse Error')('Unable to write', sourcePath);
+            writerConfig.result = util.fail('Doculisp AST Parsing')('Parse Error')('Unable to write', sourcePath);
             table.addValue(sourceKey, { type: 'variable-path', value: sourcePath });
             const result = sut.test(table);
     
@@ -207,7 +207,7 @@ describe('Controller',() => {
         it('ast parsing failure returns error', () => {
             const sourcePath = pathConstructor('./someFile.md');
             const destinationPath = pathConstructor('./README.md');
-            includeConfig.result = util.failAlt('Doculisp AST Parsing')('Parse Error')('Unable to parse ast', sourcePath);
+            includeConfig.result = util.fail('Doculisp AST Parsing')('Parse Error')('Unable to parse ast', sourcePath);
 
             const result = sut.compile(sourcePath, destinationPath);
 
@@ -217,7 +217,7 @@ describe('Controller',() => {
         it('markdown conversion failure returns error', () => {
             const sourcePath = pathConstructor('./someFile.md');
             const destinationPath = pathConstructor('./README.md');
-            writerConfig.result = util.failAlt('Doculisp AST Parsing')('Parse Error')('Unable to write', sourcePath);
+            writerConfig.result = util.fail('Doculisp AST Parsing')('Parse Error')('Unable to write', sourcePath);
             
             const result = sut.compile(sourcePath, destinationPath);
     
@@ -227,7 +227,7 @@ describe('Controller',() => {
         it('file writing failure returns error', () => {
             const sourcePath = pathConstructor('./someFile.md');
             const destinationPath = pathConstructor('./README.md');
-            fileConfig.result = util.failAlt('File Operations')('File System Error')('Unable to write file', destinationPath);
+            fileConfig.result = util.fail('File Operations')('File System Error')('Unable to write file', destinationPath);
 
             const result = sut.compile(sourcePath, destinationPath);
 
@@ -246,7 +246,7 @@ describe('Controller',() => {
 
             expect(result.length).toBe(1);
             expect(result[0]?.success).toBe(false);
-            const failure = result[0] as IFailAlt;
+            const failure = result[0] as IFail;
             expect(failure.message).toMatch(/^Must have a destination file\./);
             expect(failure.failureCategory).toBe('Validation Error');
             expect(failure.processingStep).toBe('Input Validation');
@@ -259,7 +259,7 @@ describe('Controller',() => {
 
             expect(result.length).toBe(1);
             expect(result[0]?.success).toBe(false);
-            const failure = result[0] as IFailAlt;
+            const failure = result[0] as IFail;
             expect(failure.message).toMatch(/^A project file cannot have a destination path\./);
             expect(failure.failureCategory).toBe('Validation Error');
             expect(failure.processingStep).toBe('Input Validation');
@@ -270,7 +270,7 @@ describe('Controller',() => {
 
             expect(result.length).toBe(1);
             expect(result[0]?.success).toBe(false);
-            const failure = result[0] as IFailAlt;
+            const failure = result[0] as IFail;
             expect(failure.message).toMatch(/^A source file must be given\./);
             expect(failure.failureCategory).toBe('Validation Error');
             expect(failure.processingStep).toBe('Input Validation');

@@ -6,7 +6,7 @@ import { Result, UtilBuilder } from "../types/types.general";
 function buildLoader(utilBuilder: UtilBuilder, fs: any, pathConstructor: PathConstructor): IFileHandler {
 
     const util = utilBuilder();
-    const failureBuilder = util.failAlt('File Operations')('File System Error');
+    const failureBuilder = util.fail('File Operations')('File System Error');
 
     function load(filePath: IPath): Result<string> {
         try {

@@ -6,7 +6,7 @@ import { IdentifierToken, ParameterToken, TextToken, Token, TokenizedDocument } 
 import { ITrimArray } from "../types/types.trimArray";
 
 function buildAstParser(util: IUtil, internals: IInternals, trimArray: ITrimArray): IAstParser {
-    const failureBuilder = util.failAlt('AST Parsing')('Parse Error');
+    const failureBuilder = util.fail('AST Parsing')('Parse Error');
     
     function parseTextToken(token: TextToken): IAstValue {
         return {

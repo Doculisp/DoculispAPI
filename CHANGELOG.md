@@ -126,7 +126,7 @@
 ### New Features ###
 
 - **Enhanced Error Handling**: Introduced advanced error categorization and processing step tracking
-  - **Extended Error Interface**: New `IFailAlt` interface provides enhanced error information beyond basic failure messages
+  - **Extended Error Interface**: New `IFail` interface provides enhanced error information beyond basic failure messages
     - **Failure Categories**: Errors now classified into logical categories (`Parse Error`, `Validation Error`, `File System Error`, `Include Error`)
     - **Processing Steps**: Detailed tracking of where in the pipeline errors occur (`Document Parsing`, `Tokenization`, `AST Parsing`, etc.)
     - **Enhanced Debugging**: Developers can now understand both what went wrong and where it happened in the processing pipeline
@@ -134,8 +134,8 @@
     - **Backward Compatibility**: Existing `IFail` interface remains fully functional and unchanged
     - **Enhanced Result Types**: `Result<T>` now supports both traditional and enhanced error types
     - **Gradual Adoption**: Teams can migrate to enhanced error handling incrementally without breaking changes
-  - **Improved Error Builder**: New `failAlt()` method provides structured error creation
-    - **Curried Interface**: `util.failAlt(step)(message, category, path)` enables step-specific error builders
+  - **Improved Error Builder**: New `fail()` method provides structured error creation
+    - **Curried Interface**: `util.fail(step)(message, category, path)` enables step-specific error builders
     - **Consistent Categorization**: Enforces proper error classification at the point of creation
     - **Clean Message Format**: Error messages no longer require category prefixes - handled automatically by the interface
   - **Implementation Progress**: Enhanced error handling successfully deployed across core system components
@@ -151,8 +151,8 @@
       - **Processing Step Tracking**: Input validation properly categorized under 'Input Validation' step
       - **Validation Error Classification**: Missing files, invalid project configurations classified as 'Validation Error' category
       - **Entry Point Coverage**: High-level API validation before processing pipeline begins
-    - **Improved Currying Pattern**: Enhanced `failAlt()` signature for better developer ergonomics
-      - **Two-Stage Currying**: `util.failAlt(step)(category)(message, path)` enables flexible builder patterns
+    - **Improved Currying Pattern**: Enhanced `fail()` signature for better developer ergonomics
+      - **Two-Stage Currying**: `util.fail(step)(category)(message, path)` enables flexible builder patterns
       - **Category Pre-specification**: Allows creating category-specific builders to reduce repetition
       - **Mixed Category Support**: Handles files with multiple error categories through multiple builders
     - **Doculisp AST Parser Migration**: Core Doculisp semantic validation migrated to enhanced error handling
@@ -162,7 +162,7 @@
       - **Validation Error Cleanup**: Removed redundant "Validation Error:" prefixes since category is now structured metadata
       - **Parse vs Validation Separation**: Clear distinction between parsing failures and semantic validation failures
       - **Builder Pattern Implementation**: Category-specific builders (`parseFailure`, `validationFailure`) reduce code duplication
-      - **Test Coverage Maintenance**: All approval tests updated to expect new IFailAlt error structure with processingStep and failureCategory fields
+      - **Test Coverage Maintenance**: All approval tests updated to expect new IFail error structure with processingStep and failureCategory fields
 
 ### Benefits ###
 

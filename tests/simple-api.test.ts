@@ -18,7 +18,7 @@ describe('Simple Doculisp API', () => {
             const util = api.getUtil();
             expect(util).toBeDefined();
             expect(typeof util.ok).toBe('function');
-            expect(typeof util.failAlt).toBe('function');
+            expect(typeof util.fail).toBe('function');
         });
 
         it('path constructor access provides functionality', () => {
@@ -68,7 +68,7 @@ describe('Simple Doculisp API', () => {
 
         it('failure result creation works correctly', () => {
             const util = api.getUtil();
-            const result = util.failAlt('File Operations')('File System Error')('test error');
+            const result = util.fail('File Operations')('File System Error')('test error');
             
             expect(result.success).toBe(false);
             expect(result.message).toBe('test error');

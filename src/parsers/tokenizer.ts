@@ -29,7 +29,7 @@ function getTokenBuilder() {
 
 function buildTokenize(doesIt: ILispSearches, internals: IInternals, util: IUtil) : TokenFunction {
     return function tokenize (documentMap: Result<DocumentMap>): Result<TokenizedDocument> {
-        const parseFailure = util.failAlt('Tokenization')('Parse Error');
+        const parseFailure = util.fail('Tokenization')('Parse Error');
         let isToken = false;
     
         function tokenizeWhiteSpace(input: string, current: ILocation): StringStepParseResult<Token> {

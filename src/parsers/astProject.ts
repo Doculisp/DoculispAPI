@@ -22,8 +22,8 @@ interface IOutput {
 
 function buildAstProject(internals: IInternals, util: IUtil, trimArray: ITrimArray, pathConstructor: PathConstructor, textHelper: TextHelper): IProjectParser {
     function parse(tokenResults: Result<RootAst | IAstEmpty>, variableTable: IVariableTable): Result<IProjectDocuments> {
-        const parseFailure = util.failAlt('Project AST Parsing')('Parse Error');
-        const validationFailure = util.failAlt('Project AST Parsing')('Validation Error');
+        const parseFailure = util.fail('Project AST Parsing')('Parse Error');
+        const validationFailure = util.fail('Project AST Parsing')('Validation Error');
         
         if (!tokenResults.success) {
             return tokenResults;

@@ -27,8 +27,8 @@ function getSymbolErrorMessage<T extends Ast>(typeId: string, word: string, curr
 }
 
 function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArray, pathConstructor: PathConstructor, textHelper: TextHelper): IDoculispParser {
-    const parseFailure = util.failAlt('Doculisp AST Parsing')('Parse Error');
-    const validationFailure = util.failAlt('Doculisp AST Parsing')('Validation Error');
+    const parseFailure = util.fail('Doculisp AST Parsing')('Parse Error');
+    const validationFailure = util.fail('Doculisp AST Parsing')('Validation Error');
     
     function parse(astResult: Result<RootAst | IAstEmpty>, variableTable: IVariableTable): Result<IDoculisp | IEmptyDoculisp> {
         if(!astResult.success) {

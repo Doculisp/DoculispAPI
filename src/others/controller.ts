@@ -17,7 +17,7 @@ type CompileResult = {
 };
 
 function buildLoader(util: IUtil, handler: IFileWriter, astBuilder: IIncludeBuilder, stringWrter: IStringWriter, variableTable: IVariableTable): IController {
-    const failureBuilder = util.failAlt('Input Validation')('Validation Error');
+    const failureBuilder = util.fail('Input Validation')('Validation Error');
     
     function _write(doculisp: Result<IDoculisp | IEmptyDoculisp>, variableTable: IVariableTable): Result<string | false> {
         const document = stringWrter.writeAst(doculisp, variableTable);

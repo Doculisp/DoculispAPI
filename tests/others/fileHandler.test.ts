@@ -1,7 +1,7 @@
 import { containerPromise } from "../../src/moduleLoader";
 import { ITestableContainer } from "../../src/types/types.containers";
 import { IFileHandler } from "../../src/types/types.fileHandler";
-import { IFailAlt } from "../../src/types/types.general";
+import { IFail } from "../../src/types/types.general";
 import { IPath } from "../../src/types/types.filePath";
 
 describe('File Handler Error Messages', () => {
@@ -38,7 +38,7 @@ describe('File Handler Error Messages', () => {
             };
             const result = fileHandler.load(fakePath);
             expect(result.success).toBe(false);
-            const failResult = result as IFailAlt;
+            const failResult = result as IFail;
             expect(failResult.message).toMatch(/^File load failed:/);
             expect(failResult.failureCategory).toBe('File System Error');
             expect(failResult.processingStep).toBe('File Operations');
@@ -67,7 +67,7 @@ describe('File Handler Error Messages', () => {
             const textResult = { success: true, value: 'test content' } as any;
             const result = testFileHandler.write(fakePath, textResult);
             expect(result.success).toBe(false);
-            const failResult = result as IFailAlt;
+            const failResult = result as IFail;
             expect(failResult.message).toMatch(/^File write failed:/);
             expect(failResult.failureCategory).toBe('File System Error');
             expect(failResult.processingStep).toBe('File Operations');
@@ -84,7 +84,7 @@ describe('File Handler Error Messages', () => {
             try {
                 const result = fileHandler.getProcessWorkingDirectory();
                 expect(result.success).toBe(false);
-                const failResult = result as IFailAlt;
+                const failResult = result as IFail;
                 expect(failResult.message).toMatch(/^Working directory access failed:/);
                 expect(failResult.failureCategory).toBe('File System Error');
                 expect(failResult.processingStep).toBe('File Operations');
@@ -104,7 +104,7 @@ describe('File Handler Error Messages', () => {
             };
             const result = fileHandler.setProcessWorkingDirectory(fakePath);
             expect(result.success).toBe(false);
-            const failResult = result as IFailAlt;
+            const failResult = result as IFail;
             expect(failResult.message).toMatch(/^Working directory change failed:/);
             expect(failResult.message).toContain('/nonexistent/directory');
             expect(failResult.failureCategory).toBe('File System Error');
