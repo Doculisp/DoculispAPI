@@ -329,7 +329,7 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
                     if(orig && orig.type === 'variable-id') {
                         msg = `\n\tOriginal us of Id was in '${orig.source.documentPath}' Line: ${orig.source.line}, Char: ${orig.source.char}.`;
                     }
-                    return util.fail(`Validation Error: Section id '${id}' at '${current.documentPath.fullName}' has already been used (Line: ${idIdentifier.location.line}, Char: ${idIdentifier.location.char}).${msg}`, current.documentPath);
+                    return validationFailure(`Section id '${id}' at '${current.documentPath.fullName}' has already been used (Line: ${idIdentifier.location.line}, Char: ${idIdentifier.location.char}).${msg}`, current.documentPath);
                 }
 
                 const destinationPath = (
