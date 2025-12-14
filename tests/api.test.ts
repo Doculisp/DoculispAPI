@@ -97,7 +97,7 @@ describe('Doculisp API', () => {
             const util = api.getUtil();
             expect(util).toBeDefined();
             expect(typeof util.ok).toBe('function');
-            expect(typeof util.fail).toBe('function');
+            expect(typeof util.failAlt).toBe('function');
         });
     });
 });

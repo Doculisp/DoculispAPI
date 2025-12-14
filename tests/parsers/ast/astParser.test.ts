@@ -31,7 +31,7 @@ describe('ast', () => {
         });
         
         ok = util.ok;
-        fail = util.fail;
+        fail = util.failAlt('AST Parsing')('Parse Error');
     });
 
     describe('basic functionality', () => {

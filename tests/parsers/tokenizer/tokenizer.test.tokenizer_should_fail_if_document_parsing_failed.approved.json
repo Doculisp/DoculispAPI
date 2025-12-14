@@ -1,5 +1,7 @@
 {
   "documentPath": "X:/non-exist.dlisp",
+  "failureCategory": "Parse Error",
   "message": "This document did not parse",
+  "processingStep": "Tokenization",
   "success": false
 }

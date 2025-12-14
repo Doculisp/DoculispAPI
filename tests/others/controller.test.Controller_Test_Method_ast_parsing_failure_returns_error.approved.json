@@ -2,7 +2,9 @@
   "01 Parse Ast": {
     "result": {
       "documentPath": "./someFile.md",
+      "failureCategory": "Parse Error",
       "message": "A bad parse",
+      "processingStep": "Doculisp AST Parsing",
       "success": false
     },
     "sourcePath": "./someFile.md"
@@ -10,14 +12,18 @@
   "02 Convert to Markdown": {
     "astMaybe": {
       "documentPath": "./someFile.md",
+      "failureCategory": "Parse Error",
       "message": "A bad parse",
+      "processingStep": "Doculisp AST Parsing",
       "success": false
     }
   },
   "03 Final Result": [
     {
       "documentPath": "./someFile.md",
+      "failureCategory": "Parse Error",
       "message": "A bad parse",
+      "processingStep": "Doculisp AST Parsing",
       "success": false
     }
   ]

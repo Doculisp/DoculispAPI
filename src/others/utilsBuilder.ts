@@ -1,6 +1,6 @@
 import { IRegisterable } from "../types/types.containers";
 import { IPath } from "../types/types.filePath";
-import { FailureCategory, IFail, IFailAlt, ILocation, IProjectLocation, ISuccess, IUtil, IsAfter, IsBefore, IsOrder, IsSame, ProcessingStep, isAfter, isBefore, isSame } from "../types/types.general";
+import { FailureCategory, IFailAlt, ILocation, IProjectLocation, ISuccess, IUtil, IsAfter, IsBefore, IsOrder, IsSame, ProcessingStep, isAfter, isBefore, isSame } from "../types/types.general";
 
 function before() : IsBefore { return isBefore; }
 function after()  : IsAfter  { return isAfter; }
@@ -133,14 +133,6 @@ function buildGeneral(): IUtil {
         };
     };
 
-    function fail(message: string, documentPath?: IPath) : IFail {
-        return {
-            message,
-            documentPath: documentPath,
-            success: false,
-        };
-    };
-
     function failAlt(step: ProcessingStep) : (category: FailureCategory) => (message: string, documentPath?: IPath) => IFailAlt {
         return (category: FailureCategory) => {
             return (message: string, documentPath?: IPath) : IFailAlt => {
@@ -157,7 +149,6 @@ function buildGeneral(): IUtil {
 
     return {
         ok,
-        fail,
         failAlt,
         location,
         toLocation,

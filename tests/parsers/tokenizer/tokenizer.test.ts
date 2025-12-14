@@ -39,7 +39,7 @@ describe('tokenizer', () => {
         });
 
         ok = util.ok;
-        fail = util.fail;
+        fail = util.failAlt('Tokenization')('Parse Error');
     });
 
     it('should fail if document parsing failed', () => {

@@ -1,5 +1,7 @@
 {
   "documentPath": "Z:/mybad.dlisp",
+  "failureCategory": "Parse Error",
   "message": "this is a document failure",
+  "processingStep": "Doculisp AST Parsing",
   "success": false
 }

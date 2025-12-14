@@ -11,14 +11,18 @@
     },
     "result": {
       "documentPath": "./someFile.md",
+      "failureCategory": "Parse Error",
       "message": "Unable to write",
+      "processingStep": "Doculisp AST Parsing",
       "success": false
     }
   },
   "03 Final Result": [
     {
       "documentPath": "./someFile.md",
+      "failureCategory": "Parse Error",
       "message": "Unable to write",
+      "processingStep": "Doculisp AST Parsing",
       "success": false
     }
   ]

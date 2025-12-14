@@ -41,7 +41,7 @@ describe('astDoculisp', () => {
         });
         
         ok = util.ok;
-        fail = util.fail;
+        fail = util.failAlt('Doculisp AST Parsing')('Parse Error');
     });
 
     describe('basic functionality', () => {

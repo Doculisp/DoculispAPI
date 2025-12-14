@@ -36,7 +36,7 @@ describe('includeBuilder', () => {
         variableSaver.clear();
 
         ok = util.ok;
-        fail = util.fail;
+        fail = util.failAlt('File Operations')('File System Error');
 
         let pathToResult: IDictionary<Result<string>> = undefined as any;
         pathToResult = null as any;
@@ -51,7 +51,7 @@ describe('includeBuilder', () => {
                     return result;
                 }
 
-                return util.fail(`filePath has not been setup.`, filePath);
+                return fail(`filePath has not been setup.`, filePath);
             },
             getProcessWorkingDirectory(): Result<IPath> { return util.ok(buildPath('./', false)); },
             setProcessWorkingDirectory(): Result<undefined> { return util.ok(undefined); },

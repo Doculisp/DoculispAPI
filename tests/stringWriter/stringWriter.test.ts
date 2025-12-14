@@ -42,7 +42,7 @@ describe('stringWriter', () => {
 
         const util: IUtil = environment.buildAs<IUtil>('util');
         
-        fail = util.fail;
+        fail = util.failAlt('Document Parsing')('Parse Error');
     }
 
     beforeEach(async () => {

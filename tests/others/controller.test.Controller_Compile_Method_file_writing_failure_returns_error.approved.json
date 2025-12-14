@@ -18,14 +18,18 @@
     "outputPath": "./README.md",
     "result": {
       "documentPath": "./README.md",
+      "failureCategory": "File System Error",
       "message": "Unable to write file",
+      "processingStep": "File Operations",
       "success": false
     }
   },
   "04 Final Result": [
     {
       "documentPath": "./README.md",
+      "failureCategory": "File System Error",
       "message": "Unable to write file",
+      "processingStep": "File Operations",
       "success": false
     }
   ]
