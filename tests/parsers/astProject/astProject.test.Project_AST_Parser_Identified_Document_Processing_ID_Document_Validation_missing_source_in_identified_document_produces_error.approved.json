@@ -1,5 +1,7 @@
 {
   "documentPath": "/docs.dlproj",
-  "message": "Validation Error: Missing source block in document identifier at '/docs.dlproj' (Line: 4, Char: 10).",
+  "failureCategory": "Validation Error",
+  "message": "Missing source block in document identifier at '/docs.dlproj' (Line: 4, Char: 10).",
+  "processingStep": "Project AST Parsing",
   "success": false
 }

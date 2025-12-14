@@ -1,4 +1,6 @@
 {
-  "message": "Validation Error: Document ID must be lowercase at '/docs.dlproj' (Line: 4, Char: 10). Did you mean 'readme'?",
+  "failureCategory": "Validation Error",
+  "message": "Document ID must be lowercase at '/docs.dlproj' (Line: 4, Char: 10). Did you mean 'readme'?",
+  "processingStep": "Project AST Parsing",
   "success": false
 }

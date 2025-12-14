@@ -1,5 +1,7 @@
 {
   "documentPath": "/docs.dlproj",
-  "message": "Validation Error: Duplicate document ID 'readme' at '/docs.dlproj' (Line: 10, Char: 10).\n  Original use of ID was at '/docs.dlproj' (Line: 5, Char: 14).",
+  "failureCategory": "Validation Error",
+  "message": "Duplicate document ID 'readme' at '/docs.dlproj' (Line: 10, Char: 10).\n  Original use of ID was at '/docs.dlproj' (Line: 5, Char: 14).",
+  "processingStep": "Project AST Parsing",
   "success": false
 }

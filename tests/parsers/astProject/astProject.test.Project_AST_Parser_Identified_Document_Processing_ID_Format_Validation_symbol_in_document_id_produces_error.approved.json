@@ -1,4 +1,6 @@
 {
-  "message": "Validation Error: Invalid characters in document ID 'readmeϐ' at '/docs.dlproj' (Line: 4, Char: 10).\n  'ϐ' at ID character 7.",
+  "failureCategory": "Validation Error",
+  "message": "Invalid characters in document ID 'readmeϐ' at '/docs.dlproj' (Line: 4, Char: 10).\n  'ϐ' at ID character 7.",
+  "processingStep": "Project AST Parsing",
   "success": false
 }

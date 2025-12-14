@@ -1,5 +1,7 @@
 {
   "documentPath": "./malformed.dlproj",
-  "message": "Parse Error: Documents block contains unknown identifier 'document' at './malformed.dlproj' (Line: 3, Char: 6).",
+  "failureCategory": "Parse Error",
+  "message": "Documents block contains unknown identifier 'document' at './malformed.dlproj' (Line: 3, Char: 6).",
+  "processingStep": "Project AST Parsing",
   "success": false
 }

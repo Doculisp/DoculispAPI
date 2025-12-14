@@ -1,5 +1,7 @@
 {
   "documentPath": "./myBad.dlproj",
-  "message": "Parse Error: Duplicate documents block detected at './myBad.dlproj' (Line: 3, Char: 2). Project file may only contain a single documents block.",
+  "failureCategory": "Parse Error",
+  "message": "Duplicate documents block detected at './myBad.dlproj' (Line: 3, Char: 2). Project file may only contain a single documents block.",
+  "processingStep": "Project AST Parsing",
   "success": false
 }
