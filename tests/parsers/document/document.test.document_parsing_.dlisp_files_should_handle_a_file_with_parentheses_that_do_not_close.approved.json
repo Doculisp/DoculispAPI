@@ -1,5 +1,7 @@
 {
   "documentPath": "C:/main.dlisp",
-  "message": "Parse Error: Unclosed Doculisp block at 'C:/main.dlisp' (Line: 2, Char: 1).",
+  "failureCategory": "Parse Error",
+  "message": "Unclosed Doculisp block at 'C:/main.dlisp' (Line: 2, Char: 1).",
+  "processingStep": "Document Parsing",
   "success": false
 }

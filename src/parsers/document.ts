@@ -537,7 +537,7 @@ function getPartParsers(projectLocation: IProjectLocation, doesIt: IDocumentSear
             const parsed = parser.parse(toParse, starting);
             if(parsed.success) {
                 if(0 < depth) {
-                    return util.fail(`Parse Error: Unclosed Doculisp block at '${starting.documentPath.fullName}' (Line: ${starting.line}, Char: ${starting.char}).`, projectLocation.documentPath);
+                    return parseFailure(`Unclosed Doculisp block at '${starting.documentPath.fullName}' (Line: ${starting.line}, Char: ${starting.char}).`, projectLocation.documentPath);
                 }
     
                 const [parts, leftover] = parsed.value;
