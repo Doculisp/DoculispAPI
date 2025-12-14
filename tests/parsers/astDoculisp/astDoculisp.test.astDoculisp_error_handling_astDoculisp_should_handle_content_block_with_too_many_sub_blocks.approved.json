@@ -1,5 +1,7 @@
 {
   "documentPath": "test.dlisp",
-  "message": "Validation Error: The content block at 'test.dlisp' has 3 blocks and can only have 0, 1, or 2 blocks (Line: 10, Char: 10).",
+  "failureCategory": "Validation Error",
+  "message": "The content block at 'test.dlisp' has 3 blocks and can only have 0, 1, or 2 blocks (Line: 10, Char: 10).",
+  "processingStep": "Doculisp AST Parsing",
   "success": false
 }

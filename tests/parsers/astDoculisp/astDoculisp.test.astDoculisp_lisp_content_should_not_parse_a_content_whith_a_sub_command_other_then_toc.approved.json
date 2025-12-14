@@ -1,5 +1,7 @@
 {
   "documentPath": "./itty.dlisp",
-  "message": "Validation Error: The content block at './itty.dlisp' has unknown command '#' (Line: 9, Char: 11).",
+  "failureCategory": "Validation Error",
+  "message": "The content block at './itty.dlisp' has unknown command '#' (Line: 9, Char: 11).",
+  "processingStep": "Doculisp AST Parsing",
   "success": false
 }

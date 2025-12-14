@@ -443,7 +443,7 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
                 ];
     
                 if(!validStyles.includes(bulletStyle as DoculispBulletStyle)) {
-                    return util.fail(`Validation Error: The toc block at '${location.documentPath.fullName}' has unknown bullet style '${bulletStyle}' (Line: ${location.line}, Char: ${location.char}).`, documentPath);
+                    return validationFailure(`The toc block at '${location.documentPath.fullName}' has unknown bullet style '${bulletStyle}' (Line: ${location.line}, Char: ${location.char}).`, documentPath);
                 }
 
                 return util.ok(bulletStyle as DoculispBulletStyle);
@@ -457,7 +457,7 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
                 }
     
                 if(1 < tocs.length) {
-                    return util.fail(`Validation Error: The content block at '${location.documentPath.fullName}' has more than one toc (Line: ${location.line}, Char: ${location.char}).`, location.documentPath);
+                    return validationFailure(`The content block at '${location.documentPath.fullName}' has more than one toc (Line: ${location.line}, Char: ${location.char}).`, location.documentPath);
                 }
 
                 const toc = tocs[0] as IdentifierAst;
@@ -465,12 +465,12 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
                 if(toc.type === 'ast-container') {
                     if(2 < toc.subStructure.length) {
                         const err = toc.subStructure[toc.subStructure.length -1] as IdentifierAst;
-                        return util.fail(`Validation Error: The content block at '${location.documentPath.fullName}' has ${toc.subStructure.length} blocks and can only have 0, 1, or 2 blocks (Line: ${err.location.line}, Char: ${err.location.char}).`, location.documentPath);
+                        return validationFailure(`The content block at '${location.documentPath.fullName}' has ${toc.subStructure.length} blocks and can only have 0, 1, or 2 blocks (Line: ${err.location.line}, Char: ${err.location.char}).`, location.documentPath);
                     }
 
                     const first = toc.subStructure[0] as IdentifierAst;
                     if(first.type !== 'ast-command' || !['label', 'style'].includes(first.value)){
-                        return util.fail(`Validation Error: The content block at '${location.documentPath.fullName}' contains unknown command '${first.value}' (Line: ${first.location.line}, Char: ${first.location.char}).`, location.documentPath);
+                        return validationFailure(`The content block at '${location.documentPath.fullName}' contains unknown command '${first.value}' (Line: ${first.location.line}, Char: ${first.location.char}).`, location.documentPath);
                     }
                     
                     let labelText: string | false = false;
@@ -493,11 +493,11 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
                         const second = toc.subStructure[1] as IdentifierAst;
 
                         if(second.type !== 'ast-command' || !['label', 'style'].includes(second.value)) {
-                            return util.fail(`Validation Error: The content block at '${location.documentPath.fullName}' contains unknown command '${first.value}' (Line: ${first.location.line}, Char: ${first.location.char}).`, location.documentPath);
+                            return validationFailure(`The content block at '${location.documentPath.fullName}' contains unknown command '${first.value}' (Line: ${first.location.line}, Char: ${first.location.char}).`, location.documentPath);
                         }
 
                         if(first.value === second.value) {
-                            return util.fail(`Validation Error: The content block at '${location.documentPath.fullName}' has a duplicate '${first.value}' block (Line: ${location.line}, Char: ${location.char}). First occurrence at (Line: ${second.location.line}, Char: ${second.location.char}).`, location.documentPath);
+                            return validationFailure(`The content block at '${location.documentPath.fullName}' has a duplicate '${first.value}' block (Line: ${location.line}, Char: ${location.char}). First occurrence at (Line: ${second.location.line}, Char: ${second.location.char}).`, location.documentPath);
                         }
 
                         if(second.value === 'label') {
@@ -559,15 +559,15 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
             }
     
             if(contentBlock.type === 'ast-command') {
-                return util.fail(`Validation Error: The content block at '${contentBlock.location.documentPath.fullName}' contains unknown parameter '${contentBlock.parameter.value}' (Line: ${contentBlock.location.line}, Char: ${contentBlock.location.char}).`, current.documentPath);
+                return validationFailure(`The content block at '${contentBlock.location.documentPath.fullName}' contains unknown parameter '${contentBlock.parameter.value}' (Line: ${contentBlock.location.line}, Char: ${contentBlock.location.char}).`, current.documentPath);
             }
 
             if(!hasSectionMeta) {
-                return util.fail(`Validation Error: The content block at '${contentBlock.location.documentPath.fullName}' exists before the section-meta block (Line: ${contentBlock.location.line}, Char: ${contentBlock.location.char}).`, current.documentPath);
+                return validationFailure(`The content block at '${contentBlock.location.documentPath.fullName}' exists before the section-meta block (Line: ${contentBlock.location.line}, Char: ${contentBlock.location.char}).`, current.documentPath);
             }
 
             if(!hasInclude) {
-                return util.fail(`Validation Error: The content block at '${contentBlock.location.documentPath.fullName}' exists without an include block that has external files (Line: ${contentBlock.location.line}, Char: ${contentBlock.location.char}).`, current.documentPath);
+                return validationFailure(`The content block at '${contentBlock.location.documentPath.fullName}' exists without an include block that has external files (Line: ${contentBlock.location.line}, Char: ${contentBlock.location.char}).`, current.documentPath);
             }
 
             const content: IContentLocation = {
@@ -589,7 +589,7 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
 
             if(0 < bad.length) {
                 const next = bad[0] as IdentifierAst;
-                return util.fail(`Validation Error: The content block at '${contentBlock.location.documentPath.fullName}' has unknown command '${next.value}' (Line: ${next.location.line}, Char: ${next.location.char}).`, current.documentPath);
+                return validationFailure(`The content block at '${contentBlock.location.documentPath.fullName}' has unknown command '${next.value}' (Line: ${next.location.line}, Char: ${next.location.char}).`, current.documentPath);
             }
     
             const tocMaybe = parseToc(contentBlock.subStructure, contentBlock.location);
@@ -626,11 +626,11 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
             }
 
             if(pathIdBlock.type === 'ast-identifier') {
-                return util.fail(`Validation Error: get-path command at "${current.documentPath.fullName}" is missing parameter (Line: ${pathIdBlock.location.line}, Char: ${pathIdBlock.location.char}).`, current.documentPath);
+                return validationFailure(`get-path command at "${current.documentPath.fullName}" is missing parameter (Line: ${pathIdBlock.location.line}, Char: ${pathIdBlock.location.char}).`, current.documentPath);
             }
 
             if(pathIdBlock.type === 'ast-container') {
-                return util.fail(`Validation Error: get-path command at "${current.documentPath.fullName}" contains unknown sub structure (Line: ${pathIdBlock.location.line}, Char: ${pathIdBlock.location.char}).`);
+                return parseFailure(`get-path command at "${current.documentPath.fullName}" contains unknown sub structure (Line: ${pathIdBlock.location.line}, Char: ${pathIdBlock.location.char}).`);
             }
 
             return util.ok({
@@ -663,7 +663,7 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
 
         if(0 < remaining.remaining.length) {
             const next = remaining.remaining[0] as CoreAst;
-            return util.fail(`Parse Error: Unknown identifier '${next.value}' at '${next.location.documentPath.fullName}' (Line: ${next.location.line}, Char: ${next.location.char}).`, next.location.documentPath);
+            return parseFailure(`Unknown identifier '${next.value}' at '${next.location.documentPath.fullName}' (Line: ${next.location.line}, Char: ${next.location.char}).`, next.location.documentPath);
         }
 
         return util.ok({

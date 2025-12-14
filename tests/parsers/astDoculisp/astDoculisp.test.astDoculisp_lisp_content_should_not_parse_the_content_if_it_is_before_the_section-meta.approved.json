@@ -1,5 +1,7 @@
 {
   "documentPath": "../main.dlisp",
-  "message": "Validation Error: The content block at '../main.dlisp' exists before the section-meta block (Line: 2, Char: 2).",
+  "failureCategory": "Validation Error",
+  "message": "The content block at '../main.dlisp' exists before the section-meta block (Line: 2, Char: 2).",
+  "processingStep": "Doculisp AST Parsing",
   "success": false
 }
