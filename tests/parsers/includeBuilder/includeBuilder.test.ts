@@ -1,6 +1,6 @@
 import { Options } from "approvals/lib/Core/Options";
 import { IContainer, IDictionary, ITestableContainer } from "../../../src/types/types.containers";
-import { IFail, IProjectLocation, ISuccess, IUtil, Result } from "../../../src/types/types.general";
+import { IFailAlt, IProjectLocation, ISuccess, IUtil, Result } from "../../../src/types/types.general";
 import { IDoculisp, IEmptyDoculisp } from "../../../src/types/types.astDoculisp";
 import { IIncludeBuilder } from "../../../src/types/types.includeBuilder";
 import { getVerifiers } from "../../tools";
@@ -18,7 +18,7 @@ describe('includeBuilder', () => {
     let container: IContainer = null as any;
     let util: IUtil = undefined as any;
     let ok: (successfulValue: any) => ISuccess<any> = undefined as any;
-    let fail: (message: string, documentPath?: IPath) => IFail = undefined as any;
+    let fail: (message: string, documentPath?: IPath) => IFailAlt = undefined as any;
     let addPathResult: (filePath: string, result: Result<string>) => void = undefined as any;
     let variableSaver: IVariableTestable = undefined as any;
 

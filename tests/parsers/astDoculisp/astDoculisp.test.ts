@@ -3,7 +3,7 @@ import { configure } from "approvals/lib/config";
 import { getVerifiers } from "../../tools";
 import { containerPromise } from "../../../src/moduleLoader";
 import { IDoculisp, IDoculispParser, IEmptyDoculisp } from '../../../src/types/types.astDoculisp'
-import { IFail, IProjectLocation, ISuccess, IUtil, Result } from "../../../src/types/types.general";
+import { IFailAlt, IProjectLocation, ISuccess, IUtil, Result } from "../../../src/types/types.general";
 import { buildPath, buildProjectLocation, testable } from "../../testHelpers";
 import { IAstEmpty, RootAst } from '../../../src/types/types.ast';
 import { destKey, IVariableTestable, sourceKey } from "../../../src/types/types.variableTable";
@@ -15,7 +15,7 @@ describe('astDoculisp', () => {
     let verifyAsJson: (data: any, options?: Options) => void;
     let verifyWithGiven: (data: any, options?: Options, ...given: any[]) => void;
     let ok: (successfulValue: any) => ISuccess<any> = undefined as any;
-    let fail: (message: string, documentPath?: IPath) => IFail = undefined as any;
+    let fail: (message: string, documentPath?: IPath) => IFailAlt = undefined as any;
     let util: IUtil = undefined as any;
     let toResult: (text: string, projectLocation: IProjectLocation) => Result<IDoculisp | IEmptyDoculisp> = undefined as any;
     let variableTable: IVariableTestable = undefined as any;

@@ -39,12 +39,6 @@ export interface ISuccess<T> {
     readonly success: true;
 };
 
-export interface IFail {
-    readonly message: string;
-    readonly documentPath?: IPath | undefined;
-    readonly success: false;
-};
-
 export type FailureCategory = 
     | 'Parse Error'
     | 'Validation Error'
@@ -71,7 +65,7 @@ export interface IFailAlt {
     readonly processingStep: ProcessingStep;
 };
 
-export type Result<T> = ISuccess<T> | IFail | IFailAlt;
+export type Result<T> = ISuccess<T> | IFailAlt;
 
 export type LocationBuilder = (line: number, char: number) => ILocation;
 
