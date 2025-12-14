@@ -7,14 +7,14 @@
 
 # Changelog #
 
-1. Unreleased: [[Unreleased]](#unreleased)
+1. Release: [[3.0.0] - 2025-12-14](#300---2025-12-14)
 2. Release: [[2.1.0] - 2025-10-18](#210---2025-10-18)
 3. Release: [[2.0.0] - 2025-10-18](#200---2025-10-18)
 4. Release: [[1.0.1] - 2025-10-14](#101---2025-10-14)
 5. Release: [[1.0.0] - 2025-10-14](#100---2025-10-14)
 6. History: [CLI Version History (Pre-API Extraction)](#cli-version-history-pre-api-extraction)
 
-## [Unreleased] ##
+## [3.0.0] - 2025-12-14 ##
 
 ### Breaking Changes ###
 
@@ -138,7 +138,7 @@
     - **Curried Interface**: `util.fail(step)(message, category, path)` enables step-specific error builders
     - **Consistent Categorization**: Enforces proper error classification at the point of creation
     - **Clean Message Format**: Error messages no longer require category prefixes - handled automatically by the interface
-  - **Implementation Progress**: Enhanced error handling successfully deployed across core system components
+  - **Implementation Progress**: Enhanced error handling **completely migrated** across entire system
     - **Version Package Migration**: Package information retrieval fully migrated to enhanced error handling
       - **Processing Step Tracking**: Version errors properly categorized under 'Package Information Retrieval' step
       - **Validation Error Classification**: Package.json access failures classified as 'Validation Error' category
@@ -151,14 +151,28 @@
       - **Processing Step Tracking**: Input validation properly categorized under 'Input Validation' step
       - **Validation Error Classification**: Missing files, invalid project configurations classified as 'Validation Error' category
       - **Entry Point Coverage**: High-level API validation before processing pipeline begins
-    - **Improved Currying Pattern**: Enhanced `fail()` signature for better developer ergonomics
-      - **Two-Stage Currying**: `util.fail(step)(category)(message, path)` enables flexible builder patterns
-      - **Category Pre-specification**: Allows creating category-specific builders to reduce repetition
-      - **Mixed Category Support**: Handles files with multiple error categories through multiple builders
-    - **Doculisp AST Parser Migration**: Core Doculisp semantic validation migrated to enhanced error handling
+    - **Complete Parser Migration**: All parsing components migrated to enhanced error handling
+      - **AST Parser Migration**: Core AST parsing migrated with 'AST Parsing' step categorization
+      - **Document Parser Migration**: Document parsing fully migrated with 'Document Parsing' step tracking
+      - **Tokenizer Migration**: Tokenization errors categorized under 'Tokenization' step with parse error classification
+      - **AST Project Parser Migration**: Project parsing migrated with comprehensive error categorization
+      - **Include Builder Migration**: Include processing migrated with 'Include Processing' step tracking
+    - **String Writer Migration**: Document building validation migrated to enhanced error handling
+      - **Processing Step Tracking**: Document building errors categorized under 'Building Document' step
+      - **Validation Error Classification**: Unknown document ID references classified as validation errors
+      - **Path Reference Validation**: Enhanced error context for missing path references
+    - **Interface Consolidation**: Clean consolidation of error handling interfaces
+      - **IFailAlt to IFail Migration**: Renamed enhanced interface back to standard `IFail` name
+      - **Legacy Interface Removal**: Completely removed deprecated `IFail` interface and `util.fail` method
+      - **Method Signature Unification**: All components use unified `util.fail(step)(category)(message, path)` signature
+    - **Error Message Cleanup**: Systematic cleanup of redundant error message prefixes
+      - **Prefix Removal**: Removed redundant "Validation Error:", "Parse Error:" prefixes from error messages
+      - **Structured Metadata**: Error categories now handled as structured metadata rather than message prefixes
+      - **Symbol Error Message Cleanup**: Enhanced `getSymbolErrorMessage` function with consistent formatting
+    - **Doculisp AST Parser Migration**: Core Doculisp semantic validation **completely migrated** to enhanced error handling
       - **Processing Step Tracking**: Doculisp parsing errors properly categorized under 'Doculisp AST Parsing' step
       - **Error Category Classification**: Parse errors vs validation errors now cleanly separated with dedicated builders
-      - **Systematic Migration Progress**: 17 of 40 util.fail calls successfully migrated using parallel change pattern
+      - **Complete Migration**: **All 40+ util.fail calls** successfully migrated using parallel change pattern
       - **Validation Error Cleanup**: Removed redundant "Validation Error:" prefixes since category is now structured metadata
       - **Parse vs Validation Separation**: Clear distinction between parsing failures and semantic validation failures
       - **Builder Pattern Implementation**: Category-specific builders (`parseFailure`, `validationFailure`) reduce code duplication
