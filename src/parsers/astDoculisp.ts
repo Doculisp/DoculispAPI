@@ -20,7 +20,7 @@ function getSymbolErrorMessage<T extends Ast>(typeId: string, word: string, curr
         let symbolKeys = Object.keys(symbols);
         let badMsg = symbolKeys.map(badS => `'${badS}' @ id char ${(symbols as IDictionary<number>)[badS]}`).join('\n\t');
 
-        return `Validation Error: Symbol(s) in ${typeId} id '${word}' at '${current.documentPath.fullName}' (Line: ${ast.location.line}, Char: ${ast.location.char}).\n${badMsg}`;
+        return `Symbol(s) in ${typeId} id '${word}' at '${current.documentPath.fullName}' (Line: ${ast.location.line}, Char: ${ast.location.char}).\n${badMsg}`;
     }
 
     return false;
@@ -315,7 +315,7 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
 
                 const errorMsg = getSymbolErrorMessage('section', id, current, idIdentifier, textHelper);
                 if(errorMsg) {
-                    return validationFailure(errorMsg.replace(/^Validation Error: /, ''), current.documentPath);
+                    return validationFailure(errorMsg, current.documentPath);
                 }
 
                 if(!textHelper.isLowercase(id)) {
