@@ -404,7 +404,7 @@ function getPartParsers(projectLocation: IProjectLocation, doesIt: IDocumentSear
     
             if(parsed.success) {
                 if(opened) {
-                    return util.fail(`Parse Error: Unclosed inline code block at '${starting.documentPath.fullName}' (Line: ${starting.line}, Char: ${starting.char}).`, projectLocation.documentPath);
+                    return parseFailure(`Unclosed inline code block at '${starting.documentPath.fullName}' (Line: ${starting.line}, Char: ${starting.char}).`, projectLocation.documentPath);
                 }
     
                 const [parts, leftover] = parsed.value;
