@@ -352,7 +352,7 @@ function getPartParsers(projectLocation: IProjectLocation, doesIt: IDocumentSear
                 }
                 
                 if(doesIt.startWithAnyNewline.test(input)){
-                    return util.fail(`Parse Error: Inline code block contains newline before closing at '${starting.documentPath.fullName}' (Line: ${starting.line}, Char: ${starting.char}).`, projectLocation.documentPath);
+                    return parseFailure(`Inline code block contains newline before closing at '${starting.documentPath.fullName}' (Line: ${starting.line}, Char: ${starting.char}).`, projectLocation.documentPath);
                 }
 
                 return internals.noResultFound();
