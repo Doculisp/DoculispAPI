@@ -308,7 +308,7 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
                 }
 
                 if(idIdentifier.type === 'ast-identifier') {
-                    return util.fail(`Validation Error: The section id block at '${idIdentifier.location.documentPath.fullName}' is missing identifier text parameter (Line: ${idIdentifier.location.line}, Char: ${idIdentifier.location.char}).`, current.documentPath);
+                    return validationFailure(`The section id block at '${idIdentifier.location.documentPath.fullName}' is missing identifier text parameter (Line: ${idIdentifier.location.line}, Char: ${idIdentifier.location.char}).`, current.documentPath);
                 }
 
                 const id = idIdentifier.parameter.value;
