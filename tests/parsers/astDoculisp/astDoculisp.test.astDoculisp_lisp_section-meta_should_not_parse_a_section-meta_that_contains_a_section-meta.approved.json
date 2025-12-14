@@ -1,5 +1,7 @@
 {
   "documentPath": "A:/malformed/file.dlisp",
-  "message": "Validation Error: The section-meta block at 'A:/malformed/file.dlisp' contains unknown command 'section-meta' (Line: 3, Char: 6).",
+  "failureCategory": "Validation Error",
+  "message": "The section-meta block at 'A:/malformed/file.dlisp' contains unknown command 'section-meta' (Line: 3, Char: 6).",
+  "processingStep": "Doculisp AST Parsing",
   "success": false
 }

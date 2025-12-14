@@ -373,14 +373,14 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
             }
 
             if(hasSectionMeta) {
-                return util.fail(`Validation Error: The section-meta block at '${sectionMeta.location.documentPath.fullName}' is a duplicate block (Line: ${sectionMeta.location.line}, Char: ${sectionMeta.location.char}). Only one section-meta block allowed per file.`, current.documentPath);
+                return validationFailure(`The section-meta block at '${sectionMeta.location.documentPath.fullName}' is a duplicate block (Line: ${sectionMeta.location.line}, Char: ${sectionMeta.location.char}). Only one section-meta block allowed per file.`, current.documentPath);
             }
     
             const badSections = sectionMeta.subStructure.filter(a => !['title', 'subtitle', 'ref-link', 'include', 'author', 'id'].includes(a.value));
     
             if(0 < badSections.length) {
                 const next = badSections[0] as IdentifierAst;
-                return util.fail(`Validation Error: The section-meta block at '${sectionMeta.location.documentPath.fullName}' contains unknown command '${next.value}' (Line: ${next.location.line}, Char: ${next.location.char}).`, current.documentPath);
+                return validationFailure(`The section-meta block at '${sectionMeta.location.documentPath.fullName}' contains unknown command '${next.value}' (Line: ${next.location.line}, Char: ${next.location.char}).`, current.documentPath);
             }
     
             const subtitle = parseSubtitle(sectionMeta.subStructure, current, sectionMeta.location.documentDepth + 2);

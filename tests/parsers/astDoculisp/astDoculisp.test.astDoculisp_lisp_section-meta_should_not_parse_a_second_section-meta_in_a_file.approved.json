@@ -1,5 +1,7 @@
 {
   "documentPath": "./two/sections.dlisp",
-  "message": "Validation Error: The section-meta block at './two/sections.dlisp' is a duplicate block (Line: 6, Char: 2). Only one section-meta block allowed per file.",
+  "failureCategory": "Validation Error",
+  "message": "The section-meta block at './two/sections.dlisp' is a duplicate block (Line: 6, Char: 2). Only one section-meta block allowed per file.",
+  "processingStep": "Doculisp AST Parsing",
   "success": false
 }
