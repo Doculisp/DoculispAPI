@@ -29,12 +29,13 @@ function getTokenBuilder() {
 
 function buildTokenize(doesIt: ILispSearches, internals: IInternals, util: IUtil) : TokenFunction {
     return function tokenize (documentMap: Result<DocumentMap>): Result<TokenizedDocument> {
+        const parseFailure = util.failAlt('Tokenization')('Parse Error');
         let isToken = false;
     
         function tokenizeWhiteSpace(input: string, current: ILocation): StringStepParseResult<Token> {
             if(doesIt.startWithWindowsNewline.test(input)) {
                 if(isToken) {
-                    return util.fail(`Unexpected whitespace after opening parenthesis at '${current.documentPath}' (Line: ${current.line}, Char: ${current.char}).`);
+                    return parseFailure(`Unexpected whitespace after opening parenthesis at '${current.documentPath}' (Line: ${current.line}, Char: ${current.char}).`);
                 }
                 isToken = false;
                 const newLine = (input.match(doesIt.startWithWindowsNewline) as any)[0] as string;
