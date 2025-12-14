@@ -1,5 +1,7 @@
 {
   "documentPath": "C:/my_document.md",
-  "message": "Validation Error: Document depth must be a value of 1 or larger.",
+  "failureCategory": "Validation Error",
+  "message": "Document depth must be a value of 1 or larger.",
+  "processingStep": "Document Parsing",
   "success": false
 }

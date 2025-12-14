@@ -1,5 +1,7 @@
 {
   "documentPath": "C:/examples/bad.md",
-  "message": "Parse Error: Unclosed HTML comment at 'C:/examples/bad.md' (Line: 1, Char: 1).",
+  "failureCategory": "Parse Error",
+  "message": "Unclosed HTML comment at 'C:/examples/bad.md' (Line: 1, Char: 1).",
+  "processingStep": "Document Parsing",
   "success": false
 }

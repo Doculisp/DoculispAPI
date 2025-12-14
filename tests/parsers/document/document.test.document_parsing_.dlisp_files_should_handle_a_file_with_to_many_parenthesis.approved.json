@@ -1,5 +1,7 @@
 {
   "documentPath": "C:/main.dlisp",
-  "message": "Parse Error: Extra content found outside parentheses at 'C:/main.dlisp' (Line: 1, Char: 34).",
+  "failureCategory": "Parse Error",
+  "message": "Extra content found outside parentheses at 'C:/main.dlisp' (Line: 1, Char: 34).",
+  "processingStep": "Document Parsing",
   "success": false
 }

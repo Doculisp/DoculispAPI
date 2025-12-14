@@ -644,7 +644,7 @@ function getPartParsers(projectLocation: IProjectLocation, doesIt: IDocumentSear
             const parsed = parser.parse(toParse, starting);
             if(parsed.success) {
                 if(opened) {
-                    return util.fail(`Parse Error: Unclosed HTML comment at '${starting.documentPath.fullName}' (Line: ${starting.line}, Char: ${starting.char}).`, projectLocation.documentPath);
+                    return parseFailure(`Unclosed HTML comment at '${starting.documentPath.fullName}' (Line: ${starting.line}, Char: ${starting.char}).`, projectLocation.documentPath);
                 }
 
                 const [result, leftover] = parsed.value;
@@ -854,11 +854,13 @@ function lineBuilder(util: IUtil, trimArray: ITrimArray): HandleValue<DocumentPa
 
 function documentParse(doesIt: IDocumentSearches, parserBuilder: IInternals, util: IUtil, trimArray: ITrimArray): Valid<DocumentParser> {    
     return function (documentText: string, projectLocation: IProjectLocation): Result<DocumentMap> {
+        const parseFailure = util.failAlt('Document Parsing')('Parse Error');
+        const validationFailure = util.failAlt('Document Parsing')('Validation Error');
         if(projectLocation.documentDepth <= 0) {
-            return util.fail(`Validation Error: Document depth must be a value of 1 or larger.`, projectLocation.documentPath);
+            return validationFailure(`Document depth must be a value of 1 or larger.`, projectLocation.documentPath);
         }
         if(projectLocation.documentIndex <= 0) {
-            return util.fail(`Validation Error: Document index must be a value of 1 or larger.`, projectLocation.documentPath);
+            return validationFailure(`Document index must be a value of 1 or larger.`, projectLocation.documentPath);
         }
 
         const partParsers = getPartParsers(projectLocation, doesIt, parserBuilder, util);
@@ -887,7 +889,7 @@ function documentParse(doesIt: IDocumentSearches, parserBuilder: IInternals, uti
             const [parts, leftover] = parsed.value;
             if(isDoculispFile && 0 < leftover.remaining.length) {
                 const ending = leftover.location.increaseChar(-1);
-                return util.fail(`Parse Error: Extra content found outside parentheses at '${ending.documentPath.fullName}' (Line: ${ending.line}, Char: ${ending.char}).`, documentPath);
+                return parseFailure(`Extra content found outside parentheses at '${ending.documentPath.fullName}' (Line: ${ending.line}, Char: ${ending.char}).`, documentPath);
             }
 
             const lineConcat = parserBuilder.createArrayParser(lineBuilder(util, trimArray));
