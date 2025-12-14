@@ -1,5 +1,7 @@
 {
   "documentPath": "test.dlisp",
-  "message": "Validation Error: The section id block at 'test.dlisp' contains sub blocks (Line: 3, Char: 6).",
+  "failureCategory": "Validation Error",
+  "message": "The section id block at 'test.dlisp' contains sub blocks (Line: 3, Char: 6).",
+  "processingStep": "Doculisp AST Parsing",
   "success": false
 }
