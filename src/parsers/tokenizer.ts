@@ -49,7 +49,7 @@ function buildTokenize(doesIt: ILispSearches, internals: IInternals, util: IUtil
     
             if(doesIt.startWithAnyNewline.test(input)) {
                 if(isToken) {
-                    return util.fail(`Unexpected whitespace after opening parenthesis at '${current.documentPath}' (Line: ${current.line}, Char: ${current.char}).`);
+                    return parseFailure(`Unexpected whitespace after opening parenthesis at '${current.documentPath}' (Line: ${current.line}, Char: ${current.char}).`);
                 }
                 const newLine = (input.match(doesIt.startWithLinuxNewline) as any)[0] as string;
                 input = input.slice(newLine.length);
