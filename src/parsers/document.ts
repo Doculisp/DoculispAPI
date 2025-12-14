@@ -435,7 +435,7 @@ function getPartParsers(projectLocation: IProjectLocation, doesIt: IDocumentSear
             function tryParseDoculispOpen(input: string, current: ILocation): StringStepParseResult<DocumentPart> {
                 if(doesIt.startWithDocuLisp.test(input)) {
                     if(0 < depth) {
-                        return util.fail(`Parse Error: Embedded Doculisp block detected at '${starting.documentPath.fullName}' (Line: ${current.line}, Char: ${current.char}) inside block starting at (Line: ${starting.line}, Char: ${starting.char}).`, projectLocation.documentPath);
+                        return parseFailure(`Embedded Doculisp block detected at '${starting.documentPath.fullName}' (Line: ${current.line}, Char: ${current.char}) inside block starting at (Line: ${starting.line}, Char: ${starting.char}).`, projectLocation.documentPath);
                     }
     
                     const parsed: string = (input.match(doesIt.startWithDocuLisp) as any)[0];

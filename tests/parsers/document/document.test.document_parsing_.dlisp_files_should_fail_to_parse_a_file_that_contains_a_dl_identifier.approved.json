@@ -1,5 +1,7 @@
 {
   "documentPath": "C:/bad/extraDl.dlisp",
-  "message": "Parse Error: Embedded Doculisp block detected at 'C:/bad/extraDl.dlisp' (Line: 1, Char: 1) inside block starting at (Line: 1, Char: 1).",
+  "failureCategory": "Parse Error",
+  "message": "Embedded Doculisp block detected at 'C:/bad/extraDl.dlisp' (Line: 1, Char: 1) inside block starting at (Line: 1, Char: 1).",
+  "processingStep": "Document Parsing",
   "success": false
 }
