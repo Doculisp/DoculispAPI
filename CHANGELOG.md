@@ -7,12 +7,51 @@
 
 # Changelog #
 
-1. Release: [[3.0.0] - 2025-12-14](#300---2025-12-14)
-2. Release: [[2.1.0] - 2025-10-18](#210---2025-10-18)
-3. Release: [[2.0.0] - 2025-10-18](#200---2025-10-18)
-4. Release: [[1.0.1] - 2025-10-14](#101---2025-10-14)
-5. Release: [[1.0.0] - 2025-10-14](#100---2025-10-14)
-6. History: [CLI Version History (Pre-API Extraction)](#cli-version-history-pre-api-extraction)
+1. Release: [[3.1.0] - 2025-12-14](#310---2025-12-14)
+2. Release: [[3.0.0] - 2025-12-14](#300---2025-12-14)
+3. Release: [[2.1.0] - 2025-10-18](#210---2025-10-18)
+4. Release: [[2.0.0] - 2025-10-18](#200---2025-10-18)
+5. Release: [[1.0.1] - 2025-10-14](#101---2025-10-14)
+6. Release: [[1.0.0] - 2025-10-14](#100---2025-10-14)
+7. History: [CLI Version History (Pre-API Extraction)](#cli-version-history-pre-api-extraction)
+
+## [3.1.0] - 2025-12-14 ##
+
+### New Features ###
+
+- **Comprehensive API Interface System**: Enhanced Doculisp API with complete interface definitions and advanced usage support
+  - **Main API Interface**: New `IDoculispApi` interface provides comprehensive API contract
+    - **Core Compilation Methods**: `compileFile()` and `testFile()` for basic document processing
+    - **Advanced Pipeline Access**: Direct access to individual parsing stages and utilities
+    - **Variable Table Management**: Built-in support for variable table creation and management
+    - **Testable API Support**: Built-in method to create testable API instances for testing scenarios
+  - **Testable API Interface**: New `ITestableDoculispApi` interface extends main API with test injection capabilities
+    - **Component Injection**: Methods to inject test fakes for all major components
+    - **Pipeline Stage Mocking**: Individual setter methods for each parsing pipeline stage
+    - **Utility Replacement**: Support for replacing utility functions and path constructors in tests
+    - **Isolated Testing**: Complete test isolation through dependency injection
+  - **DoculispApi Class Enhancement**: Enhanced main API class with comprehensive method coverage
+    - **Pipeline Stage Access**: New methods `getPartialAstBuilders()`, `getTokenizer()`, and `getPreprocessor()`
+    - **Advanced Usage Support**: Direct access to individual parsing components for custom workflows
+    - **Testable Instance Creation**: `getTestableApi()` method for creating test-enabled API instances
+    - **Interface Implementation**: Full implementation of `IDoculispApi` interface contract
+  - **TestableDoculispApi Class**: New testable implementation extending main API class
+    - **Dependency Injection**: Complete support for injecting test doubles through `setXxx()` methods
+    - **Test Container Integration**: Built on testable container system for proper test isolation
+    - **Component Replacement**: Individual methods to replace AST builders, tokenizers, preprocessors, and utilities
+    - **Test Safety**: Proper error handling when attempting to create testable instances from non-testable containers
+  - **API Type Export**: Enhanced module exports with explicit API interface exposure
+    - **Interface Visibility**: `IDoculispApi` interface now directly exported for consumer TypeScript integration
+    - **Type Safety**: Full TypeScript support for API consumers with complete type definitions
+    - **Import Simplification**: Streamlined import paths for API interfaces and implementations
+
+### Improved ###
+
+- **API Accessibility**: Enhanced access to internal parsing components for advanced use cases
+  - **Individual Pipeline Components**: Direct access to tokenizer, preprocessor, and partial AST builders
+  - **Advanced Integration**: Support for custom workflows using individual parsing stages
+  - **Testing Framework Integration**: Comprehensive testing support through injectable dependencies
+  - **Developer Experience**: Simplified API surface for both basic and advanced usage patterns
 
 ## [3.0.0] - 2025-12-14 ##
 

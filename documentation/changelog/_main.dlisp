@@ -5,6 +5,7 @@
 (section-meta
     (title Changelog)
     (include
+        (Release ./3_1_0.md)
         (Release ./3_0_0.md)
         (Release ./2_1_0.md)
         (Release ./2_0_0.md)
