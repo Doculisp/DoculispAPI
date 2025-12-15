@@ -27,21 +27,36 @@ This guide provides everything you need to work with the DoculispTypeScript API:
 
 <!-- (dl (# Getting Started)) -->
 
-The fastest way to access the container system with full type safety:
+**Recommended Approach**: Use the high-level DoculispApi class for most use cases:
+
+```typescript
+import { DoculispApi } from 'doculisp';
+
+// Create API instance (handles container initialization)
+const api = await DoculispApi.create();
+
+// Simple file compilation
+const results = await api.compileFile('./docs/readme.dlisp', './README.md');
+
+// Test/validate without writing output
+const testResults = await api.testFile('./docs/readme.dlisp');
+```
+
+**Advanced Container Access**: For fine-grained control, access the container directly:
 
 ```typescript
 import { containerPromise } from 'doculisp/dist/moduleLoader';
-import { IController, IPathConstructor, IPath } from 'doculisp';
+import { IController, PathConstructor, IPath } from 'doculisp';
 
 // Always await the container (it's asynchronous)
 const container = await containerPromise;
 
 // Build any registered object with full type safety
 const controller = container.buildAs<IController>('controller');
-const pathConstructor = container.buildAs<IPathConstructor>('pathConstructor');
+const pathConstructor = container.buildAs<PathConstructor>('pathConstructor');
 
-const sourcePath: IPath = pathConstructor.buildPath('./docs/readme.dlisp');
-const destinationPath: IPath = pathConstructor.buildPath('./README.md');
+const sourcePath: IPath = pathConstructor('./docs/readme.dlisp');
+const destinationPath: IPath = pathConstructor('./README.md');
 const results = controller.compile(sourcePath, destinationPath);
 ```
 
@@ -54,9 +69,14 @@ const results = controller.compile(sourcePath, destinationPath);
 ```typescript
 // Import core types for type-safe development
 import {
+  // Main API
+  DoculispApi,
+  IDoculispApi,
+  ITestableDoculispApi,
+  
   // Core interfaces
   IController,
-  IPathConstructor, 
+  PathConstructor, 
   IPath,
   
   // Pipeline types
@@ -72,6 +92,7 @@ import {
   Token,
   IAst,
   IDoculisp,
+  IRange,
   
   // Container types
   IContainer,
@@ -104,6 +125,56 @@ import {
 - **`.dlproj`**: Project files for batch compilation
 - **`.dlisp`**: Pure Doculisp structure files
 - **`.md`**: Markdown with embedded Doculisp blocks
+
+<!-- (dl (# API Interface System)) -->
+
+**Comprehensive API Interfaces**: The system provides structured interfaces for improved TypeScript integration:
+
+**Main API Interface (`IDoculispApi`)**:
+- **Core Methods**: `compileFile()` and `testFile()` for basic document processing
+- **Pipeline Access**: Direct access to parsing stages (`getTokenizer()`, `getPreprocessor()`, `getPartialAstBuilders()`)
+- **Utility Methods**: Variable table creation, path constructor, and utility functions
+- **Testing Support**: Built-in `getTestableApi()` method for test scenarios
+
+**Testable API Interface (`ITestableDoculispApi`)**:
+- **Component Injection**: Methods to inject test fakes for all major components
+- **Pipeline Mocking**: Individual setter methods for each parsing stage
+- **Test Isolation**: Complete dependency injection for isolated testing
+
+```typescript
+// Use interfaces for enhanced type safety
+import { IDoculispApi, ITestableDoculispApi } from 'doculisp';
+
+// Standard API usage
+const api: IDoculispApi = await DoculispApi.create();
+
+// Testable API for testing scenarios  
+const [testContainer, testApi]: [ITestableContainer, ITestableDoculispApi] = 
+    await DoculispApi.createTestable();
+```
+
+<!-- (dl (# AST Block Range Tracking)) -->
+
+**Precise Location Tracking**: AST interfaces include comprehensive location information:
+
+**Block Range Property**:
+All AST interfaces include a `blockRange: IRange` property:
+- **`IAstIdentifier`**: Precise location of identifier blocks
+- **`IAstCommand`**: Exact boundaries of command blocks  
+- **`IAstContainer`**: Complete container block ranges
+- **Doculisp Types**: `IPathId`, `IContentLocation`, `ILoad` interfaces also include block ranges
+
+**Usage Example**:
+```typescript
+// AST nodes include precise location information
+const identifier: IAstIdentifier = {
+    // ... existing properties
+    blockRange: {
+        start: { line: 1, char: 1 },
+        end: { line: 1, char: 10 }
+    }
+};
+```
 
 <!-- (dl (# Important Limitations)) -->
 

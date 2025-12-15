@@ -22,7 +22,7 @@ const container = await containerPromise;
 const documentParser = container.buildAs<DocumentParser>('documentParse');
 const tokenizer = container.buildAs<TokenFunction>('tokenizer');
 const astParser = container.buildAs<IAstParser>('astParser');
-const pathConstructor = container.buildAs<IPathConstructor>('pathConstructor');
+const pathConstructor = container.buildAs<PathConstructor>('pathConstructor');
 ```
 
 **Referenced as**: `[Standard Container Setup](#standard-container-access)`
@@ -34,7 +34,7 @@ Most parsing examples use this project location pattern:
 ```typescript
 // Standard project location for single document processing
 const projectLocation = {
-    documentPath: pathConstructor.buildPath(filePath),
+    documentPath: pathConstructor(filePath),
     documentDepth: 1,
     documentIndex: 1
 };

@@ -228,7 +228,7 @@ class DoculispLanguageServer {
             documentParser: this.container.buildAs<DocumentParser>('documentParse'),
             tokenizer: this.container.buildAs<TokenFunction>('tokenizer'),
             astParser: this.container.buildAs<IAstParser>('astParser'),
-            pathConstructor: this.container.buildAs<IPathConstructor>('pathConstructor')
+            pathConstructor: this.container.buildAs<PathConstructor>('pathConstructor')
         };
     }
 

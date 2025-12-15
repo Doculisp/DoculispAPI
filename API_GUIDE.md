@@ -55,21 +55,36 @@ This guide provides everything you need to work with the DoculispTypeScript API:
 
 ### Getting Started ###
 
-The fastest way to access the container system with full type safety:
+**Recommended Approach**: Use the high-level DoculispApi class for most use cases:
+
+```typescript
+import { DoculispApi } from 'doculisp';
+
+// Create API instance (handles container initialization)
+const api = await DoculispApi.create();
+
+// Simple file compilation
+const results = await api.compileFile('./docs/readme.dlisp', './README.md');
+
+// Test/validate without writing output
+const testResults = await api.testFile('./docs/readme.dlisp');
+```
+
+**Advanced Container Access**: For fine-grained control, access the container directly:
 
 ```typescript
 import { containerPromise } from 'doculisp/dist/moduleLoader';
-import { IController, IPathConstructor, IPath } from 'doculisp';
+import { IController, PathConstructor, IPath } from 'doculisp';
 
 // Always await the container (it's asynchronous)
 const container = await containerPromise;
 
 // Build any registered object with full type safety
 const controller = container.buildAs<IController>('controller');
-const pathConstructor = container.buildAs<IPathConstructor>('pathConstructor');
+const pathConstructor = container.buildAs<PathConstructor>('pathConstructor');
 
-const sourcePath: IPath = pathConstructor.buildPath('./docs/readme.dlisp');
-const destinationPath: IPath = pathConstructor.buildPath('./README.md');
+const sourcePath: IPath = pathConstructor('./docs/readme.dlisp');
+const destinationPath: IPath = pathConstructor('./README.md');
 const results = controller.compile(sourcePath, destinationPath);
 ```
 
@@ -82,9 +97,14 @@ const results = controller.compile(sourcePath, destinationPath);
 ```typescript
 // Import core types for type-safe development
 import {
+  // Main API
+  DoculispApi,
+  IDoculispApi,
+  ITestableDoculispApi,
+
   // Core interfaces
   IController,
-  IPathConstructor,
+  PathConstructor,
   IPath,
 
   // Pipeline types
@@ -100,6 +120,7 @@ import {
   Token,
   IAst,
   IDoculisp,
+  IRange,
 
   // Container types
   IContainer,
@@ -132,6 +153,56 @@ import {
 - **`.dlproj`**: Project files for batch compilation
 - **`.dlisp`**: Pure Doculisp structure files
 - **`.md`**: Markdown with embedded Doculisp blocks
+
+### API Interface System ###
+
+**Comprehensive API Interfaces**: The system provides structured interfaces for improved TypeScript integration:
+
+**Main API Interface (`IDoculispApi`)**:
+- **Core Methods**: `compileFile()` and `testFile()` for basic document processing
+- **Pipeline Access**: Direct access to parsing stages (`getTokenizer()`, `getPreprocessor()`, `getPartialAstBuilders()`)
+- **Utility Methods**: Variable table creation, path constructor, and utility functions
+- **Testing Support**: Built-in `getTestableApi()` method for test scenarios
+
+**Testable API Interface (`ITestableDoculispApi`)**:
+- **Component Injection**: Methods to inject test fakes for all major components
+- **Pipeline Mocking**: Individual setter methods for each parsing stage
+- **Test Isolation**: Complete dependency injection for isolated testing
+
+```typescript
+// Use interfaces for enhanced type safety
+import { IDoculispApi, ITestableDoculispApi } from 'doculisp';
+
+// Standard API usage
+const api: IDoculispApi = await DoculispApi.create();
+
+// Testable API for testing scenarios
+const [testContainer, testApi]: [ITestableContainer, ITestableDoculispApi] =
+    await DoculispApi.createTestable();
+```
+
+### AST Block Range Tracking ###
+
+**Precise Location Tracking**: AST interfaces include comprehensive location information:
+
+**Block Range Property**:
+All AST interfaces include a `blockRange: IRange` property:
+- **`IAstIdentifier`**: Precise location of identifier blocks
+- **`IAstCommand`**: Exact boundaries of command blocks
+- **`IAstContainer`**: Complete container block ranges
+- **Doculisp Types**: `IPathId`, `IContentLocation`, `ILoad` interfaces also include block ranges
+
+**Usage Example**:
+```typescript
+// AST nodes include precise location information
+const identifier: IAstIdentifier = {
+    // ... existing properties
+    blockRange: {
+        start: { line: 1, char: 1 },
+        end: { line: 1, char: 10 }
+    }
+};
+```
 
 ### Important Limitations ###
 
@@ -288,7 +359,7 @@ import type {
     IController,
     ITokenizer,
     IAstParser,
-    IPathConstructor,
+    PathConstructor,
     IVariableTable,
     IFileWriter,
     Result
@@ -531,7 +602,7 @@ class DoculispLanguageServer {
             documentParser: this.container.buildAs<DocumentParser>('documentParse'),
             tokenizer: this.container.buildAs<TokenFunction>('tokenizer'),
             astParser: this.container.buildAs<IAstParser>('astParser'),
-            pathConstructor: this.container.buildAs<IPathConstructor>('pathConstructor')
+            pathConstructor: this.container.buildAs<PathConstructor>('pathConstructor')
         };
     }
 
@@ -652,6 +723,29 @@ const controller = container.buildAs<IController>('controller');
 const results: Result<string | false>[] = controller.compile(sourcePath, destinationPath);
 ```
 
+### Modern API Classes ###
+
+**Recommended Approach**: Use the high-level API classes for most use cases:
+
+| API Class | Interface | Primary Purpose |
+|-----------|-----------|-----------------|
+| `DoculispApi` | `IDoculispApi` | **Main API** - simplified interface with automatic container management |
+| `TestableDoculispApi` | `ITestableDoculispApi` | **Testing API** - enhanced API with dependency injection for testing |
+
+**Usage Pattern:**
+```typescript
+// Modern API approach - recommended for new code
+import { DoculispApi, IDoculispApi, ITestableDoculispApi } from 'doculisp';
+
+// Standard usage
+const api: IDoculispApi = await DoculispApi.create();
+const results = await api.compileFile('./docs/main.dlisp', './README.md');
+
+// Testing usage
+const [testContainer, testApi]: [ITestableContainer, ITestableDoculispApi] =
+    await DoculispApi.createTestable();
+```
+
 ### Core Pipeline Components ###
 
 These objects form the heart of the compilation pipeline, processing documents through sequential transformation stages:
@@ -687,19 +781,19 @@ const astParser = container.buildAs<IAstParser>('astParser');
 | Container Key | Interface | Functionality |
 |---------------|-----------|---------------|
 | `fileHandler` | `IFileWriter` | File operations (read, write, exists), working directory management |
-| `pathConstructor` | `IPathConstructor` | Creates and manipulates `IPath` objects, path resolution |
+| `pathConstructor` | `PathConstructor` | Creates and manipulates `IPath` objects, path resolution |
 
 **Usage Pattern:**
 ```typescript
 // File system operations with proper typing
 import { containerPromise } from 'doculisp/dist/moduleLoader';
-import { IFileWriter, IPathConstructor, IPath, Result } from 'doculisp';
+import { IFileWriter, PathConstructor, IPath, Result } from 'doculisp';
 
 const container = await containerPromise;
 const fileHandler = container.buildAs<IFileWriter>('fileHandler');
-const pathConstructor = container.buildAs<IPathConstructor>('pathConstructor');
+const pathConstructor = container.buildAs<PathConstructor>('pathConstructor');
 
-const path: IPath = pathConstructor.buildPath('./docs/readme.md');
+const path: IPath = pathConstructor('./docs/readme.md');
 const content: Result<string> = fileHandler.load(path);
 ```
 
@@ -730,6 +824,41 @@ The variable table only supports system-generated variables and IDs. Custom stri
 | `textHelpers` | `ITextHelpers` | Text processing and formatting utilities |
 | `trimArray` | `ITrimArray` | Array manipulation utilities for token processing |
 | `searches` | `ISearches` | Search and lookup utilities for content analysis |
+
+### AST Block Range Tracking ###
+
+**Precise Location Information**: AST interfaces include comprehensive location tracking for enhanced tooling support:
+
+**AST Range Properties:**
+All AST node types include a required `blockRange: IRange` property for precise location tracking:
+
+- **`IAstIdentifier`**: Identifier blocks with exact start/end coordinates
+- **`IAstCommand`**: Command blocks with precise boundaries
+- **`IAstContainer`**: Container blocks with complete range information
+- **Doculisp AST Types**: `IPathId`, `IContentLocation`, `ILoad` interfaces also include ranges
+
+**Range Interface:**
+```typescript
+interface IRange {
+    start: ILocationCoordinates;
+    end: ILocationCoordinates;
+}
+
+// Example AST identifier with block range
+const identifier: IAstIdentifier = {
+    // ... existing properties
+    blockRange: {
+        start: { line: 1, char: 1 },  // Opening parenthesis position
+        end: { line: 1, char: 15 }    // Closing parenthesis position
+    }
+};
+```
+
+**Benefits:**
+- **Enhanced Tooling**: Enables precise error highlighting and block manipulation
+- **IDE Support**: Improved syntax highlighting and navigation features
+- **Debugging**: Exact location information for troubleshooting
+- **Cross-Platform**: Works with both TypeScript and JavaScript consumers
 
 ### System Information ###
 
@@ -805,16 +934,14 @@ const fileHandler = container.buildAs<IFileWriter>('fileHandler');
 const content = fileHandler.load(filePath);
 ```
 
-#### IPathConstructor - Path Management ####
+#### PathConstructor - Path Management ####
 
 ```typescript
-interface IPathConstructor {
-    buildPath(path: string): IPath;
-}
+type PathConstructor = (pathString: string) => IPath;
 
 // Usage
-const pathConstructor = container.buildAs<IPathConstructor>('pathConstructor');
-const docPath = pathConstructor.buildPath('./docs/readme.md');
+const pathConstructor = container.buildAs<PathConstructor>('pathConstructor');
+const docPath = pathConstructor('./docs/readme.md');
 ```
 
 ### Access Patterns ###
@@ -838,7 +965,7 @@ const container = await containerPromise;
 const [controller, fileHandler, pathConstructor] = [
     container.buildAs<IController>('controller'),
     container.buildAs<IFileWriter>('fileHandler'),
-    container.buildAs<IPathConstructor>('pathConstructor')
+    container.buildAs<PathConstructor>('pathConstructor')
 ];
 ```
 
@@ -1109,7 +1236,7 @@ DocumentParse uses different strategies based on file type:
 import { containerPromise } from 'doculisp/dist/moduleLoader';
 import {
     DocumentParser,
-    IPathConstructor,
+    PathConstructor,
     IProjectLocation,
     DocumentMap,
     Result
@@ -1119,11 +1246,11 @@ async function parseDocument() {
     // Use [Standard Container Setup] - see common-patterns.md
     const container = await containerPromise;
     const documentParser = container.buildAs<DocumentParser>('documentParse');
-    const pathConstructor = container.buildAs<IPathConstructor>('pathConstructor');
+    const pathConstructor = container.buildAs<PathConstructor>('pathConstructor');
 
     // Use [Standard Project Location] - see common-patterns.md
     const projectLocation: IProjectLocation = {
-        documentPath: pathConstructor.buildPath('./example.md'),
+        documentPath: pathConstructor('./example.md'),
         documentDepth: 1,
         documentIndex: 1
     };
@@ -1406,10 +1533,10 @@ async function getTokensAtPosition(
     const container = await containerPromise;
     const documentParser = container.buildAs<DocumentParser>('documentParse');
     const tokenizer = container.buildAs<TokenFunction>('tokenizer');
-    const pathConstructor = container.buildAs<IPathConstructor>('pathConstructor');
+    const pathConstructor = container.buildAs<PathConstructor>('pathConstructor');
 
     const projectLocation = {
-        documentPath: pathConstructor.buildPath(filePath),
+        documentPath: pathConstructor(filePath),
         documentDepth: 1,
         documentIndex: 1
     };
@@ -1440,10 +1567,10 @@ async function getSyntaxTokens(document: string, filePath: string): Promise<Synt
     const container = await containerPromise;
     const documentParser = container.buildAs<DocumentParser>('documentParse');
     const tokenizer = container.buildAs<TokenFunction>('tokenizer');
-    const pathConstructor = container.buildAs<IPathConstructor>('pathConstructor');
+    const pathConstructor = container.buildAs<PathConstructor>('pathConstructor');
 
     const projectLocation = {
-        documentPath: pathConstructor.buildPath(filePath),
+        documentPath: pathConstructor(filePath),
         documentDepth: 1,
         documentIndex: 1
     };
@@ -1494,10 +1621,10 @@ async function validateSyntaxOnly(document: string, filePath: string): Promise<V
     const documentParser = container.buildAs<DocumentParser>('documentParse');
     const tokenizer = container.buildAs<TokenFunction>('tokenizer');
     const astParser = container.buildAs<IAstParser>('astParser');
-    const pathConstructor = container.buildAs<IPathConstructor>('pathConstructor');
+    const pathConstructor = container.buildAs<PathConstructor>('pathConstructor');
 
     const projectLocation = {
-        documentPath: pathConstructor.buildPath(filePath),
+        documentPath: pathConstructor(filePath),
         documentDepth: 1,
         documentIndex: 1
     };
@@ -1566,10 +1693,10 @@ async function analyzeDocumentStructure(document: string, filePath: string): Pro
     const documentParser = container.buildAs<DocumentParser>('documentParse');
     const tokenizer = container.buildAs<TokenFunction>('tokenizer');
     const astParser = container.buildAs<IAstParser>('astParser');
-    const pathConstructor = container.buildAs<IPathConstructor>('pathConstructor');
+    const pathConstructor = container.buildAs<PathConstructor>('pathConstructor');
 
     const projectLocation = {
-        documentPath: pathConstructor.buildPath(filePath),
+        documentPath: pathConstructor(filePath),
         documentDepth: 1,
         documentIndex: 1
     };
@@ -3081,7 +3208,7 @@ class DoculispLanguageServer {
             documentParser: container.buildAs<DocumentParser>('documentParse'),
             tokenizer: container.buildAs<TokenFunction>('tokenizer'),
             astParser: container.buildAs<IAstParser>('astParser'),
-            pathConstructor: container.buildAs<IPathConstructor>('pathConstructor')
+            pathConstructor: container.buildAs<PathConstructor>('pathConstructor')
         };
     }
 
@@ -3128,7 +3255,7 @@ Handle include resolution correctly:
 ```typescript
 async function processWithWorkingDirectory<T>(filePath: string, operation: () => Promise<T>): Promise<T> {
     const fileHandler = container.buildAs<IFileWriter>('fileHandler');
-    const path = pathConstructor.buildPath(filePath);
+    const path = pathConstructor(filePath);
 
     const originalDir = fileHandler.getProcessWorkingDirectory();
     const targetDir = path.getContainingDir();
@@ -3168,7 +3295,7 @@ const container = await containerPromise;
 const documentParser = container.buildAs<DocumentParser>('documentParse');
 const tokenizer = container.buildAs<TokenFunction>('tokenizer');
 const astParser = container.buildAs<IAstParser>('astParser');
-const pathConstructor = container.buildAs<IPathConstructor>('pathConstructor');
+const pathConstructor = container.buildAs<PathConstructor>('pathConstructor');
 ```
 
 **Referenced as**: `[Standard Container Setup](#standard-container-access)`
@@ -3180,7 +3307,7 @@ Most parsing examples use this project location pattern:
 ```typescript
 // Standard project location for single document processing
 const projectLocation = {
-    documentPath: pathConstructor.buildPath(filePath),
+    documentPath: pathConstructor(filePath),
     documentDepth: 1,
     documentIndex: 1
 };
@@ -3322,21 +3449,138 @@ This section provides practical examples and common usage patterns for the Docul
 
 ### Quick Start Examples ###
 
-#### Basic Document Compilation ####
+**Recommended Approach**: Use the high-level `DoculispApi` class for most common use cases:
+
+#### Modern API - Simple Compilation ####
+
+```typescript
+import { DoculispApi } from 'doculisp';
+
+async function compileDocumentModern() {
+    // Create API instance (handles all container setup automatically)
+    const api = await DoculispApi.create();
+
+    // Simple file compilation
+    const results = await api.compileFile('./docs/_main.dlisp', './README.md');
+
+    if (results[0].success) {
+        console.log('✅ Document compiled successfully');
+        console.log('📄 Output:', results[0].value);
+    } else {
+        console.error('❌ Compilation failed:', results[0].message);
+    }
+}
+
+// Test/validate without writing output
+async function validateDocument() {
+    const api = await DoculispApi.create();
+    const testResults = await api.testFile('./docs/_main.dlisp');
+
+    return testResults.every(result => result.success);
+}
+```
+
+#### Advanced API Access ####
+
+**Pipeline Component Access**: Use individual parsing stages for custom workflows:
+
+```typescript
+import { DoculispApi, DocumentParser, TokenFunction, IAstParser } from 'doculisp';
+
+async function customParsingWorkflow() {
+    const api = await DoculispApi.create();
+
+    // Access individual pipeline components
+    const preprocessor: DocumentParser = api.getPreprocessor();
+    const tokenizer: TokenFunction = api.getTokenizer();
+    const astBuilders = api.getPartialAstBuilders();
+
+    // Custom processing workflow
+    const documentMap = preprocessor(content, projectLocation);
+    if (!documentMap.success) return documentMap;
+
+    const tokenized = tokenizer(documentMap.value);
+    if (!tokenized.success) return tokenized;
+
+    const ast = astBuilders.nonSemanticAstBuilder.parse(tokenized.value);
+    return ast;
+}
+
+// Utility access for custom operations
+async function customUtilityUsage() {
+    const api = await DoculispApi.create();
+
+    const pathConstructor = api.getPathConstructor();
+    const variableTable = api.createVariableTable();
+    const util = api.getUtil();
+    const stringWriter = api.getStringWriter();
+
+    // Custom operations with utilities
+    const sourcePath = pathConstructor('./custom.dlisp');
+    variableTable.addValue('custom-var', { type: 'variable-path', value: sourcePath });
+
+    return { pathConstructor, variableTable, util, stringWriter };
+}
+```
+
+#### Testable API Usage ####
+
+**Testing with Dependency Injection**: Create isolated test scenarios:
+
+```typescript
+import { DoculispApi, ITestableDoculispApi, ITestableContainer } from 'doculisp';
+
+async function testWithMocks() {
+    // Create testable API instance
+    const [testContainer, testApi]: [ITestableContainer, ITestableDoculispApi] =
+        await DoculispApi.createTestable();
+
+    // Inject test fakes
+    const mockTokenizer = jest.fn().mockReturnValue(mockTokenResult);
+    const mockPreprocessor = jest.fn().mockReturnValue(mockDocumentMap);
+
+    testApi.setTokenizer(mockTokenizer);
+    testApi.setPreprocessor(mockPreprocessor);
+
+    // Test with injected dependencies
+    const results = await testApi.compileFile('./test.dlisp', './output.md');
+
+    expect(mockTokenizer).toHaveBeenCalledWith(expectedDocumentMap);
+    expect(mockPreprocessor).toHaveBeenCalledWith(expectedContent, expectedLocation);
+
+    return results;
+}
+
+// Alternative: Get testable API from existing instance
+async function testFromExistingApi() {
+    const api = await DoculispApi.create();
+    const testableApi = api.getTestableApi();
+
+    // Inject specific component mocks
+    testableApi.setStringWriter(mockStringWriter);
+    testableApi.setPathConstructor(mockPathConstructor);
+
+    return testableApi.testFile('./test.dlisp');
+}
+```
+
+**Advanced Container Access**: For fine-grained control, use the container directly:
+
+#### Container-Level Document Compilation ####
 
 ```typescript
 import { containerPromise } from 'doculisp/dist/moduleLoader';
-import { IController, IPathConstructor, IPath, Result } from 'doculisp';
+import { IController, PathConstructor, IPath, Result } from 'doculisp';
 
 async function compileDocument() {
     // Use [Standard Container Setup] - see COMMON PATTERNS section
     const container = await containerPromise;
     const controller = container.buildAs<IController>('controller');
-    const pathConstructor = container.buildAs<IPathConstructor>('pathConstructor');
+    const pathConstructor = container.buildAs<PathConstructor>('pathConstructor');
 
     // Compile a single document with full type safety
-    const sourcePath: IPath = pathConstructor.buildPath('./docs/_main.dlisp');
-    const destinationPath: IPath = pathConstructor.buildPath('./README.md');
+    const sourcePath: IPath = pathConstructor('./docs/_main.dlisp');
+    const destinationPath: IPath = pathConstructor('./README.md');
 
     const results: Result<string | false>[] = controller.compile(sourcePath, destinationPath);
 
@@ -3353,16 +3597,16 @@ async function compileDocument() {
 
 ```typescript
 import { containerPromise } from 'doculisp/dist/moduleLoader';
-import { IController, IPathConstructor, IPath, Result } from 'doculisp';
+import { IController, PathConstructor, IPath, Result } from 'doculisp';
 
 async function compileProject() {
     // Use [Standard Container Setup] - see common-patterns.md
     const container = await containerPromise;
     const controller = container.buildAs<IController>('controller');
-    const pathConstructor = container.buildAs<IPathConstructor>('pathConstructor');
+    const pathConstructor = container.buildAs<PathConstructor>('pathConstructor');
 
     // Compile entire project (multiple documents)
-    const projectPath: IPath = pathConstructor.buildPath('./docs/docs.dlproj');
+    const projectPath: IPath = pathConstructor('./docs/docs.dlproj');
 
     // Project files don't need destination - it's embedded in structure
     const results: Result<string | false>[] = controller.compile(projectPath);
@@ -3389,7 +3633,7 @@ import {
     DocumentParser,
     TokenFunction,
     IAstParser,
-    IPathConstructor,
+    PathConstructor,
     IPath,
     IProjectLocation,
     Result,
@@ -3401,7 +3645,7 @@ class DoculispValidator {
     private documentParser: DocumentParser;
     private tokenizer: TokenFunction;
     private astParser: IAstParser;
-    private pathConstructor: IPathConstructor;
+    private pathConstructor: PathConstructor;
 
     async initialize() {
         // Use [Standard Container Setup] - see common-patterns.md
@@ -3409,13 +3653,13 @@ class DoculispValidator {
         this.documentParser = this.container.buildAs<DocumentParser>('documentParse');
         this.tokenizer = this.container.buildAs<TokenFunction>('tokenizer');
         this.astParser = this.container.buildAs<IAstParser>('astParser');
-        this.pathConstructor = this.container.buildAs<IPathConstructor>('pathConstructor');
+        this.pathConstructor = this.container.buildAs<PathConstructor>('pathConstructor');
     }
 
     async validateDocument(content: string, uri: string): Promise<Diagnostic[]> {
         // Use [Standard Project Location] - see common-patterns.md
         const projectLocation: IProjectLocation = {
-            documentPath: this.pathConstructor.buildPath(uri),
+            documentPath: this.pathConstructor(uri),
             documentDepth: 1,
             documentIndex: 1
         };
@@ -3486,7 +3730,7 @@ import { containerPromise } from 'doculisp/dist/moduleLoader';
 import {
     DocumentParser,
     TokenFunction,
-    IPathConstructor,
+    PathConstructor,
     IPath,
     IProjectLocation,
     Token
@@ -3496,18 +3740,18 @@ class DoculispSyntaxHighlighter {
     private container: any;
     private documentParser: DocumentParser;
     private tokenizer: TokenFunction;
-    private pathConstructor: IPathConstructor;
+    private pathConstructor: PathConstructor;
 
     async initialize() {
         this.container = await containerPromise;
         this.documentParser = this.container.buildAs<DocumentParser>('documentParse');
         this.tokenizer = this.container.buildAs<TokenFunction>('tokenizer');
-        this.pathConstructor = this.container.buildAs<IPathConstructor>('pathConstructor');
+        this.pathConstructor = this.container.buildAs<PathConstructor>('pathConstructor');
     }
 
     async getSemanticTokens(content: string, uri: string): Promise<SemanticToken[]> {
         const projectLocation: IProjectLocation = {
-            documentPath: this.pathConstructor.buildPath(uri),
+            documentPath: this.pathConstructor(uri),
             documentDepth: 1,
             documentIndex: 1
         };
@@ -3555,7 +3799,7 @@ import { containerPromise } from 'doculisp/dist/moduleLoader';
 import {
     DocumentParser,
     TokenFunction,
-    IPathConstructor,
+    PathConstructor,
     IPath,
     IProjectLocation,
     Token
@@ -3565,7 +3809,7 @@ class DoculispCompletionProvider {
     private container: any;
     private documentParser: DocumentParser;
     private tokenizer: TokenFunction;
-    private pathConstructor: IPathConstructor;
+    private pathConstructor: PathConstructor;
 
     private readonly CORE_IDENTIFIERS = [
         'section-meta', 'title', 'subtitle', 'author', 'id', 'ref-link', 'include',
@@ -3582,7 +3826,7 @@ class DoculispCompletionProvider {
         this.container = await containerPromise;
         this.documentParser = this.container.buildAs<DocumentParser>('documentParse');
         this.tokenizer = this.container.buildAs<TokenFunction>('tokenizer');
-        this.pathConstructor = this.container.buildAs<IPathConstructor>('pathConstructor');
+        this.pathConstructor = this.container.buildAs<PathConstructor>('pathConstructor');
     }
 
     async getCompletionItems(
@@ -3591,7 +3835,7 @@ class DoculispCompletionProvider {
         uri: string
     ): Promise<CompletionItem[]> {
         const projectLocation: IProjectLocation = {
-            documentPath: this.pathConstructor.buildPath(uri),
+            documentPath: this.pathConstructor(uri),
             documentDepth: 1,
             documentIndex: 1
         };
@@ -3714,7 +3958,7 @@ import {
     TokenFunction,
     IAstParser,
     IDoculispParser,
-    IPathConstructor,
+    PathConstructor,
     IVariableTable,
     IPath,
     IProjectLocation,
@@ -3729,14 +3973,14 @@ class DoculispSymbolProvider {
     private documentParser: DocumentParser;
     private tokenizer: TokenFunction;
     private astParser: IAstParser;
-    private pathConstructor: IPathConstructor;
+    private pathConstructor: PathConstructor;
 
     async initialize() {
         this.container = await containerPromise;
         this.documentParser = this.container.buildAs<DocumentParser>('documentParse');
         this.tokenizer = this.container.buildAs<TokenFunction>('tokenizer');
         this.astParser = this.container.buildAs<IAstParser>('astParser');
-        this.pathConstructor = this.container.buildAs<IPathConstructor>('pathConstructor');
+        this.pathConstructor = this.container.buildAs<PathConstructor>('pathConstructor');
     }
 
     async getDocumentSymbols(content: string, uri: string): Promise<DocumentSymbol[]> {
@@ -3744,7 +3988,7 @@ class DoculispSymbolProvider {
         const variableTable = this.container.buildAs<IVariableTable>('variableTable');
 
         const projectLocation: IProjectLocation = {
-            documentPath: this.pathConstructor.buildPath(uri),
+            documentPath: this.pathConstructor(uri),
             documentDepth: 1,
             documentIndex: 1
         };
@@ -3841,7 +4085,7 @@ import {
     DocumentParser,
     TokenFunction,
     IAstParser,
-    IPathConstructor,
+    PathConstructor,
     IProjectLocation,
     IAst
 } from 'doculisp';
@@ -3851,10 +4095,10 @@ async function processDocumentPipeline(filePath: string, content: string): Promi
     const documentParser = container.buildAs<DocumentParser>('documentParse');
     const tokenizer = container.buildAs<TokenFunction>('tokenizer');
     const astParser = container.buildAs<IAstParser>('astParser');
-    const pathConstructor = container.buildAs<IPathConstructor>('pathConstructor');
+    const pathConstructor = container.buildAs<PathConstructor>('pathConstructor');
 
     const projectLocation: IProjectLocation = {
-        documentPath: pathConstructor.buildPath(filePath),
+        documentPath: pathConstructor(filePath),
         documentDepth: 1,
         documentIndex: 1
     };
@@ -3902,7 +4146,7 @@ async function analyzeDoculispContent(files: string[]) {
     const container = await containerPromise;
     const documentParser = container.buildAs<DocumentParser>('documentParse');
     const tokenizer = container.buildAs<TokenFunction>('tokenizer');
-    const pathConstructor = container.buildAs<IPathConstructor>('pathConstructor');
+    const pathConstructor = container.buildAs<PathConstructor>('pathConstructor');
 
     const analysis = {
         totalFiles: files.length,
@@ -3915,7 +4159,7 @@ async function analyzeDoculispContent(files: string[]) {
     for (const [index, filePath] of files.entries()) {
         try {
             const content = await fs.readFile(filePath, 'utf-8');
-            const documentPath = pathConstructor.buildPath(filePath);
+            const documentPath = pathConstructor(filePath);
 
             // Track file types
             const extension = documentPath.extension.slice(1);
@@ -4005,11 +4249,11 @@ async function robustCompilation(sourcePath: string, destinationPath?: string) {
     try {
         const container = await containerPromise;
         const controller = container.buildAs<IController>('controller');
-        const pathConstructor = container.buildAs<IPathConstructor>('pathConstructor');
+        const pathConstructor = container.buildAs<PathConstructor>('pathConstructor');
 
-        const source = pathConstructor.buildPath(sourcePath);
+        const source = pathConstructor(sourcePath);
         const destination = destinationPath ?
-            pathConstructor.buildPath(destinationPath) : undefined;
+            pathConstructor(destinationPath) : undefined;
 
         // Validate inputs
         if (source.extension === '.dlproj' && destination) {
@@ -4091,10 +4335,10 @@ async function testDocumentCompilation() {
 
     // Test compilation
     const controller = container.buildAs<IController>('controller');
-    const pathConstructor = container.buildAs<IPathConstructor>('pathConstructor');
+    const pathConstructor = container.buildAs<PathConstructor>('pathConstructor');
 
-    const sourcePath = pathConstructor.buildPath('./test.dlisp');
-    const destinationPath = pathConstructor.buildPath('./test.md');
+    const sourcePath = pathConstructor('./test.dlisp');
+    const destinationPath = pathConstructor('./test.md');
 
     const results = controller.compile(sourcePath, destinationPath);
 
@@ -4112,7 +4356,7 @@ async function testDocumentCompilation() {
 async function optimizedBatchProcessing(files: string[]) {
     const container = await containerPromise;
     const controller = container.buildAs<IController>('controller');
-    const pathConstructor = container.buildAs<IPathConstructor>('pathConstructor');
+    const pathConstructor = container.buildAs<PathConstructor>('pathConstructor');
 
     // Group files by type for optimized processing
     const filesByType = files.reduce((acc, file) => {
@@ -4126,7 +4370,7 @@ async function optimizedBatchProcessing(files: string[]) {
     // Process project files first (most efficient for multiple docs)
     if (filesByType['.dlproj']) {
         for (const projectFile of filesByType['.dlproj']) {
-            const projectPath = pathConstructor.buildPath(projectFile);
+            const projectPath = pathConstructor(projectFile);
             const projectResults = controller.compile(projectPath);
             results.push(...projectResults);
         }
@@ -4135,8 +4379,8 @@ async function optimizedBatchProcessing(files: string[]) {
     // Process .dlisp files (fastest individual processing)
     if (filesByType['.dlisp']) {
         for (const dlispFile of filesByType['.dlisp']) {
-            const sourcePath = pathConstructor.buildPath(dlispFile);
-            const destPath = pathConstructor.buildPath(dlispFile.replace('.dlisp', '.md'));
+            const sourcePath = pathConstructor(dlispFile);
+            const destPath = pathConstructor(dlispFile.replace('.dlisp', '.md'));
             const result = controller.compile(sourcePath, destPath);
             results.push(...result);
         }
@@ -4145,8 +4389,8 @@ async function optimizedBatchProcessing(files: string[]) {
     // Process .md files last (highest overhead)
     if (filesByType['.md']) {
         for (const mdFile of filesByType['.md']) {
-            const sourcePath = pathConstructor.buildPath(mdFile);
-            const destPath = pathConstructor.buildPath(mdFile.replace(/\.md$/, '_compiled.md'));
+            const sourcePath = pathConstructor(mdFile);
+            const destPath = pathConstructor(mdFile.replace(/\.md$/, '_compiled.md'));
             const result = controller.compile(sourcePath, destPath);
             results.push(...result);
         }
@@ -4160,25 +4404,25 @@ async function optimizedBatchProcessing(files: string[]) {
 
 ```typescript
 import { containerPromise } from 'doculisp/dist/moduleLoader';
-import { IController, IPathConstructor, IPath, Result } from 'doculisp';
+import { IController, PathConstructor, IPath, Result } from 'doculisp';
 
 class DoculispProcessor {
     private container: any;
     private controller: IController;
-    private pathConstructor: IPathConstructor;
+    private pathConstructor: PathConstructor;
 
     async initialize() {
         // Initialize once and reuse
         this.container = await containerPromise;
         this.controller = this.container.buildAs<IController>('controller');
-        this.pathConstructor = this.container.buildAs<IPathConstructor>('pathConstructor');
+        this.pathConstructor = this.container.buildAs<PathConstructor>('pathConstructor');
     }
 
     async compileFile(sourcePath: string, destinationPath?: string): Promise<Result<string | false>[]> {
         // Reuse container instances for better performance
-        const source: IPath = this.pathConstructor.buildPath(sourcePath);
+        const source: IPath = this.pathConstructor(sourcePath);
         const destination: IPath | undefined = destinationPath ?
-            this.pathConstructor.buildPath(destinationPath) : undefined;
+            this.pathConstructor(destinationPath) : undefined;
 
         return this.controller.compile(source, destination);
     }
@@ -4304,10 +4548,10 @@ describe('Parser Pipeline', () => {
         const tokenizer = testContainer.buildAs<ITokenizer>('tokenizer');
         const astParser = testContainer.buildAs<IAstParser>('astParser');
         const doculispParser = testContainer.buildAs<IAstDoculispParser>('astDoculispParse');
-        const pathConstructor = testContainer.buildAs<IPathConstructor>('pathConstructor');
+        const pathConstructor = testContainer.buildAs<PathConstructor>('pathConstructor');
 
         const input = '(#intro Introduction)\n\nContent here.';
-        const path = pathConstructor.buildPath('./test.dlisp');
+        const path = pathConstructor('./test.dlisp');
 
         // Test each stage
         const tokens = tokenizer.tokenize(input, path);
@@ -4387,9 +4631,9 @@ describe('Error Handling', () => {
         testContainer.replaceValue(mockFileHandler, 'fileHandler');
 
         const controller = testContainer.buildAs<IController>('controller');
-        const pathConstructor = testContainer.buildAs<IPathConstructor>('pathConstructor');
+        const pathConstructor = testContainer.buildAs<PathConstructor>('pathConstructor');
 
-        const sourcePath = pathConstructor.buildPath('./nonexistent.dlisp');
+        const sourcePath = pathConstructor('./nonexistent.dlisp');
         const result = controller.compile(sourcePath);
 
         expect(result.success).toBe(false);
@@ -4421,11 +4665,11 @@ describe('Integration Tests', () => {
         // Use the real container for integration tests (container is async)
         const container = await containerPromise;
         const controller = container.buildAs<IController>('controller');
-        const pathConstructor = container.buildAs<IPathConstructor>('pathConstructor');
+        const pathConstructor = container.buildAs<PathConstructor>('pathConstructor');
 
         // Test with a known good file
-        const sourcePath = pathConstructor.buildPath('./test-fixtures/sample.dlisp');
-        const outputPath = pathConstructor.buildPath('./test-output/result.md');
+        const sourcePath = pathConstructor('./test-fixtures/sample.dlisp');
+        const outputPath = pathConstructor('./test-output/result.md');
 
         const result = controller.compile(sourcePath, outputPath);
 

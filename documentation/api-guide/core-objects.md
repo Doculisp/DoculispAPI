@@ -20,6 +20,29 @@ const controller = container.buildAs<IController>('controller');
 const results: Result<string | false>[] = controller.compile(sourcePath, destinationPath);
 ```
 
+<!-- (dl (# Modern API Classes)) -->
+
+**Recommended Approach**: Use the high-level API classes for most use cases:
+
+| API Class | Interface | Primary Purpose |
+|-----------|-----------|-----------------|
+| `DoculispApi` | `IDoculispApi` | **Main API** - simplified interface with automatic container management |
+| `TestableDoculispApi` | `ITestableDoculispApi` | **Testing API** - enhanced API with dependency injection for testing |
+
+**Usage Pattern:**
+```typescript
+// Modern API approach - recommended for new code
+import { DoculispApi, IDoculispApi, ITestableDoculispApi } from 'doculisp';
+
+// Standard usage
+const api: IDoculispApi = await DoculispApi.create();
+const results = await api.compileFile('./docs/main.dlisp', './README.md');
+
+// Testing usage
+const [testContainer, testApi]: [ITestableContainer, ITestableDoculispApi] = 
+    await DoculispApi.createTestable();
+```
+
 <!-- (dl (# Core Pipeline Components)) -->
 
 These objects form the heart of the compilation pipeline, processing documents through sequential transformation stages:
@@ -55,19 +78,19 @@ const astParser = container.buildAs<IAstParser>('astParser');
 | Container Key | Interface | Functionality |
 |---------------|-----------|---------------|
 | `fileHandler` | `IFileWriter` | File operations (read, write, exists), working directory management |
-| `pathConstructor` | `IPathConstructor` | Creates and manipulates `IPath` objects, path resolution |
+| `pathConstructor` | `PathConstructor` | Creates and manipulates `IPath` objects, path resolution |
 
 **Usage Pattern:**
 ```typescript
 // File system operations with proper typing
 import { containerPromise } from 'doculisp/dist/moduleLoader';
-import { IFileWriter, IPathConstructor, IPath, Result } from 'doculisp';
+import { IFileWriter, PathConstructor, IPath, Result } from 'doculisp';
 
 const container = await containerPromise;
 const fileHandler = container.buildAs<IFileWriter>('fileHandler');
-const pathConstructor = container.buildAs<IPathConstructor>('pathConstructor');
+const pathConstructor = container.buildAs<PathConstructor>('pathConstructor');
 
-const path: IPath = pathConstructor.buildPath('./docs/readme.md');
+const path: IPath = pathConstructor('./docs/readme.md');
 const content: Result<string> = fileHandler.load(path);
 ```
 
@@ -98,6 +121,41 @@ The variable table only supports system-generated variables and IDs. Custom stri
 | `textHelpers` | `ITextHelpers` | Text processing and formatting utilities |
 | `trimArray` | `ITrimArray` | Array manipulation utilities for token processing |
 | `searches` | `ISearches` | Search and lookup utilities for content analysis |
+
+<!-- (dl (# AST Block Range Tracking)) -->
+
+**Precise Location Information**: AST interfaces include comprehensive location tracking for enhanced tooling support:
+
+**AST Range Properties:**
+All AST node types include a required `blockRange: IRange` property for precise location tracking:
+
+- **`IAstIdentifier`**: Identifier blocks with exact start/end coordinates  
+- **`IAstCommand`**: Command blocks with precise boundaries
+- **`IAstContainer`**: Container blocks with complete range information
+- **Doculisp AST Types**: `IPathId`, `IContentLocation`, `ILoad` interfaces also include ranges
+
+**Range Interface:**
+```typescript
+interface IRange {
+    start: ILocationCoordinates;
+    end: ILocationCoordinates;
+}
+
+// Example AST identifier with block range
+const identifier: IAstIdentifier = {
+    // ... existing properties
+    blockRange: {
+        start: { line: 1, char: 1 },  // Opening parenthesis position
+        end: { line: 1, char: 15 }    // Closing parenthesis position
+    }
+};
+```
+
+**Benefits:**
+- **Enhanced Tooling**: Enables precise error highlighting and block manipulation
+- **IDE Support**: Improved syntax highlighting and navigation features
+- **Debugging**: Exact location information for troubleshooting
+- **Cross-Platform**: Works with both TypeScript and JavaScript consumers
 
 <!-- (dl (# System Information)) -->
 
@@ -173,16 +231,14 @@ const fileHandler = container.buildAs<IFileWriter>('fileHandler');
 const content = fileHandler.load(filePath);
 ```
 
-<!-- (dl (## IPathConstructor - Path Management)) -->
+<!-- (dl (## PathConstructor - Path Management)) -->
 
 ```typescript
-interface IPathConstructor {
-    buildPath(path: string): IPath;
-}
+type PathConstructor = (pathString: string) => IPath;
 
 // Usage
-const pathConstructor = container.buildAs<IPathConstructor>('pathConstructor');
-const docPath = pathConstructor.buildPath('./docs/readme.md');
+const pathConstructor = container.buildAs<PathConstructor>('pathConstructor');
+const docPath = pathConstructor('./docs/readme.md');
 ```
 
 <!-- (dl (# Access Patterns)) -->
@@ -206,6 +262,6 @@ const container = await containerPromise;
 const [controller, fileHandler, pathConstructor] = [
     container.buildAs<IController>('controller'),
     container.buildAs<IFileWriter>('fileHandler'),
-    container.buildAs<IPathConstructor>('pathConstructor')
+    container.buildAs<PathConstructor>('pathConstructor')
 ];
 ```

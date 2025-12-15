@@ -96,10 +96,10 @@ describe('Parser Pipeline', () => {
         const tokenizer = testContainer.buildAs<ITokenizer>('tokenizer');
         const astParser = testContainer.buildAs<IAstParser>('astParser');
         const doculispParser = testContainer.buildAs<IAstDoculispParser>('astDoculispParse');
-        const pathConstructor = testContainer.buildAs<IPathConstructor>('pathConstructor');
+        const pathConstructor = testContainer.buildAs<PathConstructor>('pathConstructor');
         
         const input = '(#intro Introduction)\n\nContent here.';
-        const path = pathConstructor.buildPath('./test.dlisp');
+        const path = pathConstructor('./test.dlisp');
         
         // Test each stage
         const tokens = tokenizer.tokenize(input, path);
@@ -179,9 +179,9 @@ describe('Error Handling', () => {
         testContainer.replaceValue(mockFileHandler, 'fileHandler');
         
         const controller = testContainer.buildAs<IController>('controller');
-        const pathConstructor = testContainer.buildAs<IPathConstructor>('pathConstructor');
+        const pathConstructor = testContainer.buildAs<PathConstructor>('pathConstructor');
         
-        const sourcePath = pathConstructor.buildPath('./nonexistent.dlisp');
+        const sourcePath = pathConstructor('./nonexistent.dlisp');
         const result = controller.compile(sourcePath);
         
         expect(result.success).toBe(false);
@@ -213,11 +213,11 @@ describe('Integration Tests', () => {
         // Use the real container for integration tests (container is async)
         const container = await containerPromise;
         const controller = container.buildAs<IController>('controller');
-        const pathConstructor = container.buildAs<IPathConstructor>('pathConstructor');
+        const pathConstructor = container.buildAs<PathConstructor>('pathConstructor');
         
         // Test with a known good file
-        const sourcePath = pathConstructor.buildPath('./test-fixtures/sample.dlisp');
-        const outputPath = pathConstructor.buildPath('./test-output/result.md');
+        const sourcePath = pathConstructor('./test-fixtures/sample.dlisp');
+        const outputPath = pathConstructor('./test-output/result.md');
         
         const result = controller.compile(sourcePath, outputPath);
         

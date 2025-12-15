@@ -63,9 +63,9 @@ Project files define document collections using this structure:
 async function compileProject() {
     const container = await containerPromise;
     const controller = container.buildAs<IController>('controller');
-    const pathConstructor = container.buildAs<IPathConstructor>('pathConstructor');
+    const pathConstructor = container.buildAs<PathConstructor>('pathConstructor');
 
-    const projectPath = pathConstructor.buildPath('./docs/docs.dlproj');
+    const projectPath = pathConstructor('./docs/docs.dlproj');
     
     // Project files don't need destination path - it's embedded in structure
     const results = controller.compile(projectPath);

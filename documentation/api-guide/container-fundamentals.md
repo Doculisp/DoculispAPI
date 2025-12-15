@@ -128,7 +128,7 @@ import type {
     IController,
     ITokenizer,
     IAstParser,
-    IPathConstructor,
+    PathConstructor,
     IVariableTable,
     IFileWriter,
     Result

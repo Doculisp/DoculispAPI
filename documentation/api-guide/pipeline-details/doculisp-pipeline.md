@@ -75,10 +75,10 @@ const parser = isDoculispFile ?
 async function compileDoculispFile() {
     const container = await containerPromise;
     const controller = container.buildAs<IController>('controller');
-    const pathConstructor = container.buildAs<IPathConstructor>('pathConstructor');
+    const pathConstructor = container.buildAs<PathConstructor>('pathConstructor');
 
-    const sourcePath = pathConstructor.buildPath('./docs/_main.dlisp');
-    const destinationPath = pathConstructor.buildPath('./README.md');
+    const sourcePath = pathConstructor('./docs/_main.dlisp');
+    const destinationPath = pathConstructor('./README.md');
     
     const result = controller.compile(sourcePath, destinationPath);
     

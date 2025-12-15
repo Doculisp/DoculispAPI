@@ -76,7 +76,7 @@ DocumentParse uses different strategies based on file type:
 import { containerPromise } from 'doculisp/dist/moduleLoader';
 import {
     DocumentParser,
-    IPathConstructor,
+    PathConstructor,
     IProjectLocation,
     DocumentMap,
     Result
@@ -86,11 +86,11 @@ async function parseDocument() {
     // Use [Standard Container Setup] - see common-patterns.md
     const container = await containerPromise;
     const documentParser = container.buildAs<DocumentParser>('documentParse');
-    const pathConstructor = container.buildAs<IPathConstructor>('pathConstructor');
+    const pathConstructor = container.buildAs<PathConstructor>('pathConstructor');
 
     // Use [Standard Project Location] - see common-patterns.md  
     const projectLocation: IProjectLocation = {
-        documentPath: pathConstructor.buildPath('./example.md'),
+        documentPath: pathConstructor('./example.md'),
         documentDepth: 1,
         documentIndex: 1
     };
@@ -373,10 +373,10 @@ async function getTokensAtPosition(
     const container = await containerPromise;
     const documentParser = container.buildAs<DocumentParser>('documentParse');
     const tokenizer = container.buildAs<TokenFunction>('tokenizer');
-    const pathConstructor = container.buildAs<IPathConstructor>('pathConstructor');
+    const pathConstructor = container.buildAs<PathConstructor>('pathConstructor');
 
     const projectLocation = {
-        documentPath: pathConstructor.buildPath(filePath),
+        documentPath: pathConstructor(filePath),
         documentDepth: 1,
         documentIndex: 1
     };
@@ -407,10 +407,10 @@ async function getSyntaxTokens(document: string, filePath: string): Promise<Synt
     const container = await containerPromise;
     const documentParser = container.buildAs<DocumentParser>('documentParse');
     const tokenizer = container.buildAs<TokenFunction>('tokenizer');
-    const pathConstructor = container.buildAs<IPathConstructor>('pathConstructor');
+    const pathConstructor = container.buildAs<PathConstructor>('pathConstructor');
 
     const projectLocation = {
-        documentPath: pathConstructor.buildPath(filePath),
+        documentPath: pathConstructor(filePath),
         documentDepth: 1,
         documentIndex: 1
     };
@@ -461,10 +461,10 @@ async function validateSyntaxOnly(document: string, filePath: string): Promise<V
     const documentParser = container.buildAs<DocumentParser>('documentParse');
     const tokenizer = container.buildAs<TokenFunction>('tokenizer');
     const astParser = container.buildAs<IAstParser>('astParser');
-    const pathConstructor = container.buildAs<IPathConstructor>('pathConstructor');
+    const pathConstructor = container.buildAs<PathConstructor>('pathConstructor');
 
     const projectLocation = {
-        documentPath: pathConstructor.buildPath(filePath),
+        documentPath: pathConstructor(filePath),
         documentDepth: 1,
         documentIndex: 1
     };
@@ -533,10 +533,10 @@ async function analyzeDocumentStructure(document: string, filePath: string): Pro
     const documentParser = container.buildAs<DocumentParser>('documentParse');
     const tokenizer = container.buildAs<TokenFunction>('tokenizer');
     const astParser = container.buildAs<IAstParser>('astParser');
-    const pathConstructor = container.buildAs<IPathConstructor>('pathConstructor');
+    const pathConstructor = container.buildAs<PathConstructor>('pathConstructor');
 
     const projectLocation = {
-        documentPath: pathConstructor.buildPath(filePath),
+        documentPath: pathConstructor(filePath),
         documentDepth: 1,
         documentIndex: 1
     };

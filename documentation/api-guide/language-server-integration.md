@@ -114,7 +114,7 @@ class DoculispLanguageServer {
             documentParser: container.buildAs<DocumentParser>('documentParse'),
             tokenizer: container.buildAs<TokenFunction>('tokenizer'),
             astParser: container.buildAs<IAstParser>('astParser'),
-            pathConstructor: container.buildAs<IPathConstructor>('pathConstructor')
+            pathConstructor: container.buildAs<PathConstructor>('pathConstructor')
         };
     }
 
@@ -161,7 +161,7 @@ Handle include resolution correctly:
 ```typescript
 async function processWithWorkingDirectory<T>(filePath: string, operation: () => Promise<T>): Promise<T> {
     const fileHandler = container.buildAs<IFileWriter>('fileHandler');
-    const path = pathConstructor.buildPath(filePath);
+    const path = pathConstructor(filePath);
     
     const originalDir = fileHandler.getProcessWorkingDirectory();
     const targetDir = path.getContainingDir();
