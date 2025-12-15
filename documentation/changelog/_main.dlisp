@@ -1,5 +1,5 @@
 (*
-    Only the most recent 10 versions are listed here, the rest are listed in the previous dlisp
+    Only the most recent 10 versions are listed here, the rest are listed in the _previousMain dlisp
     When there are unreleased changes, create an "Unreleased" section at the top who's title is "[Unreleased]".
 )
 (section-meta
