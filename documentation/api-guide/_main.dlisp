@@ -4,12 +4,13 @@
     (author GitHub Copilot)
     (include
         (Introduction ./_introduction.md)
+        (Types ./types/_main.dlisp)
     )
 )
 
 (content
     (toc
-        (style bulleted)
+        (style numbered)
         (label Contents)
     )
 )

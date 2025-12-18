@@ -1,8 +1,8 @@
-<!-- (dl (# Introduction)) -->
+<!-- (dl (section-meta Introduction)) -->
 
 The DoculispTypeScript API is designed around several core philosophical principles that make it powerful, predictable, and maintainable. Understanding these principles will help you use the API effectively and write robust code.
 
-## Immutability and Functional Design
+<!-- (dl (# Immutability and Functional Design)) -->
 
 The API follows **functional programming principles** where operations don't modify existing data structures. Instead, they return new objects with the desired changes. This approach:
 
@@ -17,7 +17,7 @@ const originalDocument = parseDocument(content);
 const processedDocument = processIncludes(originalDocument); // original unchanged
 ```
 
-## Result-Based Error Handling
+<!-- (dl (# Result-Based Error Handling)) -->
 
 Rather than throwing exceptions that can crash your application, the API uses a **Result pattern** that makes error handling explicit and manageable:
 
@@ -37,7 +37,7 @@ if (result.success) {
 }
 ```
 
-## Pipeline Architecture
+<!-- (dl (# Pipeline Architecture)) -->
 
 The API is structured as a **processing pipeline** where each stage transforms data for the next stage:
 
@@ -55,7 +55,7 @@ This design provides:
 - **Flexible processing** - customize or replace individual stages
 - **Debuggable flow** - inspect data at any stage in the pipeline
 
-## Dependency Injection and Testability
+<!-- (dl (# Dependency Injection and Testability)) -->
 
 The API uses **dependency injection** to make components:
 
@@ -73,7 +73,7 @@ const container = buildTestable()
 const controller = container.controller;
 ```
 
-## Location-Aware Processing
+<!-- (dl (# Location-Aware Processing)) -->
 
 Every piece of data maintains **precise location information** (file, line, character) throughout processing:
 
@@ -82,7 +82,7 @@ Every piece of data maintains **precise location information** (file, line, char
 - **Debug-friendly** - trace any value back to its source
 - **User-friendly** - errors point to specific locations in source files
 
-## Modular and Extensible Design
+<!-- (dl (# Modular and Extensible Design)) -->
 
 The API is built for **composition and extension**:
 

@@ -1,0 +1,60 @@
+(section-meta
+    (title DoculispTypeScript Public Types)
+    (author Jason Kerney)
+    (author GitHub Copilot)
+    (include
+        (Errors ./error-handling/_main.md)
+        (Data-Structures ./data-structures/_main.dlisp)
+        (Utility ./utility-and-support/_main.dlisp)
+    )
+)
+
+(content
+    (toc
+        (style bulleted)
+        (label Contents)
+    )
+)
+
+(*
+## Utility and Support Types
+
+### Location and Positioning
+ILocation - Source code location with comparison methods
+IPosition - Line/character coordinates
+IDocumentProjectPosition - Document path and position info
+
+### File System Operations
+IPath - Core file path interface
+PathConstructor - Factory function for paths
+IFileHandler - Complete file system operations
+IFileLoader, IFileWriter, IDirectoryHandler - Specialized file operations
+
+### Text and String Processing
+IStringBuilder - String construction with line management
+StringBuilderFactory - Factory for string builders
+
+### General Utilities
+IUtil - Core utility functions for results and locations
+IComparable - Interface for comparable objects
+IVersion - Version information provider
+
+## Pipeline Component Types
+
+### Core Pipeline Interfaces
+IController - Main compilation orchestrator
+IIncludeBuilder - Full AST building with includes
+IStringWriter - Converts AST to markdown output
+IDocWriter - Document compilation and file writing
+
+### Specialized Parsers
+DocumentParser - Raw document parsing function
+IAstParser - Token to AST conversion
+IDoculispParser - AST to Doculisp semantic parsing
+IProjectParser - Project-level parsing
+
+### Dependency Injection
+IContainer - Main dependency container
+ITestableContainer - Container with test replacement capabilities
+IManager, IRegistry - Container component interfaces
+)

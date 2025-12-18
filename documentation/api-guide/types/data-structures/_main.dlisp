@@ -1,0 +1,12 @@
+(section-meta
+    (title Data Structure Types)
+    (include
+        (Token-and-Parsing-Types ./token-parsing.md)
+        (AST-Node-Types ./ast-nodes.md)
+        (Doculisp-Semantic-Types ./doculisp-semantic.md)
+        (Project-and-Document-Types ./project-document.md)
+        (Configuration-and-Variable-Types ./config-variable.md)
+    )
+)
+
+(content (toc bulleted))
