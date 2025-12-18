@@ -6,6 +6,7 @@
         (Errors ./error-handling/_main.md)
         (Data-Structures ./data-structures/_main.dlisp)
         (Utility ./utility-and-support/_main.dlisp)
+        (Pipeline-Components ./pipeline-components/_main.dlisp)
     )
 )
 
@@ -17,28 +18,6 @@
 )
 
 (*
-## Utility and Support Types
-
-### Location and Positioning
-ILocation - Source code location with comparison methods
-IPosition - Line/character coordinates
-IDocumentProjectPosition - Document path and position info
-
-### File System Operations
-IPath - Core file path interface
-PathConstructor - Factory function for paths
-IFileHandler - Complete file system operations
-IFileLoader, IFileWriter, IDirectoryHandler - Specialized file operations
-
-### Text and String Processing
-IStringBuilder - String construction with line management
-StringBuilderFactory - Factory for string builders
-
-### General Utilities
-IUtil - Core utility functions for results and locations
-IComparable - Interface for comparable objects
-IVersion - Version information provider
-
 ## Pipeline Component Types
 
 ### Core Pipeline Interfaces

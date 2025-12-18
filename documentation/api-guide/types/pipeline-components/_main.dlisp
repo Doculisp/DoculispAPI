@@ -1,0 +1,15 @@
+(section-meta
+    (title Pipeline Component Types)
+    (include
+        (Core-Pipeline-Interfaces ./core-pipeline.md)
+        (Specialized-Parsers ./specialized-parsers.md)
+        (Dependency-Injection ./dependency-injection.md)
+    )
+)
+
+(content
+    (toc
+        (style numbered-labeled)
+        (label Contents)
+    )
+)

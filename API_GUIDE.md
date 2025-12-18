@@ -115,6 +115,7 @@ This philosophy makes the DoculispTypeScript API both powerful for complex docum
 * [Result and Error Handling Types](#result-and-error-handling-types)
 * [Data Structure Types](#data-structure-types)
 * [Utility and Support Types](#utility-and-support-types)
+* [Pipeline Component Types](#pipeline-component-types)
 
 ### Result and Error Handling Types ###
 
@@ -1083,6 +1084,325 @@ type UtilBuilder = () => IUtil;
 - **Utility instantiation** - Create new utility objects
 - **Dependency injection** - Allow different utility implementations
 - **Testing support** - Enable utility mocking and replacement
+
+### Pipeline Component Types ###
+
+#### Contents ####
+
+1. Core Pipeline Interfaces: [Core Pipeline Interfaces](#core-pipeline-interfaces)
+2. Specialized Parsers: [Specialized Parsers](#specialized-parsers)
+3. Dependency Injection: [Dependency Injection](#dependency-injection)
+
+#### Core Pipeline Interfaces ####
+
+These interfaces represent the main components that orchestrate the document compilation pipeline from source to output.
+
+###### `IController` ######
+
+Main compilation orchestrator interface that coordinates the entire processing pipeline:
+
+```typescript
+interface IController {
+    compile(source: IPath, output: IPath | false): Promise<Result<void>>;
+    test(variableTable: IVariableTable): Promise<Result<void>>;
+}
+```
+
+**Key Methods:**
+- **`compile`** - Full compilation from source file to output markdown
+- **`test`** - Validation mode that checks syntax without writing output
+- **Pipeline coordination** - Orchestrates all processing stages in sequence
+- **Error propagation** - Collects and reports errors from any pipeline stage
+
+**Usage Pattern:**
+```typescript
+const controller = container.buildAs<IController>('controller');
+
+// Compile to file
+const result = await controller.compile(sourcePath, outputPath);
+
+// Test validation only
+const testResult = await controller.test(variableTable);
+```
+
+###### `IIncludeBuilder` ######
+
+Full AST building interface with external file inclusion and dependency resolution:
+
+```typescript
+interface IIncludeBuilder {
+    build(doculisp: IDoculisp, variableTable: IVariableTable): Promise<Result<ISectionWriter>>;
+}
+```
+
+**Capabilities:**
+- **Include resolution** - Process external file dependencies recursively
+- **AST completion** - Build complete document tree with all includes
+- **Variable context** - Manage shared variables across included files
+- **Error aggregation** - Collect errors from all included documents
+
+**Processing Flow:**
+1. **Parse includes** - Identify external file references
+2. **Recursive processing** - Process each included file through full pipeline
+3. **Dependency resolution** - Handle nested includes and circular reference detection
+4. **Tree assembly** - Combine all processed content into unified structure
+
+###### `IStringWriter` ######
+
+Interface for converting processed AST structures to final markdown output:
+
+```typescript
+interface IStringWriter {
+    writeString(sectionWriter: ISectionWriter): Result<string>;
+}
+```
+
+**Responsibilities:**
+- **Markdown generation** - Convert semantic structures to markdown syntax
+- **Content formatting** - Apply proper spacing, headings, and structure
+- **Table of contents** - Generate TOC based on configuration
+- **Link resolution** - Convert path references to proper markdown links
+
+**Output Features:**
+- **Clean markdown** - Standards-compliant output that works everywhere
+- **Proper formatting** - Consistent spacing and structure
+- **Dynamic headings** - Context-aware heading levels
+- **Metadata handling** - Include author information and document metadata
+
+###### `IDocWriter` ######
+
+Document compilation and file writing interface that handles the final output stage:
+
+```typescript
+interface IDocWriter {
+    compileDocument(source: IPath, output: IPath | false): Promise<Result<void>>;
+}
+```
+
+**Functionality:**
+- **End-to-end compilation** - Complete processing from source to file output
+- **File system operations** - Handle reading source and writing output files
+- **Output management** - Create directories and manage file paths
+- **Error handling** - Comprehensive error reporting with file context
+
+**Usage Modes:**
+- **File output** - When `output` is an `IPath`, writes to specified file
+- **Test mode** - When `output` is `false`, validates without writing
+- **Directory creation** - Automatically creates output directories if needed
+
+#### Specialized Parsers ####
+
+These parser interfaces handle the transformation of content through different stages of the processing pipeline.
+
+###### `DocumentParser` ######
+
+Function type for parsing raw document content into structured format:
+
+```typescript
+type DocumentParser = (content: string, projectLocation: IProjectLocation) => Result<DocumentMap>;
+```
+
+**Processing:**
+- **Raw text input** - Accepts plain text document content
+- **Content separation** - Identifies text content vs. Doculisp blocks
+- **Structure creation** - Generates `DocumentMap` with mixed content parts
+- **Location tracking** - Maintains precise source location information
+
+**Output Structure:**
+- **`DocumentPart[]`** - Array of text and Lisp content blocks
+- **Project context** - Location information for error reporting
+- **Mixed content support** - Handles documents with embedded Doculisp
+
+###### `IAstParser` ######
+
+Interface for converting tokenized content to Abstract Syntax Tree representation:
+
+```typescript
+interface IAstParser {
+    parse(tokenizedDocument: TokenizedDocument): Result<RootAst>;
+}
+```
+
+**Transformation:**
+- **Token to AST** - Convert sequential tokens into hierarchical tree structure
+- **Syntax validation** - Ensure proper Lisp syntax and structure
+- **Node creation** - Generate typed AST nodes (identifiers, commands, containers)
+- **Error detection** - Identify malformed expressions and syntax errors
+
+**AST Benefits:**
+- **Structural representation** - Tree format enables easier processing
+- **Type safety** - Strongly typed nodes prevent runtime errors
+- **Location preservation** - Each node maintains source position
+- **Hierarchical access** - Navigate nested structures efficiently
+
+###### `IDoculispParser` ######
+
+Interface for parsing AST into Doculisp semantic structures:
+
+```typescript
+interface IDoculispParser {
+    parse(rootAst: RootAst, variableTable: IVariableTable): Result<IDoculisp>;
+}
+```
+
+**Semantic Analysis:**
+- **AST to semantics** - Convert raw AST into meaningful Doculisp structures
+- **Command interpretation** - Process Doculisp commands (section-meta, content, etc.)
+- **Validation rules** - Apply Doculisp-specific structural requirements
+- **Variable integration** - Handle variable definitions and references
+
+**Semantic Structures:**
+- **`IWrite`** - Text content for output
+- **`ITitle`** - Document and section titles
+- **`ITableOfContents`** - TOC configuration
+- **`IHeader`** - Dynamic heading elements
+- **`IContentLocation`** - Content placement markers
+
+###### `IProjectParser` ######
+
+Interface for parsing project-level AST into project structure definitions:
+
+```typescript
+interface IProjectParser {
+    parse(rootAst: RootAst): Result<IProject>;
+}
+```
+
+**Project Processing:**
+- **Project syntax** - Parse `.dlproj` file format
+- **Document definitions** - Extract source/output file pairs
+- **Batch configuration** - Setup for multi-document compilation
+- **Validation** - Ensure all referenced files exist and are accessible
+
+**Project Structure:**
+- **`IDocument[]`** - Array of document compilation definitions
+- **Source paths** - Input Doculisp files to process
+- **Output paths** - Target markdown files to generate
+- **Batch coordination** - Enable processing multiple documents together
+
+**Usage Pattern:**
+```typescript
+// Parse project file
+const projectResult = projectParser.parse(projectAst);
+if (projectResult.success) {
+    // Process each document in the project
+    for (const doc of projectResult.value.documents) {
+        await compileDocument(doc.source, doc.output);
+    }
+}
+```
+
+#### Dependency Injection ####
+
+These interfaces provide dependency injection capabilities for testing, modularity, and component replacement throughout the API.
+
+###### `IContainer` ######
+
+Main dependency injection container interface for component management:
+
+```typescript
+interface IContainer {
+    buildAs<T>(key: string): T;
+    buildTestable(): ITestableContainer;
+}
+```
+
+**Core Capabilities:**
+- **Component resolution** - Retrieve registered components by key
+- **Type safety** - Generic `buildAs<T>` ensures correct return types
+- **Testable creation** - Generate isolated containers for testing
+- **Dependency coordination** - Manage component lifecycles and dependencies
+
+**Usage Pattern:**
+```typescript
+// Get components from container
+const controller = container.buildAs<IController>('controller');
+const parser = container.buildAs<IAstParser>('astParser');
+const pathConstructor = container.buildAs<PathConstructor>('pathConstructor');
+```
+
+###### `ITestableContainer` ######
+
+Extended container interface with test replacement capabilities:
+
+```typescript
+interface ITestableContainer extends IContainer {
+    replaceValue<T>(fake: T, key: string): void;
+}
+```
+
+**Testing Features:**
+- **Component replacement** - Swap real implementations with test fakes
+- **Isolation** - Independent container instances for each test
+- **Fake injection** - Replace file system, parsers, or other dependencies
+- **Test control** - Complete control over component behavior in tests
+
+**Testing Pattern:**
+```typescript
+// Create testable container
+const testContainer = container.buildTestable();
+
+// Inject test fakes
+const mockFileSystem = createMockFileSystem();
+testContainer.replaceValue(mockFileSystem, 'fileHandler');
+
+// Test with controlled dependencies
+const api = new DoculispApi(testContainer);
+```
+
+###### `IManager` ######
+
+Container management interface for component registration and lifecycle:
+
+```typescript
+interface IManager {
+    register<T>(key: string, factory: () => T): void;
+    registerSingleton<T>(key: string, factory: () => T): void;
+    registerInstance<T>(key: string, instance: T): void;
+}
+```
+
+**Registration Types:**
+- **`register`** - New instance per request (transient)
+- **`registerSingleton`** - Single shared instance (singleton)
+- **`registerInstance`** - Pre-created instance registration
+- **Factory functions** - Lazy instantiation with dependency resolution
+
+###### `IRegistry` ######
+
+Registry interface for component lookup and resolution:
+
+```typescript
+interface IRegistry {
+    resolve<T>(key: string): T;
+    canResolve(key: string): boolean;
+    getRegistrations(): string[];
+}
+```
+
+**Registry Operations:**
+- **Component resolution** - Look up registered components by key
+- **Availability checking** - Verify if components are registered
+- **Registration listing** - Get all available component keys
+- **Dependency validation** - Ensure all required components are available
+
+**Container Architecture Benefits:**
+- **Modularity** - Clean separation between components
+- **Testability** - Easy mocking and replacement for tests
+- **Flexibility** - Swap implementations without changing client code
+- **Maintainability** - Clear dependency declarations and management
+
+**Example Setup:**
+```typescript
+// Component registration
+manager.registerSingleton('fileHandler', () => new FileHandler());
+manager.register('astParser', () => new AstParser());
+manager.registerInstance('pathConstructor', createPathConstructor());
+
+// Component usage
+const fileHandler = registry.resolve<IFileHandler>('fileHandler');
+const canParse = registry.canResolve('astParser');
+```
 
 <!-- Written By: Jason Kerney -->
 <!-- Written By: GitHub Copilot -->
