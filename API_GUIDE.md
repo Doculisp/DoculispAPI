@@ -13,7 +13,8 @@
 1. [Introduction](#introduction)
 2. [Document Parser](#document-parser)
 3. [Tokenizer](#tokenizer)
-4. [DoculispTypeScript Public Types](#doculisptypescript-public-types)
+4. [AST Parser](#ast-parser)
+5. [DoculispTypeScript Public Types](#doculisptypescript-public-types)
 
 ## Introduction ##
 
@@ -489,6 +490,266 @@ The Tokenizer is specifically designed for **Doculisp's Lisp-inspired syntax**:
 - **Comment support** - Handles commented-out blocks with `*` prefix
 
 This tokenization approach enables Doculisp to maintain its **clean, readable syntax** while providing the structural foundation needed for reliable parsing and error reporting.
+
+## AST Parser ##
+
+The **AST Parser** is the third stage of the Doculisp processing pipeline, responsible for transforming the linear token stream into a hierarchical Abstract Syntax Tree (AST) that represents the structural relationships of Doculisp expressions.
+
+#### Core Purpose ####
+
+The AST Parser converts tokenized Doculisp code into a **non-semantic, structurally-validated tree**:
+
+- **Hierarchical Structure** - Transform flat token stream into nested tree
+- **Syntax Validation** - Ensure proper Lisp expression structure without interpreting meaning
+- **Shape Validation** - Verify basic structural correctness of expressions
+- **Foundation Building** - Create a clean, validated structure for semantic processing
+
+This transformation from linear tokens to a **structurally-sound tree** makes semantic analysis much easier in subsequent pipeline stages by ensuring the basic shape of the code is correct.
+
+#### AST Node Architecture ####
+
+The AST Parser creates a tree of strongly-typed nodes that represent the **structural shape** of Doculisp syntax without interpreting semantic meaning:
+
+##### Core AST Union #####
+
+All AST nodes are part of the [`CoreAst`](#coreast) union type:
+
+```typescript
+type CoreAst = IdentifierAst | IAstValue;
+```
+
+##### Value Nodes #####
+
+**[`IAstValue`](#iastvalue)** - Represents literal values and parameters:
+
+```typescript
+interface IAstValue {
+    readonly type: 'value';
+    readonly value: string;
+    readonly location: ILocation;
+}
+```
+
+**Usage:** Parameter values like `"My Document Title"`, `"./path/to/file.md"`, `"numbered-labeled"`
+
+##### Identifier Nodes #####
+
+**[`IAstIdentifier`](#iastidentifier)** - Represents Doculisp commands and identifiers:
+
+```typescript
+interface IAstIdentifier {
+    readonly type: 'identifier';
+    readonly identifier: string;
+    readonly location: ILocation;
+}
+```
+
+**Usage:** Commands like `section-meta`, `title`, `include`, `content`
+
+##### Command Nodes #####
+
+**[`IAstCommand`](#iastcommand)** - Represents commands with their parameters:
+
+```typescript
+interface IAstCommand {
+    readonly type: 'command';
+    readonly identifier: string;
+    readonly parameters: CoreAst[];
+    readonly location: ILocation;
+}
+```
+
+**Usage:** Complete expressions like `(title My Document)`, `(include (Section ./file.md))`
+
+##### Container Nodes #####
+
+**[`IAstContainer`](#iastcontainer)** - Represents nested groupings:
+
+```typescript
+interface IAstContainer {
+    readonly type: 'container';
+    readonly children: CoreAst[];
+    readonly location: ILocation;
+}
+```
+
+**Usage:** Nested structures and complex expressions with multiple levels
+
+#### Parsing Process ####
+
+##### Token Stream to Tree Transformation #####
+
+The AST Parser processes the [`TokenizedDocument`](#tokenizeddocument) using **recursive descent parsing**:
+
+**Example Token Stream:**
+```
+[IdentifierToken: "section-meta"]
+[IdentifierToken: "title"]
+[ParameterToken: "My Document"]
+[CloseParenthesisToken: ")"]
+[CloseParenthesisToken: ")"]
+```
+
+**Generated AST Structure:**
+```typescript
+{
+  type: 'command',
+  identifier: 'section-meta',
+  parameters: [
+    {
+      type: 'command',
+      identifier: 'title',
+      parameters: [
+        {
+          type: 'value',
+          value: 'My Document',
+          location: {...}
+        }
+      ],
+      location: {...}
+    }
+  ],
+  location: {...}
+}
+```
+
+##### Nested Expression Handling #####
+
+The parser handles **arbitrarily deep nesting** of Doculisp expressions:
+
+**Input:**
+```doculisp
+(section-meta
+    (include
+        (Getting-Started ./start.md)
+        (Advanced
+            (Deep-Topic ./deep.md)
+            (Expert-Level ./expert.md)
+        )
+    )
+)
+```
+
+**Tree Structure:**
+- **Root Command**: `section-meta`
+  - **Child Command**: `include`
+    - **Child Command**: `Getting-Started` → `./start.md`
+    - **Child Command**: `Advanced`
+      - **Child Command**: `Deep-Topic` → `./deep.md`
+      - **Child Command**: `Expert-Level` → `./expert.md`
+
+#### Parser Interface ####
+
+The AST Parser implements the [`IAstParser`](#iastparser) interface:
+
+```typescript
+interface IAstParser {
+    parse(tokenizedDocument: TokenizedDocument): Result<RootAst>;
+}
+```
+
+**Input:**
+- **[`TokenizedDocument`](#tokenizeddocument)** - Structured tokens from Tokenizer
+
+**Output:**
+- **[`Result<RootAst>`](#resultt)** - Success with AST or detailed failure
+
+##### RootAst Structure #####
+
+The parser produces a [`RootAst`](#rootast) containing the complete tree:
+
+```typescript
+interface RootAst {
+    readonly ast: CoreAst[];
+    readonly projectLocation: IProjectLocation;
+}
+```
+
+**Properties:**
+- **AST array** - Top-level AST nodes (multiple root expressions allowed)
+- **Project context** - Location information for error reporting
+- **Immutable structure** - Read-only tree for safe processing
+
+#### Syntax Validation ####
+
+The AST Parser performs **comprehensive syntax validation** during tree construction:
+
+##### Structural Validation #####
+
+- **Balanced parentheses** - Ensure all expressions are properly closed
+- **Valid nesting** - Check that nested structures are syntactically correct
+- **Command structure** - Validate that commands have appropriate parameters
+- **Expression completeness** - Ensure no incomplete or malformed expressions
+
+##### Error Detection #####
+
+**Common syntax errors detected:**
+
+- **Unmatched parentheses** - Missing opening or closing parentheses
+- **Invalid token sequences** - Tokens that don't form valid expressions
+- **Malformed commands** - Commands with incorrect parameter structure
+- **Nested expression errors** - Problems in deeply nested structures
+
+**Example Error:**
+```typescript
+{
+    success: false,
+    message: "Expected closing parenthesis for expression starting at line 5, character 8",
+    documentPath: sourcePath,
+    processingStep: "AST Parsing",
+    failureCategory: "Parse Error"
+}
+```
+
+#### Location Preservation ####
+
+Every AST node maintains **complete location tracking**:
+
+```typescript
+interface ILocation {
+    readonly documentPath: IPath;
+    readonly documentDepth: number;
+    readonly documentIndex: number;
+    readonly line: number;
+    readonly char: number;
+}
+```
+
+**Benefits:**
+- **Precise error reporting** - Point to exact characters where problems occur
+- **IDE integration** - Enable click-to-navigate from errors to source
+- **Debugging support** - Trace any AST node back to its original source location
+- **Tool development** - Enable rich development tools and language servers
+
+#### Integration with Pipeline ####
+
+The AST Parser serves as the **structural validation layer** that prepares clean, validated syntax trees for semantic analysis:
+
+**Pipeline Flow:**
+1. **[Document Parser](#documentparser)** → [`DocumentMap`](#documentmap) (content separation)
+2. **[Tokenizer](#tokenfunction)** → [`TokenizedDocument`](#tokenizeddocument) (lexical analysis)
+3. **[AST Parser](#iastparser)** → [`RootAst`](#rootast) (non-semantic syntax tree)
+4. **[Semantic Parser](#idoculispparser)** → [`IDoculisp`](#idoculisp) (semantic meaning interpretation)
+
+##### Tree Processing Benefits #####
+
+The non-semantic AST provides several advantages for downstream semantic processing:
+
+- **Clean structure** - Guaranteed syntactically correct tree for semantic analysis
+- **Shape validation** - Basic structural errors caught before semantic processing
+- **Simplified semantics** - Semantic parsers can focus on meaning, not syntax
+- **Early error detection** - Structural problems identified before complex semantic analysis
+
+##### Lisp Expression Support #####
+
+The AST Parser is specifically designed for **Doculisp's Lisp-inspired syntax**:
+
+- **S-expressions** - Full support for parenthesized expressions
+- **Command-parameter structure** - Clear distinction between commands and their arguments
+- **Arbitrary nesting** - Handle deeply nested expressions without limits
+- **Multiple roots** - Support documents with multiple top-level expressions
+
+This **non-semantic AST representation** provides a clean, structurally-validated foundation that makes semantic analysis much easier by ensuring the basic shape and syntax of Doculisp documents is correct before any meaning interpretation begins.
 
 ## DoculispTypeScript Public Types ##
 

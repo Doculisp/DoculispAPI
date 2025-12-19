@@ -6,6 +6,7 @@
         (Introduction ./_introduction.md)
         (Document-Parser ./document-parser.md)
         (Tokenizer ./tokenizer.md)
+        (AST-Parser ./astparser.md)
         (Types ./types/_main.dlisp)
     )
 )
