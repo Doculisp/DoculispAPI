@@ -3,7 +3,7 @@
     (author Jason Kerney)
     (author GitHub Copilot)
     (include
-        (Introduction ./_introduction.md)
+        (Introduction ./introduction.md)
         (Document-Parser ./document-parser.md)
         (Tokenizer ./tokenizer.md)
         (AST-Parser ./astparser.md)
