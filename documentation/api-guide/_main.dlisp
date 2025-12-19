@@ -9,6 +9,7 @@
         (AST-Parser ./astparser.md)
         (Doculisp-AST-Parser ./doculisp-astparser.md)
         (AST-Project-Parser ./astproject-parser.md)
+        (Include-Builder ./include-builder.md)
         (Types ./types/_main.dlisp)
     )
 )
