@@ -4,6 +4,7 @@
     (author GitHub Copilot)
     (include
         (Introduction ./_introduction.md)
+        (Document-Parser ./document-parser.md)
         (Types ./types/_main.dlisp)
     )
 )
