@@ -5,6 +5,7 @@
     (include
         (Introduction ./_introduction.md)
         (Document-Parser ./document-parser.md)
+        (Tokenizer ./tokenizer.md)
         (Types ./types/_main.dlisp)
     )
 )

@@ -12,7 +12,8 @@
 
 1. [Introduction](#introduction)
 2. [Document Parser](#document-parser)
-3. [DoculispTypeScript Public Types](#doculisptypescript-public-types)
+3. [Tokenizer](#tokenizer)
+4. [DoculispTypeScript Public Types](#doculisptypescript-public-types)
 
 ## Introduction ##
 
@@ -276,6 +277,218 @@ The Document Parser serves as the **foundation** for the entire Doculisp process
 By cleanly separating content types at the beginning, the Document Parser enables the rest of the pipeline to focus purely on Doculisp processing while preserving markdown content exactly as authored.
 
 This design supports Doculisp's core philosophy of **gradual adoption** - documents can start as pure markdown and incrementally add Doculisp features without breaking existing content.
+
+## Tokenizer ##
+
+The **Tokenizer** is the second stage of the Doculisp processing pipeline, responsible for breaking down Doculisp code blocks into discrete, typed tokens that can be parsed into an Abstract Syntax Tree.
+
+#### Core Purpose ####
+
+The Tokenizer transforms the Doculisp parts extracted by the Document Parser into a **structured token stream**:
+
+- **Lexical Analysis** - Break Doculisp code into meaningful units
+- **Token Classification** - Assign specific types to each token
+- **Location Tracking** - Maintain precise source positions for every token
+- **Syntax Preparation** - Prepare tokens for AST parsing
+
+This tokenization enables the **structured parsing** of Doculisp's Lisp-inspired syntax while preserving complete location information for error reporting.
+
+#### Token Types ####
+
+The Tokenizer produces four distinct types of tokens, each serving a specific purpose in Doculisp syntax:
+
+##### Text Tokens #####
+
+**`TextToken`** - Represents regular text content outside of Lisp expressions:
+
+```typescript
+interface TextToken {
+    readonly type: 'text';
+    readonly content: string;
+    readonly location: ILocation;
+}
+```
+
+**Usage:** Text that appears between Doculisp blocks or at the document level.
+
+##### Identifier Tokens #####
+
+**`IdentifierToken`** - Represents Doculisp commands and identifiers:
+
+```typescript
+interface IdentifierToken {
+    readonly type: 'identifier';
+    readonly identifier: string;
+    readonly location: ILocation;
+}
+```
+
+**Examples:** `section-meta`, `title`, `include`, `content`, `toc`, `#`, `##`
+
+##### Parameter Tokens #####
+
+**`ParameterToken`** - Represents parameter values passed to Doculisp commands:
+
+```typescript
+interface ParameterToken {
+    readonly type: 'parameter';
+    readonly parameter: string;
+    readonly location: ILocation;
+}
+```
+
+**Examples:** `"My Document Title"`, `"./path/to/file.md"`, `"numbered-labeled"`
+
+##### Structural Tokens #####
+
+**`CloseParenthesisToken`** - Represents closing parentheses that end Lisp expressions:
+
+```typescript
+interface CloseParenthesisToken {
+    readonly type: 'close-parenthesis';
+    readonly location: ILocation;
+}
+```
+
+**Purpose:** Marks the end of Lisp expressions and enables proper nesting.
+
+#### Tokenization Process ####
+
+##### Input Processing #####
+
+The Tokenizer receives a [`DocumentMap`](#documentmap) and processes only the Doculisp parts:
+
+**Example Doculisp Code:**
+```doculisp
+(section-meta
+    (title My Document)
+    (include
+        (Getting-Started ./getting-started.md)
+        (Advanced ./advanced.md)
+    )
+)
+```
+
+**Token Stream Output:**
+1. **IdentifierToken**: `"section-meta"`
+2. **IdentifierToken**: `"title"`
+3. **ParameterToken**: `"My Document"`
+4. **CloseParenthesisToken**: `)`
+5. **IdentifierToken**: `"include"`
+6. **IdentifierToken**: `"Getting-Started"`
+7. **ParameterToken**: `"./getting-started.md"`
+8. **CloseParenthesisToken**: `)`
+9. **IdentifierToken**: `"Advanced"`
+10. **ParameterToken**: `"./advanced.md"`
+11. **CloseParenthesisToken**: `)`
+12. **CloseParenthesisToken**: `)`
+13. **CloseParenthesisToken**: `)`
+
+##### Location Preservation #####
+
+Every token maintains **precise source location** information:
+
+```typescript
+interface ILocation {
+    readonly documentPath: IPath;
+    readonly line: number;
+    readonly char: number;
+    // ... additional properties
+}
+```
+
+This enables:
+- **Exact error positioning** - Point to specific characters in source files
+- **IDE integration** - Navigate directly to token locations
+- **Debugging support** - Trace tokens back to original source
+
+#### Tokenizer Interface ####
+
+The Tokenizer follows the API's functional design pattern:
+
+```typescript
+type TokenFunction = (input: DocumentMap) => Result<TokenizedDocument>;
+```
+
+**Input:**
+- **[`DocumentMap`](#documentmap)** - Mixed content from Document Parser
+
+**Output:**
+- **[`Result<TokenizedDocument>`](#resultt)** - Success with tokens or detailed failure
+
+### TokenizedDocument Structure
+
+The tokenizer produces a [`TokenizedDocument`](#tokenizeddocument) containing:
+
+```typescript
+interface TokenizedDocument {
+    readonly tokens: Token[];
+    readonly projectLocation: IProjectLocation;
+}
+```
+
+**Properties:**
+- **Token array** - Sequential list of all tokens in processing order
+- **Project context** - Location information for error reporting
+- **Immutable structure** - Read-only token stream for safe processing
+
+#### Error Handling ####
+
+The Tokenizer provides **comprehensive error detection** for common syntax issues:
+
+##### Syntax Errors #####
+
+- **Unmatched parentheses** - Missing opening or closing parentheses
+- **Invalid characters** - Characters that break Doculisp syntax rules
+- **Malformed expressions** - Improperly structured Lisp expressions
+- **Encoding issues** - Unicode or character encoding problems
+
+**Example Error:**
+```typescript
+{
+    success: false,
+    message: "Unmatched closing parenthesis at line 8, character 15",
+    documentPath: sourcePath,
+    processingStep: "Tokenization",
+    failureCategory: "Parse Error"
+}
+```
+
+##### Parameter Validation #####
+
+- **Parameter length limits** - Enforce 255 character maximum
+- **Newline detection** - Parameters cannot contain newlines
+- **Escape sequence handling** - Proper handling of `\)` and other escapes
+
+#### Integration with Pipeline ####
+
+The Tokenizer serves as the **bridge** between textual content and structured parsing:
+
+**Pipeline Flow:**
+1. **[Document Parser](#documentparser)** → [`DocumentMap`](#documentmap) (separate content types)
+2. **[Tokenizer](#tokenfunction)** → [`TokenizedDocument`](#tokenizeddocument) (structured tokens)
+3. **[AST Parser](#iastparser)** → [`RootAst`](#rootast) (syntax tree)
+4. **[Semantic Parser](#idoculispparser)** → [`IDoculisp`](#idoculisp) (semantic meaning)
+
+##### Token Stream Benefits #####
+
+The tokenized representation provides several advantages:
+
+- **Structured Access** - Random access to any token by index
+- **Type Safety** - Each token has a specific, known type
+- **Location Precision** - Every token knows its exact source position
+- **Parser Preparation** - Tokens are ready for recursive descent parsing
+
+##### Lisp Syntax Support #####
+
+The Tokenizer is specifically designed for **Doculisp's Lisp-inspired syntax**:
+
+- **S-expressions** - Parenthesized expressions with nested structure
+- **Commands and parameters** - Clear distinction between identifiers and values
+- **Whitespace handling** - Flexible whitespace rules for readability
+- **Comment support** - Handles commented-out blocks with `*` prefix
+
+This tokenization approach enables Doculisp to maintain its **clean, readable syntax** while providing the structural foundation needed for reliable parsing and error reporting.
 
 ## DoculispTypeScript Public Types ##
 
