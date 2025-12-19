@@ -7,6 +7,7 @@
         (Document-Parser ./document-parser.md)
         (Tokenizer ./tokenizer.md)
         (AST-Parser ./astparser.md)
+        (Doculisp-AST-Parser ./doculisp-astparser.md)
         (Types ./types/_main.dlisp)
     )
 )
