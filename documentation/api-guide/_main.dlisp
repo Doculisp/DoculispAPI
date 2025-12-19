@@ -4,6 +4,7 @@
     (author GitHub Copilot)
     (include
         (Introduction ./introduction.md)
+        (DoculispApi ./doculisp-api.md)
         (Document-Parser ./document-parser.md)
         (Tokenizer ./tokenizer.md)
         (AST-Parser ./astparser.md)
