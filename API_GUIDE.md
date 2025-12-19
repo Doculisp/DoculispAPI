@@ -16,7 +16,9 @@
 4. [AST Parser](#ast-parser)
 5. [Doculisp AST Parser](#doculisp-ast-parser)
 6. [AST Project Parser](#ast-project-parser)
-7. [DoculispTypeScript Public Types](#doculisptypescript-public-types)
+7. [Include Builder](#include-builder)
+8. [String Writer](#string-writer)
+9. [DoculispTypeScript Public Types](#doculisptypescript-public-types)
 
 ## Introduction ##
 
@@ -1215,6 +1217,501 @@ Using project files provides several advantages:
 - **Automation support** - Easy integration with build systems and CI/CD pipelines
 
 The **AST Project Parser** extends Doculisp's capabilities from individual document processing to **comprehensive project management**, enabling scalable documentation workflows for large, multi-document projects.
+
+## Include Builder ##
+
+The **Include Builder** serves as both the **first and final step** in the Doculisp processing workflow due to its unique ability to walk the include tree. It orchestrates the complete processing of all dependencies AND assembles the final unified document structure.
+
+#### Core Purpose ####
+
+The Include Builder performs **dual orchestration and final assembly**:
+
+**As First Step (Orchestrator):**
+- **Pipeline Initiation** - Kicks off processing for the main document and all includes
+- **Tree Walking** - Recursively discovers and processes the entire include hierarchy
+- **Dependency Coordination** - Manages processing of each file through the complete pipeline
+- **Context Management** - Maintains variable context across the entire include tree
+
+**As Final Step (Assembler):**
+- **Document Assembly** - Combines all processed content into unified structure
+- **Include Integration** - Weaves included content into the main document structure
+- **Final Validation** - Ensures the complete document is ready for output
+
+This **dual role** enables the Include Builder to both initiate the entire processing workflow AND produce the final unified result.
+
+#### Include Processing ####
+
+The Include Builder processes the `include` declarations found in document metadata to build complete document hierarchies:
+
+##### Include Syntax Recognition #####
+
+From `section-meta` blocks, the builder processes include lists:
+
+```doculisp
+(section-meta
+    (title Main Document)
+    (include
+        (Getting-Started ./docs/getting-started.md)
+        (API-Reference ./docs/api-reference.md)
+        (Advanced-Topics ./docs/advanced.md)
+    )
+)
+```
+
+##### Recursive Processing #####
+
+For each included file, the Include Builder **orchestrates complete pipeline processing**:
+
+1. **Loads the external file** using the file system interface
+2. **Orchestrates full pipeline** - Coordinates Document Parser → Tokenizer → AST Parser → Doculisp AST Parser for each include
+3. **Manages recursive processing** - When includes have their own includes, orchestrates additional pipeline runs
+4. **Assembles the complete structure** - Combines all processed results into unified document hierarchy
+
+##### Dependency Tree Construction #####
+
+**Example Include Hierarchy:**
+```
+Main Document
+├── Getting Started
+│   ├── Installation (included from getting-started.md)
+│   └── Quick Start (included from getting-started.md)
+├── API Reference
+│   ├── Core API (included from api-reference.md)
+│   └── Advanced API (included from api-reference.md)
+└── Advanced Topics
+```
+
+#### Circular Dependency Detection ####
+
+The Include Builder implements **comprehensive circular dependency detection**:
+
+##### Detection Algorithm #####
+
+- **Path tracking** - Maintains stack of currently processing file paths
+- **Cycle detection** - Identifies when a file attempts to include itself (directly or indirectly)
+- **Error reporting** - Provides clear error messages showing the circular path
+
+**Circular Dependency Error:**
+```typescript
+{
+    success: false,
+    message: "Circular dependency detected: main.dlisp → intro.md → overview.md → main.dlisp",
+    documentPath: currentPath,
+    processingStep: "Include Processing",
+    failureCategory: "Include Error"
+}
+```
+
+##### Dependency Validation #####
+
+The builder validates all include relationships:
+- **File existence** - Ensures all included files exist and are accessible
+- **Path resolution** - Resolves relative paths correctly based on including file location
+- **Permission checking** - Verifies files are readable
+- **Format validation** - Ensures included files are valid Doculisp or markdown
+
+#### Variable Context Management ####
+
+The Include Builder manages **variable context** across the entire include hierarchy:
+
+##### Variable Inheritance #####
+
+- **Context propagation** - Variables from parent documents are available in included documents
+- **Scope management** - Each included document can define its own local variables
+- **Source tracking** - Maintains [`sourceKey`](#sourcekey) for each file being processed
+- **Working directory** - Updates [`workingDirectoryKey`](#workingdirectorykey) for relative path resolution
+
+##### Variable Resolution #####
+
+```typescript
+// Variable context during include processing:
+parentVariables.addValue(sourceKey, currentFile);
+parentVariables.addValue(workingDirectoryKey, currentFileDirectory);
+
+// Process included file with inherited context
+const childVariableTable = parentVariables.createChild();
+const includeResult = await processIncludeWithContext(includedFile, childVariableTable);
+```
+
+#### Builder Interface ####
+
+The Include Builder implements the [`IIncludeBuilder`](#iincludebuilder) interface:
+
+```typescript
+interface IIncludeBuilder {
+    build(doculisp: IDoculisp, variableTable: IVariableTable): Promise<Result<ISectionWriter>>;
+}
+```
+
+**Input:**
+- **[`IDoculisp`](#idoculisp)** - Semantic document structure from Doculisp AST Parser
+- **[`IVariableTable`](#ivariabletable)** - Variable context for resolution
+
+**Output:**
+- **[`Promise<Result<ISectionWriter>>`](#resultt)** - Complete document tree or detailed failure
+
+##### ISectionWriter Structure #####
+
+The builder produces an [`ISectionWriter`](#isectionwriter) containing the complete document:
+
+```typescript
+interface ISectionWriter {
+    readonly doculisp: IDoculisp;
+    readonly variableTable: IVariableTable;
+}
+```
+
+**Properties:**
+- **Complete Doculisp structure** - Main document with all includes resolved and integrated
+- **Final variable table** - All variables from main document and includes combined
+- **Self-contained** - No external dependencies remain; ready for output generation
+
+#### Document Tree Assembly ####
+
+The Include Builder creates a **complete, hierarchical document structure**:
+
+##### Tree Building Process #####
+
+1. **Start with main document** - Process the root Doculisp structure
+2. **Identify includes** - Find all `include` declarations in document metadata
+3. **Process each include** - Run each included file through the full pipeline
+4. **Integrate results** - Combine included content into main document structure
+5. **Recursive processing** - Handle nested includes in included files
+6. **Finalize structure** - Create complete, self-contained document tree
+
+##### Content Integration #####
+
+**Before Include Resolution:**
+```typescript
+// Main document has include references
+{
+    parts: [
+        { type: 'title', title: 'Main Document' },
+        { type: 'content-location' }  // Placeholder for included content
+    ],
+    includes: []  // Empty - not yet resolved
+}
+```
+
+**After Include Resolution:**
+```typescript
+// Complete document with all content integrated
+{
+    parts: [
+        { type: 'title', title: 'Main Document' },
+        { type: 'title', title: 'Getting Started' },  // From included file
+        { type: 'write', content: 'Installation instructions...' },
+        { type: 'title', title: 'API Reference' },   // From another included file
+        { type: 'write', content: 'API documentation...' }
+    ],
+    includes: [/* Complete included document structures */]
+}
+```
+
+#### Error Handling and Recovery ####
+
+The Include Builder provides **comprehensive error handling** for include-related issues:
+
+##### Include Resolution Errors #####
+
+- **File not found** - Missing included files with clear path information
+- **Permission denied** - Inaccessible files with security context
+- **Parsing failures** - Errors in included file syntax or structure
+- **Circular dependencies** - Complete dependency chain information
+
+##### Error Aggregation #####
+
+The builder can collect and report multiple errors:
+- **Continue processing** - Attempt to process all includes even if some fail
+- **Error collection** - Gather all errors for comprehensive reporting
+- **Partial success** - Indicate which includes succeeded and which failed
+
+**Multi-Include Error Example:**
+```typescript
+{
+    success: false,
+    message: "Multiple include failures: './intro.md' not found, './api.md' has syntax errors",
+    documentPath: mainDocumentPath,
+    processingStep: "Include Processing",
+    failureCategory: "Include Error"
+}
+```
+
+#### Integration with Pipeline ####
+
+The Include Builder has **dual positioning** in the processing workflow due to its tree-walking capabilities:
+
+**Complete Processing Flow with Include Builder:**
+1. **[Include Builder](#iincludebuilder)** *(First Step)* - Takes [`IDoculisp`](#idoculisp) with include references, initiates tree walking
+
+2. **For main document and each discovered include, orchestrates:**
+   - **[Document Parser](#documentparser)** → [`DocumentMap`](#documentmap) (content separation)
+   - **[Tokenizer](#tokenfunction)** → [`TokenizedDocument`](#tokenizeddocument) (lexical analysis)
+   - **[AST Parser](#iastparser)** → [`RootAst`](#rootast) (structural validation)
+   - **[Doculisp AST Parser](#idoculispparser)** → [`IDoculisp`](#idoculisp) (semantic interpretation)
+   - **Recursively processes nested includes** - Walks deeper into include tree as needed
+
+3. **[Include Builder](#iincludebuilder)** *(Final Step)* - Assembles all processed content → [`ISectionWriter`](#isectionwriter) (unified document)
+
+4. **[String Writer](#istringwriter)** → Final markdown output
+
+##### Dependency Resolution Benefits #####
+
+The Include Builder provides crucial capabilities:
+
+- **Modular documentation** - Enables breaking large documents into manageable pieces
+- **Reusable content** - Allows sharing content sections across multiple documents
+- **Maintainable structure** - Changes to included files automatically propagate
+- **Collaborative workflows** - Multiple authors can work on different sections independently
+
+##### Document Composition #####
+
+The Include Builder enables **sophisticated document composition**:
+
+- **Hierarchical organization** - Nested includes create complex document structures
+- **Content reuse** - Same included files can be used in multiple parent documents
+- **Conditional inclusion** - Include processing respects commented includes (`*Section`)
+- **Dynamic assembly** - Complete documents assembled at build time from modular components
+
+The **Include Builder** serves as both the **orchestration engine** and **final assembler** for modular, interdependent Doculisp documents. Its tree-walking capabilities enable it to initiate and coordinate the complete processing workflow while also producing the final unified, self-contained structures, embodying Doculisp's core philosophy of **modular, maintainable documentation**.
+
+## String Writer ##
+
+The **String Writer** is the final output generation stage of the Doculisp processing pipeline, responsible for converting the complete, unified document structure into clean, standards-compliant markdown text.
+
+#### Core Purpose ####
+
+The String Writer performs **markdown generation and output formatting**:
+
+- **Markdown Generation** - Convert semantic Doculisp structures into proper markdown syntax
+- **Content Formatting** - Apply consistent spacing, structure, and styling
+- **Table of Contents Creation** - Generate TOC based on document configuration
+- **Link Resolution** - Convert cross-references and path IDs into proper markdown links
+- **Final Assembly** - Combine all elements into complete, ready-to-use markdown
+
+This final stage transforms the **complete semantic document structure** into **clean, portable markdown** that works across all platforms and tools.
+
+#### Markdown Generation ####
+
+The String Writer converts each type of [`DoculispPart`](#doculisppart) into appropriate markdown output:
+
+##### Content Writing #####
+
+**`IWrite` Elements** - Direct text content output:
+```typescript
+// Input: IWrite part
+{ type: 'write', content: 'This is documentation content.' }
+
+// Output: Direct markdown
+"This is documentation content."
+```
+
+##### Title Generation #####
+
+**`ITitle` Elements** - Document and section titles:
+```typescript
+// Input: ITitle part
+{ type: 'title', title: 'Getting Started', level: 1 }
+
+// Output: Markdown heading
+"# Getting Started"
+```
+
+##### Dynamic Headers #####
+
+**`IHeader` Elements** - Context-aware headings with optional IDs:
+```typescript
+// Input: IHeader part
+{ type: 'header', level: 2, text: 'Installation', id: 'install-guide' }
+
+// Output: Markdown heading with anchor
+"## Installation {#install-guide}"
+```
+
+##### Table of Contents #####
+
+**`ITableOfContents` Elements** - Generated TOC based on document structure:
+```typescript
+// Input: TOC configuration
+{ type: 'table-of-contents', style: 'numbered-labeled', label: 'Contents' }
+
+// Output: Generated TOC
+"## Contents\n1. [Getting Started](#getting-started)\n2. [Installation](#installation)"
+```
+
+#### Content Integration ####
+
+The String Writer handles **complex content integration** from the complete document hierarchy:
+
+##### Include Content Placement #####
+
+**`IContentLocation` Elements** - Mark where included content appears:
+```typescript
+// Included content is seamlessly integrated at content-location markers
+// Original: (content (toc numbered-labeled))
+// Result: Complete TOC + all included content in proper order
+```
+
+##### Cross-Reference Resolution #####
+
+**`IPathId` Elements** - Resolve cross-document references:
+```typescript
+// Input: Path reference
+{ type: 'path-id', id: 'installation-guide' }
+
+// Output: Resolved markdown link
+"[Installation Guide](#installation-guide)"
+```
+
+##### Variable Substitution #####
+
+The String Writer integrates with the variable system to resolve:
+- **Source file context** - Current file information for relative paths
+- **Working directory** - Base path for relative link resolution
+- **Custom variables** - User-defined content substitutions
+
+#### Formatting and Styling ####
+
+The String Writer applies **consistent formatting rules** for clean, readable output:
+
+##### Spacing Management #####
+
+- **Consistent line breaks** - Proper spacing between sections and elements
+- **Paragraph separation** - Clear distinction between content blocks
+- **List formatting** - Proper indentation and spacing for TOC and other lists
+- **Code block preservation** - Maintain formatting for code examples
+
+##### Content Structure #####
+
+- **Heading hierarchy** - Ensure proper H1, H2, H3 progression
+- **Section organization** - Logical flow from titles through content to includes
+- **Metadata handling** - Include author information and document metadata appropriately
+
+**Example Output Structure:**
+```markdown
+# Document Title
+
+*Authors: Jason Kerney, GitHub Copilot*
+
+## Table of Contents
+1. [Introduction](#introduction)
+2. [Getting Started](#getting-started)
+
+## Introduction
+Content from introduction section...
+
+## Getting Started
+Content from getting started include...
+```
+
+#### Writer Interface ####
+
+The String Writer implements the [`IStringWriter`](#istringwriter) interface:
+
+```typescript
+interface IStringWriter {
+    writeString(sectionWriter: ISectionWriter): Result<string>;
+}
+```
+
+**Input:**
+- **[`ISectionWriter`](#isectionwriter)** - Complete, unified document structure from Include Builder
+
+**Output:**
+- **[`Result<string>`](#resultt)** - Generated markdown text or detailed failure
+
+##### Processing Flow #####
+
+The String Writer processes the complete document through these stages:
+
+1. **Document Analysis** - Examine the complete structure and determine output requirements
+2. **TOC Generation** - Create table of contents based on configuration and content
+3. **Content Processing** - Convert each semantic element to appropriate markdown
+4. **Link Resolution** - Resolve all cross-references and path IDs
+5. **Final Assembly** - Combine all elements with proper formatting and spacing
+
+#### Table of Contents Generation ####
+
+The String Writer generates **dynamic table of contents** based on document configuration:
+
+##### TOC Styles #####
+
+The writer supports all [`TocStyle`](#tocstyle) options:
+
+- **`no-table`** - Skip TOC generation entirely
+- **`unlabeled`** - TOC without section names (just links)
+- **`labeled`** - Section names only
+- **`numbered`** - Numbered entries only (1., 2., 3.)
+- **`numbered-labeled`** - Numbers with section names (1. Getting Started)
+- **`bulleted`** - Bullet points only (-, *, +)
+- **`bulleted-labeled`** - Bullets with section names (- Getting Started)
+
+##### TOC Content Discovery #####
+
+The writer analyzes the complete document structure to:
+- **Extract headings** - Find all titles and headers for TOC entries
+- **Generate anchors** - Create proper markdown anchor links
+- **Calculate hierarchy** - Determine proper nesting and indentation
+- **Apply styling** - Format according to specified TOC style
+
+#### Error Handling ####
+
+The String Writer provides **comprehensive error handling** for output generation issues:
+
+##### Generation Errors #####
+
+- **Invalid structure** - Malformed document elements that can't be converted
+- **Link resolution failures** - Cross-references that can't be resolved
+- **Formatting issues** - Problems with markdown generation or structure
+- **Variable resolution errors** - Missing or invalid variables during substitution
+
+**Generation Error Example:**
+```typescript
+{
+    success: false,
+    message: "Unable to resolve cross-reference ID 'missing-section' in link generation",
+    documentPath: sourcePath,
+    processingStep: "Building Document",
+    failureCategory: "Validation Error"
+}
+```
+
+##### Output Validation #####
+
+The writer validates generated output for:
+- **Markdown compliance** - Ensure generated markdown follows standards
+- **Link integrity** - Verify all links are properly formatted and resolvable
+- **Structure consistency** - Check that heading levels and hierarchy are correct
+- **Content completeness** - Ensure all semantic elements were properly converted
+
+#### Integration with Pipeline ####
+
+The String Writer completes the **entire Doculisp processing pipeline**:
+
+**Complete Workflow:**
+1. **[Include Builder](#iincludebuilder)** - Orchestrates processing and assembles [`ISectionWriter`](#isectionwriter)
+2. **[String Writer](#istringwriter)** - Converts to final markdown output
+3. **File Operations** - Write generated markdown to target files
+
+##### Output Benefits #####
+
+The String Writer produces **high-quality markdown** with several advantages:
+
+- **Standards compliance** - Works with all markdown processors and platforms
+- **Clean formatting** - Consistent, readable structure throughout
+- **Complete cross-referencing** - All links and references properly resolved
+- **Portable output** - Generated files work independently without Doculisp dependencies
+
+##### Generation Flexibility #####
+
+The String Writer supports **flexible output generation**:
+
+- **File output** - Write directly to specified files
+- **String return** - Return generated markdown for further processing
+- **Streaming support** - Handle large documents efficiently
+- **Encoding management** - Proper UTF-8 and character encoding handling
+
+The **String Writer** completes Doculisp's transformation of **modular, maintainable source documents** into **clean, portable markdown output** that preserves all the benefits of Doculisp's structured approach while producing standard markdown that works everywhere.
 
 ## DoculispTypeScript Public Types ##
 

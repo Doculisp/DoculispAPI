@@ -10,6 +10,7 @@
         (Doculisp-AST-Parser ./doculisp-astparser.md)
         (AST-Project-Parser ./astproject-parser.md)
         (Include-Builder ./include-builder.md)
+        (String-Writer ./string-writer.md)
         (Types ./types/_main.dlisp)
     )
 )
