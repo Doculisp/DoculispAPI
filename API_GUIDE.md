@@ -156,7 +156,7 @@ Final markdown content.
 )
 ```
 
-### Content Type Classification
+#### Content Type Classification ####
 
 The parser classifies content into two distinct types:
 
@@ -176,7 +176,7 @@ For complete type definitions, see [DocumentPart](#documentpart) and [DocumentMa
 
 #### Processing Strategy ####
 
-### Mixed Content Handling
+##### Mixed Content Handling #####
 
 The Document Parser enables **seamless integration** of static and dynamic content:
 
@@ -205,7 +205,7 @@ This concluding text remains unchanged.
 3. **Text Part**: `"## Static Conclusion\nThis concluding text remains unchanged.\n"`
 4. **Lisp Part**: `"(content (toc numbered-labeled))"`
 
-### Location Preservation
+#### Location Preservation ####
 
 Every part maintains **precise location information**:
 
@@ -242,7 +242,7 @@ type DocumentParser = (
 **Return Value:**
 - **[`Result<DocumentMap>`](#resultt)** - Success with parsed structure or detailed failure
 
-### Error Handling
+#### Error Handling ####
 
 The parser provides **comprehensive error reporting** for:
 
