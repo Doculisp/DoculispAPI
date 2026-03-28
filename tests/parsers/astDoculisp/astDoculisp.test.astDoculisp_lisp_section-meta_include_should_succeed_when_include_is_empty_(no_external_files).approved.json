@@ -1,0 +1,37 @@
+{
+  "success": true,
+  "value": {
+    "projectLocation": {
+      "documentDepth": 1,
+      "documentIndex": 4,
+      "documentPath": "./no-externals.dlisp"
+    },
+    "section": {
+      "doculisp": [
+        {
+          "documentOrder": {
+            "char": 6,
+            "documentDepth": 1,
+            "documentIndex": 4,
+            "documentPath": "./no-externals.dlisp",
+            "line": 3
+          },
+          "label": "# Test Document #",
+          "ref_link": "#test-document",
+          "title": "Test Document",
+          "type": "doculisp-title"
+        }
+      ],
+      "documentOrder": {
+        "char": 1,
+        "documentDepth": 1,
+        "documentIndex": 4,
+        "documentPath": "./no-externals.dlisp",
+        "line": 1
+      },
+      "include": [],
+      "type": "doculisp-section"
+    },
+    "type": "doculisp-root"
+  }
+}

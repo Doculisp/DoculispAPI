@@ -205,7 +205,9 @@ describe('astDoculisp', () => {
     (Section ./doculisp.md)
 )
 (title Doculisp is ✨)
-)`;
+)
+
+(content)`;
 
                 const result = toResult(contents, buildProjectLocation('main.dlisp', 1, 4));
 
@@ -545,7 +547,9 @@ A story of a misbehaving parser.
         (section ./doculisp.md)
         (section ./section-meta.md)
     )
-)`;
+)
+
+(content)`;
 
                     const result = toResult(contents, buildProjectLocation('main.dlisp', 1, 4));
 
@@ -572,6 +576,8 @@ A story of a misbehaving parser.
         (My-Section ./first.md)
     )
 )
+
+(content)
 `;
                     const result = toResult(contents, buildProjectLocation('main.dlisp', 1, 4));
 
@@ -587,7 +593,9 @@ A story of a misbehaving parser.
         (Section ./structure.md)
         (Section ./doculisp.md)
     )
-)`;
+)
+
+(content)`;
 
                     const result = toResult(contents, buildProjectLocation('main.dlisp', 1, 4));
 
@@ -636,6 +644,32 @@ A story of a misbehaving parser.
 )`;
 
                     const result = toResult(contents, buildProjectLocation('./malformed.dlisp', 1, 4));
+
+                    verifyAsJson(result);
+                });
+
+                it('should fail when include has external files but no content block', () => {
+                    const contents = `
+(section-meta
+    (title Test Document)
+    (include
+        (Section ./external.md)
+    )
+)`;
+
+                    const result = toResult(contents, buildProjectLocation('./missing-content.dlisp', 1, 4));
+
+                    verifyAsJson(result);
+                });
+
+                it('should succeed when include is empty (no external files)', () => {
+                    const contents = `
+(section-meta
+    (title Test Document)
+    (include)
+)`;
+
+                    const result = toResult(contents, buildProjectLocation('./no-externals.dlisp', 1, 4));
 
                     verifyAsJson(result);
                 });

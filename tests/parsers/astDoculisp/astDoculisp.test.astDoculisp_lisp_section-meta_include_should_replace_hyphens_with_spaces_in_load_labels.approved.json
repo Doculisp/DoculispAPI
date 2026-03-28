@@ -1,5 +1,5 @@
 {
-  "000_given": "\n(section-meta\n    (title Annoying Space)\n    (include\n        (My-Section ./first.md)\n    )\n)\n",
+  "000_given": "\n(section-meta\n    (title Annoying Space)\n    (include\n        (My-Section ./first.md)\n    )\n)\n\n(content)\n",
   "999_received": {
     "success": true,
     "value": {
@@ -22,6 +22,32 @@
             "ref_link": "#annoying-space",
             "title": "Annoying Space",
             "type": "doculisp-title"
+          },
+          {
+            "blockRange": {
+              "end": {
+                "char": 9,
+                "documentDepth": 1,
+                "documentIndex": 4,
+                "documentPath": "main.dlisp",
+                "line": 9
+              },
+              "start": {
+                "char": 1,
+                "documentDepth": 1,
+                "documentIndex": 4,
+                "documentPath": "main.dlisp",
+                "line": 9
+              }
+            },
+            "documentOrder": {
+              "char": 2,
+              "documentDepth": 1,
+              "documentIndex": 4,
+              "documentPath": "main.dlisp",
+              "line": 9
+            },
+            "type": "doculisp-content"
           }
         ],
         "documentOrder": {

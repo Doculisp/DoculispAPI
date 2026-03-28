@@ -3,10 +3,10 @@
     "C:/grand.md": "<!--\n(dl\n    (section-meta\n        (title A Grandchild Document)\n    )\n)\n-->\n\nHi gramps!\n"
   },
   "001_given": {
-    "./child.md": "<!--\n(dl\n    (section-meta\n        (title A Child Document)\n        (include\n            (GrandChild C:/grand.md)\n        )\n    )\n)\n-->\n\nHi Dad!\n\n(content)\n"
+    "./child.md": "<!--\n(dl\n    (section-meta\n        (title A Child Document)\n        (include\n            (GrandChild C:/grand.md)\n        )\n    )\n\n    (content)\n)\n-->\n\nHi Dad!\n"
   },
   "002_given": {
-    "./_main.md": "<!--\n(dl\n    (section-meta\n        (title Top Level Document)\n        (include\n            (Child ./child.md)\n        )\n    )\n)\n-->\nHello World!\n\n(content)\n"
+    "./_main.md": "<!--\n(dl\n    (section-meta\n        (title Top Level Document)\n        (include\n            (Child ./child.md)\n        )\n    )\n\n    (content)\n)\n-->\nHello World!\n"
   },
   "999_received": {
     "success": true,
@@ -32,15 +32,30 @@
             "type": "doculisp-title"
           },
           {
+            "blockRange": {
+              "end": {
+                "char": 13,
+                "documentDepth": 1,
+                "documentIndex": 1,
+                "documentPath": "./_main.md",
+                "line": 10
+              },
+              "start": {
+                "char": 5,
+                "documentDepth": 1,
+                "documentIndex": 1,
+                "documentPath": "./_main.md",
+                "line": 10
+              }
+            },
             "documentOrder": {
-              "char": 1,
+              "char": 6,
               "documentDepth": 1,
               "documentIndex": 1,
               "documentPath": "./_main.md",
-              "line": 11
+              "line": 10
             },
-            "type": "doculisp-write",
-            "value": "Hello World!"
+            "type": "doculisp-content"
           },
           {
             "documentOrder": {
@@ -51,7 +66,7 @@
               "line": 13
             },
             "type": "doculisp-write",
-            "value": "(content)"
+            "value": "Hello World!"
           }
         ],
         "documentOrder": {
@@ -95,15 +110,30 @@
                   "type": "doculisp-title"
                 },
                 {
+                  "blockRange": {
+                    "end": {
+                      "char": 13,
+                      "documentDepth": 2,
+                      "documentIndex": 1,
+                      "documentPath": "./child.md",
+                      "line": 10
+                    },
+                    "start": {
+                      "char": 5,
+                      "documentDepth": 2,
+                      "documentIndex": 1,
+                      "documentPath": "./child.md",
+                      "line": 10
+                    }
+                  },
                   "documentOrder": {
-                    "char": 1,
+                    "char": 6,
                     "documentDepth": 2,
                     "documentIndex": 1,
                     "documentPath": "./child.md",
-                    "line": 12
+                    "line": 10
                   },
-                  "type": "doculisp-write",
-                  "value": "Hi Dad!"
+                  "type": "doculisp-content"
                 },
                 {
                   "documentOrder": {
@@ -114,7 +144,7 @@
                     "line": 14
                   },
                   "type": "doculisp-write",
-                  "value": "(content)"
+                  "value": "Hi Dad!"
                 }
               ],
               "documentOrder": {

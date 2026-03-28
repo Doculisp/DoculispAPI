@@ -1,0 +1,24 @@
+{
+  "documentPath": "./missing-content.dlisp",
+  "failureCategory": "Validation Error",
+  "info": "The section-meta block at './missing-content.dlisp' has an include block with external files but no content block. A content block is required when including external files.",
+  "message": "The section-meta block at './missing-content.dlisp' has an include block with external files but no content block. A content block is required when including external files. (Line 3, Char 6)",
+  "processingStep": "Doculisp AST Parsing",
+  "range": {
+    "end": {
+      "char": 18,
+      "documentDepth": 1,
+      "documentIndex": 4,
+      "documentPath": "./missing-content.dlisp",
+      "line": 3
+    },
+    "start": {
+      "char": 6,
+      "documentDepth": 1,
+      "documentIndex": 4,
+      "documentPath": "./missing-content.dlisp",
+      "line": 3
+    }
+  },
+  "success": false
+}

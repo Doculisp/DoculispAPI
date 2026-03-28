@@ -1121,11 +1121,34 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
             return parseFailure(`Unknown identifier '${next.value}' at '${next.location.documentPath.fullName}' (Line: ${next.location.line}, Char: ${next.location.char}).`, range, next.location.documentPath);
         }
 
+        // Validate: If include has external files, content block is required
+        const doculispParts = result.filter(d => d.type !== 'doculisp-load') as DoculispPart[];
+        const loadParts = result.filter(d => d.type === 'doculisp-load') as ILoad[];
+        const hasContentBlock = doculispParts.some(d => d.type === 'doculisp-content');
+
+        if(hasInclude && !hasContentBlock) {
+            // Find the section-meta block to report error location
+            const sectionMetaPart = doculispParts.find(d => d.type === 'doculisp-title');
+            const errorLocation = sectionMetaPart ? sectionMetaPart.documentOrder : util.toLocation(astRoot.location, 1, 1);
+            
+            const range: IRange = {
+                start: errorLocation,
+                end: {
+                    line: errorLocation.line,
+                    char: errorLocation.char + 'section-meta'.length,
+                    documentPath: errorLocation.documentPath,
+                    documentDepth: errorLocation.documentDepth,
+                    documentIndex: errorLocation.documentIndex,
+                }
+            };
+            return validationFailure(`The section-meta block at '${errorLocation.documentPath.fullName}' has an include block with external files but no content block. A content block is required when including external files.`, range, errorLocation.documentPath);
+        }
+
         return util.ok({
             projectLocation: astRoot.location,
             section: {
-                doculisp: result.filter(d => d.type !== 'doculisp-load') as DoculispPart[],
-                include: result.filter(d => d.type === 'doculisp-load') as ILoad[],
+                doculisp: doculispParts,
+                include: loadParts,
                 documentOrder: util.toLocation(astRoot.location, 1, 1),
                 type: 'doculisp-section'
             },

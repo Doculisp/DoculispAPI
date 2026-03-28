@@ -1,5 +1,20 @@
 <!-- (dl (section-meta [Unreleased])) -->
 
+<!-- (dl (# Fixed)) -->
+
+- **Include Validation**: Fixed missing validation for include blocks with external files
+  - **Documented Rule Enforcement**: Now properly enforces the documented rule: "If include is used there must be a content block"
+  - **Validation Logic**: Include blocks with external files now require a corresponding content block
+  - **Error Message**: Clear validation error when include has external files but no content block
+    - Error format: `"Validation Error: The section-meta block at '[path]' has an include block with external files but no content block. A content block is required when including external files."`
+    - Includes precise location information (line and character positions)
+  - **Empty Include Support**: Empty include blocks (without external files) correctly don't require content blocks
+  - **Test Coverage**: Added comprehensive test coverage
+    - New test: "should fail when include has external files but no content block" - verifies error is thrown
+    - New test: "should succeed when include is empty (no external files)" - verifies empty includes work without content
+    - Updated 7 existing tests to properly include content blocks when using includes with external files
+  - **Bug Analysis**: Resolved discrepancy between documented language specification and actual parser enforcement
+
 ### Improved ###
 
 - **Error Reporting**: Enhanced error message consistency and precision across entire parsing pipeline

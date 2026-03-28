@@ -94,10 +94,10 @@ describe('includeBuilder', () => {
             (Section ${badPath})
         )
     )
+
+    (content)
 )
 -->
-
-(content)
 `;
 
             const result = toExternalResult(doc, buildProjectLocation('C:/_main.md', 1, 1));
@@ -228,12 +228,12 @@ Hi gramps!
             (GrandChild ${grandChildPath})
         )
     )
+
+    (content)
 )
 -->
 
 Hi Dad!
-
-(content)
 `;
             const childPath = './child.md';
 
@@ -248,11 +248,11 @@ Hi Dad!
             (Child ${childPath})
         )
     )
+
+    (content)
 )
 -->
 Hello World!
-
-(content)
 `;
 
             const docPath = './_main.md';
