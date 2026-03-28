@@ -1,6 +1,6 @@
 {
   "name": "doculisp-api",
-  "version": "3.1.0",
+  "version": "4.0.0",
   "description": "API library for building markdown documents with Doculisp DSL",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
