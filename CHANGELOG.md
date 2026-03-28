@@ -7,7 +7,7 @@
 
 # Changelog #
 
-1. Pending: [[Unreleased]](#unreleased)
+1. Release: [[4.0.0] - 2026-03-28](#400---2026-03-28)
 2. Release: [[3.1.0] - 2025-12-14](#310---2025-12-14)
 3. Release: [[3.0.0] - 2025-12-14](#300---2025-12-14)
 4. Release: [[2.1.0] - 2025-10-18](#210---2025-10-18)
@@ -16,7 +16,24 @@
 7. Release: [[1.0.0] - 2025-10-14](#100---2025-10-14)
 8. History: [CLI Version History (Pre-API Extraction)](#cli-version-history-pre-api-extraction)
 
-## [Unreleased] ##
+## [4.0.0] - 2026-03-28 ##
+
+### Breaking Changes ###
+
+- **Include Validation**: Fixed missing validation for include blocks with external files
+  - **Documented Rule Enforcement**: Now properly enforces the documented rule: "If include is used there must be a content block"
+  - **Breaking Change**: Files with include blocks containing external files but no content block will now fail validation
+  - **Validation Logic**: Include blocks with external files now require a corresponding content block
+  - **Error Message**: Clear validation error when include has external files but no content block
+    - Error format: `"Validation Error: The section-meta block at '[path]' has an include block with external files but no content block. A content block is required when including external files."`
+    - Includes precise location information (line and character positions)
+  - **Empty Include Support**: Empty include blocks (without external files) correctly don't require content blocks
+  - **Migration Guide**: Existing files using includes must add `(content)` blocks
+  - **Test Coverage**: Added comprehensive test coverage
+    - New test: "should fail when include has external files but no content block" - verifies error is thrown
+    - New test: "should succeed when include is empty (no external files)" - verifies empty includes work without content
+    - Updated 7 existing tests to properly include content blocks when using includes with external files
+  - **Bug Analysis**: Resolved discrepancy between documented language specification and actual parser enforcement
 
 ### Improved ###
 
