@@ -7,14 +7,26 @@
 
 # Changelog #
 
-1. Release: [[4.0.0] - 2026-03-28](#400---2026-03-28)
-2. Release: [[3.1.0] - 2025-12-14](#310---2025-12-14)
-3. Release: [[3.0.0] - 2025-12-14](#300---2025-12-14)
-4. Release: [[2.1.0] - 2025-10-18](#210---2025-10-18)
-5. Release: [[2.0.0] - 2025-10-18](#200---2025-10-18)
-6. Release: [[1.0.1] - 2025-10-14](#101---2025-10-14)
-7. Release: [[1.0.0] - 2025-10-14](#100---2025-10-14)
-8. History: [CLI Version History (Pre-API Extraction)](#cli-version-history-pre-api-extraction)
+1. Release: [[4.0.1] - 2026-03-28](#401---2026-03-28)
+2. Release: [[4.0.0] - 2026-03-28](#400---2026-03-28)
+3. Release: [[3.1.0] - 2025-12-14](#310---2025-12-14)
+4. Release: [[3.0.0] - 2025-12-14](#300---2025-12-14)
+5. Release: [[2.1.0] - 2025-10-18](#210---2025-10-18)
+6. Release: [[2.0.0] - 2025-10-18](#200---2025-10-18)
+7. Release: [[1.0.1] - 2025-10-14](#101---2025-10-14)
+8. Release: [[1.0.0] - 2025-10-14](#100---2025-10-14)
+9. History: [CLI Version History (Pre-API Extraction)](#cli-version-history-pre-api-extraction)
+
+## [4.0.1] - 2026-03-28 ##
+
+### Fixed ###
+
+- **Security Update**: Updated `glob` dependency from v10.4.1 to v13.0.6
+  - **Security Patch**: Addressed widely publicized security vulnerabilities in older glob versions
+  - **No Breaking Changes**: API-compatible upgrade with no code changes required
+  - **Performance**: Inherits performance improvements from glob v11-13
+  - **Node Compatibility**: Continues to support Node v20+ (already required by project)
+  - **Test Coverage**: All 300 tests passing with updated dependency
 
 ## [4.0.0] - 2026-03-28 ##
 
