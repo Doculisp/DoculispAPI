@@ -3,8 +3,8 @@
   "999_received": {
     "documentPath": "main.md",
     "failureCategory": "Validation Error",
-    "info": "Section id 'my-Id' at 'main.md' must be lowercase (Line: 5, Char: 6). Did you mean 'my-id'?",
-    "message": "Section id 'my-Id' at 'main.md' must be lowercase (Line: 5, Char: 6). Did you mean 'my-id'? (Line 5, Char 6)",
+    "info": "Section id 'my-Id' at 'main.md' must be lowercase. Did you mean 'my-id'?",
+    "message": "Section id 'my-Id' at 'main.md' must be lowercase. Did you mean 'my-id'? (Line 5, Char 6)",
     "processingStep": "Doculisp AST Parsing",
     "range": {
       "end": {

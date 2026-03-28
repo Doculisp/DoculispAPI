@@ -1,8 +1,8 @@
 {
   "documentPath": "test.dlisp",
   "failureCategory": "Validation Error",
-  "info": "The section-meta block at 'test.dlisp' contains unknown command 'unknown-param' (Line: 4, Char: 6).",
-  "message": "The section-meta block at 'test.dlisp' contains unknown command 'unknown-param' (Line: 4, Char: 6). (Line 4, Char 6)",
+  "info": "The section-meta block at 'test.dlisp' contains unknown command 'unknown-param'.",
+  "message": "The section-meta block at 'test.dlisp' contains unknown command 'unknown-param'. (Line 4, Char 6)",
   "processingStep": "Doculisp AST Parsing",
   "range": {
     "end": {

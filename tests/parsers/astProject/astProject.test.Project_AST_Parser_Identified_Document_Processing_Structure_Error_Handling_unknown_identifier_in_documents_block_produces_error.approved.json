@@ -1,8 +1,8 @@
 {
   "documentPath": "./malformed.dlproj",
   "failureCategory": "Parse Error",
-  "info": "Documents block contains unknown identifier 'unknownIdentifier' at './malformed.dlproj' (Line: 7, Char: 6).",
-  "message": "Documents block contains unknown identifier 'unknownIdentifier' at './malformed.dlproj' (Line: 7, Char: 6). (Line 7, Char 6)",
+  "info": "Documents block contains unknown identifier 'unknownIdentifier' at './malformed.dlproj'.",
+  "message": "Documents block contains unknown identifier 'unknownIdentifier' at './malformed.dlproj'. (Line 7, Char 6)",
   "processingStep": "Project AST Parsing",
   "range": {
     "end": {

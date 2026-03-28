@@ -3,19 +3,19 @@
   "999_received": {
     "documentPath": "D:/comments/simple.md",
     "failureCategory": "Parse Error",
-    "info": "Tokenization failed: Unexpected whitespace after opening parenthesis at 'D:/comments/simple.md' (Line: 1, Char: 18).",
-    "message": "Tokenization failed: Unexpected whitespace after opening parenthesis at 'D:/comments/simple.md' (Line: 1, Char: 18). (Line 1, Char 10)",
+    "info": "Tokenization failed: Unexpected whitespace after opening parenthesis at 'D:/comments/simple.md'.",
+    "message": "Tokenization failed: Unexpected whitespace after opening parenthesis at 'D:/comments/simple.md'. (Line 1, Char 18)",
     "processingStep": "Tokenization",
     "range": {
       "end": {
-        "char": 14,
+        "char": 19,
         "documentDepth": 1,
         "documentIndex": 1,
         "documentPath": "D:/comments/simple.md",
         "line": 1
       },
       "start": {
-        "char": 10,
+        "char": 18,
         "documentDepth": 1,
         "documentIndex": 1,
         "documentPath": "D:/comments/simple.md",

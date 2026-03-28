@@ -35,7 +35,17 @@ function buildTokenize(doesIt: ILispSearches, internals: IInternals, util: IUtil
         function tokenizeWhiteSpace(input: string, current: ILocation): StringStepParseResult<Token> {
             if(doesIt.startWithWindowsNewline.test(input)) {
                 if(isToken) {
-                    return parseFailure(`Unexpected whitespace after opening parenthesis at '${current.documentPath}' (Line: ${current.line}, Char: ${current.char}).`);
+                    const range: IRange = {
+                        start: current,
+                        end: {
+                            line: current.line,
+                            char: current.char + 1,
+                            documentPath: current.documentPath,
+                            documentDepth: current.documentDepth,
+                            documentIndex: current.documentIndex
+                        }
+                    };
+                    return parseFailure(`Unexpected whitespace after opening parenthesis at '${current.documentPath}'.`, range, current.documentPath);
                 }
                 isToken = false;
                 const newLine = (input.match(doesIt.startWithWindowsNewline) as any)[0] as string;
@@ -49,7 +59,17 @@ function buildTokenize(doesIt: ILispSearches, internals: IInternals, util: IUtil
     
             if(doesIt.startWithAnyNewline.test(input)) {
                 if(isToken) {
-                    return parseFailure(`Unexpected whitespace after opening parenthesis at '${current.documentPath}' (Line: ${current.line}, Char: ${current.char}).`);
+                    const range: IRange = {
+                        start: current,
+                        end: {
+                            line: current.line,
+                            char: current.char + 1,
+                            documentPath: current.documentPath,
+                            documentDepth: current.documentDepth,
+                            documentIndex: current.documentIndex
+                        }
+                    };
+                    return parseFailure(`Unexpected whitespace after opening parenthesis at '${current.documentPath}'.`, range, current.documentPath);
                 }
                 const newLine = (input.match(doesIt.startWithLinuxNewline) as any)[0] as string;
                 input = input.slice(newLine.length);
@@ -62,7 +82,17 @@ function buildTokenize(doesIt: ILispSearches, internals: IInternals, util: IUtil
     
             if(doesIt.startWithNonNewLineWhiteSpace.test(input)) {
                 if(isToken) {
-                    return parseFailure(`Unexpected whitespace after opening parenthesis at '${current.documentPath}' (Line: ${current.line}, Char: ${current.char}).`);
+                    const range: IRange = {
+                        start: current,
+                        end: {
+                            line: current.line,
+                            char: current.char + 1,
+                            documentPath: current.documentPath,
+                            documentDepth: current.documentDepth,
+                            documentIndex: current.documentIndex
+                        }
+                    };
+                    return parseFailure(`Unexpected whitespace after opening parenthesis at '${current.documentPath}'.`, range, current.documentPath);
                 }
                 const space = (input.match(doesIt.startWithNonNewLineWhiteSpace) as any)[0] as string;
                 input = input.slice(space.length);
@@ -274,7 +304,7 @@ function buildTokenize(doesIt: ILispSearches, internals: IInternals, util: IUtil
                 if (tokens.success) {
                     totalTokens.addTokens(tokens.value);
                 } else {
-                    const range: IRange = {
+                    const range: IRange = tokens.range || {
                         start: part.location,
                         end: {
                             line: part.location.line,
@@ -284,7 +314,7 @@ function buildTokenize(doesIt: ILispSearches, internals: IInternals, util: IUtil
                             documentIndex: part.location.documentIndex
                         }
                     };
-                    return parseFailure(`Tokenization failed: ${tokens.message}`, range, documentPath);
+                    return parseFailure(`Tokenization failed: ${tokens.info || tokens.message}`, range, documentPath);
                 }
             }
         }

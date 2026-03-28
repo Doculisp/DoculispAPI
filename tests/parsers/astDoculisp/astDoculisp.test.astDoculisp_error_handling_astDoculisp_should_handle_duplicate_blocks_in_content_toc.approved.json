@@ -1,8 +1,8 @@
 {
   "documentPath": "test.dlisp",
   "failureCategory": "Validation Error",
-  "info": "The content block at 'test.dlisp' has a duplicate 'label' block (Line: 6, Char: 2). First occurrence at (Line: 9, Char: 10).",
-  "message": "The content block at 'test.dlisp' has a duplicate 'label' block (Line: 6, Char: 2). First occurrence at (Line: 9, Char: 10). (Line 9, Char 10)",
+  "info": "The content block at 'test.dlisp' has a duplicate 'label' block.",
+  "message": "The content block at 'test.dlisp' has a duplicate 'label' block. (Line 9, Char 10)",
   "processingStep": "Doculisp AST Parsing",
   "range": {
     "end": {

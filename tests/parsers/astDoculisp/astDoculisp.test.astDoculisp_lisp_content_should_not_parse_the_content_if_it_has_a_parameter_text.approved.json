@@ -1,8 +1,8 @@
 {
   "documentPath": "../main.dlisp",
   "failureCategory": "Validation Error",
-  "info": "The content block at '../main.dlisp' contains unknown parameter 'toc' (Line: 9, Char: 2).",
-  "message": "The content block at '../main.dlisp' contains unknown parameter 'toc' (Line: 9, Char: 2). (Line 9, Char 2)",
+  "info": "The content block at '../main.dlisp' contains unknown parameter 'toc'.",
+  "message": "The content block at '../main.dlisp' contains unknown parameter 'toc'. (Line 9, Char 2)",
   "processingStep": "Doculisp AST Parsing",
   "range": {
     "end": {

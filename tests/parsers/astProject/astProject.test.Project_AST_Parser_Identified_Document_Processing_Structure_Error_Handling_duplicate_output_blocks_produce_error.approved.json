@@ -1,8 +1,8 @@
 {
   "documentPath": "./malformed.dlproj",
   "failureCategory": "Parse Error",
-  "info": "Duplicate output block at './malformed.dlproj' (Line: 4, Char: 10).",
-  "message": "Duplicate output block at './malformed.dlproj' (Line: 4, Char: 10). (Line 4, Char 10)",
+  "info": "Duplicate output block at './malformed.dlproj'.",
+  "message": "Duplicate output block at './malformed.dlproj'. (Line 4, Char 10)",
   "processingStep": "Project AST Parsing",
   "range": {
     "end": {

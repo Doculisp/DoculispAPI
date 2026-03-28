@@ -1,8 +1,8 @@
 {
   "documentPath": "main.dlisp",
   "failureCategory": "Validation Error",
-  "info": "Author block at 'main.dlisp' does not contain the author's name (Line: 4, Char: 6).",
-  "message": "Author block at 'main.dlisp' does not contain the author's name (Line: 4, Char: 6). (Line 4, Char 6)",
+  "info": "Author block at 'main.dlisp' does not contain the author's name.",
+  "message": "Author block at 'main.dlisp' does not contain the author's name. (Line 4, Char 6)",
   "processingStep": "Doculisp AST Parsing",
   "range": {
     "end": {

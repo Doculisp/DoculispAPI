@@ -1,8 +1,8 @@
 {
   "documentPath": "C:/bad/noCloseInline.md",
   "failureCategory": "Parse Error",
-  "info": "Unclosed inline code block at 'C:/bad/noCloseInline.md' (Line: 1, Char: 1).",
-  "message": "Unclosed inline code block at 'C:/bad/noCloseInline.md' (Line: 1, Char: 1). (Line 1, Char 1)",
+  "info": "Unclosed inline code block at 'C:/bad/noCloseInline.md'.",
+  "message": "Unclosed inline code block at 'C:/bad/noCloseInline.md'. (Line 1, Char 1)",
   "processingStep": "Document Parsing",
   "range": {
     "end": {

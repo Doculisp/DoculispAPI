@@ -3,8 +3,8 @@
   "999_received": {
     "documentPath": "./_main.md",
     "failureCategory": "Validation Error",
-    "info": "The section-meta block at './_main.md' contains unknown command 'bad' (Line: 5, Char: 10).",
-    "message": "The section-meta block at './_main.md' contains unknown command 'bad' (Line: 5, Char: 10). (Line 5, Char 10)",
+    "info": "The section-meta block at './_main.md' contains unknown command 'bad'.",
+    "message": "The section-meta block at './_main.md' contains unknown command 'bad'. (Line 5, Char 10)",
     "processingStep": "Doculisp AST Parsing",
     "range": {
       "end": {

@@ -1,8 +1,8 @@
 {
   "documentPath": "./malformed.dlproj",
   "failureCategory": "Parse Error",
-  "info": "Unknown identifier 'unknownBlock' at './malformed.dlproj' (Line: 6, Char: 10).",
-  "message": "Unknown identifier 'unknownBlock' at './malformed.dlproj' (Line: 6, Char: 10). (Line 6, Char 10)",
+  "info": "Unknown identifier 'unknownBlock' at './malformed.dlproj'.",
+  "message": "Unknown identifier 'unknownBlock' at './malformed.dlproj'. (Line 6, Char 10)",
   "processingStep": "Project AST Parsing",
   "range": {
     "end": {

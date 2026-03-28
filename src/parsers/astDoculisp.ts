@@ -20,7 +20,7 @@ function getSymbolErrorMessage<T extends Ast>(typeId: string, word: string, curr
         let symbolKeys = Object.keys(symbols);
         let badMsg = symbolKeys.map(badS => `'${badS}' @ id char ${(symbols as IDictionary<number>)[badS]}`).join('\n\t');
 
-        return `Symbol(s) in ${typeId} id '${word}' at '${current.documentPath.fullName}' (Line: ${ast.location.line}, Char: ${ast.location.char}).\n${badMsg}`;
+        return `Symbol(s) in ${typeId} id '${word}' at '${current.documentPath.fullName}'.\n${badMsg}`;
     }
 
     return false;
@@ -120,7 +120,7 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
                             documentIndex: ast.location.documentIndex,
                         }
                     };
-                    return validationFailure(`Heading ID must be lowercase at '${current.documentPath.fullName}' (Line: ${ast.location.line}, Char: ${ast.location.char}). Did you mean '${id.toLocaleLowerCase()}'?`, range, current.documentPath);
+                    return validationFailure(`Heading ID must be lowercase at '${current.documentPath.fullName}'. Did you mean '${id.toLocaleLowerCase()}'?`, range, current.documentPath);
                 }
 
                 if(variableTable.hasKey(id)) {
@@ -237,7 +237,7 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
                             documentIndex: next.location.documentIndex,
                         }
                     };
-                    return validationFailure(`Unknown block '${next.value}' in title block at '${title.location.documentPath.fullName}' (Line: ${title.location.line}, Char: ${title.location.char}).`, range, current.documentPath);
+                    return validationFailure(`Unknown block '${next.value}' in title block at '${title.location.documentPath.fullName}'.`, range, current.documentPath);
                 }
     
                 let linkText = getLinkText(title, refLink);
@@ -379,7 +379,7 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
                             documentIndex: refLink.location.documentIndex,
                         }
                     };
-                    return validationFailure(`Missing ref-link text in ref-link block at '${refLink.location.documentPath.fullName}' (Line: ${refLink.location.line}, Char: ${refLink.location.char}).`, range, current.documentPath);
+                    return validationFailure(`Missing ref-link text in ref-link block at '${refLink.location.documentPath.fullName}'.`, range, current.documentPath);
                 }
     
                 if(refLink.type === 'ast-container') {
@@ -521,7 +521,7 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
                                 documentIndex: author.location.documentIndex,
                             }
                         };
-                        return validationFailure(`Author block at '${author.location.documentPath.fullName}' does not contain the author's name (Line: ${author.location.line}, Char: ${author.location.char}).`, range, location.documentPath);
+                        return validationFailure(`Author block at '${author.location.documentPath.fullName}' does not contain the author's name.`, range, location.documentPath);
                     }
 
                     if(author.type === 'ast-container') {
@@ -536,7 +536,7 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
                                 documentIndex: child.location.documentIndex,
                             }
                         };
-                        return validationFailure(`Author block at '${author.location.documentPath.fullName}' contains unknown child block '${child.value}' (Line: ${child.location.line}, Char: ${child.location.char}).`, range, location.documentPath);
+                        return validationFailure(`Author block at '${author.location.documentPath.fullName}' contains unknown child block '${child.value}'.`, range, location.documentPath);
                     }
 
                     variableTable.addValueToStringList('author', { value: author.parameter.value, type: 'variable-string' });
@@ -563,7 +563,7 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
                             documentIndex: location.documentIndex,
                         }
                     };
-                    return validationFailure(`The section-meta block at '${location.documentPath.fullName}' has more than one id (Line: ${location.line}, Char: ${location.char}).`, range, current.documentPath);
+                    return validationFailure(`The section-meta block at '${location.documentPath.fullName}' has more than one id.`, range, current.documentPath);
                 }
 
                 const idIdentifier = ids[0] as IdentifierAst;
@@ -579,7 +579,7 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
                             documentIndex: idIdentifier.location.documentIndex,
                         }
                     };
-                    return validationFailure(`The section id block at '${idIdentifier.location.documentPath.fullName}' contains sub blocks (Line: ${idIdentifier.location.line}, Char: ${idIdentifier.location.char}).`, range, current.documentPath);
+                    return validationFailure(`The section id block at '${idIdentifier.location.documentPath.fullName}' contains sub blocks.`, range, current.documentPath);
                 }
 
                 if(idIdentifier.type === 'ast-identifier') {
@@ -593,7 +593,7 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
                             documentIndex: idIdentifier.location.documentIndex,
                         }
                     };
-                    return validationFailure(`The section id block at '${idIdentifier.location.documentPath.fullName}' is missing identifier text parameter (Line: ${idIdentifier.location.line}, Char: ${idIdentifier.location.char}).`, range, current.documentPath);
+                    return validationFailure(`The section id block at '${idIdentifier.location.documentPath.fullName}' is missing identifier text parameter.`, range, current.documentPath);
                 }
 
                 const id = idIdentifier.parameter.value;
@@ -624,7 +624,7 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
                             documentIndex: idIdentifier.location.documentIndex,
                         }
                     };
-                    return validationFailure(`Section id '${id}' at '${current.documentPath.fullName}' must be lowercase (Line: ${idIdentifier.location.line}, Char: ${idIdentifier.location.char}). Did you mean '${id.toLocaleLowerCase()}'?`, range, current.documentPath);
+                    return validationFailure(`Section id '${id}' at '${current.documentPath.fullName}' must be lowercase. Did you mean '${id.toLocaleLowerCase()}'?`, range, current.documentPath);
                 }
 
                 if(variableTable.hasKey(id)) {
@@ -644,7 +644,7 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
                             documentIndex: idIdentifier.location.documentIndex,
                         }
                     };
-                    return validationFailure(`Section id '${id}' at '${current.documentPath.fullName}' has already been used (Line: ${idIdentifier.location.line}, Char: ${idIdentifier.location.char}).${msg}`, range, current.documentPath);
+                    return validationFailure(`Section id '${id}' at '${current.documentPath.fullName}' has already been used.${msg}`, range, current.documentPath);
                 }
 
                 const destinationPath = (
@@ -698,7 +698,7 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
                         documentIndex: sectionMeta.location.documentIndex,
                     }
                 };
-                return validationFailure(`The section-meta block at '${sectionMeta.location.documentPath.fullName}' is a duplicate block (Line: ${sectionMeta.location.line}, Char: ${sectionMeta.location.char}). Only one section-meta block allowed per file.`, range, current.documentPath);
+                return validationFailure(`The section-meta block at '${sectionMeta.location.documentPath.fullName}' is a duplicate block. Only one section-meta block allowed per file.`, range, current.documentPath);
             }
     
             const badSections = sectionMeta.subStructure.filter(a => !['title', 'subtitle', 'ref-link', 'include', 'author', 'id'].includes(a.value));
@@ -715,7 +715,7 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
                         documentIndex: next.location.documentIndex,
                     }
                 };
-                return validationFailure(`The section-meta block at '${sectionMeta.location.documentPath.fullName}' contains unknown command '${next.value}' (Line: ${next.location.line}, Char: ${next.location.char}).`, range, current.documentPath);
+                return validationFailure(`The section-meta block at '${sectionMeta.location.documentPath.fullName}' contains unknown command '${next.value}'.`, range, current.documentPath);
             }
     
             const subtitle = parseSubtitle(sectionMeta.subStructure, current, sectionMeta.location.documentDepth + 2);
@@ -788,7 +788,7 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
                             documentIndex: location.documentIndex,
                         }
                     };
-                    return validationFailure(`The toc block at '${location.documentPath.fullName}' has unknown bullet style '${bulletStyle}' (Line: ${location.line}, Char: ${location.char}).`, range, documentPath);
+                    return validationFailure(`The toc block at '${location.documentPath.fullName}' has unknown bullet style '${bulletStyle}'.`, range, documentPath);
                 }
 
                 return util.ok(bulletStyle as DoculispBulletStyle);
@@ -812,7 +812,7 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
                             documentIndex: location.documentIndex,
                         }
                     };
-                    return validationFailure(`The content block at '${location.documentPath.fullName}' has more than one toc (Line: ${location.line}, Char: ${location.char}).`, range, location.documentPath);
+                    return validationFailure(`The content block at '${location.documentPath.fullName}' has more than one toc.`, range, location.documentPath);
                 }
 
                 const toc = tocs[0] as IdentifierAst;
@@ -830,7 +830,7 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
                                 documentIndex: err.location.documentIndex,
                             }
                         };
-                        return validationFailure(`The content block at '${location.documentPath.fullName}' has ${toc.subStructure.length} blocks and can only have 0, 1, or 2 blocks (Line: ${err.location.line}, Char: ${err.location.char}).`, range, location.documentPath);
+                        return validationFailure(`The content block at '${location.documentPath.fullName}' has ${toc.subStructure.length} blocks and can only have 0, 1, or 2 blocks.`, range, location.documentPath);
                     }
 
                     const first = toc.subStructure[0] as IdentifierAst;
@@ -845,7 +845,7 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
                                 documentIndex: first.location.documentIndex,
                             }
                         };
-                        return validationFailure(`The content block at '${location.documentPath.fullName}' contains unknown command '${first.value}' (Line: ${first.location.line}, Char: ${first.location.char}).`, range, location.documentPath);
+                        return validationFailure(`The content block at '${location.documentPath.fullName}' contains unknown command '${first.value}'.`, range, location.documentPath);
                     }
                     
                     let labelText: string | false = false;
@@ -878,7 +878,7 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
                                     documentIndex: second.location.documentIndex,
                                 }
                             };
-                            return validationFailure(`The content block at '${location.documentPath.fullName}' contains unknown command '${second.value}' (Line: ${second.location.line}, Char: ${second.location.char}).`, range, location.documentPath);
+                            return validationFailure(`The content block at '${location.documentPath.fullName}' contains unknown command '${second.value}'.`, range, location.documentPath);
                         }
 
                         if(first.value === second.value) {
@@ -892,7 +892,7 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
                                     documentIndex: second.location.documentIndex,
                                 }
                             };
-                            return validationFailure(`The content block at '${location.documentPath.fullName}' has a duplicate '${first.value}' block (Line: ${location.line}, Char: ${location.char}). First occurrence at (Line: ${second.location.line}, Char: ${second.location.char}).`, range, location.documentPath);
+                            return validationFailure(`The content block at '${location.documentPath.fullName}' has a duplicate '${first.value}' block.`, range, location.documentPath);
                         }
 
                         if(second.value === 'label') {
@@ -964,7 +964,7 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
                         documentIndex: contentBlock.location.documentIndex,
                     }
                 };
-                return validationFailure(`The content block at '${contentBlock.location.documentPath.fullName}' contains unknown parameter '${contentBlock.parameter.value}' (Line: ${contentBlock.location.line}, Char: ${contentBlock.location.char}).`, range, current.documentPath);
+                return validationFailure(`The content block at '${contentBlock.location.documentPath.fullName}' contains unknown parameter '${contentBlock.parameter.value}'.`, range, current.documentPath);
             }
 
             if(!hasSectionMeta) {
@@ -978,7 +978,7 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
                         documentIndex: contentBlock.location.documentIndex,
                     }
                 };
-                return validationFailure(`The content block at '${contentBlock.location.documentPath.fullName}' exists before the section-meta block (Line: ${contentBlock.location.line}, Char: ${contentBlock.location.char}).`, range, current.documentPath);
+                return validationFailure(`The content block at '${contentBlock.location.documentPath.fullName}' exists before the section-meta block.`, range, current.documentPath);
             }
 
             if(!hasInclude) {
@@ -992,7 +992,7 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
                         documentIndex: contentBlock.location.documentIndex,
                     }
                 };
-                return validationFailure(`The content block at '${contentBlock.location.documentPath.fullName}' exists without an include block that has external files (Line: ${contentBlock.location.line}, Char: ${contentBlock.location.char}).`, range, current.documentPath);
+                return validationFailure(`The content block at '${contentBlock.location.documentPath.fullName}' exists without an include block that has external files.`, range, current.documentPath);
             }
 
             const content: IContentLocation = {
@@ -1024,7 +1024,7 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
                         documentIndex: next.location.documentIndex,
                     }
                 };
-                return validationFailure(`The content block at '${contentBlock.location.documentPath.fullName}' has unknown command '${next.value}' (Line: ${next.location.line}, Char: ${next.location.char}).`, range, current.documentPath);
+                return validationFailure(`The content block at '${contentBlock.location.documentPath.fullName}' has unknown command '${next.value}'.`, range, current.documentPath);
             }
     
             const tocMaybe = parseToc(contentBlock.subStructure, contentBlock.location);

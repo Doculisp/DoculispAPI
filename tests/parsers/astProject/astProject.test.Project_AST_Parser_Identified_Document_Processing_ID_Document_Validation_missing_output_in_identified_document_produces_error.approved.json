@@ -1,8 +1,8 @@
 {
   "documentPath": "/docs.dlproj",
   "failureCategory": "Validation Error",
-  "info": "Missing output block in document identifier at '/docs.dlproj' (Line: 4, Char: 10).",
-  "message": "Missing output block in document identifier at '/docs.dlproj' (Line: 4, Char: 10). (Line 4, Char 10)",
+  "info": "Missing output block in document identifier at '/docs.dlproj'.",
+  "message": "Missing output block in document identifier at '/docs.dlproj'. (Line 4, Char 10)",
   "processingStep": "Project AST Parsing",
   "range": {
     "end": {

@@ -1,8 +1,8 @@
 {
   "documentPath": "test.dlisp",
   "failureCategory": "Validation Error",
-  "info": "The content block at 'test.dlisp' has more than one toc (Line: 6, Char: 2).",
-  "message": "The content block at 'test.dlisp' has more than one toc (Line: 6, Char: 2). (Line 6, Char 2)",
+  "info": "The content block at 'test.dlisp' has more than one toc.",
+  "message": "The content block at 'test.dlisp' has more than one toc. (Line 6, Char 2)",
   "processingStep": "Doculisp AST Parsing",
   "range": {
     "end": {

@@ -1,8 +1,8 @@
 {
   "documentPath": "C:/examples/badInline.md",
   "failureCategory": "Parse Error",
-  "info": "Inline code block contains newline before closing at 'C:/examples/badInline.md' (Line: 1, Char: 1).",
-  "message": "Inline code block contains newline before closing at 'C:/examples/badInline.md' (Line: 1, Char: 1). (Line 1, Char 1)",
+  "info": "Inline code block contains newline before closing at 'C:/examples/badInline.md'.",
+  "message": "Inline code block contains newline before closing at 'C:/examples/badInline.md'. (Line 1, Char 1)",
   "processingStep": "Document Parsing",
   "range": {
     "end": {
