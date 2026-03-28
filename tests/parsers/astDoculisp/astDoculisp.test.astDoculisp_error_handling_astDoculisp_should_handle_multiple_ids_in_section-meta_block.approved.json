@@ -1,7 +1,24 @@
 {
   "documentPath": "test.dlisp",
   "failureCategory": "Validation Error",
-  "message": "The section-meta block at 'test.dlisp' has more than one id (Line: 0, Char: 0).",
+  "info": "The section-meta block at 'test.dlisp' has more than one id (Line: 0, Char: 0).",
+  "message": "The section-meta block at 'test.dlisp' has more than one id (Line: 0, Char: 0). (Line 0, Char 0)",
   "processingStep": "Doculisp AST Parsing",
+  "range": {
+    "end": {
+      "char": 12,
+      "documentDepth": 1,
+      "documentIndex": 1,
+      "documentPath": "test.dlisp",
+      "line": 0
+    },
+    "start": {
+      "char": 0,
+      "documentDepth": 1,
+      "documentIndex": 1,
+      "documentPath": "test.dlisp",
+      "line": 0
+    }
+  },
   "success": false
 }

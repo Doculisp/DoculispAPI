@@ -81,7 +81,17 @@ function buildAstProject(internals: IInternals, util: IUtil, trimArray: ITrimArr
 
             if (0 < remaining.remaining.length) {
                 const bad = remaining.remaining[0] as CoreAst;
-                return parseFailure(`Documents block contains unknown identifier '${bad.value}' at '${current.documentPath.fullName}' (Line: ${bad.location.line}, Char: ${bad.location.char}).`, current.documentPath);
+                const range: IRange = {
+                    start: bad.location,
+                    end: {
+                        line: bad.location.line,
+                        char: bad.location.char + bad.value.length,
+                        documentPath: bad.location.documentPath,
+                        documentDepth: bad.location.documentDepth,
+                        documentIndex: bad.location.documentIndex
+                    }
+                };
+                return parseFailure(`Documents block contains unknown identifier '${bad.value}' at '${current.documentPath.fullName}' (Line: ${bad.location.line}, Char: ${bad.location.char}).`, range, current.documentPath);
             }
 
             const documents: IProjectDocuments = {
@@ -167,7 +177,17 @@ function buildAstProject(internals: IInternals, util: IUtil, trimArray: ITrimArr
 
                 if (0 < remaining.remaining.length) {
                     const first = remaining.remaining[0] as IdentifierAst;
-                    return parseFailure(`Unknown identifier '${first.value}' at '${current.documentPath.fullName}' (Line: ${first.location.line}, Char: ${first.location.char}).`, current.documentPath);
+                    const range: IRange = {
+                        start: first.location,
+                        end: {
+                            line: first.location.line,
+                            char: first.location.char + first.value.length,
+                            documentPath: first.location.documentPath,
+                            documentDepth: first.location.documentDepth,
+                            documentIndex: first.location.documentIndex
+                        }
+                    };
+                    return parseFailure(`Unknown identifier '${first.value}' at '${current.documentPath.fullName}' (Line: ${first.location.line}, Char: ${first.location.char}).`, range, current.documentPath);
                 }
 
                 const sources = result.filter(r => r.type === 'i-source');
@@ -178,21 +198,61 @@ function buildAstProject(internals: IInternals, util: IUtil, trimArray: ITrimArr
                 }
 
                 if (0 === sources.length) {
-                    return validationFailure(`Missing source block in document identifier at '${originalLocation.documentPath}' (Line: ${originalLocation.line}, Char: ${originalLocation.char}).`, originalLocation.documentPath)
+                    const range: IRange = {
+                        start: originalLocation,
+                        end: {
+                            line: originalLocation.line,
+                            char: originalLocation.char + 1,
+                            documentPath: originalLocation.documentPath,
+                            documentDepth: originalLocation.documentDepth,
+                            documentIndex: originalLocation.documentIndex
+                        }
+                    };
+                    return validationFailure(`Missing source block in document identifier at '${originalLocation.documentPath}' (Line: ${originalLocation.line}, Char: ${originalLocation.char}).`, range, originalLocation.documentPath)
                 }
 
                 if (0 === outputs.length) {
-                    return validationFailure(`Missing output block in document identifier at '${originalLocation.documentPath}' (Line: ${originalLocation.line}, Char: ${originalLocation.char}).`, originalLocation.documentPath)
+                    const range: IRange = {
+                        start: originalLocation,
+                        end: {
+                            line: originalLocation.line,
+                            char: originalLocation.char + 1,
+                            documentPath: originalLocation.documentPath,
+                            documentDepth: originalLocation.documentDepth,
+                            documentIndex: originalLocation.documentIndex
+                        }
+                    };
+                    return validationFailure(`Missing output block in document identifier at '${originalLocation.documentPath}' (Line: ${originalLocation.line}, Char: ${originalLocation.char}).`, range, originalLocation.documentPath)
                 }
 
                 if (1 < sources.length) {
                     const bad = sources[1] as ISource;
-                    return parseFailure(`Duplicate source block at '${current.documentPath}' (Line: ${bad.location.line}, Char: ${bad.location.char}).`, current.documentPath);
+                    const range: IRange = {
+                        start: bad.location,
+                        end: {
+                            line: bad.location.line,
+                            char: bad.location.char + 1,
+                            documentPath: bad.location.documentPath,
+                            documentDepth: bad.location.documentDepth,
+                            documentIndex: bad.location.documentIndex
+                        }
+                    };
+                    return parseFailure(`Duplicate source block at '${current.documentPath}' (Line: ${bad.location.line}, Char: ${bad.location.char}).`, range, current.documentPath);
                 }
 
                 if (1 < outputs.length) {
                     const bad = outputs[1] as IOutput;
-                    return parseFailure(`Duplicate output block at '${current.documentPath}' (Line: ${bad.location.line}, Char: ${bad.location.char}).`, current.documentPath);
+                    const range: IRange = {
+                        start: bad.location,
+                        end: {
+                            line: bad.location.line,
+                            char: bad.location.char + 1,
+                            documentPath: bad.location.documentPath,
+                            documentDepth: bad.location.documentDepth,
+                            documentIndex: bad.location.documentIndex
+                        }
+                    };
+                    return parseFailure(`Duplicate output block at '${current.documentPath}' (Line: ${bad.location.line}, Char: ${bad.location.char}).`, range, current.documentPath);
                 }
 
                 const source = sources[0] as ISource;
@@ -234,12 +294,31 @@ function buildAstProject(internals: IInternals, util: IUtil, trimArray: ITrimArr
                 if (!!table) {
                     let bads = Object.keys(table);
                     let badMsg = bads.map(badS => `'${badS}' at ID character ${table[badS]}`).join('.\n  ') + '.';
-
-                    return validationFailure(`Invalid characters in document ID '${id}' at '${current.documentPath.fullName}' (Line: ${current.line}, Char: ${current.char}).\n  ${badMsg}`);
+                    const range: IRange = {
+                        start: ast.location,
+                        end: {
+                            line: ast.location.line,
+                            char: ast.location.char + id.length,
+                            documentPath: ast.location.documentPath,
+                            documentDepth: ast.location.documentDepth,
+                            documentIndex: ast.location.documentIndex
+                        }
+                    };
+                    return validationFailure(`Invalid characters in document ID '${id}' at '${current.documentPath.fullName}' (Line: ${current.line}, Char: ${current.char}).\n  ${badMsg}`, range);
                 }
 
                 if (!textHelper.isLowercase(id)) {
-                    return validationFailure(`Document ID must be lowercase at '${current.documentPath.fullName}' (Line: ${current.line}, Char: ${current.char}). Did you mean '${id.toLocaleLowerCase()}'?`)
+                    const range: IRange = {
+                        start: ast.location,
+                        end: {
+                            line: ast.location.line,
+                            char: ast.location.char + id.length,
+                            documentPath: ast.location.documentPath,
+                            documentDepth: ast.location.documentDepth,
+                            documentIndex: ast.location.documentIndex
+                        }
+                    };
+                    return validationFailure(`Document ID must be lowercase at '${current.documentPath.fullName}' (Line: ${current.line}, Char: ${current.char}). Did you mean '${id.toLocaleLowerCase()}'?`, range)
                 }
 
                 if (variableTable.hasKey(id)) {
@@ -249,8 +328,17 @@ function buildAstProject(internals: IInternals, util: IUtil, trimArray: ITrimArr
                     if (orig && orig.type === 'variable-id') {
                         msg = `\n  Original use of ID was at '${orig.source.documentPath}' (Line: ${orig.source.line}, Char: ${orig.source.char}).`;
                     }
-
-                    return validationFailure(`Duplicate document ID '${id}' at '${current.documentPath.fullName}' (Line: ${current.line}, Char: ${current.char}).${msg}`, current.documentPath);
+                    const range: IRange = {
+                        start: ast.location,
+                        end: {
+                            line: ast.location.line,
+                            char: ast.location.char + id.length,
+                            documentPath: ast.location.documentPath,
+                            documentDepth: ast.location.documentDepth,
+                            documentIndex: ast.location.documentIndex
+                        }
+                    };
+                    return validationFailure(`Duplicate document ID '${id}' at '${current.documentPath.fullName}' (Line: ${current.line}, Char: ${current.char}).${msg}`, range, current.documentPath);
                 }
                 return parseDocumentByParts(current, input, blockRange, id)(ast.subStructure, (ast.subStructure[0] as IdentifierAst).location);
             }
@@ -280,16 +368,36 @@ function buildAstProject(internals: IInternals, util: IUtil, trimArray: ITrimArr
 
             if (0 < remaining.remaining.length) {
                 const bad = remaining.remaining[0] as CoreAst;
-                return parseFailure(`Unknown identifier '${bad.value}' at '${current.documentPath}' (Line: ${bad.location.line}, Char: ${bad.location.char}).`, current.documentPath);
+                const range: IRange = {
+                    start: bad.location,
+                    end: {
+                        line: bad.location.line,
+                        char: bad.location.char + bad.value.length,
+                        documentPath: bad.location.documentPath,
+                        documentDepth: bad.location.documentDepth,
+                        documentIndex: bad.location.documentIndex
+                    }
+                };
+                return parseFailure(`Unknown identifier '${bad.value}' at '${current.documentPath}' (Line: ${bad.location.line}, Char: ${bad.location.char}).`, range, current.documentPath);
             }
 
             if (result.length === 0) {
-                return parseFailure(`Document block does not contain source or output at '${current.documentPath}' (Line: ${current.line}, Char: ${current.char}).`, current.documentPath);
+                const range: IRange = {
+                    start: current,
+                    end: {
+                        line: current.line,
+                        char: current.char + 1,
+                        documentPath: current.documentPath,
+                        documentDepth: current.documentDepth,
+                        documentIndex: current.documentIndex
+                    }
+                };
+                return parseFailure(`Document block does not contain source or output at '${current.documentPath}' (Line: ${current.line}, Char: ${current.char}).`, range, current.documentPath);
             }
 
             if (1 < result.length) {
                 const bad = result[0] as IProjectDocument;
-                return parseFailure(`Duplicate source block at '${current.documentPath.fullName}' (Line: ${bad.location.line}, Char: ${bad.location.char}).`, current.documentPath);
+                return parseFailure(`Duplicate source block at '${current.documentPath.fullName}' (Line: ${bad.location.line}, Char: ${bad.location.char}).`, bad.blockRange, current.documentPath);
             }
 
             const doc = result[0] as IProjectDocument;
@@ -313,7 +421,17 @@ function buildAstProject(internals: IInternals, util: IUtil, trimArray: ITrimArr
 
         if (0 < remaining.remaining.length) {
             const bad = remaining.remaining[0] as CoreAst;
-            return parseFailure(`Unknown identifier '${bad.value}' at '${bad.location.documentPath.fullName}' (Line: ${bad.location.line}, Char: ${bad.location.char}).`, bad.location.documentPath);
+            const range: IRange = {
+                start: bad.location,
+                end: {
+                    line: bad.location.line,
+                    char: bad.location.char + bad.value.length,
+                    documentPath: bad.location.documentPath,
+                    documentDepth: bad.location.documentDepth,
+                    documentIndex: bad.location.documentIndex
+                }
+            };
+            return parseFailure(`Unknown identifier '${bad.value}' at '${bad.location.documentPath.fullName}' (Line: ${bad.location.line}, Char: ${bad.location.char}).`, range, bad.location.documentPath);
         }
 
         if (0 === result.length) {
@@ -332,7 +450,7 @@ function buildAstProject(internals: IInternals, util: IUtil, trimArray: ITrimArr
 
         if (1 < result.length) {
             const bad = result[1] as IProjectDocuments;
-            return parseFailure(`Duplicate documents block detected at '${bad.location.documentPath.fullName}' (Line: ${bad.location.line}, Char: ${bad.location.char}). Project file may only contain a single documents block.`, bad.location.documentPath);
+            return parseFailure(`Duplicate documents block detected at '${bad.location.documentPath.fullName}' (Line: ${bad.location.line}, Char: ${bad.location.char}). Project file may only contain a single documents block.`, bad.blockRange, bad.location.documentPath);
         }
 
         return util.ok(result[0] as IProjectDocuments);

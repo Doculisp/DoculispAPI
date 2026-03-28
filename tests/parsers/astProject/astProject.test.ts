@@ -66,7 +66,7 @@ describe('Project AST Parser', () => {
          */
         describe('Error Propagation', () => {
             it('failed input parsing propagates error', () => {
-                const tokenResults = util.fail('Project AST Parsing')('Parse Error')('No good.');
+                const tokenResults = util.fail('Project AST Parsing')('Parse Error')('No good.', undefined);
                 const result = parser.parse(tokenResults, variableTable);
 
                 expect(result).toBe(tokenResults);

@@ -1,7 +1,24 @@
 {
   "documentPath": "D:\\Development\\github\\Doculisp\\DoculispApi\\tests\\Sample\\simpleBadLink\\parsers\\document.md",
   "failureCategory": "Validation Error",
-  "message": "Unknown document ID 'mains' at 'D:\\Development\\github\\Doculisp\\DoculispApi\\tests\\Sample\\simpleBadLink\\parsers\\document.md' (Line: 32, Char: 18).",
+  "info": "Unknown document ID 'mains' at 'D:\\Development\\github\\Doculisp\\DoculispApi\\tests\\Sample\\simpleBadLink\\parsers\\document.md' (Line: 32, Char: 18).",
+  "message": "Unknown document ID 'mains' at 'D:\\Development\\github\\Doculisp\\DoculispApi\\tests\\Sample\\simpleBadLink\\parsers\\document.md' (Line: 32, Char: 18). (Line 32, Char 17)",
   "processingStep": "Building Document",
+  "range": {
+    "end": {
+      "char": 32,
+      "documentDepth": 3,
+      "documentIndex": 1,
+      "documentPath": "D:\\Development\\github\\Doculisp\\DoculispApi\\tests\\Sample\\simpleBadLink\\parsers\\document.md",
+      "line": 32
+    },
+    "start": {
+      "char": 17,
+      "documentDepth": 3,
+      "documentIndex": 1,
+      "documentPath": "D:\\Development\\github\\Doculisp\\DoculispApi\\tests\\Sample\\simpleBadLink\\parsers\\document.md",
+      "line": 32
+    }
+  },
   "success": false
 }

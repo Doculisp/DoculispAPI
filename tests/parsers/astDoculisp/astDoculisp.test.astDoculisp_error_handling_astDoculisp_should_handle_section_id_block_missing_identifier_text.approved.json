@@ -1,7 +1,24 @@
 {
   "documentPath": "test.dlisp",
   "failureCategory": "Validation Error",
-  "message": "The section id block at 'test.dlisp' is missing identifier text parameter (Line: 3, Char: 6).",
+  "info": "The section id block at 'test.dlisp' is missing identifier text parameter (Line: 3, Char: 6).",
+  "message": "The section id block at 'test.dlisp' is missing identifier text parameter (Line: 3, Char: 6). (Line 3, Char 6)",
   "processingStep": "Doculisp AST Parsing",
+  "range": {
+    "end": {
+      "char": 8,
+      "documentDepth": 1,
+      "documentIndex": 1,
+      "documentPath": "test.dlisp",
+      "line": 3
+    },
+    "start": {
+      "char": 6,
+      "documentDepth": 1,
+      "documentIndex": 1,
+      "documentPath": "test.dlisp",
+      "line": 3
+    }
+  },
   "success": false
 }

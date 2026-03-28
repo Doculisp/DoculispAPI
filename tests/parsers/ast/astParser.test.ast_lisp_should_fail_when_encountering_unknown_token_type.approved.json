@@ -1,7 +1,24 @@
 {
   "documentPath": "./malformed.dlisp",
   "failureCategory": "Parse Error",
-  "message": "Unknown token '@invalid' at './malformed.dlisp' (Line: 1, Char: 13).",
+  "info": "Unknown token '@invalid' at './malformed.dlisp'",
+  "message": "Unknown token '@invalid' at './malformed.dlisp' (Line 1, Char 13)",
   "processingStep": "AST Parsing",
+  "range": {
+    "end": {
+      "char": 21,
+      "documentDepth": 1,
+      "documentIndex": 1,
+      "documentPath": "./malformed.dlisp",
+      "line": 1
+    },
+    "start": {
+      "char": 13,
+      "documentDepth": 1,
+      "documentIndex": 1,
+      "documentPath": "./malformed.dlisp",
+      "line": 1
+    }
+  },
   "success": false
 }

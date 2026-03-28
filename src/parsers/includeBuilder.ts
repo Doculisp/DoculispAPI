@@ -3,7 +3,7 @@ import { IIncludeBuilder } from "../types/types.includeBuilder";
 import { IRegisterable } from "../types/types.containers";
 import { DocumentParser } from "../types/types.document";
 import { IFileHandler } from "../types/types.fileHandler";
-import { IProjectLocation, IUtil, Result } from "../types/types.general";
+import { IProjectLocation, IRange, IUtil, Result } from "../types/types.general";
 import { TokenFunction } from "../types/types.tokens";
 import { IAstParser } from "../types/types.ast";
 import { IVariablePath, IVariableTable } from "../types/types.variableTable";
@@ -63,7 +63,17 @@ function buildAstBuilder(util: IUtil, doculispParser: IDoculispParser, documentP
             }
 
             if(load.path.extension !== '.md' && load.path.extension !== '.dlisp') {
-                return failureBuilder(`Invalid file type in include block at '${doculisp.documentOrder.documentPath}' (Line: ${load.documentOrder.line}, Char: ${load.documentOrder.char}). Included files must be markdown or dlisp files.`, doculisp.documentOrder.documentPath);
+                const range: IRange = {
+                    start: load.documentOrder,
+                    end: {
+                        line: load.documentOrder.line,
+                        char: load.documentOrder.char + load.path.fullName.length,
+                        documentPath: load.documentOrder.documentPath,
+                        documentDepth: load.documentOrder.documentDepth,
+                        documentIndex: load.documentOrder.documentIndex,
+                    }
+                };
+                return failureBuilder(`Invalid file type in include block at '${doculisp.documentOrder.documentPath}' (Line: ${load.documentOrder.line}, Char: ${load.documentOrder.char}). Included files must be markdown or dlisp files.`, range, doculisp.documentOrder.documentPath);
             }
 
             const astResult = _parse(load.path, { documentDepth: doculisp.documentOrder.documentDepth + 1, documentIndex: index + 1, documentPath: load.path}, variableTable);

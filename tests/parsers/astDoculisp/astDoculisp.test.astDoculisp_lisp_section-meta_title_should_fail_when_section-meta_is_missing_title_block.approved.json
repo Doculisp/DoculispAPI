@@ -1,7 +1,24 @@
 {
   "documentPath": "./malformed.dlisp",
   "failureCategory": "Parse Error",
-  "message": "Section-meta missing title block at './malformed.dlisp' (Line: 0, Char: 0).",
+  "info": "Section-meta missing title block at './malformed.dlisp'.",
+  "message": "Section-meta missing title block at './malformed.dlisp'. (Line 0, Char 0)",
   "processingStep": "Doculisp AST Parsing",
+  "range": {
+    "end": {
+      "char": 1,
+      "documentDepth": 1,
+      "documentIndex": 1,
+      "documentPath": "./malformed.dlisp",
+      "line": 0
+    },
+    "start": {
+      "char": 0,
+      "documentDepth": 1,
+      "documentIndex": 1,
+      "documentPath": "./malformed.dlisp",
+      "line": 0
+    }
+  },
   "success": false
 }

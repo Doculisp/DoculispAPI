@@ -1,6 +1,6 @@
 import { IRegisterable } from "../types/types.containers";
 import { DocumentMap, DocumentPart, ILispBlock } from "../types/types.document";
-import { ILocation, IUtil, Result, isSame } from "../types/types.general";
+import { ILocation, IRange, IUtil, Result, isSame } from "../types/types.general";
 import { IInternals, StringStepParseResult } from "../types/types.internal";
 import { ILispSearches, Searcher } from "../types/types.textHelpers";
 import { Token, TokenFunction, TokenizedDocument } from "../types/types.tokens";
@@ -274,7 +274,17 @@ function buildTokenize(doesIt: ILispSearches, internals: IInternals, util: IUtil
                 if (tokens.success) {
                     totalTokens.addTokens(tokens.value);
                 } else {
-                    return parseFailure(`Tokenization failed: ${tokens.message}`, documentPath);
+                    const range: IRange = {
+                        start: part.location,
+                        end: {
+                            line: part.location.line,
+                            char: part.location.char + Math.min(4, part.text.length),
+                            documentPath: part.location.documentPath,
+                            documentDepth: part.location.documentDepth,
+                            documentIndex: part.location.documentIndex
+                        }
+                    };
+                    return parseFailure(`Tokenization failed: ${tokens.message}`, range, documentPath);
                 }
             }
         }

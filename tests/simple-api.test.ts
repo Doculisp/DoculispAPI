@@ -68,7 +68,7 @@ describe('Simple Doculisp API', () => {
 
         it('failure result creation works correctly', () => {
             const util = api.getUtil();
-            const result = util.fail('File Operations')('File System Error')('test error');
+            const result = util.fail('File Operations')('File System Error')('test error', undefined);
             
             expect(result.success).toBe(false);
             expect(result.message).toBe('test error');

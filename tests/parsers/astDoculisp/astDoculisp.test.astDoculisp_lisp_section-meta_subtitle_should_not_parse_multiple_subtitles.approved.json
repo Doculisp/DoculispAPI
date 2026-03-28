@@ -1,7 +1,24 @@
 {
   "documentPath": "main.dlisp",
   "failureCategory": "Validation Error",
-  "message": "Multiple subtitle blocks found in section-meta at 'main.dlisp' (Line: 0, Char: 0). Only one subtitle block allowed per section-meta.",
+  "info": "Multiple subtitle blocks found in section-meta at 'main.dlisp'. Only one subtitle block allowed per section-meta.",
+  "message": "Multiple subtitle blocks found in section-meta at 'main.dlisp'. Only one subtitle block allowed per section-meta. (Line 0, Char 0)",
   "processingStep": "Doculisp AST Parsing",
+  "range": {
+    "end": {
+      "char": 1,
+      "documentDepth": 2,
+      "documentIndex": 7,
+      "documentPath": "main.dlisp",
+      "line": 0
+    },
+    "start": {
+      "char": 0,
+      "documentDepth": 2,
+      "documentIndex": 7,
+      "documentPath": "main.dlisp",
+      "line": 0
+    }
+  },
   "success": false
 }

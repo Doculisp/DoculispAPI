@@ -1,6 +1,6 @@
 import { Options } from "approvals/lib/Core/Options";
 import { IContainer, IDictionary, ITestableContainer } from "../../../src/types/types.containers";
-import { IFail, IProjectLocation, ISuccess, IUtil, Result } from "../../../src/types/types.general";
+import { IFail, IProjectLocation, IRange, ISuccess, IUtil, Result } from "../../../src/types/types.general";
 import { IDoculisp, IEmptyDoculisp } from "../../../src/types/types.astDoculisp";
 import { IIncludeBuilder } from "../../../src/types/types.includeBuilder";
 import { getVerifiers } from "../../tools";
@@ -18,7 +18,7 @@ describe('includeBuilder', () => {
     let container: IContainer = null as any;
     let util: IUtil = undefined as any;
     let ok: (successfulValue: any) => ISuccess<any> = undefined as any;
-    let fail: (message: string, documentPath?: IPath) => IFail = undefined as any;
+    let fail: (message: string, range?: IRange | undefined, documentPath?: IPath) => IFail = undefined as any;
     let addPathResult: (filePath: string, result: Result<string>) => void = undefined as any;
     let variableSaver: IVariableTestable = undefined as any;
 
@@ -51,7 +51,7 @@ describe('includeBuilder', () => {
                     return result;
                 }
 
-                return fail(`filePath has not been setup.`, filePath);
+                return fail(`filePath has not been setup.`, undefined, filePath);
             },
             getProcessWorkingDirectory(): Result<IPath> { return util.ok(buildPath('./', false)); },
             setProcessWorkingDirectory(): Result<undefined> { return util.ok(undefined); },
@@ -77,13 +77,13 @@ describe('includeBuilder', () => {
         it('parse errors propagate through chain', () => {
             const builder: IIncludeBuilder = testable.include.parserBuilder(container, setup);
 
-            const expectedResult = fail('This is a failure',  buildPath('M:/y/pah.md'));
+            const expectedResult = fail('This is a failure', undefined, buildPath('M:/y/pah.md'));
             expect(builder.parseExternals(expectedResult, variableSaver)).toBe(expectedResult);
         });
 
         it('file system errors propagate correctly', () => {
             const badPath = buildPath('B:/add.md');
-            const expectedResult = fail('baad file error', badPath);
+            const expectedResult = fail('baad file error', undefined, badPath);
             addPathResult(badPath.fullName, expectedResult);
 
             const doc = `<!--
@@ -278,7 +278,7 @@ Hello World!
         it('main file load errors propagate correctly', () => {
             const docPath = 'C:/bad.md';
 
-            const expectedResult = fail('baad file', buildPath(docPath));
+            const expectedResult = fail('baad file', undefined, buildPath(docPath));
 
             addPathResult(docPath, expectedResult);
 

@@ -1,7 +1,24 @@
 {
   "documentPath": "../main.dlisp",
   "failureCategory": "Validation Error",
-  "message": "The content block at '../main.dlisp' contains unknown command 'type' (Line: 9, Char: 16).",
+  "info": "The content block at '../main.dlisp' contains unknown command 'type' (Line: 9, Char: 16).",
+  "message": "The content block at '../main.dlisp' contains unknown command 'type' (Line: 9, Char: 16). (Line 9, Char 16)",
   "processingStep": "Doculisp AST Parsing",
+  "range": {
+    "end": {
+      "char": 20,
+      "documentDepth": 2,
+      "documentIndex": 7,
+      "documentPath": "../main.dlisp",
+      "line": 9
+    },
+    "start": {
+      "char": 16,
+      "documentDepth": 2,
+      "documentIndex": 7,
+      "documentPath": "../main.dlisp",
+      "line": 9
+    }
+  },
   "success": false
 }

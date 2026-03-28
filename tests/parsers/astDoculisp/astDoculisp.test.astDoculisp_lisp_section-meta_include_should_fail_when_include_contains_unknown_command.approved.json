@@ -1,7 +1,24 @@
 {
   "documentPath": "./malformed.dlisp",
   "failureCategory": "Parse Error",
-  "message": "Include contains unknown command 'invalidContainer' at './malformed.dlisp' (Line: 6, Char: 10).",
+  "info": "Include contains unknown command 'invalidContainer' at './malformed.dlisp'.",
+  "message": "Include contains unknown command 'invalidContainer' at './malformed.dlisp'. (Line 6, Char 10)",
   "processingStep": "Doculisp AST Parsing",
+  "range": {
+    "end": {
+      "char": 26,
+      "documentDepth": 1,
+      "documentIndex": 4,
+      "documentPath": "./malformed.dlisp",
+      "line": 6
+    },
+    "start": {
+      "char": 10,
+      "documentDepth": 1,
+      "documentIndex": 4,
+      "documentPath": "./malformed.dlisp",
+      "line": 6
+    }
+  },
   "success": false
 }

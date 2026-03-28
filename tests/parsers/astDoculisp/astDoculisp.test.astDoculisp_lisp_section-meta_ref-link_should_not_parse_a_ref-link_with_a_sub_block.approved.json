@@ -1,7 +1,24 @@
 {
   "documentPath": "main.dlisp",
   "failureCategory": "Validation Error",
-  "message": "The ref-link block at 'main.dlisp' contains unknown block 'weird' (Line: 4, Char: 16).",
+  "info": "The ref-link block at 'main.dlisp' contains unknown block 'weird'.",
+  "message": "The ref-link block at 'main.dlisp' contains unknown block 'weird'. (Line 4, Char 16)",
   "processingStep": "Doculisp AST Parsing",
+  "range": {
+    "end": {
+      "char": 21,
+      "documentDepth": 3,
+      "documentIndex": 11,
+      "documentPath": "main.dlisp",
+      "line": 4
+    },
+    "start": {
+      "char": 16,
+      "documentDepth": 3,
+      "documentIndex": 11,
+      "documentPath": "main.dlisp",
+      "line": 4
+    }
+  },
   "success": false
 }

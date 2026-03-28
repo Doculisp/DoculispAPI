@@ -1,7 +1,24 @@
 {
   "documentPath": "./malformed.dlisp",
   "failureCategory": "Validation Error",
-  "message": "The section-meta block at './malformed.dlisp' has more than one include (Line: 0, Char: 0).",
+  "info": "The section-meta block at './malformed.dlisp' has more than one include.",
+  "message": "The section-meta block at './malformed.dlisp' has more than one include. (Line 0, Char 0)",
   "processingStep": "Doculisp AST Parsing",
+  "range": {
+    "end": {
+      "char": 1,
+      "documentDepth": 1,
+      "documentIndex": 4,
+      "documentPath": "./malformed.dlisp",
+      "line": 0
+    },
+    "start": {
+      "char": 0,
+      "documentDepth": 1,
+      "documentIndex": 4,
+      "documentPath": "./malformed.dlisp",
+      "line": 0
+    }
+  },
   "success": false
 }

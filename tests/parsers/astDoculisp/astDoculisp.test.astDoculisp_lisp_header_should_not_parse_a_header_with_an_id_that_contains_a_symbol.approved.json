@@ -3,8 +3,25 @@
   "999_received": {
     "documentPath": "S:/ome/file.md",
     "failureCategory": "Validation Error",
-    "message": "Symbol(s) in heading id 'F|rst' at 'S:/ome/file.md' (Line: 2, Char: 6).\n'|' @ id char 2",
+    "info": "Symbol(s) in heading id 'F|rst' at 'S:/ome/file.md' (Line: 2, Char: 6).\n'|' @ id char 2",
+    "message": "Symbol(s) in heading id 'F|rst' at 'S:/ome/file.md' (Line: 2, Char: 6).\n'|' @ id char 2 (Line 2, Char 6)",
     "processingStep": "Doculisp AST Parsing",
+    "range": {
+      "end": {
+        "char": 12,
+        "documentDepth": 2,
+        "documentIndex": 1,
+        "documentPath": "S:/ome/file.md",
+        "line": 2
+      },
+      "start": {
+        "char": 6,
+        "documentDepth": 2,
+        "documentIndex": 1,
+        "documentPath": "S:/ome/file.md",
+        "line": 2
+      }
+    },
     "success": false
   }
 }

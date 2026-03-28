@@ -1,7 +1,24 @@
 {
   "documentPath": "../main.dlisp",
   "failureCategory": "Validation Error",
-  "message": "The content block at '../main.dlisp' exists before the section-meta block (Line: 2, Char: 2).",
+  "info": "The content block at '../main.dlisp' exists before the section-meta block (Line: 2, Char: 2).",
+  "message": "The content block at '../main.dlisp' exists before the section-meta block (Line: 2, Char: 2). (Line 2, Char 2)",
   "processingStep": "Doculisp AST Parsing",
+  "range": {
+    "end": {
+      "char": 9,
+      "documentDepth": 4,
+      "documentIndex": 2,
+      "documentPath": "../main.dlisp",
+      "line": 2
+    },
+    "start": {
+      "char": 2,
+      "documentDepth": 4,
+      "documentIndex": 2,
+      "documentPath": "../main.dlisp",
+      "line": 2
+    }
+  },
   "success": false
 }

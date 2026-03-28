@@ -1,7 +1,24 @@
 {
   "documentPath": "./malformed.dlisp",
   "failureCategory": "Validation Error",
-  "message": "The include block at './malformed.dlisp' has unknown parameter 'unknownParameter' (Line: 4, Char: 6).",
+  "info": "The include block at './malformed.dlisp' has unknown parameter 'unknownParameter'.",
+  "message": "The include block at './malformed.dlisp' has unknown parameter 'unknownParameter'. (Line 4, Char 6)",
   "processingStep": "Doculisp AST Parsing",
+  "range": {
+    "end": {
+      "char": 13,
+      "documentDepth": 1,
+      "documentIndex": 4,
+      "documentPath": "./malformed.dlisp",
+      "line": 4
+    },
+    "start": {
+      "char": 6,
+      "documentDepth": 1,
+      "documentIndex": 4,
+      "documentPath": "./malformed.dlisp",
+      "line": 4
+    }
+  },
   "success": false
 }

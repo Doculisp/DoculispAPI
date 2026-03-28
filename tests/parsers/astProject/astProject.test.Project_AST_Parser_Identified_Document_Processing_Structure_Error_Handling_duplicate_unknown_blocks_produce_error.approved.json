@@ -1,7 +1,24 @@
 {
   "documentPath": "./malformed.dlproj",
   "failureCategory": "Parse Error",
-  "message": "Duplicate source block at './malformed.dlproj' (Line: 4, Char: 10).",
+  "info": "Duplicate source block at './malformed.dlproj' (Line: 4, Char: 10).",
+  "message": "Duplicate source block at './malformed.dlproj' (Line: 4, Char: 10). (Line 4, Char 10)",
   "processingStep": "Project AST Parsing",
+  "range": {
+    "end": {
+      "char": 11,
+      "documentDepth": 1,
+      "documentIndex": 1,
+      "documentPath": "./malformed.dlproj",
+      "line": 4
+    },
+    "start": {
+      "char": 10,
+      "documentDepth": 1,
+      "documentIndex": 1,
+      "documentPath": "./malformed.dlproj",
+      "line": 4
+    }
+  },
   "success": false
 }

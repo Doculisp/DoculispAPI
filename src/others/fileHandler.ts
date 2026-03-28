@@ -14,7 +14,7 @@ function buildLoader(utilBuilder: UtilBuilder, fs: any, pathConstructor: PathCon
             return util.ok(value);
         } catch (error) {
             const msg = (error && (error as any).message) ? (error as any).message : String(error);
-            return failureBuilder(`File load failed: ${msg} (Path: ${filePath.fullName}).`, filePath);
+            return failureBuilder(`File load failed: ${msg} (Path: ${filePath.fullName}).`, undefined, filePath);
         }
     }
 
@@ -31,7 +31,7 @@ function buildLoader(utilBuilder: UtilBuilder, fs: any, pathConstructor: PathCon
         }
         catch(error) {
             const msg = (error && (error as any).message) ? (error as any).message : String(error);
-            return failureBuilder(`File write failed: ${msg} (Path: ${filePath.fullName}).`, filePath);
+            return failureBuilder(`File write failed: ${msg} (Path: ${filePath.fullName}).`, undefined, filePath);
         }
     }
 
@@ -50,7 +50,7 @@ function buildLoader(utilBuilder: UtilBuilder, fs: any, pathConstructor: PathCon
             return util.ok(undefined);
         } catch(error) {
             const msg = (error && (error as any).message) ? (error as any).message : String(error);
-            return failureBuilder(`Working directory change failed: ${msg} (Path: ${directory.fullName}).`, directory);
+            return failureBuilder(`Working directory change failed: ${msg} (Path: ${directory.fullName}).`, undefined, directory);
         }
     }
 

@@ -1,7 +1,24 @@
 {
   "documentPath": "C:/main.dlisp",
   "failureCategory": "Parse Error",
-  "message": "Extra content found outside parentheses at 'C:/main.dlisp' (Line: 1, Char: 34).",
+  "info": "Extra content found outside parentheses at 'C:/main.dlisp' (Line: 1, Char: 34).",
+  "message": "Extra content found outside parentheses at 'C:/main.dlisp' (Line: 1, Char: 34). (Line 1, Char 34)",
   "processingStep": "Document Parsing",
+  "range": {
+    "end": {
+      "char": 35,
+      "documentDepth": 5,
+      "documentIndex": 8,
+      "documentPath": "C:/main.dlisp",
+      "line": 1
+    },
+    "start": {
+      "char": 34,
+      "documentDepth": 5,
+      "documentIndex": 8,
+      "documentPath": "C:/main.dlisp",
+      "line": 1
+    }
+  },
   "success": false
 }

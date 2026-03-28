@@ -175,7 +175,7 @@ describe('Controller',() => {
     
         it('ast parsing failure returns error', () => {
             const sourcePath = pathConstructor('./someFile.md');
-            includeConfig.result = util.fail('Doculisp AST Parsing')('Parse Error')('A bad parse', sourcePath);
+            includeConfig.result = util.fail('Doculisp AST Parsing')('Parse Error')('A bad parse', undefined, sourcePath);
             table.addValue(sourceKey, { type: 'variable-path', value: sourcePath });
             const result = sut.test(table);
     
@@ -184,7 +184,7 @@ describe('Controller',() => {
     
         it('markdown conversion failure returns error', () => {
             const sourcePath = pathConstructor('./someFile.md');
-            writerConfig.result = util.fail('Doculisp AST Parsing')('Parse Error')('Unable to write', sourcePath);
+            writerConfig.result = util.fail('Doculisp AST Parsing')('Parse Error')('Unable to write', undefined, sourcePath);
             table.addValue(sourceKey, { type: 'variable-path', value: sourcePath });
             const result = sut.test(table);
     
@@ -207,7 +207,7 @@ describe('Controller',() => {
         it('ast parsing failure returns error', () => {
             const sourcePath = pathConstructor('./someFile.md');
             const destinationPath = pathConstructor('./README.md');
-            includeConfig.result = util.fail('Doculisp AST Parsing')('Parse Error')('Unable to parse ast', sourcePath);
+            includeConfig.result = util.fail('Doculisp AST Parsing')('Parse Error')('Unable to parse ast', undefined, sourcePath);
 
             const result = sut.compile(sourcePath, destinationPath);
 
@@ -217,7 +217,7 @@ describe('Controller',() => {
         it('markdown conversion failure returns error', () => {
             const sourcePath = pathConstructor('./someFile.md');
             const destinationPath = pathConstructor('./README.md');
-            writerConfig.result = util.fail('Doculisp AST Parsing')('Parse Error')('Unable to write', sourcePath);
+            writerConfig.result = util.fail('Doculisp AST Parsing')('Parse Error')('Unable to write', undefined, sourcePath);
             
             const result = sut.compile(sourcePath, destinationPath);
     
@@ -227,7 +227,7 @@ describe('Controller',() => {
         it('file writing failure returns error', () => {
             const sourcePath = pathConstructor('./someFile.md');
             const destinationPath = pathConstructor('./README.md');
-            fileConfig.result = util.fail('File Operations')('File System Error')('Unable to write file', destinationPath);
+            fileConfig.result = util.fail('File Operations')('File System Error')('Unable to write file', undefined, destinationPath);
 
             const result = sut.compile(sourcePath, destinationPath);
 

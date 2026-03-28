@@ -1,7 +1,24 @@
 {
   "documentPath": "./malformed.dlisp",
   "failureCategory": "Parse Error",
-  "message": "Malformed lisp expression at './malformed.dlisp' (Line: 1, Char: 2).",
+  "info": "Malformed lisp expression at './malformed.dlisp'",
+  "message": "Malformed lisp expression at './malformed.dlisp' (Line 1, Char 2)",
   "processingStep": "AST Parsing",
+  "range": {
+    "end": {
+      "char": 3,
+      "documentDepth": 1,
+      "documentIndex": 1,
+      "documentPath": "./malformed.dlisp",
+      "line": 1
+    },
+    "start": {
+      "char": 2,
+      "documentDepth": 1,
+      "documentIndex": 1,
+      "documentPath": "./malformed.dlisp",
+      "line": 1
+    }
+  },
   "success": false
 }

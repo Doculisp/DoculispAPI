@@ -1,6 +1,23 @@
 {
   "failureCategory": "Validation Error",
-  "message": "Document ID must be lowercase at '/docs.dlproj' (Line: 4, Char: 10). Did you mean 'readme'?",
+  "info": "Document ID must be lowercase at '/docs.dlproj' (Line: 4, Char: 10). Did you mean 'readme'?",
+  "message": "Document ID must be lowercase at '/docs.dlproj' (Line: 4, Char: 10). Did you mean 'readme'? (Line 4, Char 10)",
   "processingStep": "Project AST Parsing",
+  "range": {
+    "end": {
+      "char": 16,
+      "documentDepth": 1,
+      "documentIndex": 1,
+      "documentPath": "/docs.dlproj",
+      "line": 4
+    },
+    "start": {
+      "char": 10,
+      "documentDepth": 1,
+      "documentIndex": 1,
+      "documentPath": "/docs.dlproj",
+      "line": 4
+    }
+  },
   "success": false
 }

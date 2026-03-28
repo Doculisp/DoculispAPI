@@ -3,8 +3,25 @@
   "999_received": {
     "documentPath": "main.md",
     "failureCategory": "Validation Error",
-    "message": "Symbol(s) in section id 'my-✨-id' at 'main.md' (Line: 5, Char: 6).\n'✨' @ id char 4",
+    "info": "Symbol(s) in section id 'my-✨-id' at 'main.md' (Line: 5, Char: 6).\n'✨' @ id char 4",
+    "message": "Symbol(s) in section id 'my-✨-id' at 'main.md' (Line: 5, Char: 6).\n'✨' @ id char 4 (Line 5, Char 6)",
     "processingStep": "Doculisp AST Parsing",
+    "range": {
+      "end": {
+        "char": 8,
+        "documentDepth": 1,
+        "documentIndex": 1,
+        "documentPath": "main.md",
+        "line": 5
+      },
+      "start": {
+        "char": 6,
+        "documentDepth": 1,
+        "documentIndex": 1,
+        "documentPath": "main.md",
+        "line": 5
+      }
+    },
     "success": false
   }
 }

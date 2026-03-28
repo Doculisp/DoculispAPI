@@ -1,6 +1,6 @@
 import { IRegisterable } from "../types/types.containers";
 import { IPath } from "../types/types.filePath";
-import { FailureCategory, IFail, ILocation, IProjectLocation, ISuccess, IUtil, IsAfter, IsBefore, IsOrder, IsSame, ProcessingStep, isAfter, isBefore, isSame } from "../types/types.general";
+import { FailureCategory, IFail, ILocation, IProjectLocation, IRange, ISuccess, IUtil, IsAfter, IsBefore, IsOrder, IsSame, ProcessingStep, isAfter, isBefore, isSame } from "../types/types.general";
 
 function before() : IsBefore { return isBefore; }
 function after()  : IsAfter  { return isAfter; }
@@ -133,15 +133,21 @@ function buildGeneral(): IUtil {
         };
     };
 
-    function fail(step: ProcessingStep) : (category: FailureCategory) => (message: string, documentPath?: IPath) => IFail {
+    function fail(step: ProcessingStep) : (category: FailureCategory) => (message: string, range?: IRange | undefined, documentPath?: IPath) => IFail {
         return (category: FailureCategory) => {
-            return (message: string, documentPath?: IPath) : IFail => {
+            return (message: string, range?: IRange | undefined, documentPath?: IPath) : IFail => {
+                let errorMessage = message;
+                if (range?.start?.line != null && range?.start?.char != null && range?.end != null) {
+                    errorMessage = `${message} (Line ${range.start.line}, Char ${range.start.char})`;
+                }
                 return {
-                    message,
+                    message: errorMessage,
+                    info:message,
                     documentPath,
                     success: false,
                     failureCategory: category,
                     processingStep: step,
+                    range,
                 };
             };
         };

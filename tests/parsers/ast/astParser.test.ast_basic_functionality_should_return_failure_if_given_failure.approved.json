@@ -1,6 +1,7 @@
 {
   "documentPath": "Z:/mybad.dlisp",
   "failureCategory": "Parse Error",
+  "info": "this is a document failure",
   "message": "this is a document failure",
   "processingStep": "AST Parsing",
   "success": false

@@ -1,7 +1,24 @@
 {
   "documentPath": "./malformed.dlproj",
   "failureCategory": "Parse Error",
-  "message": "Unknown identifier 'unknownTopLevel' at './malformed.dlproj' (Line: 8, Char: 2).",
+  "info": "Unknown identifier 'unknownTopLevel' at './malformed.dlproj' (Line: 8, Char: 2).",
+  "message": "Unknown identifier 'unknownTopLevel' at './malformed.dlproj' (Line: 8, Char: 2). (Line 8, Char 2)",
   "processingStep": "Project AST Parsing",
+  "range": {
+    "end": {
+      "char": 17,
+      "documentDepth": 1,
+      "documentIndex": 1,
+      "documentPath": "./malformed.dlproj",
+      "line": 8
+    },
+    "start": {
+      "char": 2,
+      "documentDepth": 1,
+      "documentIndex": 1,
+      "documentPath": "./malformed.dlproj",
+      "line": 8
+    }
+  },
   "success": false
 }

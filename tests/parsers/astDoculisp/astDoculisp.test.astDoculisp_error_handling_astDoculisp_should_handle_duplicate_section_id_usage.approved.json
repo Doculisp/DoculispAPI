@@ -1,7 +1,24 @@
 {
   "documentPath": "test.dlisp",
   "failureCategory": "Parse Error",
-  "message": "Unknown token 'First section' at 'test.dlisp' (Line: 6, Char: 1).",
+  "info": "Unknown token 'First section' at 'test.dlisp'",
+  "message": "Unknown token 'First section' at 'test.dlisp' (Line 6, Char 1)",
   "processingStep": "AST Parsing",
+  "range": {
+    "end": {
+      "char": 14,
+      "documentDepth": 1,
+      "documentIndex": 1,
+      "documentPath": "test.dlisp",
+      "line": 6
+    },
+    "start": {
+      "char": 1,
+      "documentDepth": 1,
+      "documentIndex": 1,
+      "documentPath": "test.dlisp",
+      "line": 6
+    }
+  },
   "success": false
 }

@@ -1,7 +1,24 @@
 {
   "documentPath": "C:/my_document.md",
   "failureCategory": "Validation Error",
-  "message": "Document index must be a value of 1 or larger.",
+  "info": "Document index must be a value of 1 or larger.",
+  "message": "Document index must be a value of 1 or larger. (Line 1, Char 1)",
   "processingStep": "Document Parsing",
+  "range": {
+    "end": {
+      "char": 2,
+      "documentDepth": 4,
+      "documentIndex": 0,
+      "documentPath": "C:/my_document.md",
+      "line": 1
+    },
+    "start": {
+      "char": 1,
+      "documentDepth": 4,
+      "documentIndex": 0,
+      "documentPath": "C:/my_document.md",
+      "line": 1
+    }
+  },
   "success": false
 }

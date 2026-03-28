@@ -110,11 +110,11 @@ function buildLoader(util: IUtil, handler: IFileWriter, astBuilder: IIncludeBuil
 
     function compile(sourcePath: IPath, destinationPath: IPath | false = false): Result<string>[] {
         if(sourcePath.extension !== '.dlproj' && !destinationPath) {
-            return [failureBuilder(`Must have a destination file.`, sourcePath)];
+            return [failureBuilder(`Must have a destination file.`, undefined, sourcePath)];
         }
 
         if(sourcePath.extension === '.dlproj' && destinationPath) {
-            return [failureBuilder('A project file cannot have a destination path.', sourcePath)];
+            return [failureBuilder('A project file cannot have a destination path.', undefined, sourcePath)];
         }
 
         if(sourcePath.extension === '.dlproj') {

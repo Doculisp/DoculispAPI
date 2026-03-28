@@ -3,8 +3,25 @@
   "999_received": {
     "documentPath": "S:/ome/file.md",
     "failureCategory": "Validation Error",
-    "message": "Missing header text in dynamic header at 'S:/ome/file.md' (Line: 2, Char: 6).",
+    "info": "Dynamic header at 'S:/ome/file.md' must have a text parameter.",
+    "message": "Dynamic header at 'S:/ome/file.md' must have a text parameter. (Line 2, Char 6)",
     "processingStep": "Doculisp AST Parsing",
+    "range": {
+      "end": {
+        "char": 7,
+        "documentDepth": 2,
+        "documentIndex": 3,
+        "documentPath": "S:/ome/file.md",
+        "line": 2
+      },
+      "start": {
+        "char": 6,
+        "documentDepth": 2,
+        "documentIndex": 3,
+        "documentPath": "S:/ome/file.md",
+        "line": 2
+      }
+    },
     "success": false
   }
 }

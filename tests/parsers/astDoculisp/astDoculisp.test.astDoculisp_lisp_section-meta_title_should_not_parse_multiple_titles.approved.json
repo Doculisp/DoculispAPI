@@ -1,7 +1,24 @@
 {
   "documentPath": "main.dlisp",
   "failureCategory": "Validation Error",
-  "message": "Multiple title blocks found in section-meta at 'main.dlisp' (Line: 0, Char: 0). Only one title block allowed per section-meta.",
+  "info": "Multiple title blocks found in section-meta at 'main.dlisp'. Only one title block allowed per section-meta.",
+  "message": "Multiple title blocks found in section-meta at 'main.dlisp'. Only one title block allowed per section-meta. (Line 0, Char 0)",
   "processingStep": "Doculisp AST Parsing",
+  "range": {
+    "end": {
+      "char": 1,
+      "documentDepth": 1,
+      "documentIndex": 1,
+      "documentPath": "main.dlisp",
+      "line": 0
+    },
+    "start": {
+      "char": 0,
+      "documentDepth": 1,
+      "documentIndex": 1,
+      "documentPath": "main.dlisp",
+      "line": 0
+    }
+  },
   "success": false
 }

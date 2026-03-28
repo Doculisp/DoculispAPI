@@ -1,7 +1,24 @@
 {
   "documentPath": "../noInclude.dlisp",
   "failureCategory": "Validation Error",
-  "message": "The content block at '../noInclude.dlisp' exists without an include block that has external files (Line: 6, Char: 2).",
+  "info": "The content block at '../noInclude.dlisp' exists without an include block that has external files (Line: 6, Char: 2).",
+  "message": "The content block at '../noInclude.dlisp' exists without an include block that has external files (Line: 6, Char: 2). (Line 6, Char 2)",
   "processingStep": "Doculisp AST Parsing",
+  "range": {
+    "end": {
+      "char": 9,
+      "documentDepth": 2,
+      "documentIndex": 7,
+      "documentPath": "../noInclude.dlisp",
+      "line": 6
+    },
+    "start": {
+      "char": 2,
+      "documentDepth": 2,
+      "documentIndex": 7,
+      "documentPath": "../noInclude.dlisp",
+      "line": 6
+    }
+  },
   "success": false
 }

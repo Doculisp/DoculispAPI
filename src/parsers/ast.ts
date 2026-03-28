@@ -114,7 +114,11 @@ function buildAstParser(util: IUtil, internals: IInternals, trimArray: ITrimArra
         }
 
         if(closeCommand.type !== 'token - close parenthesis') {
-            return failureBuilder(`Malformed lisp expression at '${closeCommand.location.documentPath.fullName}' (Line: ${closeCommand.location.line}, Char: ${closeCommand.location.char}).`, closeCommand.location.documentPath);
+            const range: IRange = {
+                start: command.location,
+                end: { line: closeCommand.location.line, char: closeCommand.location.char + closeCommand.text.length, documentPath: closeCommand.location.documentPath, documentDepth: closeCommand.location.documentDepth, documentIndex: closeCommand.location.documentIndex },
+            };
+            return failureBuilder(`Malformed lisp expression at '${closeCommand.location.documentPath.fullName}'`, range, closeCommand.location.documentPath);
         }
 
         return util.ok({
@@ -153,7 +157,11 @@ function buildAstParser(util: IUtil, internals: IInternals, trimArray: ITrimArra
         const close = remaining.remaining[0] as Token;
 
         if(remaining.remaining.length === 0 || close.type !== 'token - close parenthesis') {
-            return failureBuilder(`Malformed lisp expression at '${remaining.location.documentPath.fullName}' (Line: ${remaining.location.line}, Char: ${remaining.location.char}).`, remaining.location.documentPath);
+            const range: IRange = {
+                start: container.location,
+                end: { line: remaining.location.line, char: remaining.location.char + (remaining.remaining.length > 0 ? (remaining.remaining[0] as any).text.length : 1), documentPath: remaining.location.documentPath, documentDepth: remaining.location.documentDepth, documentIndex: remaining.location.documentIndex },
+            };
+            return failureBuilder(`Malformed lisp expression at '${remaining.location.documentPath.fullName}'`, range, remaining.location.documentPath);
         }
 
         return util.ok({
@@ -189,7 +197,11 @@ function buildAstParser(util: IUtil, internals: IInternals, trimArray: ITrimArra
         if(0 < leftovers.remaining.length) {
             const token: Token = leftovers.remaining[0] as Token;
             const tokenText = token.type === 'token - close parenthesis' ? ')' : (token as any).text;
-            return failureBuilder(`Unknown token '${tokenText}' at '${token.location.documentPath.fullName}' (Line: ${token.location.line}, Char: ${token.location.char}).`, token.location.documentPath)
+            const range: IRange = {
+                start: token.location,
+                end: { line: token.location.line, char: token.location.char + (tokenText ? tokenText.length : 1), documentPath: token.location.documentPath, documentDepth: token.location.documentDepth, documentIndex: token.location.documentIndex },
+            };
+            return failureBuilder(`Unknown token '${tokenText}' at '${token.location.documentPath.fullName}'`, range, token.location.documentPath)
         }
         
         return util.ok({

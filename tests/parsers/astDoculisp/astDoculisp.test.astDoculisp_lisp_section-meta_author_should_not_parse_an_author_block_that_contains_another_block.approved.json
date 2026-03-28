@@ -1,7 +1,24 @@
 {
   "documentPath": "main.dlisp",
   "failureCategory": "Validation Error",
-  "message": "Author block at 'main.dlisp' contains unknown child block 'title' (Line: 5, Char: 10).",
+  "info": "Author block at 'main.dlisp' contains unknown child block 'title' (Line: 5, Char: 10).",
+  "message": "Author block at 'main.dlisp' contains unknown child block 'title' (Line: 5, Char: 10). (Line 5, Char 10)",
   "processingStep": "Doculisp AST Parsing",
+  "range": {
+    "end": {
+      "char": 15,
+      "documentDepth": 1,
+      "documentIndex": 7,
+      "documentPath": "main.dlisp",
+      "line": 5
+    },
+    "start": {
+      "char": 10,
+      "documentDepth": 1,
+      "documentIndex": 7,
+      "documentPath": "main.dlisp",
+      "line": 5
+    }
+  },
   "success": false
 }

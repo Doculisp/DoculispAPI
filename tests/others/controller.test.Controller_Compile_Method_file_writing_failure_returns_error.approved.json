@@ -19,6 +19,7 @@
     "result": {
       "documentPath": "./README.md",
       "failureCategory": "File System Error",
+      "info": "Unable to write file",
       "message": "Unable to write file",
       "processingStep": "File Operations",
       "success": false
@@ -28,6 +29,7 @@
     {
       "documentPath": "./README.md",
       "failureCategory": "File System Error",
+      "info": "Unable to write file",
       "message": "Unable to write file",
       "processingStep": "File Operations",
       "success": false

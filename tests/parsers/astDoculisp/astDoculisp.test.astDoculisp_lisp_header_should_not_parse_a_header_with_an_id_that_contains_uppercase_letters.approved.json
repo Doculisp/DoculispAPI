@@ -1,9 +1,27 @@
 {
   "000_given": "<!--\n(dl (#First My heading))\n-->",
   "999_received": {
+    "documentPath": "S:/ome/file.md",
     "failureCategory": "Validation Error",
-    "message": "Heading ID must be lowercase at 'S:/ome/file.md' (Line: 2, Char: 6). Did you mean 'first'?",
+    "info": "Heading ID must be lowercase at 'S:/ome/file.md' (Line: 2, Char: 6). Did you mean 'first'?",
+    "message": "Heading ID must be lowercase at 'S:/ome/file.md' (Line: 2, Char: 6). Did you mean 'first'? (Line 2, Char 6)",
     "processingStep": "Doculisp AST Parsing",
+    "range": {
+      "end": {
+        "char": 12,
+        "documentDepth": 2,
+        "documentIndex": 1,
+        "documentPath": "S:/ome/file.md",
+        "line": 2
+      },
+      "start": {
+        "char": 6,
+        "documentDepth": 2,
+        "documentIndex": 1,
+        "documentPath": "S:/ome/file.md",
+        "line": 2
+      }
+    },
     "success": false
   }
 }

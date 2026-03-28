@@ -59,10 +59,12 @@ export type ProcessingStep =
 
 export interface IFail {
     readonly message: string;
+    readonly info: string;
     readonly documentPath?: IPath | undefined;
     readonly success: false;
     readonly failureCategory: FailureCategory;
     readonly processingStep: ProcessingStep;
+    readonly range?: IRange | undefined;
 };
 
 export type Result<T> = ISuccess<T> | IFail;
@@ -73,7 +75,7 @@ export type UtilBuilder = () => IUtil;
 
 export interface IUtil {
     ok<T>(successfulValue: T): ISuccess<T>;
-    fail(step: ProcessingStep) : (category: FailureCategory) => (message: string, documentPath?: IPath) => IFail;
+    fail(step: ProcessingStep) : (category: FailureCategory) => (message: string, range?: IRange | undefined, documentPath?: IPath) => IFail;
     location: (documentPath: IPath, documentDepth: number, documentIndex: number, line: number, char: number) => ILocation;
     toLocation: (projectLocation: IProjectLocation, line: number, char: number) => ILocation;
     getProjectLocation: (location: ILocation) => IProjectLocation;

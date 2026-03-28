@@ -1,7 +1,7 @@
 import { configure } from "approvals/lib/config";
 import { Options } from "approvals/lib/Core/Options";
 import { getVerifiers } from "../tools";
-import { IFail, IProjectLocation, IUtil } from "../../src/types/types.general";
+import { IFail, IProjectLocation, IRange, IUtil } from "../../src/types/types.general";
 import { Result } from "../../src/types/types.general";
 import { buildProjectLocation, testable, buildPath } from "../testHelpers";
 import { IDirectoryHandler, IFileLoader } from "../../src/types/types.fileHandler";
@@ -15,7 +15,7 @@ describe('stringWriter', () => {
     let verifyAsJson: (data: any, options?: Options) => void;
     let verifyMarkdown: (sut: any, options?: Options) => void;
     let toResult: (text: string, location: IProjectLocation) => Result<string> = null as any;
-    let fail: (message: string, documentPath?: IPath) => IFail = undefined as any;
+    let fail: (message: string, range?: IRange | undefined, documentPath?: IPath) => IFail = undefined as any;
     let variableTable: IVariableTestable = undefined as any;
 
     function verifyMarkdownResult(textMaybe: Result<string>, options?: Options): void {
@@ -54,7 +54,7 @@ describe('stringWriter', () => {
 
     describe('basic functionality', () => {
         it('should not write an error', () => {
-            const expectedResult = fail('Some failure', buildPath('S:/ome/path.md'));
+            const expectedResult = fail('Some failure', undefined, buildPath('S:/ome/path.md'));
             const writer = testable.stringWriter.writer(container);
             const result = writer.writeAst(expectedResult, variableTable);
 
@@ -196,7 +196,7 @@ This is the end
                                     return r;
                                 }
 
-                                return fail('path not yet setup', path);
+                                return fail('path not yet setup', undefined, path);
                             },
                             getProcessWorkingDirectory() {
                                 return util.ok(buildPath('./', false));

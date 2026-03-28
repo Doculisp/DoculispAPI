@@ -12,6 +12,7 @@
     "result": {
       "documentPath": "./someFile.md",
       "failureCategory": "Parse Error",
+      "info": "Unable to write",
       "message": "Unable to write",
       "processingStep": "Doculisp AST Parsing",
       "success": false
@@ -21,6 +22,7 @@
     {
       "documentPath": "./someFile.md",
       "failureCategory": "Parse Error",
+      "info": "Unable to write",
       "message": "Unable to write",
       "processingStep": "Doculisp AST Parsing",
       "success": false
