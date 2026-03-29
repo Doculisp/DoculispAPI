@@ -300,9 +300,10 @@ describe('document', () => {
                     parseAndVerify(CODE_BLOCK_FIXTURES.unclosedMultilineCodeBlock, 'C:/bad/examples/multiline.md', HEADING_DEPTH.LEVEL_2, DOCUMENT_INDEX.SEVENTH);
                 });
             });
-    });
+        });
 
-    describe('Doculisp', () => {
+        describe('Doculisp', () => {
+        describe('embedded blocks', () => {
             it('should parse a doculisp block at top of file', () => {
                 parseAndVerifyWithGiven(DOCULISP_FIXTURES.singleLineBlock, '_main.md', HEADING_DEPTH.LEVEL_3, DOCUMENT_INDEX.SEVENTH);
             });
@@ -315,14 +316,6 @@ describe('document', () => {
                 parseAndVerifyWithGiven(DOCULISP_FIXTURES.blockInMiddle, '_main.md', HEADING_DEPTH.LEVEL_7, DOCUMENT_INDEX.FIFTH);
             });
 
-            it('should parse lisp outside an html tag as text', () => {
-                parseAndVerify(DOCULISP_FIXTURES.lispOutsideHtml, 'documentExample.md', HEADING_DEPTH.LEVEL_3, DOCUMENT_INDEX.FOURTH);
-            });
-
-            it('should parse Doculisp outside an html tag as text', () => {
-                parseAndVerify(DOCULISP_FIXTURES.doculispOutsideHtml, 'documentExample2.md', HEADING_DEPTH.LEVEL_8, DOCUMENT_INDEX.EIGHTH);
-            });
-
             it('should allow for an escaped parentheses in a parameter', () => {
                 parseAndVerifyWithGiven(DOCULISP_FIXTURES.escapedParentheses, './_main.md', HEADING_DEPTH.LEVEL_2, DOCUMENT_INDEX.FIRST);
             });
@@ -331,7 +324,18 @@ describe('document', () => {
                 parseAndVerifyWithGiven(DOCULISP_FIXTURES.getPathInLink, './_main.md', HEADING_DEPTH.LEVEL_2, DOCUMENT_INDEX.FIRST);
             });
         });
+
+        describe('outside html comments', () => {
+            it('should parse lisp outside an html tag as text', () => {
+                parseAndVerify(DOCULISP_FIXTURES.lispOutsideHtml, 'documentExample.md', HEADING_DEPTH.LEVEL_3, DOCUMENT_INDEX.FOURTH);
+            });
+
+            it('should parse Doculisp outside an html tag as text', () => {
+                parseAndVerify(DOCULISP_FIXTURES.doculispOutsideHtml, 'documentExample2.md', HEADING_DEPTH.LEVEL_8, DOCUMENT_INDEX.EIGHTH);
+            });
+        });
     });
+});
 
     describe('parsing .dlisp files', () => {
         it('should handle a correctly formatted file', () => {
