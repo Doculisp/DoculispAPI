@@ -150,7 +150,7 @@ describe('document', () => {
     let verifyWithGiven: (data: any, options?: Options | undefined, ...given: any[]) => void;
 
     beforeAll(() => {
-        let verifiers = getVerifiers(configure);
+        const verifiers = getVerifiers(configure);
         verifyAsJson = verifiers.verifyAsJson;
         verifyWithGiven = verifiers.verifyWithGiven;
     });
@@ -255,8 +255,8 @@ describe('document', () => {
 
         describe('html comments', () => {
             it('should not parse html comments', () => {
-                const md = HTML_COMMENT_FIXTURES.simpleComment.trim();
-                parseAndVerify(md, 'C:/readme.md', HEADING_DEPTH.LEVEL_5, DOCUMENT_INDEX.SECOND);
+                const trimmedComment = HTML_COMMENT_FIXTURES.simpleComment.trim();
+                parseAndVerify(trimmedComment, 'C:/readme.md', HEADING_DEPTH.LEVEL_5, DOCUMENT_INDEX.SECOND);
             });
     
             it('should not parse html but preserve new line counts comments', () => {
