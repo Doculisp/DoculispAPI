@@ -27,14 +27,17 @@ describe('tokenizer', () => {
         verifyWithGiven = verifiers.verifyWithGiven;
     });
 
+    // Consolidated setup logic for tokenizer environment configuration
+    const setupTokenizerEnvironment = (environment: ITestableContainer): IUtil => {
+        const pathHandler: PathConstructor = (filePath) => buildPath(filePath);
+        environment.replaceValue(pathHandler, 'pathConstructor');
+        return environment.buildAs<IUtil>('util');
+    };
+
     beforeEach(async () => {
         container = await containerPromise;
         tokenizer = testable.token.parserBuilder(container, (environment: ITestableContainer) => {
-            const pathHandler: PathConstructor = function (filePath) {
-                    return buildPath(filePath);
-            };
-            environment.replaceValue(pathHandler, 'pathConstructor');
-            util = environment.buildAs<IUtil>('util');
+            util = setupTokenizerEnvironment(environment);
             getLocation = buildLocation(util);
         });
 
@@ -104,10 +107,8 @@ describe('tokenizer', () => {
         it('should provide standardized error when tokenization fails (mocked parser)', () => {
             // Build a tokenizer that uses a mocked internals.createStringParser which always fails
             const failingTokenizer = testable.token.parserBuilder(container, (environment: ITestableContainer) => {
-                const pathHandler: PathConstructor = function (filePath) {
-                    return buildPath(filePath);
-                };
-                environment.replaceValue(pathHandler, 'pathConstructor');
+                util = setupTokenizerEnvironment(environment);
+                getLocation = buildLocation(util);
 
                 // Grab the real internals so we can base the mock on it
                 const originalInternals = environment.buildAs<any>('internals');
@@ -119,9 +120,6 @@ describe('tokenizer', () => {
                 };
 
                 environment.replaceValue(mockInternals, 'internals');
-
-                util = environment.buildAs<IUtil>('util');
-                getLocation = buildLocation(util);
             });
 
             const parseResult = createDocMap([createLispPart('(unclosed (paren', 1, 1)], 1, 1);
@@ -231,11 +229,7 @@ describe('tokenizer', () => {
 
         beforeEach(() => {
             toResult = testable.token.resultBuilder(container, environment => {
-                const pathHandler: PathConstructor = function (filePath) {
-                    return buildPath(filePath);
-                };
-                environment.replaceValue(pathHandler, 'pathConstructor');
-                util = environment.buildAs<IUtil>('util');
+                util = setupTokenizerEnvironment(environment);
                 getLocation = buildLocation(util);
             });
         });
