@@ -63,6 +63,18 @@ describe('tokenizer', () => {
         location: getLocation(path, 0, 0, line, char),
     });
 
+    // Semantic test scenario helpers
+    const tokenizeScenario = {
+        text: (text: string, depth: number = 6, index: number = 8) => 
+            tokenizer(createDocMap([createTextPart(text, 5, 23)], depth, index)),
+        
+        lisp: (code: string, depth: number = 2, index: number = 7, line: number = 4, char: number = 2, path: string = BASIC_SAMPLE_DOCUMENT) => 
+            tokenizer(createDocMap([createLispPart(code, line, char, path)], depth, index, path)),
+        
+        empty: () => 
+            tokenizer(createDocMap([], 4, 8, 'c:/empty/readme.md')),
+    };
+
     it('should fail if document parsing failed', () => {
         const parseResult = fail('This document did not parse', undefined, buildPath('X:/non-exist.dlisp')) as Result<DocumentMap>;
 
@@ -72,34 +84,26 @@ describe('tokenizer', () => {
     });
 
     it('should return empty if given an empty parse result', () => {
-        const parseResult = createDocMap([], 4, 8, 'c:/empty/readme.md');
-
-        const result = tokenizer(parseResult);
+        const result = tokenizeScenario.empty();
 
         verifyAsJson(result);
     });
 
     it('should tokenize text as text', () => {
-        const parseResult = createDocMap([createTextPart('hello my text', 5, 23)], 6, 8);
-
-        const result = tokenizer(parseResult);
+        const result = tokenizeScenario.text('hello my text');
 
         verifyAsJson(result);
     });
 
     describe('handling Doculisp', () => {
         it('should tokenize an empty comment', () => {
-            const parseResult = createDocMap([createLispPart('(*)', 2, 1)], 1, 5);
-            
-            const result = tokenizer(parseResult);
+            const result = tokenizeScenario.lisp('(*)', 1, 5, 2, 1);
 
             verifyAsJson(result);
         });
         
         it('should tokenize an single identifier', () => {
-            const parseResult = createDocMap([createLispPart('(identifier)', 4, 2)], 2, 7);
-            
-            const result = tokenizer(parseResult);
+            const result = tokenizeScenario.lisp('(identifier)');
 
             verifyAsJson(result);
         });
@@ -130,95 +134,71 @@ describe('tokenizer', () => {
         });
         
         it('should tokenize an single identifier with space after identifier', () => {
-            const parseResult = createDocMap([createLispPart('(identifier )', 4, 2)], 3, 7);
-            
-            const result = tokenizer(parseResult);
+            const result = tokenizeScenario.lisp('(identifier )', 3);
 
             verifyAsJson(result);
         });
         
         it('should tokenize an single identifier with new line after identifier', () => {
-            const parseResult = createDocMap([createLispPart('(identifier\r\n)', 4, 2)], 7, 4);
-            
-            const result = tokenizer(parseResult);
+            const result = tokenizeScenario.lisp('(identifier\r\n)', 7, 4);
 
             verifyAsJson(result);
         });
         
         it('should tokenize an single identifier containing only numbers', () => {
-            const parseResult = createDocMap([createLispPart('(123987)', 4, 2)], 4, 6);
-            
-            const result = tokenizer(parseResult);
+            const result = tokenizeScenario.lisp('(123987)', 4, 6);
 
             verifyAsJson(result);
         });
         
         it('should tokenize an single identifier with hyphen and underscore', () => {
-            const parseResult = createDocMap([createLispPart('(identifier-start_end)', 4, 2)], 7, 7);
-            
-            const result = tokenizer(parseResult);
+            const result = tokenizeScenario.lisp('(identifier-start_end)', 7);
 
             verifyAsJson(result);
         });
 
         it('should tokenize a single identifier with a single word parameter', () => {
-            const parseResult = createDocMap([createLispPart('(the thing)', 1, 13, 'Z:/parameter.md')], 5, 5, 'Z:/parameter.md');
-
-            const result = tokenizer(parseResult);
+            const result = tokenizeScenario.lisp('(the thing)', 5, 5, 1, 13, 'Z:/parameter.md');
 
             verifyAsJson(result);
         });
 
         it('should tokenize a single identifier with a multi word parameter', () => {
-            const parseResult = createDocMap([createLispPart('(title the thing from beyond\n\tthe swamp)', 1, 13, 'Z:/parameter.md')], 8, 1, 'Z:/parameter.md');
-
-            const result = tokenizer(parseResult);
+            const result = tokenizeScenario.lisp('(title the thing from beyond\n\tthe swamp)', 8, 1, 1, 13, 'Z:/parameter.md');
 
             verifyAsJson(result);
         });
 
         it('should handle nested lisp', () => {
-            const parseResult = createDocMap([
-                createLispPart(`(section-meta
+            const result = tokenizeScenario.lisp(`(section-meta
         (include
             (Section ./structure.md)
         )
-    )`, 2, 1, 'A:/main.md')
-            ], 7, 7, 'A:/main.md');
-
-            const result = tokenizer(parseResult);
+    )`, 7, 7, 2, 1, 'A:/main.md');
 
             verifyAsJson(result);
         });
 
         it('should handle comment with nested lisp', () => {
-            const parseResult = createDocMap([
-                createLispPart(`(section-meta
+            const result = tokenizeScenario.lisp(`(section-meta
         (*include
             (Section ./structure.md)
             (*Section ./comments.md)
             (Section ./toc.md)
         )
-    )`, 2, 1, 'A:/main.md')
-            ], 7, 1, 'A:/main.md');
-
-            const result = tokenizer(parseResult);
+    )`, 7, 1, 2, 1, 'A:/main.md');
 
             verifyAsJson(result);
         });
 
         it('should handle parameter with escaped open paren', () => {
-            const parseResult = createDocMap([createLispPart("(title The elusive \\())", 2, 1, 'A:/main.md')], 7, 1, 'A:/main.md');
-
-            const result = tokenizer(parseResult);
+            const result = tokenizeScenario.lisp("(title The elusive \\())", 7, 1, 2, 1, 'A:/main.md');
 
             verifyAsJson(result);
         });
 
         it('should handle parameter with escaped close paren', () => {
-            const parseResult = createDocMap([createLispPart("(title The elusive \\))", 2, 1, 'A:/main.md')], 7, 1, 'A:/main.md');
-
-            const result = tokenizer(parseResult);
+            const result = tokenizeScenario.lisp("(title The elusive \\))", 7, 1, 2, 1, 'A:/main.md');
 
             verifyAsJson(result);
         });
