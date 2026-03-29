@@ -256,45 +256,49 @@ describe('document', () => {
         });
 
         describe('html comments', () => {
-            it('should not parse html comments', () => {
-                const trimmedComment = HTML_COMMENT_FIXTURES.simpleComment.trim();
-                parseAndVerify(trimmedComment, 'C:/readme.md', HEADING_DEPTH.LEVEL_5, DOCUMENT_INDEX.SECOND);
-            });
-    
-            it('should not parse html but preserve new line counts comments', () => {
-                parseAndVerify(HTML_COMMENT_FIXTURES.multilineComment, 'C:/readme.md', HEADING_DEPTH.LEVEL_8, DOCUMENT_INDEX.THIRD);
-            });
-    
-            it('should not parse html comments in the middle of text.', () => {
-                parseAndVerify(HTML_COMMENT_FIXTURES.commentInMiddle, 'C:/comments/helloWorld.md', HEADING_DEPTH.ROOT, DOCUMENT_INDEX.SECOND);
-            });
-    
+            describe('successful parsing', () => {
+                it('should not parse html comments', () => {
+                    const trimmedComment = HTML_COMMENT_FIXTURES.simpleComment.trim();
+                    parseAndVerify(trimmedComment, 'C:/readme.md', HEADING_DEPTH.LEVEL_5, DOCUMENT_INDEX.SECOND);
+                });
+        
+                it('should not parse html but preserve new line counts comments', () => {
+                    parseAndVerify(HTML_COMMENT_FIXTURES.multilineComment, 'C:/readme.md', HEADING_DEPTH.LEVEL_8, DOCUMENT_INDEX.THIRD);
+                });
+        
+                it('should not parse html comments in the middle of text.', () => {
+                    parseAndVerify(HTML_COMMENT_FIXTURES.commentInMiddle, 'C:/comments/helloWorld.md', HEADING_DEPTH.ROOT, DOCUMENT_INDEX.SECOND);
+                });
+        
                 it('should parse html comments inside an inline code block', () => {
-                parseAndVerify(CODE_BLOCK_FIXTURES.inlineCodeWithComment, 'C:/html/inline.md', HEADING_DEPTH.LEVEL_5, DOCUMENT_INDEX.THIRD);
+                    parseAndVerify(CODE_BLOCK_FIXTURES.inlineCodeWithComment, 'C:/html/inline.md', HEADING_DEPTH.LEVEL_5, DOCUMENT_INDEX.THIRD);
+                });
+
+                it('should parse an inline codeblock in middle of sentence', () => {
+                    parseAndVerify(CODE_BLOCK_FIXTURES.inlineCodeInSentence, 'C:/html/inline.md', HEADING_DEPTH.LEVEL_5, DOCUMENT_INDEX.THIRD);
+                });
+
+                it('should parse html comments inside a multiline code block', () => {
+                    parseAndVerify(CODE_BLOCK_FIXTURES.codeBlockWithHtmlComments, 'C:/markdown/multiline.md', HEADING_DEPTH.LEVEL_4, DOCUMENT_INDEX.THIRD);
+                });
             });
 
-            it('should parse an inline codeblock in middle of sentence', () => {
-                parseAndVerify(CODE_BLOCK_FIXTURES.inlineCodeInSentence, 'C:/html/inline.md', HEADING_DEPTH.LEVEL_5, DOCUMENT_INDEX.THIRD);
-            });
+            describe('parsing failures', () => {
+                it('should fail to parse if html comment is not closed', () => {
+                    parseAndVerify(HTML_COMMENT_FIXTURES.unclosedComment, 'C:/examples/bad.md', HEADING_DEPTH.LEVEL_5, DOCUMENT_INDEX.FOURTH);
+                });
 
-            it('should parse html comments inside a multiline code block', () => {
-                parseAndVerify(CODE_BLOCK_FIXTURES.codeBlockWithHtmlComments, 'C:/markdown/multiline.md', HEADING_DEPTH.LEVEL_4, DOCUMENT_INDEX.THIRD);
-            });
+                it('should fail if inline code block does not close', () => {
+                    parseAndVerify(CODE_BLOCK_FIXTURES.unclosedInlineCodeBlock, 'C:/bad/noCloseInline.md', HEADING_DEPTH.LEVEL_8, DOCUMENT_INDEX.FOURTH);
+                });
 
-            it('should fail to parse if html comment is not closed', () => {
-                parseAndVerify(HTML_COMMENT_FIXTURES.unclosedComment, 'C:/examples/bad.md', HEADING_DEPTH.LEVEL_5, DOCUMENT_INDEX.FOURTH);
-            });
+                it('should fail to parse an inline code block with a line break', () => {
+                    parseAndVerify(CODE_BLOCK_FIXTURES.inlineCodeBlockWithLineBreak, 'C:/examples/badInline.md', HEADING_DEPTH.LEVEL_6, DOCUMENT_INDEX.EIGHTH);
+                });
 
-            it('should fail if inline code block does not close', () => {
-                parseAndVerify(CODE_BLOCK_FIXTURES.unclosedInlineCodeBlock, 'C:/bad/noCloseInline.md', HEADING_DEPTH.LEVEL_8, DOCUMENT_INDEX.FOURTH);
-            });
-
-            it('should fail to parse an inline code block with a line break', () => {
-                parseAndVerify(CODE_BLOCK_FIXTURES.inlineCodeBlockWithLineBreak, 'C:/examples/badInline.md', HEADING_DEPTH.LEVEL_6, DOCUMENT_INDEX.EIGHTH);
-            });
-
-            it('should fail to parse a multiline code block that does not close', () => {
-                parseAndVerify(CODE_BLOCK_FIXTURES.unclosedMultilineCodeBlock, 'C:/bad/examples/multiline.md', HEADING_DEPTH.LEVEL_2, DOCUMENT_INDEX.SEVENTH);
+                it('should fail to parse a multiline code block that does not close', () => {
+                    parseAndVerify(CODE_BLOCK_FIXTURES.unclosedMultilineCodeBlock, 'C:/bad/examples/multiline.md', HEADING_DEPTH.LEVEL_2, DOCUMENT_INDEX.SEVENTH);
+                });
             });
     });
 
