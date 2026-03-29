@@ -29,58 +29,57 @@ type DoculispPart = IWrite | ITitle | ITableOfContents | IContentLocation | IHea
 
 **`IWrite`** - Text content to be written to the output:
 ```typescript
-interface IWrite {
-    readonly type: 'write';
-    readonly content: string;
-    readonly location: ILocation;
+interface IWrite extends ILocationSortable {
+    readonly type: 'doculisp-write';
+    readonly value: string;
 }
 ```
 
 **`ITitle`** - Document and section titles:
 ```typescript
-interface ITitle {
-    readonly type: 'title';
+interface ITitle extends ILocationSortable {
+    readonly type: 'doculisp-title';
     readonly title: string;
-    readonly level: number;  // Heading level (H1, H2, etc.)
-    readonly location: ILocation;
+    readonly label: string;
+    readonly id?: string | undefined;
+    readonly ref_link: string;
+    readonly subtitle?: string | undefined;
 }
 ```
 
 **`ITableOfContents`** - Table of contents configuration:
 ```typescript
-interface ITableOfContents {
-    readonly type: 'table-of-contents';
-    readonly style: TocStyle;
-    readonly label?: string;
-    readonly location: ILocation;
+interface ITableOfContents extends ILocationSortable {
+    readonly type: 'doculisp-toc';
+    readonly label: string | false;
+    readonly bulletStyle: DoculispBulletStyle;
 }
 ```
 
 **`IContentLocation`** - Markers for where included content should appear:
 ```typescript
-interface IContentLocation {
-    readonly type: 'content-location';
-    readonly location: ILocation;
+interface IContentLocation extends ILocationSortable {
+    readonly type: 'doculisp-content';
+    readonly blockRange: IRange;
 }
 ```
 
 **`IHeader`** - Dynamic heading elements:
 ```typescript
-interface IHeader {
-    readonly type: 'header';
-    readonly level: number;
+interface IHeader extends ILocationSortable {
+    readonly type: 'doculisp-header';
+    readonly depthCount: number;
     readonly text: string;
-    readonly id?: string;
-    readonly location: ILocation;
+    readonly id?: string | undefined;
 }
 ```
 
 **`IPathId`** - Path reference identifiers for cross-linking:
 ```typescript
-interface IPathId {
-    readonly type: 'path-id';
+interface IPathId extends ILocationSortable {
+    readonly type: 'doculisp-path-id';
     readonly id: string;
-    readonly location: ILocation;
+    readonly blockRange: IRange;
 }
 ```
 
@@ -154,7 +153,7 @@ The Doculisp AST Parser implements the [`IDoculispParser`](<!-- (dl (get-path id
 
 ```typescript
 interface IDoculispParser {
-    parse(rootAst: RootAst, variableTable: IVariableTable): Result<IDoculisp>;
+    parse(tokenResults: Result<RootAst | IAstEmpty>, variableTable: IVariableTable): Result<IDoculisp | IEmptyDoculisp>;
 }
 ```
 
@@ -163,7 +162,7 @@ interface IDoculispParser {
 - **[`IVariableTable`](<!-- (dl (get-path variable-table-type)) -->)** - Variable context for resolution
 
 **Output:**
-- **[`Result<IDoculisp>`](<!-- (dl (get-path result-type)) -->)** - Success with semantic structure or detailed failure
+- **[`Result<IDoculisp | IEmptyDoculisp>`](<!-- (dl (get-path result-type)) -->)** - Success with semantic structure or detailed failure
 
 <!-- (dl (### IDoculisp Structure)) -->
 
@@ -171,16 +170,16 @@ The parser produces an [`IDoculisp`](<!-- (dl (get-path doculisp-type)) -->) con
 
 ```typescript
 interface IDoculisp {
-    readonly parts: DoculispPart[];
-    readonly includes: ISectionWriter[];
-    readonly projectLocation: IProjectLocation;
+    projectLocation: IProjectLocation;
+    section: ISectionWriter;
+    type: 'doculisp-root';
 }
 ```
 
 **Properties:**
-- **Semantic parts** - All meaningful Doculisp elements in processing order
-- **Include structure** - Resolved external document dependencies  
-- **Project context** - Location information for error reporting
+- **Section structure** - Contains the ISectionWriter with all document content
+- **Location context** - Project-level positioning for error handling
+- **Type discriminator** - Identifies this as a root Doculisp document
 
 <!-- (dl (## Variable Integration)) -->
 

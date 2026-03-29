@@ -23,7 +23,7 @@ The String Writer converts each type of [`DoculispPart`](<!-- (dl (get-path docu
 **`IWrite` Elements** - Direct text content output:
 ```typescript
 // Input: IWrite part
-{ type: 'write', content: 'This is documentation content.' }
+{ type: 'doculisp-write', value: 'This is documentation content.' }
 
 // Output: Direct markdown
 "This is documentation content."
@@ -34,7 +34,7 @@ The String Writer converts each type of [`DoculispPart`](<!-- (dl (get-path docu
 **`ITitle` Elements** - Document and section titles:
 ```typescript
 // Input: ITitle part
-{ type: 'title', title: 'Getting Started', level: 1 }
+{ type: 'doculisp-title', title: 'Getting Started', label: 'Getting Started' }
 
 // Output: Markdown heading
 "# Getting Started"
@@ -45,7 +45,7 @@ The String Writer converts each type of [`DoculispPart`](<!-- (dl (get-path docu
 **`IHeader` Elements** - Context-aware headings with optional IDs:
 ```typescript
 // Input: IHeader part
-{ type: 'header', level: 2, text: 'Installation', id: 'install-guide' }
+{ type: 'doculisp-header', depthCount: 2, text: 'Installation', id: 'install-guide' }
 
 // Output: Markdown heading with anchor
 "## Installation {#install-guide}"
@@ -56,7 +56,7 @@ The String Writer converts each type of [`DoculispPart`](<!-- (dl (get-path docu
 **`ITableOfContents` Elements** - Generated TOC based on document structure:
 ```typescript
 // Input: TOC configuration
-{ type: 'table-of-contents', style: 'numbered-labeled', label: 'Contents' }
+{ type: 'doculisp-toc', bulletStyle: 'numbered-labeled', label: 'Contents' }
 
 // Output: Generated TOC
 "## Contents\n1. [Getting Started](#getting-started)\n2. [Installation](#installation)"
@@ -70,7 +70,7 @@ The String Writer handles **complex content integration** from the complete docu
 
 **`IContentLocation` Elements** - Mark where included content appears:
 ```typescript
-// Included content is seamlessly integrated at content-location markers
+// Included content is seamlessly integrated at doculisp-content markers
 // Original: (content (toc numbered-labeled))
 // Result: Complete TOC + all included content in proper order
 ```

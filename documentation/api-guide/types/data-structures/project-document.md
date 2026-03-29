@@ -2,38 +2,48 @@
 
 These types represent project-level structures and raw document parsing results.
 
-<!-- (dl (##document-type `IDocument`)) -->
+<!-- (dl (##project-document-type `IProjectDocument`)) -->
 
 Represents a single document definition within a project:
 
 ```typescript
-interface IDocument {
-    readonly source: IPath;
-    readonly output: IPath;
-    readonly location: ILocation;
+interface IProjectDocument {
+    id?: string | undefined;
+    sourcePath: IPath;
+    destinationPath: IPath;
+    location: ILocation;
+    type: 'project-document';
+    blockRange: IRange;
 }
 ```
 
 **Properties:**
+- **ID** - Optional identifier for cross-referencing
 - **Source path** - Input Doculisp file location
-- **Output path** - Target markdown file destination  
-- **Location context** - Position in project file for error reporting
+- **Destination path** - Target markdown file destination  
+- **Location** - Position in project file for error reporting
+- **Type discriminator** - `'project-document'`
+- **Block range** - Source range information
 
-<!-- (dl (##project-type `IProject`)) -->
+<!-- (dl (##project-documents-type `IProjectDocuments`)) -->
 
 Container for multiple document definitions in a project:
 
 ```typescript
-interface IProject {
-    readonly documents: IDocument[];
-    readonly projectLocation: IProjectLocation;
+interface IProjectDocuments {
+    documents: IProjectDocument[];
+    location: ILocation;
+    type: 'project-documents';
+    blockRange: IRange;
 }
 ```
 
 **Key Features:**
 - **Document array** - All documents defined in the project
 - **Batch processing** - Enables compilation of multiple documents
-- **Project context** - Location information for project-level operations
+- **Location** - Position information for project-level operations
+- **Type discriminator** - `'project-documents'`
+- **Block range** - Source range information
 
 <!-- (dl (##document-map-type `DocumentMap`)) -->
 

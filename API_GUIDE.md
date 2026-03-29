@@ -181,21 +181,26 @@ The DoculispApi provides essential methods for document processing:
 
 **`compileFile` Method:**
 ```typescript
-async compileFile(sourcePath: string, outputPath?: string): Promise<Result<void>>
+async compileFile(sourcePath: string, outputPath?: string): Result<string>[]
 ```
 
 **Usage:**
 ```typescript
 // Compile to specific output file
-const result = await api.compileFile('./docs/readme.dlisp', './README.md');
+const results = await api.compileFile('./docs/readme.dlisp', './README.md');
 
 // Compile with automatic output path
-const result = await api.compileFile('./docs/readme.dlisp');
+const results = await api.compileFile('./docs/readme.dlisp');
 
-if (result.success) {
-    console.log('Document compiled successfully');
+// Check results (returns array because .dlproj files can compile multiple documents)
+if (results.every(r => r.success)) {
+    console.log('All documents compiled successfully');
 } else {
-    console.error(`Compilation failed: ${result.message}`);
+    results.forEach(result => {
+        if (!result.success) {
+            console.error(`Compilation failed: ${result.message}`);
+        }
+    });
 }
 ```
 
@@ -203,18 +208,23 @@ if (result.success) {
 
 **`testFile` Method:**
 ```typescript
-async testFile(sourcePath: string): Promise<Result<void>>
+async testFile(sourcePath: string): Result<string | false>[]
 ```
 
 **Usage:**
 ```typescript
 // Test document without generating output
-const result = await api.testFile('./docs/readme.dlisp');
+const results = await api.testFile('./docs/readme.dlisp');
 
-if (result.success) {
+// Check results (returns array for consistency with compileFile)
+if (results.every(r => r.success)) {
     console.log('Document is valid');
 } else {
-    console.error(`Validation failed: ${result.message}`);
+    results.forEach(result => {
+        if (!result.success) {
+            console.error(`Validation failed: ${result.message}`);
+        }
+    });
 }
 ```
 
@@ -650,8 +660,8 @@ The Tokenizer produces four distinct types of tokens, each serving a specific pu
 
 ```typescript
 interface TextToken {
-    readonly type: 'text';
-    readonly content: string;
+    readonly type: 'token - text';
+    readonly text: string;
     readonly location: ILocation;
 }
 ```
@@ -664,8 +674,8 @@ interface TextToken {
 
 ```typescript
 interface IdentifierToken {
-    readonly type: 'identifier';
-    readonly identifier: string;
+    readonly type: 'token - identifier';
+    readonly text: string;
     readonly location: ILocation;
 }
 ```
@@ -678,8 +688,8 @@ interface IdentifierToken {
 
 ```typescript
 interface ParameterToken {
-    readonly type: 'parameter';
-    readonly parameter: string;
+    readonly type: 'token - parameter';
+    readonly text: string;
     readonly location: ILocation;
 }
 ```
@@ -692,7 +702,7 @@ interface ParameterToken {
 
 ```typescript
 interface CloseParenthesisToken {
-    readonly type: 'close-parenthesis';
+    readonly type: 'token - close parenthesis';
     readonly location: ILocation;
 }
 ```
@@ -870,7 +880,7 @@ type CoreAst = IdentifierAst | IAstValue;
 
 ```typescript
 interface IAstValue {
-    readonly type: 'value';
+    readonly type: 'ast-value';
     readonly value: string;
     readonly location: ILocation;
 }
@@ -884,9 +894,10 @@ interface IAstValue {
 
 ```typescript
 interface IAstIdentifier {
-    readonly type: 'identifier';
-    readonly identifier: string;
+    readonly type: 'ast-identifier';
+    readonly value: string;
     readonly location: ILocation;
+    readonly blockRange: IRange;
 }
 ```
 
@@ -898,10 +909,11 @@ interface IAstIdentifier {
 
 ```typescript
 interface IAstCommand {
-    readonly type: 'command';
-    readonly identifier: string;
-    readonly parameters: CoreAst[];
+    readonly type: 'ast-command';
+    readonly value: string;
     readonly location: ILocation;
+    readonly parameter: IAstParameter;
+    readonly blockRange: IRange;
 }
 ```
 
@@ -913,9 +925,11 @@ interface IAstCommand {
 
 ```typescript
 interface IAstContainer {
-    readonly type: 'container';
-    readonly children: CoreAst[];
+    readonly type: 'ast-container';
+    readonly value: string;
     readonly location: ILocation;
+    readonly subStructure: IdentifierAst[];
+    readonly blockRange: IRange;
 }
 ```
 
@@ -1007,13 +1021,13 @@ The parser produces a [`RootAst`](#rootast) containing the complete tree:
 ```typescript
 interface RootAst {
     readonly ast: CoreAst[];
-    readonly projectLocation: IProjectLocation;
+    readonly location: IProjectLocation;
 }
 ```
 
 **Properties:**
 - **AST array** - Top-level AST nodes (multiple root expressions allowed)
-- **Project context** - Location information for error reporting
+- **Location** - Project location information for error reporting
 - **Immutable structure** - Read-only tree for safe processing
 
 #### Syntax Validation ####
@@ -1128,58 +1142,57 @@ type DoculispPart = IWrite | ITitle | ITableOfContents | IContentLocation | IHea
 
 **`IWrite`** - Text content to be written to the output:
 ```typescript
-interface IWrite {
-    readonly type: 'write';
-    readonly content: string;
-    readonly location: ILocation;
+interface IWrite extends ILocationSortable {
+    readonly type: 'doculisp-write';
+    readonly value: string;
 }
 ```
 
 **`ITitle`** - Document and section titles:
 ```typescript
-interface ITitle {
-    readonly type: 'title';
+interface ITitle extends ILocationSortable {
+    readonly type: 'doculisp-title';
     readonly title: string;
-    readonly level: number;  // Heading level (H1, H2, etc.)
-    readonly location: ILocation;
+    readonly label: string;
+    readonly id?: string | undefined;
+    readonly ref_link: string;
+    readonly subtitle?: string | undefined;
 }
 ```
 
 **`ITableOfContents`** - Table of contents configuration:
 ```typescript
-interface ITableOfContents {
-    readonly type: 'table-of-contents';
-    readonly style: TocStyle;
-    readonly label?: string;
-    readonly location: ILocation;
+interface ITableOfContents extends ILocationSortable {
+    readonly type: 'doculisp-toc';
+    readonly label: string | false;
+    readonly bulletStyle: DoculispBulletStyle;
 }
 ```
 
 **`IContentLocation`** - Markers for where included content should appear:
 ```typescript
-interface IContentLocation {
-    readonly type: 'content-location';
-    readonly location: ILocation;
+interface IContentLocation extends ILocationSortable {
+    readonly type: 'doculisp-content';
+    readonly blockRange: IRange;
 }
 ```
 
 **`IHeader`** - Dynamic heading elements:
 ```typescript
-interface IHeader {
-    readonly type: 'header';
-    readonly level: number;
+interface IHeader extends ILocationSortable {
+    readonly type: 'doculisp-header';
+    readonly depthCount: number;
     readonly text: string;
-    readonly id?: string;
-    readonly location: ILocation;
+    readonly id?: string | undefined;
 }
 ```
 
 **`IPathId`** - Path reference identifiers for cross-linking:
 ```typescript
-interface IPathId {
-    readonly type: 'path-id';
+interface IPathId extends ILocationSortable {
+    readonly type: 'doculisp-path-id';
     readonly id: string;
-    readonly location: ILocation;
+    readonly blockRange: IRange;
 }
 ```
 
@@ -1253,7 +1266,7 @@ The Doculisp AST Parser implements the [`IDoculispParser`](#idoculispparser) int
 
 ```typescript
 interface IDoculispParser {
-    parse(rootAst: RootAst, variableTable: IVariableTable): Result<IDoculisp>;
+    parse(tokenResults: Result<RootAst | IAstEmpty>, variableTable: IVariableTable): Result<IDoculisp | IEmptyDoculisp>;
 }
 ```
 
@@ -1262,7 +1275,7 @@ interface IDoculispParser {
 - **[`IVariableTable`](#ivariabletable)** - Variable context for resolution
 
 **Output:**
-- **[`Result<IDoculisp>`](#resultt)** - Success with semantic structure or detailed failure
+- **[`Result<IDoculisp | IEmptyDoculisp>`](#resultt)** - Success with semantic structure or detailed failure
 
 ##### IDoculisp Structure #####
 
@@ -1270,16 +1283,16 @@ The parser produces an [`IDoculisp`](#idoculisp) containing complete semantic in
 
 ```typescript
 interface IDoculisp {
-    readonly parts: DoculispPart[];
-    readonly includes: ISectionWriter[];
-    readonly projectLocation: IProjectLocation;
+    projectLocation: IProjectLocation;
+    section: ISectionWriter;
+    type: 'doculisp-root';
 }
 ```
 
 **Properties:**
-- **Semantic parts** - All meaningful Doculisp elements in processing order
-- **Include structure** - Resolved external document dependencies
-- **Project context** - Location information for error reporting
+- **Section structure** - Contains the ISectionWriter with all document content
+- **Location context** - Project-level positioning for error handling
+- **Type discriminator** - Identifies this as a root Doculisp document
 
 #### Variable Integration ####
 
@@ -1382,31 +1395,39 @@ The AST Project Parser transforms the validated AST into meaningful project stru
 
 ##### Project Structure #####
 
-The parser creates an [`IProject`](#iproject) containing all document definitions:
+The parser creates an [`IProjectDocuments`](#iprojectdocuments) containing all document definitions:
 
 ```typescript
-interface IProject {
-    readonly documents: IDocument[];
-    readonly projectLocation: IProjectLocation;
+interface IProjectDocuments {
+    documents: IProjectDocument[];
+    location: ILocation;
+    type: 'project-documents';
+    blockRange: IRange;
 }
 ```
 
 ##### Document Definitions #####
 
-Each document mapping becomes an [`IDocument`](#idocument) structure:
+Each document mapping becomes an [`IProjectDocument`](#iprojectdocument) structure:
 
 ```typescript
-interface IDocument {
-    readonly source: IPath;
-    readonly output: IPath;
-    readonly location: ILocation;
+interface IProjectDocument {
+    id?: string | undefined;
+    sourcePath: IPath;
+    destinationPath: IPath;
+    location: ILocation;
+    type: 'project-document';
+    blockRange: IRange;
 }
 ```
 
 **Properties:**
+- **ID** - Optional identifier for cross-referencing
 - **Source path** - Input Doculisp file with full path resolution
-- **Output path** - Target markdown file with full path resolution
+- **Destination path** - Target markdown file with full path resolution
 - **Location context** - Position in project file for error reporting
+- **Type discriminator** - `'project-document'`
+- **Block range** - Source range information
 
 #### Path Resolution ####
 
@@ -1448,15 +1469,16 @@ The AST Project Parser implements the [`IProjectParser`](#iprojectparser) interf
 
 ```typescript
 interface IProjectParser {
-    parse(rootAst: RootAst): Result<IProject>;
+    parse(tokenResults: Result<RootAst | IAstEmpty>, variableTable: IVariableTable): Result<IProjectDocuments>;
 }
 ```
 
 **Input:**
 - **[`RootAst`](#rootast)** - Structurally validated AST from project file parsing
+- **[`IVariableTable`](#ivariabletable)** - Variable context for resolution
 
 **Output:**
-- **[`Result<IProject>`](#resultt)** - Success with project configuration or detailed failure
+- **[`Result<IProjectDocuments>`](#resultt)** - Success with project configuration or detailed failure
 
 ##### Project Processing Flow #####
 
@@ -1466,7 +1488,7 @@ The parser processes project files through these stages:
 2. **Document Extraction** - Find and process each document definition
 3. **Path Resolution** - Resolve all source and output paths
 4. **Validation** - Verify all paths and configurations are valid
-5. **Project Assembly** - Create final `IProject` structure
+5. **Project Assembly** - Create final `IProjectDocuments` structure
 
 #### Project Validation ####
 
@@ -1505,12 +1527,12 @@ The AST Project Parser enables **coordinated multi-document compilation**:
 
 ```typescript
 // Typical project processing workflow:
-const projectResult = projectParser.parse(projectAst);
+const projectResult = projectParser.parse(projectAst, variableTable);
 if (projectResult.success) {
     for (const document of projectResult.value.documents) {
         const compileResult = await controller.compile(
-            document.source,
-            document.output
+            document.sourcePath,
+            document.destinationPath
         );
         // Handle individual document results
     }
@@ -1538,7 +1560,7 @@ The AST Project Parser operates **parallel to document parsing** for project-lev
 1. **Project File Processing** → [`DocumentMap`](#documentmap)
 2. **Project Tokenization** → [`TokenizedDocument`](#tokenizeddocument)
 3. **Project AST Parsing** → [`RootAst`](#rootast)
-4. **[AST Project Parser](#iprojectparser)** → [`IProject`](#iproject)
+4. **[AST Project Parser](#iprojectparser)** → [`IProjectDocuments`](#iprojectdocuments)
 
 ##### Project Orchestration #####
 
@@ -1681,32 +1703,43 @@ The Include Builder implements the [`IIncludeBuilder`](#iincludebuilder) interfa
 
 ```typescript
 interface IIncludeBuilder {
-    build(doculisp: IDoculisp, variableTable: IVariableTable): Promise<Result<ISectionWriter>>;
+    parse(variableTable: IVariableTable): Result<IDoculisp | IEmptyDoculisp>;
+    parseProject(path: IPath, variableTable: IVariableTable): Result<IProjectDocuments>;
+    parseExternals(doculisp: Result<IDoculisp | IEmptyDoculisp>, variableTable: IVariableTable): Result<IDoculisp | IEmptyDoculisp>;
 }
 ```
 
-**Input:**
-- **[`IDoculisp`](#idoculisp)** - Semantic document structure from Doculisp AST Parser
-- **[`IVariableTable`](#ivariabletable)** - Variable context for resolution
+**Methods:**
 
-**Output:**
-- **[`Promise<Result<ISectionWriter>>`](#resultt)** - Complete document tree or detailed failure
+- **`parse`** - Parse a single Doculisp document with the complete pipeline
+  - **Input:** Variable table with source file context
+  - **Output:** `Result<IDoculisp | IEmptyDoculisp>` - Complete semantic structure
+
+- **`parseProject`** - Parse a project file (.dlproj) to get document definitions
+  - **Input:** Project file path and variable table
+  - **Output:** `Result<IProjectDocuments>` - Project structure with document definitions
+
+- **`parseExternals`** - Process external includes recursively
+  - **Input:** Doculisp structure (possibly with unresolved includes) and variable table
+  - **Output:** `Result<IDoculisp | IEmptyDoculisp>` - Structure with includes fully resolved
 
 ##### ISectionWriter Structure #####
 
-The builder produces an [`ISectionWriter`](#isectionwriter) containing the complete document:
+The builder produces an [`ISectionWriter`](#isectionwriter) containing the section structure:
 
 ```typescript
-interface ISectionWriter {
-    readonly doculisp: IDoculisp;
-    readonly variableTable: IVariableTable;
+interface ISectionWriter extends ILocationSortable {
+    readonly doculisp: DoculispPart[];
+    readonly include: ILoad[];
+    readonly type: 'doculisp-section';
 }
 ```
 
 **Properties:**
-- **Complete Doculisp structure** - Main document with all includes resolved and integrated
-- **Final variable table** - All variables from main document and includes combined
-- **Self-contained** - No external dependencies remain; ready for output generation
+- **Doculisp parts** - All semantic elements in processing order
+- **Include array** - External document dependencies (ILoad[])
+- **Type discriminator** - Identifies this as a section structure
+- **Document order** - Location information from ILocationSortable
 
 #### Document Tree Assembly ####
 
@@ -1723,15 +1756,15 @@ The Include Builder creates a **complete, hierarchical document structure**:
 
 ##### Content Integration #####
 
-**Before Include Resolution:**
-```typescript
-// Main document has include references
+**Before Include section has include references
 {
-    parts: [
-        { type: 'title', title: 'Main Document' },
-        { type: 'content-location' }  // Placeholder for included content
+    doculisp: [
+        { type: 'doculisp-title', title: 'Main Document', ... },
+        { type: 'doculisp-content', ... }  // Placeholder for included content
     ],
-    includes: []  // Empty - not yet resolved
+    include: [
+        { type: 'doculisp-load', path: './getting-started.md', document: false, ... }
+    ]  // Not yet resolved
 }
 ```
 
@@ -1739,12 +1772,17 @@ The Include Builder creates a **complete, hierarchical document structure**:
 ```typescript
 // Complete document with all content integrated
 {
-    parts: [
-        { type: 'title', title: 'Main Document' },
-        { type: 'title', title: 'Getting Started' },  // From included file
-        { type: 'write', content: 'Installation instructions...' },
-        { type: 'title', title: 'API Reference' },   // From another included file
-        { type: 'write', content: 'API documentation...' }
+    doculisp: [
+        { type: 'doculisp-title', title: 'Main Document', ... },
+        { type: 'doculisp-title', title: 'Getting Started', ... },  // From included file
+        { type: 'doculisp-write', value: 'Installation instructions...', ... },
+        { type: 'doculisp-title', title: 'API Reference', ... },   // From another included file
+        { type: 'doculisp-write', value: 'API documentation...', ... }
+    ],
+    include: [
+        { type: 'doculisp-load', path: './getting-started.md', document: <resolved ISectionWriter>, ... },
+        { type: 'doculisp-load', path: './api-reference.md', document: <resolved ISectionWriter>, ... }
+    ]  // Fully resolved
     ],
     includes: [/* Complete included document structures */]
 }
@@ -1842,7 +1880,7 @@ The String Writer converts each type of [`DoculispPart`](#doculisppart) into app
 **`IWrite` Elements** - Direct text content output:
 ```typescript
 // Input: IWrite part
-{ type: 'write', content: 'This is documentation content.' }
+{ type: 'doculisp-write', value: 'This is documentation content.' }
 
 // Output: Direct markdown
 "This is documentation content."
@@ -1853,7 +1891,7 @@ The String Writer converts each type of [`DoculispPart`](#doculisppart) into app
 **`ITitle` Elements** - Document and section titles:
 ```typescript
 // Input: ITitle part
-{ type: 'title', title: 'Getting Started', level: 1 }
+{ type: 'doculisp-title', title: 'Getting Started', label: 'Getting Started' }
 
 // Output: Markdown heading
 "# Getting Started"
@@ -1864,7 +1902,7 @@ The String Writer converts each type of [`DoculispPart`](#doculisppart) into app
 **`IHeader` Elements** - Context-aware headings with optional IDs:
 ```typescript
 // Input: IHeader part
-{ type: 'header', level: 2, text: 'Installation', id: 'install-guide' }
+{ type: 'doculisp-header', depthCount: 2, text: 'Installation', id: 'install-guide' }
 
 // Output: Markdown heading with anchor
 "## Installation {#install-guide}"
@@ -1875,7 +1913,7 @@ The String Writer converts each type of [`DoculispPart`](#doculisppart) into app
 **`ITableOfContents` Elements** - Generated TOC based on document structure:
 ```typescript
 // Input: TOC configuration
-{ type: 'table-of-contents', style: 'numbered-labeled', label: 'Contents' }
+{ type: 'doculisp-toc', bulletStyle: 'numbered-labeled', label: 'Contents' }
 
 // Output: Generated TOC
 "## Contents\n1. [Getting Started](#getting-started)\n2. [Installation](#installation)"
@@ -1889,7 +1927,7 @@ The String Writer handles **complex content integration** from the complete docu
 
 **`IContentLocation` Elements** - Mark where included content appears:
 ```typescript
-// Included content is seamlessly integrated at content-location markers
+// Included content is seamlessly integrated at doculisp-content markers
 // Original: (content (toc numbered-labeled))
 // Result: Complete TOC + all included content in proper order
 ```
@@ -2298,7 +2336,7 @@ Root container for an entire AST with project location context:
 ```typescript
 interface RootAst {
     readonly ast: CoreAst[];
-    readonly projectLocation: IProjectLocation;
+    readonly location: IProjectLocation;
 }
 ```
 
@@ -2313,7 +2351,7 @@ Represents literal values in the AST:
 
 ```typescript
 interface IAstValue {
-    readonly type: 'value';
+    readonly type: 'ast-value';
     readonly value: string;
     readonly location: ILocation;
 }
@@ -2330,16 +2368,18 @@ Represents identifier nodes (commands, block names):
 
 ```typescript
 interface IAstIdentifier {
-    readonly type: 'identifier';
-    readonly identifier: string;
+    readonly type: 'ast-identifier';
+    readonly value: string;
     readonly location: ILocation;
+    readonly blockRange: IRange;
 }
 ```
 
 **Properties:**
 - **Type discriminator** - Identifies this as an identifier node
-- **Identifier text** - The identifier string
+- **Value text** - The identifier string
 - **Location tracking** - Source location for debugging
+- **Block range** - Range information for the entire block
 
 ###### `IAstCommand` ######
 
@@ -2347,17 +2387,20 @@ Represents command nodes with parameters:
 
 ```typescript
 interface IAstCommand {
-    readonly type: 'command';
-    readonly identifier: string;
-    readonly parameters: CoreAst[];
+    readonly type: 'ast-command';
+    readonly value: string;
     readonly location: ILocation;
+    readonly parameter: IAstParameter;
+    readonly blockRange: IRange;
 }
 ```
 
 **Properties:**
-- **Command identifier** - The command name
-- **Parameter array** - Child AST nodes representing parameters
+- **Type discriminator** - Identifies this as a command node
+- **Command value** - The command name
+- **Parameter** - Single parameter (IAstParameter) for this command
 - **Location tracking** - Source position for error reporting
+- **Block range** - Range information for the entire block
 
 ###### `IAstContainer` ######
 
@@ -2365,14 +2408,19 @@ Represents container nodes that group other AST elements:
 
 ```typescript
 interface IAstContainer {
-    readonly type: 'container';
-    readonly children: CoreAst[];
+    readonly type: 'ast-container';
+    readonly value: string;
     readonly location: ILocation;
+    readonly subStructure: IdentifierAst[];
+    readonly blockRange: IRange;
 }
 ```
 
-**Properties:**
-- **Child nodes** - Array of contained AST elements
+Type discriminator** - Identifies this as a container node
+- **Container value** - The container identifier
+- **Sub-structure** - Array of IdentifierAst elements (nested identifiers, commands, containers)
+- **Location context** - Position information for debugging
+- **Block range** - Range information for the entire block
 - **Hierarchical structure** - Enables nested Doculisp blocks
 - **Location context** - Position information for debugging
 
@@ -2402,32 +2450,34 @@ Complete Doculisp document structure containing all semantic parts:
 
 ```typescript
 interface IDoculisp {
-    readonly parts: DoculispPart[];
-    readonly includes: ISectionWriter[];
-    readonly projectLocation: IProjectLocation;
+    projectLocation: IProjectLocation;
+    section: ISectionWriter;
+    type: 'doculisp-root';
 }
 ```
 
 **Key Features:**
-- **Semantic parts** - All processed Doculisp elements in order
-- **Include resolution** - Resolved external document dependencies
+- **Section structure** - Contains the ISectionWriter with all document content
 - **Location context** - Project-level positioning for error handling
+- **Type discriminator** - Identifies this as a root Doculisp document
 
 ###### `ISectionWriter` ######
 
-Root document structure with complete include hierarchy:
+Section structure with complete include hierarchy:
 
 ```typescript
-interface ISectionWriter {
-    readonly doculisp: IDoculisp;
-    readonly variableTable: IVariableTable;
+interface ISectionWriter extends ILocationSortable {
+    readonly doculisp: DoculispPart[];
+    readonly include: ILoad[];
+    readonly type: 'doculisp-section';
 }
 ```
 
 **Properties:**
-- **Doculisp content** - Complete semantic document structure
-- **Variable context** - Shared variable table for metadata and references
-- **Include hierarchy** - Full resolution of external dependencies
+- **Doculisp parts** - All semantic elements in this section
+- **Include array** - External document dependencies (ILoad objects)
+- **Type discriminator** - Identifies this as a section structure
+- **Document order** - Location information from ILocationSortable
 
 ###### `TocStyle` ######
 
@@ -2453,42 +2503,180 @@ type TocStyle =
 - **`bulleted`** - Bullet points only
 - **`bulleted-labeled`** - Bullets with section names
 
-#### Project and Document Types ####
+###### `IWrite` ######
 
-These types represent project-level structures and raw document parsing results.
-
-###### `IDocument` ######
-
-Represents a single document definition within a project:
+Text content element to be written to output:
 
 ```typescript
-interface IDocument {
-    readonly source: IPath;
-    readonly output: IPath;
-    readonly location: ILocation;
+interface IWrite extends ILocationSortable {
+    readonly type: 'doculisp-write';
+    readonly value: string;
 }
 ```
 
 **Properties:**
-- **Source path** - Input Doculisp file location
-- **Output path** - Target markdown file destination
-- **Location context** - Position in project file for error reporting
+- **Type discriminator** - `'doculisp-write'`
+- **Value** - Text content to output
+- **Document order** - Location from ILocationSortable
 
-###### `IProject` ######
+###### `ITitle` ######
+
+Document or section title element:
+
+```typescript
+interface ITitle extends ILocationSortable {
+    readonly type: 'doculisp-title';
+    readonly title: string;
+    readonly label: string;
+    readonly id?: string | undefined;
+    readonly ref_link: string;
+    readonly subtitle?: string | undefined;
+}
+```
+
+**Properties:**
+- **Type discriminator** - `'doculisp-title'`
+- **Title** - Main title text
+- **Label** - Title label for references
+- **ID** - Optional identifier
+- **Ref link** - Reference link text
+- **Subtitle** - Optional subtitle
+
+###### `ITableOfContents` ######
+
+Table of contents configuration element:
+
+```typescript
+interface ITableOfContents extends ILocationSortable {
+    readonly type: 'doculisp-toc';
+    readonly label: string | false;
+    readonly bulletStyle: DoculispBulletStyle;
+}
+```
+
+**Properties:**
+- **Type discriminator** - `'doculisp-toc'` (not `'table-of-contents'`)
+- **Label** - TOC heading label or false for no label
+- **Bullet style** - One of the DoculispBulletStyle options
+
+###### `IContentLocation` ######
+
+Marker for where included content should appear:
+
+```typescript
+interface IContentLocation extends ILocationSortable {
+    readonly type: 'doculisp-content';
+    readonly blockRange: IRange;
+}
+```
+
+**Properties:**
+- **Type discriminator** - `'doculisp-content'` (not `'content-location'`)
+- **Block range** - Source range information
+
+###### `IHeader` ######
+
+Dynamic heading element with context-aware levels:
+
+```typescript
+interface IHeader extends ILocationSortable {
+    readonly type: 'doculisp-header';
+    readonly depthCount: number;
+    readonly text: string;
+    readonly id?: string | undefined;
+}
+```
+
+**Properties:**
+- **Type discriminator** - `'doculisp-header'`
+- **Depth count** - Heading level depth
+- **Text** - Heading text content
+- **ID** - Optional identifier for cross-referencing
+
+###### `IPathId` ######
+
+Path reference identifier for cross-linking:
+
+```typescript
+interface IPathId extends ILocationSortable {
+    readonly type: 'doculisp-path-id';
+    readonly id: string;
+    readonly blockRange: IRange;
+}
+```
+
+**Properties:**
+- **Type discriminator** - `'doculisp-path-id'`
+- **ID** - Identifier for path reference
+- **Block range** - Source range information
+
+###### `ILoad` ######
+
+External document include specification:
+
+```typescript
+interface ILoad extends ILocationSortable {
+    readonly type: 'doculisp-load';
+    readonly path: IPath;
+    readonly sectionLabel: string;
+    document: ISectionWriter | false;
+    blockRange: IRange;
+}
+```
+
+**Properties:**
+- **Type discriminator** - `'doculisp-load'`
+- **Path** - Path to external document
+- **Section label** - Label for the included section
+- **Document** - Resolved ISectionWriter or false if not yet loaded
+- **Block range** - Source range information
+
+#### Project and Document Types ####
+
+These types represent project-level structures and raw document parsing results.
+
+###### `IProjectDocument` ######
+
+Represents a single document definition within a project:
+
+```typescript
+interface IProjectDocument {
+    id?: string | undefined;
+    sourcePath: IPath;
+    destinationPath: IPath;
+    location: ILocation;
+    type: 'project-document';
+    blockRange: IRange;
+}
+```
+
+**Properties:**
+- **ID** - Optional identifier for cross-referencing
+- **Source path** - Input Doculisp file location
+- **Destination path** - Target markdown file destination
+- **Location** - Position in project file for error reporting
+- **Type discriminator** - `'project-document'`
+- **Block range** - Source range information
+
+###### `IProjectDocuments` ######
 
 Container for multiple document definitions in a project:
 
 ```typescript
-interface IProject {
-    readonly documents: IDocument[];
-    readonly projectLocation: IProjectLocation;
+interface IProjectDocuments {
+    documents: IProjectDocument[];
+    location: ILocation;
+    type: 'project-documents';
+    blockRange: IRange;
 }
 ```
 
 **Key Features:**
 - **Document array** - All documents defined in the project
 - **Batch processing** - Enables compilation of multiple documents
-- **Project context** - Location information for project-level operations
+- **Location** - Position information for project-level operations
+- **Type discriminator** - `'project-documents'`
+- **Block range** - Source range information
 
 ###### `DocumentMap` ######
 
@@ -3050,14 +3238,18 @@ Main compilation orchestrator interface that coordinates the entire processing p
 
 ```typescript
 interface IController {
-    compile(source: IPath, output: IPath | false): Promise<Result<void>>;
-    test(variableTable: IVariableTable): Promise<Result<void>>;
+    compile(sourcePath: IPath, destinationPath?: IPath | false): Result<string>[];
+    test(variableTable: IVariableTable): Result<string | false>[];
 }
 ```
 
 **Key Methods:**
 - **`compile`** - Full compilation from source file to output markdown
+  - Returns array of results (for .dlproj files with multiple documents)
+  - Each result contains the output file path on success
 - **`test`** - Validation mode that checks syntax without writing output
+  - Returns array of results for consistency with compile
+  - Returns validation status for each document
 - **Pipeline coordination** - Orchestrates all processing stages in sequence
 - **Error propagation** - Collects and reports errors from any pipeline stage
 
@@ -3065,11 +3257,16 @@ interface IController {
 ```typescript
 const controller = container.buildAs<IController>('controller');
 
-// Compile to file
-const result = await controller.compile(sourcePath, outputPath);
+// Compile to file (returns array of results)
+const results = controller.compile(sourcePath, outputPath);
+results.forEach(result => {
+    if (result.success) {
+        console.log(`Compiled: ${result.value}`);
+    }
+});
 
 // Test validation only
-const testResult = await controller.test(variableTable);
+const testResults = controller.test(variableTable);
 ```
 
 ###### `IIncludeBuilder` ######
@@ -3078,33 +3275,38 @@ Full AST building interface with external file inclusion and dependency resoluti
 
 ```typescript
 interface IIncludeBuilder {
-    build(doculisp: IDoculisp, variableTable: IVariableTable): Promise<Result<ISectionWriter>>;
+    parse(variableTable: IVariableTable): Result<IDoculisp | IEmptyDoculisp>;
+    parseProject(path: IPath, variableTable: IVariableTable): Result<IProjectDocuments>;
+    parseExternals(doculisp: Result<IDoculisp | IEmptyDoculisp>, variableTable: IVariableTable): Result<IDoculisp | IEmptyDoculisp>;
 }
 ```
 
 **Capabilities:**
-- **Include resolution** - Process external file dependencies recursively
-- **AST completion** - Build complete document tree with all includes
+- **Parse** - Process a single Doculisp document through the complete pipeline
+- **Parse project** - Process project files (.dlproj) to extract document definitions
+- **Parse externals** - Resolve external file dependencies recursively
 - **Variable context** - Manage shared variables across included files
 - **Error aggregation** - Collect errors from all included documents
 
 **Processing Flow:**
-1. **Parse includes** - Identify external file references
-2. **Recursive processing** - Process each included file through full pipeline
-3. **Dependency resolution** - Handle nested includes and circular reference detection
-4. **Tree assembly** - Combine all processed content into unified structure
+1. **Parse document** - Run complete pipeline on source file
+2. **Identify includes** - Find external file references in semantic structure
+3. **Recursive processing** - Process each included file through full pipeline
+4. **Dependency resolution** - Handle nested includes and circular reference detection
+5. **Structure assembly** - Combine all processed content into unified IDoculisp
 
 ###### `IStringWriter` ######
 
-Interface for converting processed AST structures to final markdown output:
-
-```typescript
-interface IStringWriter {
-    writeString(sectionWriter: ISectionWriter): Result<string>;
+InterfaceAst(astMaybe: Result<IDoculisp | IEmptyDoculisp>, variableTable: IVariableTable): Result<string>;
 }
 ```
 
 **Responsibilities:**
+- **Markdown generation** - Convert IDoculisp semantic structures to markdown syntax
+- **Content formatting** - Apply proper spacing, headings, and structure
+- **Table of contents** - Generate TOC based on configuration
+- **Link resolution** - Convert path references to proper markdown links
+- **Result handling** - Process Result types and propagate error
 - **Markdown generation** - Convert semantic structures to markdown syntax
 - **Content formatting** - Apply proper spacing, headings, and structure
 - **Table of contents** - Generate TOC based on configuration
@@ -3116,7 +3318,7 @@ interface IStringWriter {
 - **Dynamic headings** - Context-aware heading levels
 - **Metadata handling** - Include author information and document metadata
 
-###### `IDocWriter` ######
+<!-- (dl (##idoc-writer-type `IDocWriter`)) -->
 
 Document compilation and file writing interface that handles the final output stage:
 

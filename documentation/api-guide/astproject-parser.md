@@ -51,31 +51,39 @@ The AST Project Parser transforms the validated AST into meaningful project stru
 
 <!-- (dl (### Project Structure)) -->
 
-The parser creates an [`IProject`](<!-- (dl (get-path project-type)) -->) containing all document definitions:
+The parser creates an [`IProjectDocuments`](<!-- (dl (get-path project-documents-type)) -->) containing all document definitions:
 
 ```typescript
-interface IProject {
-    readonly documents: IDocument[];
-    readonly projectLocation: IProjectLocation;
+interface IProjectDocuments {
+    documents: IProjectDocument[];
+    location: ILocation;
+    type: 'project-documents';
+    blockRange: IRange;
 }
 ```
 
 <!-- (dl (### Document Definitions)) -->
 
-Each document mapping becomes an [`IDocument`](<!-- (dl (get-path document-type)) -->) structure:
+Each document mapping becomes an [`IProjectDocument`](<!-- (dl (get-path project-document-type)) -->) structure:
 
 ```typescript
-interface IDocument {
-    readonly source: IPath;
-    readonly output: IPath;
-    readonly location: ILocation;
+interface IProjectDocument {
+    id?: string | undefined;
+    sourcePath: IPath;
+    destinationPath: IPath;
+    location: ILocation;
+    type: 'project-document';
+    blockRange: IRange;
 }
 ```
 
 **Properties:**
+- **ID** - Optional identifier for cross-referencing
 - **Source path** - Input Doculisp file with full path resolution
-- **Output path** - Target markdown file with full path resolution
+- **Destination path** - Target markdown file with full path resolution
 - **Location context** - Position in project file for error reporting
+- **Type discriminator** - `'project-document'`
+- **Block range** - Source range information
 
 <!-- (dl (## Path Resolution)) -->
 
@@ -117,15 +125,16 @@ The AST Project Parser implements the [`IProjectParser`](<!-- (dl (get-path ipro
 
 ```typescript
 interface IProjectParser {
-    parse(rootAst: RootAst): Result<IProject>;
+    parse(tokenResults: Result<RootAst | IAstEmpty>, variableTable: IVariableTable): Result<IProjectDocuments>;
 }
 ```
 
 **Input:**
 - **[`RootAst`](<!-- (dl (get-path root-ast-type)) -->)** - Structurally validated AST from project file parsing
+- **[`IVariableTable`](<!-- (dl (get-path variable-table-type)) -->)** - Variable context for resolution
 
 **Output:**
-- **[`Result<IProject>`](<!-- (dl (get-path result-type)) -->)** - Success with project configuration or detailed failure
+- **[`Result<IProjectDocuments>`](<!-- (dl (get-path result-type)) -->)** - Success with project configuration or detailed failure
 
 <!-- (dl (### Project Processing Flow)) -->
 
@@ -135,7 +144,7 @@ The parser processes project files through these stages:
 2. **Document Extraction** - Find and process each document definition
 3. **Path Resolution** - Resolve all source and output paths
 4. **Validation** - Verify all paths and configurations are valid
-5. **Project Assembly** - Create final `IProject` structure
+5. **Project Assembly** - Create final `IProjectDocuments` structure
 
 <!-- (dl (## Project Validation)) -->
 
@@ -174,12 +183,12 @@ The AST Project Parser enables **coordinated multi-document compilation**:
 
 ```typescript
 // Typical project processing workflow:
-const projectResult = projectParser.parse(projectAst);
+const projectResult = projectParser.parse(projectAst, variableTable);
 if (projectResult.success) {
     for (const document of projectResult.value.documents) {
         const compileResult = await controller.compile(
-            document.source, 
-            document.output
+            document.sourcePath, 
+            document.destinationPath
         );
         // Handle individual document results
     }
@@ -207,7 +216,7 @@ The AST Project Parser operates **parallel to document parsing** for project-lev
 1. **Project File Processing** → [`DocumentMap`](<!-- (dl (get-path document-map-type)) -->)
 2. **Project Tokenization** → [`TokenizedDocument`](<!-- (dl (get-path tokenized-document-type)) -->)  
 3. **Project AST Parsing** → [`RootAst`](<!-- (dl (get-path root-ast-type)) -->)
-4. **[AST Project Parser](<!-- (dl (get-path iproject-parser-type)) -->)** → [`IProject`](<!-- (dl (get-path project-type)) -->)
+4. **[AST Project Parser](<!-- (dl (get-path iproject-parser-type)) -->)** → [`IProjectDocuments`](<!-- (dl (get-path project-documents-type)) -->)
 
 <!-- (dl (### Project Orchestration)) -->
 

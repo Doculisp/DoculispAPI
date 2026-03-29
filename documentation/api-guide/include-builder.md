@@ -119,32 +119,43 @@ The Include Builder implements the [`IIncludeBuilder`](<!-- (dl (get-path iinclu
 
 ```typescript
 interface IIncludeBuilder {
-    build(doculisp: IDoculisp, variableTable: IVariableTable): Promise<Result<ISectionWriter>>;
+    parse(variableTable: IVariableTable): Result<IDoculisp | IEmptyDoculisp>;
+    parseProject(path: IPath, variableTable: IVariableTable): Result<IProjectDocuments>;
+    parseExternals(doculisp: Result<IDoculisp | IEmptyDoculisp>, variableTable: IVariableTable): Result<IDoculisp | IEmptyDoculisp>;
 }
 ```
 
-**Input:**
-- **[`IDoculisp`](<!-- (dl (get-path doculisp-type)) -->)** - Semantic document structure from Doculisp AST Parser
-- **[`IVariableTable`](<!-- (dl (get-path variable-table-type)) -->)** - Variable context for resolution
+**Methods:**
 
-**Output:**
-- **[`Promise<Result<ISectionWriter>>`](<!-- (dl (get-path result-type)) -->)** - Complete document tree or detailed failure
+- **`parse`** - Parse a single Doculisp document with the complete pipeline
+  - **Input:** Variable table with source file context
+  - **Output:** `Result<IDoculisp | IEmptyDoculisp>` - Complete semantic structure
+
+- **`parseProject`** - Parse a project file (.dlproj) to get document definitions
+  - **Input:** Project file path and variable table
+  - **Output:** `Result<IProjectDocuments>` - Project structure with document definitions
+
+- **`parseExternals`** - Process external includes recursively
+  - **Input:** Doculisp structure (possibly with unresolved includes) and variable table
+  - **Output:** `Result<IDoculisp | IEmptyDoculisp>` - Structure with includes fully resolved
 
 <!-- (dl (### ISectionWriter Structure)) -->
 
-The builder produces an [`ISectionWriter`](<!-- (dl (get-path section-writer-type)) -->) containing the complete document:
+The builder produces an [`ISectionWriter`](<!-- (dl (get-path section-writer-type)) -->) containing the section structure:
 
 ```typescript
-interface ISectionWriter {
-    readonly doculisp: IDoculisp;
-    readonly variableTable: IVariableTable;
+interface ISectionWriter extends ILocationSortable {
+    readonly doculisp: DoculispPart[];
+    readonly include: ILoad[];
+    readonly type: 'doculisp-section';
 }
 ```
 
 **Properties:**
-- **Complete Doculisp structure** - Main document with all includes resolved and integrated
-- **Final variable table** - All variables from main document and includes combined
-- **Self-contained** - No external dependencies remain; ready for output generation
+- **Doculisp parts** - All semantic elements in processing order
+- **Include array** - External document dependencies (ILoad[])
+- **Type discriminator** - Identifies this as a section structure
+- **Document order** - Location information from ILocationSortable
 
 <!-- (dl (## Document Tree Assembly)) -->
 
@@ -161,15 +172,15 @@ The Include Builder creates a **complete, hierarchical document structure**:
 
 <!-- (dl (### Content Integration)) -->
 
-**Before Include Resolution:**
-```typescript
-// Main document has include references
+**Before Include section has include references
 {
-    parts: [
-        { type: 'title', title: 'Main Document' },
-        { type: 'content-location' }  // Placeholder for included content
+    doculisp: [
+        { type: 'doculisp-title', title: 'Main Document', ... },
+        { type: 'doculisp-content', ... }  // Placeholder for included content
     ],
-    includes: []  // Empty - not yet resolved
+    include: [
+        { type: 'doculisp-load', path: './getting-started.md', document: false, ... }
+    ]  // Not yet resolved
 }
 ```
 
@@ -177,12 +188,17 @@ The Include Builder creates a **complete, hierarchical document structure**:
 ```typescript
 // Complete document with all content integrated
 {
-    parts: [
-        { type: 'title', title: 'Main Document' },
-        { type: 'title', title: 'Getting Started' },  // From included file
-        { type: 'write', content: 'Installation instructions...' },
-        { type: 'title', title: 'API Reference' },   // From another included file
-        { type: 'write', content: 'API documentation...' }
+    doculisp: [
+        { type: 'doculisp-title', title: 'Main Document', ... },
+        { type: 'doculisp-title', title: 'Getting Started', ... },  // From included file
+        { type: 'doculisp-write', value: 'Installation instructions...', ... },
+        { type: 'doculisp-title', title: 'API Reference', ... },   // From another included file
+        { type: 'doculisp-write', value: 'API documentation...', ... }
+    ],
+    include: [
+        { type: 'doculisp-load', path: './getting-started.md', document: <resolved ISectionWriter>, ... },
+        { type: 'doculisp-load', path: './api-reference.md', document: <resolved ISectionWriter>, ... }
+    ]  // Fully resolved
     ],
     includes: [/* Complete included document structures */]
 }

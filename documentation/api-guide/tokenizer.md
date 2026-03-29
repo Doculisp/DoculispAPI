@@ -23,8 +23,8 @@ The Tokenizer produces four distinct types of tokens, each serving a specific pu
 
 ```typescript
 interface TextToken {
-    readonly type: 'text';
-    readonly content: string;
+    readonly type: 'token - text';
+    readonly text: string;
     readonly location: ILocation;
 }
 ```
@@ -37,8 +37,8 @@ interface TextToken {
 
 ```typescript
 interface IdentifierToken {
-    readonly type: 'identifier';
-    readonly identifier: string;
+    readonly type: 'token - identifier';
+    readonly text: string;
     readonly location: ILocation;
 }
 ```
@@ -51,8 +51,8 @@ interface IdentifierToken {
 
 ```typescript
 interface ParameterToken {
-    readonly type: 'parameter';
-    readonly parameter: string;
+    readonly type: 'token - parameter';
+    readonly text: string;
     readonly location: ILocation;
 }
 ```
@@ -65,7 +65,7 @@ interface ParameterToken {
 
 ```typescript
 interface CloseParenthesisToken {
-    readonly type: 'close-parenthesis';
+    readonly type: 'token - close parenthesis';
     readonly location: ILocation;
 }
 ```

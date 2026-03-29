@@ -31,7 +31,7 @@ type CoreAst = IdentifierAst | IAstValue;
 
 ```typescript
 interface IAstValue {
-    readonly type: 'value';
+    readonly type: 'ast-value';
     readonly value: string;
     readonly location: ILocation;
 }
@@ -45,9 +45,10 @@ interface IAstValue {
 
 ```typescript
 interface IAstIdentifier {
-    readonly type: 'identifier';
-    readonly identifier: string;
+    readonly type: 'ast-identifier';
+    readonly value: string;
     readonly location: ILocation;
+    readonly blockRange: IRange;
 }
 ```
 
@@ -59,10 +60,11 @@ interface IAstIdentifier {
 
 ```typescript
 interface IAstCommand {
-    readonly type: 'command';
-    readonly identifier: string;
-    readonly parameters: CoreAst[];
+    readonly type: 'ast-command';
+    readonly value: string;
     readonly location: ILocation;
+    readonly parameter: IAstParameter;
+    readonly blockRange: IRange;
 }
 ```
 
@@ -74,9 +76,11 @@ interface IAstCommand {
 
 ```typescript
 interface IAstContainer {
-    readonly type: 'container';
-    readonly children: CoreAst[];
+    readonly type: 'ast-container';
+    readonly value: string;
     readonly location: ILocation;
+    readonly subStructure: IdentifierAst[];
+    readonly blockRange: IRange;
 }
 ```
 
@@ -168,13 +172,13 @@ The parser produces a [`RootAst`](<!-- (dl (get-path root-ast-type)) -->) contai
 ```typescript
 interface RootAst {
     readonly ast: CoreAst[];
-    readonly projectLocation: IProjectLocation;
+    readonly location: IProjectLocation;
 }
 ```
 
 **Properties:**
 - **AST array** - Top-level AST nodes (multiple root expressions allowed)
-- **Project context** - Location information for error reporting
+- **Location** - Project location information for error reporting
 - **Immutable structure** - Read-only tree for safe processing
 
 <!-- (dl (## Syntax Validation)) -->

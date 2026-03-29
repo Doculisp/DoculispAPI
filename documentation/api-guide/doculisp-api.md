@@ -63,21 +63,26 @@ The DoculispApi provides essential methods for document processing:
 
 **`compileFile` Method:**
 ```typescript
-async compileFile(sourcePath: string, outputPath?: string): Promise<Result<void>>
+async compileFile(sourcePath: string, outputPath?: string): Result<string>[]
 ```
 
 **Usage:**
 ```typescript
 // Compile to specific output file
-const result = await api.compileFile('./docs/readme.dlisp', './README.md');
+const results = await api.compileFile('./docs/readme.dlisp', './README.md');
 
 // Compile with automatic output path
-const result = await api.compileFile('./docs/readme.dlisp');
+const results = await api.compileFile('./docs/readme.dlisp');
 
-if (result.success) {
-    console.log('Document compiled successfully');
+// Check results (returns array because .dlproj files can compile multiple documents)
+if (results.every(r => r.success)) {
+    console.log('All documents compiled successfully');
 } else {
-    console.error(`Compilation failed: ${result.message}`);
+    results.forEach(result => {
+        if (!result.success) {
+            console.error(`Compilation failed: ${result.message}`);
+        }
+    });
 }
 ```
 
@@ -85,18 +90,23 @@ if (result.success) {
 
 **`testFile` Method:**
 ```typescript
-async testFile(sourcePath: string): Promise<Result<void>>
+async testFile(sourcePath: string): Result<string | false>[]
 ```
 
 **Usage:**
 ```typescript
 // Test document without generating output
-const result = await api.testFile('./docs/readme.dlisp');
+const results = await api.testFile('./docs/readme.dlisp');
 
-if (result.success) {
+// Check results (returns array for consistency with compileFile)
+if (results.every(r => r.success)) {
     console.log('Document is valid');
 } else {
-    console.error(`Validation failed: ${result.message}`);
+    results.forEach(result => {
+        if (!result.success) {
+            console.error(`Validation failed: ${result.message}`);
+        }
+    });
 }
 ```
 

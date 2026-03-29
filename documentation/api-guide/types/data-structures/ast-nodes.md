@@ -21,7 +21,7 @@ Root container for an entire AST with project location context:
 ```typescript
 interface RootAst {
     readonly ast: CoreAst[];
-    readonly projectLocation: IProjectLocation;
+    readonly location: IProjectLocation;
 }
 ```
 
@@ -36,7 +36,7 @@ Represents literal values in the AST:
 
 ```typescript
 interface IAstValue {
-    readonly type: 'value';
+    readonly type: 'ast-value';
     readonly value: string;
     readonly location: ILocation;
 }
@@ -53,16 +53,18 @@ Represents identifier nodes (commands, block names):
 
 ```typescript
 interface IAstIdentifier {
-    readonly type: 'identifier';
-    readonly identifier: string;
+    readonly type: 'ast-identifier';
+    readonly value: string;
     readonly location: ILocation;
+    readonly blockRange: IRange;
 }
 ```
 
 **Properties:**
 - **Type discriminator** - Identifies this as an identifier node
-- **Identifier text** - The identifier string
+- **Value text** - The identifier string
 - **Location tracking** - Source location for debugging
+- **Block range** - Range information for the entire block
 
 <!-- (dl (##ast-command-type `IAstCommand`)) -->
 
@@ -70,17 +72,20 @@ Represents command nodes with parameters:
 
 ```typescript
 interface IAstCommand {
-    readonly type: 'command';
-    readonly identifier: string;
-    readonly parameters: CoreAst[];
+    readonly type: 'ast-command';
+    readonly value: string;
     readonly location: ILocation;
+    readonly parameter: IAstParameter;
+    readonly blockRange: IRange;
 }
 ```
 
 **Properties:**
-- **Command identifier** - The command name
-- **Parameter array** - Child AST nodes representing parameters
+- **Type discriminator** - Identifies this as a command node
+- **Command value** - The command name
+- **Parameter** - Single parameter (IAstParameter) for this command
 - **Location tracking** - Source position for error reporting
+- **Block range** - Range information for the entire block
 
 <!-- (dl (##ast-container-type `IAstContainer`)) -->
 
@@ -88,13 +93,17 @@ Represents container nodes that group other AST elements:
 
 ```typescript
 interface IAstContainer {
-    readonly type: 'container';
-    readonly children: CoreAst[];
+    readonly type: 'ast-container';
+    readonly value: string;
     readonly location: ILocation;
+    readonly subStructure: IdentifierAst[];
+    readonly blockRange: IRange;
 }
 ```
-
-**Properties:**
-- **Child nodes** - Array of contained AST elements
+Type discriminator** - Identifies this as a container node
+- **Container value** - The container identifier
+- **Sub-structure** - Array of IdentifierAst elements (nested identifiers, commands, containers)
+- **Location context** - Position information for debugging
+- **Block range** - Range information for the entire block
 - **Hierarchical structure** - Enables nested Doculisp blocks
 - **Location context** - Position information for debugging

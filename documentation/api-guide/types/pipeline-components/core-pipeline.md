@@ -8,14 +8,18 @@ Main compilation orchestrator interface that coordinates the entire processing p
 
 ```typescript
 interface IController {
-    compile(source: IPath, output: IPath | false): Promise<Result<void>>;
-    test(variableTable: IVariableTable): Promise<Result<void>>;
+    compile(sourcePath: IPath, destinationPath?: IPath | false): Result<string>[];
+    test(variableTable: IVariableTable): Result<string | false>[];
 }
 ```
 
 **Key Methods:**
 - **`compile`** - Full compilation from source file to output markdown
+  - Returns array of results (for .dlproj files with multiple documents)
+  - Each result contains the output file path on success
 - **`test`** - Validation mode that checks syntax without writing output
+  - Returns array of results for consistency with compile
+  - Returns validation status for each document
 - **Pipeline coordination** - Orchestrates all processing stages in sequence
 - **Error propagation** - Collects and reports errors from any pipeline stage
 
@@ -23,11 +27,16 @@ interface IController {
 ```typescript
 const controller = container.buildAs<IController>('controller');
 
-// Compile to file
-const result = await controller.compile(sourcePath, outputPath);
+// Compile to file (returns array of results)
+const results = controller.compile(sourcePath, outputPath);
+results.forEach(result => {
+    if (result.success) {
+        console.log(`Compiled: ${result.value}`);
+    }
+});
 
 // Test validation only
-const testResult = await controller.test(variableTable);
+const testResults = controller.test(variableTable);
 ```
 
 <!-- (dl (##iinclude-builder-type `IIncludeBuilder`)) -->
@@ -36,33 +45,38 @@ Full AST building interface with external file inclusion and dependency resoluti
 
 ```typescript
 interface IIncludeBuilder {
-    build(doculisp: IDoculisp, variableTable: IVariableTable): Promise<Result<ISectionWriter>>;
+    parse(variableTable: IVariableTable): Result<IDoculisp | IEmptyDoculisp>;
+    parseProject(path: IPath, variableTable: IVariableTable): Result<IProjectDocuments>;
+    parseExternals(doculisp: Result<IDoculisp | IEmptyDoculisp>, variableTable: IVariableTable): Result<IDoculisp | IEmptyDoculisp>;
 }
 ```
 
 **Capabilities:**
-- **Include resolution** - Process external file dependencies recursively
-- **AST completion** - Build complete document tree with all includes
+- **Parse** - Process a single Doculisp document through the complete pipeline
+- **Parse project** - Process project files (.dlproj) to extract document definitions
+- **Parse externals** - Resolve external file dependencies recursively
 - **Variable context** - Manage shared variables across included files
 - **Error aggregation** - Collect errors from all included documents
 
 **Processing Flow:**
-1. **Parse includes** - Identify external file references
-2. **Recursive processing** - Process each included file through full pipeline
-3. **Dependency resolution** - Handle nested includes and circular reference detection
-4. **Tree assembly** - Combine all processed content into unified structure
+1. **Parse document** - Run complete pipeline on source file
+2. **Identify includes** - Find external file references in semantic structure
+3. **Recursive processing** - Process each included file through full pipeline
+4. **Dependency resolution** - Handle nested includes and circular reference detection
+5. **Structure assembly** - Combine all processed content into unified IDoculisp
 
 <!-- (dl (##istring-writer-type `IStringWriter`)) -->
 
-Interface for converting processed AST structures to final markdown output:
-
-```typescript
-interface IStringWriter {
-    writeString(sectionWriter: ISectionWriter): Result<string>;
+InterfaceAst(astMaybe: Result<IDoculisp | IEmptyDoculisp>, variableTable: IVariableTable): Result<string>;
 }
 ```
 
 **Responsibilities:**
+- **Markdown generation** - Convert IDoculisp semantic structures to markdown syntax
+- **Content formatting** - Apply proper spacing, headings, and structure
+- **Table of contents** - Generate TOC based on configuration
+- **Link resolution** - Convert path references to proper markdown links
+- **Result handling** - Process Result types and propagate error
 - **Markdown generation** - Convert semantic structures to markdown syntax
 - **Content formatting** - Apply proper spacing, headings, and structure
 - **Table of contents** - Generate TOC based on configuration
