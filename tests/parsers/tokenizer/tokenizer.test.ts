@@ -214,85 +214,58 @@ describe('tokenizer', () => {
             });
         });
 
-        it('should fail when space follows opening parenthesis', () => {
-            const input = '<!-- (dl ( identifier)) -->';
-            const location = buildProjectLocation(BASIC_SAMPLE_DOCUMENT, 1, 1);
-            
-            const result = toResult(input, location);
-            
-            verifyWithGiven(result, undefined, input);
-        });
+        // Helper to test whitespace validation patterns
+        const testWhitespaceValidation = (description: string, input: string) => {
+            it(description, () => {
+                const location = buildProjectLocation(BASIC_SAMPLE_DOCUMENT, 1, 1);
+                const result = toResult(input, location);
+                verifyWithGiven(result, undefined, input);
+            });
+        };
 
-        it('should fail when newline follows opening parenthesis', () => {
-            const input = '<!-- (dl (\nidentifier)) -->';
-            const location = buildProjectLocation(BASIC_SAMPLE_DOCUMENT, 1, 1);
-            
-            const result = toResult(input, location);
-            
-            verifyWithGiven(result, undefined, input);
-        });
+        testWhitespaceValidation(
+            'should fail when space follows opening parenthesis',
+            '<!-- (dl ( identifier)) -->'
+        );
 
-        it('should fail when tab follows opening parenthesis', () => {
-            const input = '<!-- (dl (\tidentifier)) -->';
-            const location = buildProjectLocation(BASIC_SAMPLE_DOCUMENT, 1, 1);
-            
-            const result = toResult(input, location);
-            
-            verifyWithGiven(result, undefined, input);
-        });
+        testWhitespaceValidation(
+            'should fail when newline follows opening parenthesis',
+            '<!-- (dl (\nidentifier)) -->'
+        );
 
-        it('should fail when multiple whitespace follows opening parenthesis', () => {
-            const input = '<!-- (dl ( \n\t identifier)) -->';
-            const location = buildProjectLocation(BASIC_SAMPLE_DOCUMENT, 1, 1);
-            
-            const result = toResult(input, location);
-            
-            verifyWithGiven(result, undefined, input);
-        });
+        testWhitespaceValidation(
+            'should fail when tab follows opening parenthesis',
+            '<!-- (dl (\tidentifier)) -->'
+        );
 
-        it('should fail with Windows line endings after opening parenthesis', () => {
-            const input = '<!-- (dl (\r\nidentifier)) -->';
-            const location = buildProjectLocation(BASIC_SAMPLE_DOCUMENT, 1, 1);
-            
-            const result = toResult(input, location);
-            
-            verifyWithGiven(result, undefined, input);
-        });
+        testWhitespaceValidation(
+            'should fail when multiple whitespace follows opening parenthesis',
+            '<!-- (dl ( \n\t identifier)) -->'
+        );
 
-        it('should fail in nested context with whitespace', () => {
-            const input = '<!-- (dl (outer ( inner))) -->';
-            const location = buildProjectLocation(BASIC_SAMPLE_DOCUMENT, 1, 1);
-            
-            const result = toResult(input, location);
-            
-            verifyWithGiven(result, undefined, input);
-        });
+        testWhitespaceValidation(
+            'should fail with Windows line endings after opening parenthesis',
+            '<!-- (dl (\r\nidentifier)) -->'
+        );
 
-        it('should succeed when identifier immediately follows opening parenthesis', () => {
-            const input = '<!-- (dl (identifier)) -->';
-            const location = buildProjectLocation(BASIC_SAMPLE_DOCUMENT, 1, 1);
-            
-            const result = toResult(input, location);
-            
-            verifyWithGiven(result, undefined, input);
-        });
+        testWhitespaceValidation(
+            'should fail in nested context with whitespace',
+            '<!-- (dl (outer ( inner))) -->'
+        );
 
-        it('should succeed with whitespace before closing parenthesis', () => {
-            const input = '<!-- (dl (identifier )) -->';
-            const location = buildProjectLocation(BASIC_SAMPLE_DOCUMENT, 1, 1);
-            
-            const result = toResult(input, location);
-            
-            verifyWithGiven(result, undefined, input);
-        });
+        testWhitespaceValidation(
+            'should succeed when identifier immediately follows opening parenthesis',
+            '<!-- (dl (identifier)) -->'
+        );
 
-        it('should succeed with whitespace in parameters', () => {
-            const input = '<!-- (dl (command parameter with spaces)) -->';
-            const location = buildProjectLocation(BASIC_SAMPLE_DOCUMENT, 1, 1);
-            
-            const result = toResult(input, location);
-            
-            verifyWithGiven(result, undefined, input);
-        });
+        testWhitespaceValidation(
+            'should succeed with whitespace before closing parenthesis',
+            '<!-- (dl (identifier )) -->'
+        );
+
+        testWhitespaceValidation(
+            'should succeed with whitespace in parameters',
+            '<!-- (dl (command parameter with spaces)) -->'
+        );
     });
 });
