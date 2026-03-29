@@ -160,221 +160,161 @@ describe('document', () => {
         parse = testable.document.resultBuilder(container);
     });
 
-    it('should not allow a document with a zero depth.', () => {
-        const result = parse('hello', buildProjectLocation('C:/my_document.md', 0, 6));
-        
+    // Helper functions to reduce duplication
+    const parseAndVerify = (content: string, path: string, depth: number, index: number) => {
+        const result = parse(content, buildProjectLocation(path, depth, index));
         verifyAsJson(result);
+    };
+
+    const parseAndVerifyWithGiven = (content: string, path: string, depth: number, index: number) => {
+        const result = parse(content, buildProjectLocation(path, depth, index));
+        verifyWithGiven(result, undefined, content);
+    };
+
+    it('should not allow a document with a zero depth.', () => {
+        parseAndVerify('hello', 'C:/my_document.md', 0, 6);
     });
 
     it('should not allow a document with a negative depth.', () => {
-        const result = parse('hello', buildProjectLocation('C:/my_document.md', -1, 6));
-        
-        verifyAsJson(result);
+        parseAndVerify('hello', 'C:/my_document.md', -1, 6);
     });
 
     it('should not allow a document with a zero index.', () => {
-        const result = parse('', buildProjectLocation('C:/my_document.md', 4, 0));
-        
-        verifyAsJson(result);
+        parseAndVerify('', 'C:/my_document.md', 4, 0);
     });
 
     it('should not allow a document with a negative index.', () => {
-        const result = parse('', buildProjectLocation('C:/my_document.md', 4, -1));
-        
-        verifyAsJson(result);
+        parseAndVerify('', 'C:/my_document.md', 4, -1);
     });
 
     describe('parsing markup', () => {
         describe('text', () => {
             it('should successfully parse an empty string', () => {
-            const result = parse(TEXT_FIXTURES.empty, buildProjectLocation('C:/my_document.md', 4, 8));
+                parseAndVerify(TEXT_FIXTURES.empty, 'C:/my_document.md', 4, 8);
+            });
     
-            verifyAsJson(result);
-        });
-    
-        it('should parse a simple text of "hello"', () => {
-            const result = parse(TEXT_FIXTURES.simpleText, buildProjectLocation('C:/my_document.md', 3, 6));
-    
-            verifyAsJson(result);
-        });
+            it('should parse a simple text of "hello"', () => {
+                parseAndVerify(TEXT_FIXTURES.simpleText, 'C:/my_document.md', 3, 6);
+            });
 
-        it('should parse text of "blow fish"', () => {
-            const result = parse(TEXT_FIXTURES.twoWords, buildProjectLocation('C:/my_document.md', 7, 2));
-            verifyAsJson(result);
-        });
+            it('should parse text of "blow fish"', () => {
+                parseAndVerify(TEXT_FIXTURES.twoWords, 'C:/my_document.md', 7, 2);
+            });
 
-        it('should parse text of " blow fish"', () => {
-            const result = parse(TEXT_FIXTURES.leadingSpace, buildProjectLocation('C:/my_document.md', 4, 6));
-            verifyAsJson(result);
-        });
+            it('should parse text of " blow fish"', () => {
+                parseAndVerify(TEXT_FIXTURES.leadingSpace, 'C:/my_document.md', 4, 6);
+            });
 
-        it('should parse text of " blow fish "', () => {
-            const result = parse(TEXT_FIXTURES.surroundingSpaces, buildProjectLocation('C:/my_document.md', 7, 1));
-            verifyAsJson(result);
-        });
+            it('should parse text of " blow fish "', () => {
+                parseAndVerify(TEXT_FIXTURES.surroundingSpaces, 'C:/my_document.md', 7, 1);
+            });
 
-        it('should parse text of "   \\r\\n blow fish"', () => {
-            const result = parse(TEXT_FIXTURES.lineBreakWithSpaces, buildProjectLocation('C:/my_document.md', 1, 8));
-            verifyAsJson(result);
-        });
+            it('should parse text of "   \\r\\n blow fish"', () => {
+                parseAndVerify(TEXT_FIXTURES.lineBreakWithSpaces, 'C:/my_document.md', 1, 8);
+            });
 
-        it('should parse nested multiline code blocks', () => {
-            const result = parse(CODE_BLOCK_FIXTURES.nestedCodeBlocks, buildProjectLocation('C:/markdown/multiline.md', 4, 3));
+            it('should parse nested multiline code blocks', () => {
+                parseAndVerify(CODE_BLOCK_FIXTURES.nestedCodeBlocks, 'C:/markdown/multiline.md', 4, 3);
+            });
 
-            verifyAsJson(result);
-        });
-
-        it('should parse nested multiline code blocks that end with the file', () => {
-            const result = parse(CODE_BLOCK_FIXTURES.nestedCodeBlocksEndOfFile, buildProjectLocation('C:/markdown/multiline.md', 4, 3));
-
-            verifyAsJson(result);
-        });
+            it('should parse nested multiline code blocks that end with the file', () => {
+                parseAndVerify(CODE_BLOCK_FIXTURES.nestedCodeBlocksEndOfFile, 'C:/markdown/multiline.md', 4, 3);
+            });
 
             it('should not parse nested multiline code blocks when closing markers are unbalanced', () => {
-                const md = `An example of an markdown document with nested code blocks that do not close:
-    \`\`\`\`markdown
-    # A document
-    
-    \`\`\`html
-    <a href="www.google.com">Google</a>
-    \`\`\`
-    
-    ## Sub section title
-    \`\`\`\`\`
-    `;
-                const result = parse(md, buildProjectLocation('C:/markdown/multiline.md', 4, 3));
-    
-                verifyAsJson(result);
+                parseAndVerify(CODE_BLOCK_FIXTURES.nestedCodeBlocksUnbalanced, 'C:/markdown/multiline.md', 4, 3);
             });
         });
 
         describe('html comments', () => {
             it('should not parse html comments', () => {
-            const md = HTML_COMMENT_FIXTURES.simpleComment.trim();
-                const result = parse(md, buildProjectLocation('C:/readme.md', 5, 2));
-    
-                verifyAsJson(result);
+                const md = HTML_COMMENT_FIXTURES.simpleComment.trim();
+                parseAndVerify(md, 'C:/readme.md', 5, 2);
             });
     
             it('should not parse html but preserve new line counts comments', () => {
-            const result = parse(HTML_COMMENT_FIXTURES.multilineComment, buildProjectLocation('C:/readme.md', 8, 3));
-                verifyAsJson(result);
+                parseAndVerify(HTML_COMMENT_FIXTURES.multilineComment, 'C:/readme.md', 8, 3);
             });
     
             it('should not parse html comments in the middle of text.', () => {
-            const result = parse(HTML_COMMENT_FIXTURES.commentInMiddle, buildProjectLocation('C:/comments/helloWorld.md', 1, 2));
-                verifyAsJson(result);
+                parseAndVerify(HTML_COMMENT_FIXTURES.commentInMiddle, 'C:/comments/helloWorld.md', 1, 2);
             });
     
-            it('should parse html comments inside an inline code block', () => {
-            const result = parse(CODE_BLOCK_FIXTURES.inlineCodeWithComment, buildProjectLocation('C:/html/inline.md', 5, 3));
+                it('should parse html comments inside an inline code block', () => {
+                parseAndVerify(CODE_BLOCK_FIXTURES.inlineCodeWithComment, 'C:/html/inline.md', 5, 3);
+            });
 
-            verifyAsJson(result);
-        });
+            it('should parse an inline codeblock in middle of sentence', () => {
+                parseAndVerify(CODE_BLOCK_FIXTURES.inlineCodeInSentence, 'C:/html/inline.md', 5, 3);
+            });
 
-        it('should parse an inline codeblock in middle of sentence', () => {
-            const result = parse(CODE_BLOCK_FIXTURES.inlineCodeInSentence, buildProjectLocation('C:/html/inline.md', 5, 3));
-            
-            verifyAsJson(result);
-        });
+            it('should parse html comments inside a multiline code block', () => {
+                parseAndVerify(CODE_BLOCK_FIXTURES.codeBlockWithHtmlComments, 'C:/markdown/multiline.md', 4, 3);
+            });
 
-        it('should parse html comments inside a multiline code block', () => {
-            const result = parse(CODE_BLOCK_FIXTURES.codeBlockWithHtmlComments, buildProjectLocation('C:/markdown/multiline.md', 4, 3));
+            it('should fail to parse if html comment is not closed', () => {
+                parseAndVerify(HTML_COMMENT_FIXTURES.unclosedComment, 'C:/examples/bad.md', 5, 4);
+            });
 
-            verifyAsJson(result);
-        });
+            it('should fail if inline code block does not close', () => {
+                parseAndVerify(CODE_BLOCK_FIXTURES.unclosedInlineCodeBlock, 'C:/bad/noCloseInline.md', 8, 4);
+            });
 
-        it('should fail to parse if html comment is not closed', () => {
-            const result = parse(HTML_COMMENT_FIXTURES.unclosedComment, buildProjectLocation('C:/examples/bad.md', 5, 4));
+            it('should fail to parse an inline code block with a line break', () => {
+                parseAndVerify(CODE_BLOCK_FIXTURES.inlineCodeBlockWithLineBreak, 'C:/examples/badInline.md', 6, 8);
+            });
 
-            verifyAsJson(result);
-        });
-
-        it('should fail if inline code block does not close', () => {
-            const result = parse(CODE_BLOCK_FIXTURES.unclosedInlineCodeBlock, buildProjectLocation('C:/bad/noCloseInline.md', 8, 4));
-
-            verifyAsJson(result);
-        });
-
-        it('should fail to parse an inline code block with a line break', () => {
-            const result = parse(CODE_BLOCK_FIXTURES.inlineCodeBlockWithLineBreak, buildProjectLocation('C:/examples/badInline.md', 6, 8));
-
-            verifyAsJson(result);
-        });
-
-        it('should fail to parse a multiline code block that does not close', () => {
-            const result = parse(CODE_BLOCK_FIXTURES.unclosedMultilineCodeBlock, buildProjectLocation('C:/bad/examples/multiline.md', 2, 7));
-
-            verifyAsJson(result);
-        });
+            it('should fail to parse a multiline code block that does not close', () => {
+                parseAndVerify(CODE_BLOCK_FIXTURES.unclosedMultilineCodeBlock, 'C:/bad/examples/multiline.md', 2, 7);
+            });
     });
 
     describe('Doculisp', () => {
-        it('should parse a doculisp block at top of file', () => {
-                const result = parse(DOCULISP_FIXTURES.singleLineBlock, buildProjectLocation('_main.md', 3, 7));
-
-                verifyWithGiven(result, undefined, DOCULISP_FIXTURES.singleLineBlock);
+            it('should parse a doculisp block at top of file', () => {
+                parseAndVerifyWithGiven(DOCULISP_FIXTURES.singleLineBlock, '_main.md', 3, 7);
             });
 
             it('should parse a multiline doculisp block', () => {
-                const result = parse(DOCULISP_FIXTURES.multilineBlock, buildProjectLocation('S:/ome/file.md', 2, 1));
-
-                verifyWithGiven(result, undefined, DOCULISP_FIXTURES.multilineBlock);
+                parseAndVerifyWithGiven(DOCULISP_FIXTURES.multilineBlock, 'S:/ome/file.md', 2, 1);
             });
             
             it('should parse a doculisp block in the middle of file', () => {
-                const result = parse(DOCULISP_FIXTURES.blockInMiddle, buildProjectLocation('_main.md', 7, 5));
-
-                verifyWithGiven(result, undefined, DOCULISP_FIXTURES.blockInMiddle);
+                parseAndVerifyWithGiven(DOCULISP_FIXTURES.blockInMiddle, '_main.md', 7, 5);
             });
 
             it('should parse lisp outside an html tag as text', () => {
-                const result = parse(DOCULISP_FIXTURES.lispOutsideHtml, buildProjectLocation('documentExample.md', 3, 4));
-
-                verifyAsJson(result);
+                parseAndVerify(DOCULISP_FIXTURES.lispOutsideHtml, 'documentExample.md', 3, 4);
             });
 
             it('should parse Doculisp outside an html tag as text', () => {
-                const result = parse(DOCULISP_FIXTURES.doculispOutsideHtml, buildProjectLocation('documentExample2.md', 8, 8));
-
-                verifyAsJson(result);
+                parseAndVerify(DOCULISP_FIXTURES.doculispOutsideHtml, 'documentExample2.md', 8, 8);
             });
 
             it('should allow for an escaped parentheses in a parameter', () => {
-                const result = parse(DOCULISP_FIXTURES.escapedParentheses, buildProjectLocation('./_main.md', 2, 1));
-                verifyWithGiven(result, undefined, DOCULISP_FIXTURES.escapedParentheses);
+                parseAndVerifyWithGiven(DOCULISP_FIXTURES.escapedParentheses, './_main.md', 2, 1);
             });
 
             it('should parse Doculisp that contains a get-path in a link', () => {
-                const result = parse(DOCULISP_FIXTURES.getPathInLink, buildProjectLocation('./_main.md', 2, 1));
-                verifyWithGiven(result, undefined, DOCULISP_FIXTURES.getPathInLink);
+                parseAndVerifyWithGiven(DOCULISP_FIXTURES.getPathInLink, './_main.md', 2, 1);
             });
         });
     });
 
     describe('parsing .dlisp files', () => {
         it('should handle a correctly formatted file', () => {
-            let result = parse(DLISP_FILE_FIXTURES.validFile, buildProjectLocation('C:/main.dlisp', 7, 1));
-
-            verifyAsJson(result);
+            parseAndVerify(DLISP_FILE_FIXTURES.validFile, 'C:/main.dlisp', 7, 1);
         });
 
         it('should fail to parse a file that contains a dl identifier', () => {
-            let result = parse(DLISP_FILE_FIXTURES.fileWithDlIdentifier, buildProjectLocation('C:/bad/extraDl.dlisp', 5, 6));
-
-            verifyAsJson(result);
+            parseAndVerify(DLISP_FILE_FIXTURES.fileWithDlIdentifier, 'C:/bad/extraDl.dlisp', 5, 6);
         });
 
         it('should handle a file with parentheses that do not close', () => {
-            let result = parse(DLISP_FILE_FIXTURES.unclosedParentheses, buildProjectLocation('C:/main.dlisp', 6, 1));
-
-            verifyAsJson(result);
+            parseAndVerify(DLISP_FILE_FIXTURES.unclosedParentheses, 'C:/main.dlisp', 6, 1);
         });
 
         it('should handle a file with to many parenthesis', () => {
-            let result = parse(DLISP_FILE_FIXTURES.tooManyParentheses, buildProjectLocation('C:/main.dlisp', 5, 8));
-
-            verifyAsJson(result);
+            parseAndVerify(DLISP_FILE_FIXTURES.tooManyParentheses, 'C:/main.dlisp', 5, 8);
         });
     });
 });
