@@ -214,28 +214,30 @@ describe('document', () => {
 
     describe('parsing markup', () => {
         describe('text', () => {
-            it('should successfully parse an empty string', () => {
-                parseAndVerify(TEXT_FIXTURES.empty, 'C:/my_document.md', HEADING_DEPTH.LEVEL_4, DOCUMENT_INDEX.EIGHTH);
-            });
-    
-            it('should parse a simple text of "hello"', () => {
-                parseAndVerify(TEXT_FIXTURES.simpleText, 'C:/my_document.md', HEADING_DEPTH.LEVEL_3, DOCUMENT_INDEX.SIXTH);
-            });
+            describe('basic text', () => {
+                it('should successfully parse an empty string', () => {
+                    parseAndVerify(TEXT_FIXTURES.empty, 'C:/my_document.md', HEADING_DEPTH.LEVEL_4, DOCUMENT_INDEX.EIGHTH);
+                });
+        
+                it('should parse a simple text of "hello"', () => {
+                    parseAndVerify(TEXT_FIXTURES.simpleText, 'C:/my_document.md', HEADING_DEPTH.LEVEL_3, DOCUMENT_INDEX.SIXTH);
+                });
 
-            it('should parse text of "blow fish"', () => {
-                parseAndVerify(TEXT_FIXTURES.twoWords, 'C:/my_document.md', HEADING_DEPTH.LEVEL_7, DOCUMENT_INDEX.SECOND);
-            });
+                it('should parse text of "blow fish"', () => {
+                    parseAndVerify(TEXT_FIXTURES.twoWords, 'C:/my_document.md', HEADING_DEPTH.LEVEL_7, DOCUMENT_INDEX.SECOND);
+                });
 
-            it('should parse text of " blow fish"', () => {
-                parseAndVerify(TEXT_FIXTURES.leadingSpace, 'C:/my_document.md', HEADING_DEPTH.LEVEL_4, DOCUMENT_INDEX.SIXTH);
-            });
+                it('should parse text of " blow fish"', () => {
+                    parseAndVerify(TEXT_FIXTURES.leadingSpace, 'C:/my_document.md', HEADING_DEPTH.LEVEL_4, DOCUMENT_INDEX.SIXTH);
+                });
 
-            it('should parse text of " blow fish "', () => {
-                parseAndVerify(TEXT_FIXTURES.surroundingSpaces, 'C:/my_document.md', HEADING_DEPTH.LEVEL_7, DOCUMENT_INDEX.FIRST);
-            });
+                it('should parse text of " blow fish "', () => {
+                    parseAndVerify(TEXT_FIXTURES.surroundingSpaces, 'C:/my_document.md', HEADING_DEPTH.LEVEL_7, DOCUMENT_INDEX.FIRST);
+                });
 
-            it('should parse text of "   \\r\\n blow fish"', () => {
-                parseAndVerify(TEXT_FIXTURES.lineBreakWithSpaces, 'C:/my_document.md', HEADING_DEPTH.ROOT, DOCUMENT_INDEX.EIGHTH);
+                it('should parse text of "   \\r\\n blow fish"', () => {
+                    parseAndVerify(TEXT_FIXTURES.lineBreakWithSpaces, 'C:/my_document.md', HEADING_DEPTH.ROOT, DOCUMENT_INDEX.EIGHTH);
+                });
             });
 
             it('should parse nested multiline code blocks', () => {
