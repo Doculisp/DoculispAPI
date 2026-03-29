@@ -1,11 +1,13 @@
 import { containerPromise } from "../../../src/moduleLoader";
-import { verifyAsJsonJest, verifyWithGivenJest } from "../../tools";
+import { verifyAsJsonJest } from "../../tools";
 import { IContainer, ITestableContainer } from "../../../src/types/types.containers";
 import { TokenFunction, TokenizedDocument } from '../../../src/types/types.tokens';
 import { IFail, ILocation, IRange, ISuccess, IUtil, Result, IProjectLocation } from "../../../src/types/types.general";
 import { DocumentMap } from "../../../src/types/types.document";
-import { buildProjectLocation, testable, buildPath, buildLocation } from "../../testHelpers";
-import { IPath, PathConstructor } from "../../../src/types/types.filePath";
+import { testable, buildPath, buildLocation } from "../../testHelpers";
+import { IPath } from "../../../src/types/types.filePath";
+import { createTokenizerBuilders, CreateDocMapFn, CreatePartFn } from "./tokenizer.builders";
+import { setupTokenizerEnvironment, createTokenizeScenario, createWhitespaceValidator } from "./tokenizer.helpers";
 
 describe('tokenizer', () => {
     const BASIC_SAMPLE_DOCUMENT = 'D:/comments/simple.md';
@@ -16,13 +18,14 @@ describe('tokenizer', () => {
     let fail: (message: string, range?: IRange | undefined, documentPath?: IPath) => IFail = undefined as any;
     let util: IUtil = undefined as any;
     let getLocation: (path: string, depth: number, index: number, line: number, char: number, extension?: string | false) => ILocation = undefined as any;
-
-    // Consolidated setup logic for tokenizer environment configuration
-    const setupTokenizerEnvironment = (environment: ITestableContainer): IUtil => {
-        const pathHandler: PathConstructor = (filePath) => buildPath(filePath);
-        environment.replaceValue(pathHandler, 'pathConstructor');
-        return environment.buildAs<IUtil>('util');
-    };
+    
+    // Test data builders
+    let createDocMap: CreateDocMapFn = undefined as any;
+    let createTextPart: CreatePartFn = undefined as any;
+    let createLispPart: CreatePartFn = undefined as any;
+    
+    // Semantic test scenarios
+    let tokenizeScenario: ReturnType<typeof createTokenizeScenario> = undefined as any;
 
     beforeEach(async () => {
         container = await containerPromise;
@@ -33,37 +36,16 @@ describe('tokenizer', () => {
 
         ok = util.ok;
         fail = util.fail('Tokenization')('Parse Error');
-    });
-
-    // Test data builders
-    const createDocMap = (parts: any[], depth: number = 1, index: number = 1, path: string = BASIC_SAMPLE_DOCUMENT) => ok({
-        projectLocation: buildProjectLocation(path, depth, index),
-        parts: parts,
-    });
-
-    const createTextPart = (text: string, line: number, char: number, path: string = BASIC_SAMPLE_DOCUMENT) => ({
-        type: 'text' as const,
-        text: text,
-        location: getLocation(path, 0, 0, line, char),
-    });
-
-    const createLispPart = (text: string, line: number, char: number, path: string = BASIC_SAMPLE_DOCUMENT) => ({
-        type: 'lisp' as const,
-        text: text,
-        location: getLocation(path, 0, 0, line, char),
-    });
-
-    // Semantic test scenario helpers
-    const tokenizeScenario = {
-        text: (text: string, depth: number = 6, index: number = 8) => 
-            tokenizer(createDocMap([createTextPart(text, 5, 23)], depth, index)),
         
-        lisp: (code: string, depth: number = 2, index: number = 7, line: number = 4, char: number = 2, path: string = BASIC_SAMPLE_DOCUMENT) => 
-            tokenizer(createDocMap([createLispPart(code, line, char, path)], depth, index, path)),
+        // Initialize test data builders
+        const builders = createTokenizerBuilders(ok, getLocation, BASIC_SAMPLE_DOCUMENT);
+        createDocMap = builders.createDocMap;
+        createTextPart = builders.createTextPart;
+        createLispPart = builders.createLispPart;
         
-        empty: () => 
-            tokenizer(createDocMap([], 4, 8, 'c:/empty/readme.md')),
-    };
+        // Initialize semantic test scenarios
+        tokenizeScenario = createTokenizeScenario(tokenizer, createDocMap, createTextPart, createLispPart);
+    });
 
     it('should fail if document parsing failed', () => {
         const parseResult = fail('This document did not parse', undefined, buildPath('X:/non-exist.dlisp')) as Result<DocumentMap>;
@@ -203,15 +185,8 @@ describe('tokenizer', () => {
                 getLocation = buildLocation(util);
             });
         });
-
-        // Helper to test whitespace validation patterns
-        const testWhitespaceValidation = (description: string, input: string) => {
-            it(description, () => {
-                const location = buildProjectLocation(BASIC_SAMPLE_DOCUMENT, 1, 1);
-                const result = toResult(input, location);
-                verifyWithGivenJest(result, input);
-            });
-        };
+        
+        const testWhitespaceValidation = createWhitespaceValidator(() => toResult, BASIC_SAMPLE_DOCUMENT);
 
         testWhitespaceValidation(
             'should fail when space follows opening parenthesis',
