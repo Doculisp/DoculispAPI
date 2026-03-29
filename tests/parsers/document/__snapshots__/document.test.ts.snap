@@ -1,0 +1,1067 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`document parsing .dlisp files parsing failures should fail to parse a file that contains a dl identifier 1`] = `
+{
+  "documentPath": "C:/bad/extraDl.dlisp",
+  "failureCategory": "Parse Error",
+  "info": "Embedded Doculisp block detected at 'C:/bad/extraDl.dlisp' (Line: 1, Char: 1) inside block.",
+  "message": "Embedded Doculisp block detected at 'C:/bad/extraDl.dlisp' (Line: 1, Char: 1) inside block. (Line 1, Char 1)",
+  "processingStep": "Document Parsing",
+  "range": {
+    "end": {
+      "char": 1,
+      "documentDepth": 5,
+      "documentIndex": 6,
+      "documentPath": "C:/bad/extraDl.dlisp",
+      "line": 1,
+    },
+    "start": {
+      "char": 1,
+      "documentDepth": 5,
+      "documentIndex": 6,
+      "documentPath": "C:/bad/extraDl.dlisp",
+      "line": 1,
+    },
+  },
+  "success": false,
+}
+`;
+
+exports[`document parsing .dlisp files parsing failures should handle a file with parentheses that do not close 1`] = `
+{
+  "documentPath": "C:/main.dlisp",
+  "failureCategory": "Parse Error",
+  "info": "Unclosed Doculisp block at 'C:/main.dlisp'.",
+  "message": "Unclosed Doculisp block at 'C:/main.dlisp'. (Line 2, Char 1)",
+  "processingStep": "Document Parsing",
+  "range": {
+    "end": {
+      "char": 5,
+      "documentDepth": 6,
+      "documentIndex": 1,
+      "documentPath": "C:/main.dlisp",
+      "line": 2,
+    },
+    "start": {
+      "char": 1,
+      "documentDepth": 6,
+      "documentIndex": 1,
+      "documentPath": "C:/main.dlisp",
+      "line": 2,
+    },
+  },
+  "success": false,
+}
+`;
+
+exports[`document parsing .dlisp files parsing failures should handle a file with to many parenthesis 1`] = `
+{
+  "documentPath": "C:/main.dlisp",
+  "failureCategory": "Parse Error",
+  "info": "Extra content found outside parentheses at 'C:/main.dlisp'.",
+  "message": "Extra content found outside parentheses at 'C:/main.dlisp'. (Line 1, Char 34)",
+  "processingStep": "Document Parsing",
+  "range": {
+    "end": {
+      "char": 35,
+      "documentDepth": 5,
+      "documentIndex": 8,
+      "documentPath": "C:/main.dlisp",
+      "line": 1,
+    },
+    "start": {
+      "char": 34,
+      "documentDepth": 5,
+      "documentIndex": 8,
+      "documentPath": "C:/main.dlisp",
+      "line": 1,
+    },
+  },
+  "success": false,
+}
+`;
+
+exports[`document parsing .dlisp files successful parsing should handle a correctly formatted file 1`] = `
+{
+  "success": true,
+  "value": {
+    "parts": [
+      {
+        "location": {
+          "char": 1,
+          "documentDepth": 7,
+          "documentIndex": 1,
+          "documentPath": "C:/main.dlisp",
+          "line": 2,
+        },
+        "text": "(section-meta
+    (title Doculisp)
+    (include
+        (Section ./structure.md)
+        (Section ./doculisp.md)
+        (Section ./section-meta.md)
+        (Section ./content.md)
+        (Section ./headings.md)
+        (Section ./comment.md)
+        (Section ./keywords.md)
+    )
+)
+
+(content (toc numbered-labeled))",
+        "type": "lisp",
+      },
+    ],
+    "projectLocation": {
+      "documentDepth": 7,
+      "documentIndex": 1,
+      "documentPath": "C:/main.dlisp",
+    },
+  },
+}
+`;
+
+exports[`document parsing markup Doculisp embedded blocks should allow for an escaped parentheses in a parameter 1`] = `
+{
+  "000_given": undefined,
+  "001_given": "<!-- (dl (# My \\(really awesome header)) -->",
+  "999_received": {
+    "success": true,
+    "value": {
+      "parts": [
+        {
+          "location": {
+            "char": 10,
+            "documentDepth": 2,
+            "documentIndex": 1,
+            "documentPath": "./_main.md",
+            "line": 1,
+          },
+          "text": "(# My \\(really awesome header)",
+          "type": "lisp",
+        },
+      ],
+      "projectLocation": {
+        "documentDepth": 2,
+        "documentIndex": 1,
+        "documentPath": "./_main.md",
+      },
+    },
+  },
+}
+`;
+
+exports[`document parsing markup Doculisp embedded blocks should parse Doculisp that contains a get-path in a link 1`] = `
+{
+  "000_given": undefined,
+  "001_given": "<!-- (dl
+(section-meta
+    (title Using Dynamic Path)
+)
+) -->
+
+[back](<!-- (dl (get-path readme)) -->)
+                ",
+  "999_received": {
+    "success": true,
+    "value": {
+      "parts": [
+        {
+          "location": {
+            "char": 1,
+            "documentDepth": 2,
+            "documentIndex": 1,
+            "documentPath": "./_main.md",
+            "line": 2,
+          },
+          "text": "(section-meta
+    (title Using Dynamic Path)
+)",
+          "type": "lisp",
+        },
+        {
+          "location": {
+            "char": 1,
+            "documentDepth": 2,
+            "documentIndex": 1,
+            "documentPath": "./_main.md",
+            "line": 7,
+          },
+          "text": "[back](",
+          "type": "text",
+        },
+        {
+          "location": {
+            "char": 17,
+            "documentDepth": 2,
+            "documentIndex": 1,
+            "documentPath": "./_main.md",
+            "line": 7,
+          },
+          "text": "(get-path readme)",
+          "type": "lisp",
+        },
+        {
+          "location": {
+            "char": 39,
+            "documentDepth": 2,
+            "documentIndex": 1,
+            "documentPath": "./_main.md",
+            "line": 7,
+          },
+          "text": ")",
+          "type": "text",
+        },
+      ],
+      "projectLocation": {
+        "documentDepth": 2,
+        "documentIndex": 1,
+        "documentPath": "./_main.md",
+      },
+    },
+  },
+}
+`;
+
+exports[`document parsing markup Doculisp embedded blocks should parse a doculisp block at top of file 1`] = `
+{
+  "000_given": undefined,
+  "001_given": "<!-- (dl (# header)) -->",
+  "999_received": {
+    "success": true,
+    "value": {
+      "parts": [
+        {
+          "location": {
+            "char": 10,
+            "documentDepth": 3,
+            "documentIndex": 7,
+            "documentPath": "_main.md",
+            "line": 1,
+          },
+          "text": "(# header)",
+          "type": "lisp",
+        },
+      ],
+      "projectLocation": {
+        "documentDepth": 3,
+        "documentIndex": 7,
+        "documentPath": "_main.md",
+      },
+    },
+  },
+}
+`;
+
+exports[`document parsing markup Doculisp embedded blocks should parse a doculisp block in the middle of file 1`] = `
+{
+  "000_given": undefined,
+  "001_given": "# Title
+some text about title
+<!--
+Some lisp: (dl (# two)) -->
+Mickey Mouse Hotline.",
+  "999_received": {
+    "success": true,
+    "value": {
+      "parts": [
+        {
+          "location": {
+            "char": 1,
+            "documentDepth": 7,
+            "documentIndex": 5,
+            "documentPath": "_main.md",
+            "line": 1,
+          },
+          "text": "# Title",
+          "type": "text",
+        },
+        {
+          "location": {
+            "char": 1,
+            "documentDepth": 7,
+            "documentIndex": 5,
+            "documentPath": "_main.md",
+            "line": 2,
+          },
+          "text": "some text about title",
+          "type": "text",
+        },
+        {
+          "location": {
+            "char": 16,
+            "documentDepth": 7,
+            "documentIndex": 5,
+            "documentPath": "_main.md",
+            "line": 4,
+          },
+          "text": "(# two)",
+          "type": "lisp",
+        },
+        {
+          "location": {
+            "char": 1,
+            "documentDepth": 7,
+            "documentIndex": 5,
+            "documentPath": "_main.md",
+            "line": 5,
+          },
+          "text": "Mickey Mouse Hotline.",
+          "type": "text",
+        },
+      ],
+      "projectLocation": {
+        "documentDepth": 7,
+        "documentIndex": 5,
+        "documentPath": "_main.md",
+      },
+    },
+  },
+}
+`;
+
+exports[`document parsing markup Doculisp embedded blocks should parse a multiline doculisp block 1`] = `
+{
+  "000_given": undefined,
+  "001_given": "<!--
+(dl (# My heading))
+-->",
+  "999_received": {
+    "success": true,
+    "value": {
+      "parts": [
+        {
+          "location": {
+            "char": 5,
+            "documentDepth": 2,
+            "documentIndex": 1,
+            "documentPath": "S:/ome/file.md",
+            "line": 2,
+          },
+          "text": "(# My heading)",
+          "type": "lisp",
+        },
+      ],
+      "projectLocation": {
+        "documentDepth": 2,
+        "documentIndex": 1,
+        "documentPath": "S:/ome/file.md",
+      },
+    },
+  },
+}
+`;
+
+exports[`document parsing markup Doculisp outside html comments should parse Doculisp outside an html tag as text 1`] = `
+{
+  "success": true,
+  "value": {
+    "parts": [
+      {
+        "location": {
+          "char": 1,
+          "documentDepth": 8,
+          "documentIndex": 8,
+          "documentPath": "documentExample2.md",
+          "line": 1,
+        },
+        "text": "(dl (# Heading)) Hello Doculisp",
+        "type": "text",
+      },
+    ],
+    "projectLocation": {
+      "documentDepth": 8,
+      "documentIndex": 8,
+      "documentPath": "documentExample2.md",
+    },
+  },
+}
+`;
+
+exports[`document parsing markup Doculisp outside html comments should parse lisp outside an html tag as text 1`] = `
+{
+  "success": true,
+  "value": {
+    "parts": [
+      {
+        "location": {
+          "char": 1,
+          "documentDepth": 3,
+          "documentIndex": 4,
+          "documentPath": "documentExample.md",
+          "line": 1,
+        },
+        "text": "(# Heading) Hello Doculisp",
+        "type": "text",
+      },
+    ],
+    "projectLocation": {
+      "documentDepth": 3,
+      "documentIndex": 4,
+      "documentPath": "documentExample.md",
+    },
+  },
+}
+`;
+
+exports[`document parsing markup html comments parsing failures should fail if inline code block does not close 1`] = `
+{
+  "documentPath": "C:/bad/noCloseInline.md",
+  "failureCategory": "Parse Error",
+  "info": "Unclosed inline code block at 'C:/bad/noCloseInline.md'.",
+  "message": "Unclosed inline code block at 'C:/bad/noCloseInline.md'. (Line 1, Char 1)",
+  "processingStep": "Document Parsing",
+  "range": {
+    "end": {
+      "char": 2,
+      "documentDepth": 8,
+      "documentIndex": 4,
+      "documentPath": "C:/bad/noCloseInline.md",
+      "line": 1,
+    },
+    "start": {
+      "char": 1,
+      "documentDepth": 8,
+      "documentIndex": 4,
+      "documentPath": "C:/bad/noCloseInline.md",
+      "line": 1,
+    },
+  },
+  "success": false,
+}
+`;
+
+exports[`document parsing markup html comments parsing failures should fail to parse a multiline code block that does not close 1`] = `
+{
+  "documentPath": "C:/bad/examples/multiline.md",
+  "failureCategory": "Parse Error",
+  "info": "Unclosed multiline code block at 'C:/bad/examples/multiline.md'.",
+  "message": "Unclosed multiline code block at 'C:/bad/examples/multiline.md'. (Line 1, Char 1)",
+  "processingStep": "Document Parsing",
+  "range": {
+    "end": {
+      "char": 4,
+      "documentDepth": 2,
+      "documentIndex": 7,
+      "documentPath": "C:/bad/examples/multiline.md",
+      "line": 1,
+    },
+    "start": {
+      "char": 1,
+      "documentDepth": 2,
+      "documentIndex": 7,
+      "documentPath": "C:/bad/examples/multiline.md",
+      "line": 1,
+    },
+  },
+  "success": false,
+}
+`;
+
+exports[`document parsing markup html comments parsing failures should fail to parse an inline code block with a line break 1`] = `
+{
+  "documentPath": "C:/examples/badInline.md",
+  "failureCategory": "Parse Error",
+  "info": "Inline code block contains newline before closing at 'C:/examples/badInline.md'.",
+  "message": "Inline code block contains newline before closing at 'C:/examples/badInline.md'. (Line 1, Char 1)",
+  "processingStep": "Document Parsing",
+  "range": {
+    "end": {
+      "char": 2,
+      "documentDepth": 6,
+      "documentIndex": 8,
+      "documentPath": "C:/examples/badInline.md",
+      "line": 1,
+    },
+    "start": {
+      "char": 1,
+      "documentDepth": 6,
+      "documentIndex": 8,
+      "documentPath": "C:/examples/badInline.md",
+      "line": 1,
+    },
+  },
+  "success": false,
+}
+`;
+
+exports[`document parsing markup html comments parsing failures should fail to parse if html comment is not closed 1`] = `
+{
+  "documentPath": "C:/examples/bad.md",
+  "failureCategory": "Parse Error",
+  "info": "Unclosed HTML comment at 'C:/examples/bad.md'.",
+  "message": "Unclosed HTML comment at 'C:/examples/bad.md'. (Line 1, Char 1)",
+  "processingStep": "Document Parsing",
+  "range": {
+    "end": {
+      "char": 5,
+      "documentDepth": 5,
+      "documentIndex": 4,
+      "documentPath": "C:/examples/bad.md",
+      "line": 1,
+    },
+    "start": {
+      "char": 1,
+      "documentDepth": 5,
+      "documentIndex": 4,
+      "documentPath": "C:/examples/bad.md",
+      "line": 1,
+    },
+  },
+  "success": false,
+}
+`;
+
+exports[`document parsing markup html comments successful parsing should not parse html but preserve new line counts comments 1`] = `
+{
+  "success": true,
+  "value": {
+    "parts": [
+      {
+        "location": {
+          "char": 1,
+          "documentDepth": 8,
+          "documentIndex": 3,
+          "documentPath": "C:/readme.md",
+          "line": 4,
+        },
+        "text": "                     		hello bro",
+        "type": "text",
+      },
+    ],
+    "projectLocation": {
+      "documentDepth": 8,
+      "documentIndex": 3,
+      "documentPath": "C:/readme.md",
+    },
+  },
+}
+`;
+
+exports[`document parsing markup html comments successful parsing should not parse html comments 1`] = `
+{
+  "success": true,
+  "value": {
+    "parts": [
+      {
+        "location": {
+          "char": 27,
+          "documentDepth": 5,
+          "documentIndex": 2,
+          "documentPath": "C:/readme.md",
+          "line": 1,
+        },
+        "text": "hello bro",
+        "type": "text",
+      },
+    ],
+    "projectLocation": {
+      "documentDepth": 5,
+      "documentIndex": 2,
+      "documentPath": "C:/readme.md",
+    },
+  },
+}
+`;
+
+exports[`document parsing markup html comments successful parsing should not parse html comments in the middle of text. 1`] = `
+{
+  "success": true,
+  "value": {
+    "parts": [
+      {
+        "location": {
+          "char": 1,
+          "documentDepth": 1,
+          "documentIndex": 2,
+          "documentPath": "C:/comments/helloWorld.md",
+          "line": 1,
+        },
+        "text": "hello",
+        "type": "text",
+      },
+      {
+        "location": {
+          "char": 1,
+          "documentDepth": 1,
+          "documentIndex": 2,
+          "documentPath": "C:/comments/helloWorld.md",
+          "line": 4,
+        },
+        "text": "    world",
+        "type": "text",
+      },
+    ],
+    "projectLocation": {
+      "documentDepth": 1,
+      "documentIndex": 2,
+      "documentPath": "C:/comments/helloWorld.md",
+    },
+  },
+}
+`;
+
+exports[`document parsing markup html comments successful parsing should parse an inline codeblock in middle of sentence 1`] = `
+{
+  "success": true,
+  "value": {
+    "parts": [
+      {
+        "location": {
+          "char": 1,
+          "documentDepth": 5,
+          "documentIndex": 3,
+          "documentPath": "C:/html/inline.md",
+          "line": 1,
+        },
+        "text": "hello \`int = 5;\` world",
+        "type": "text",
+      },
+    ],
+    "projectLocation": {
+      "documentDepth": 5,
+      "documentIndex": 3,
+      "documentPath": "C:/html/inline.md",
+    },
+  },
+}
+`;
+
+exports[`document parsing markup html comments successful parsing should parse html comments inside a multiline code block 1`] = `
+{
+  "success": true,
+  "value": {
+    "parts": [
+      {
+        "location": {
+          "char": 1,
+          "documentDepth": 4,
+          "documentIndex": 3,
+          "documentPath": "C:/markdown/multiline.md",
+          "line": 1,
+        },
+        "text": "An example of an markdown document with html comments:",
+        "type": "text",
+      },
+      {
+        "location": {
+          "char": 1,
+          "documentDepth": 4,
+          "documentIndex": 3,
+          "documentPath": "C:/markdown/multiline.md",
+          "line": 2,
+        },
+        "text": "    \`\`\`markdown
+    # A document
+
+    <!-- this need
+    a summary
+    -->
+
+    ## Sub section title
+    \`\`\`",
+        "type": "text",
+      },
+    ],
+    "projectLocation": {
+      "documentDepth": 4,
+      "documentIndex": 3,
+      "documentPath": "C:/markdown/multiline.md",
+    },
+  },
+}
+`;
+
+exports[`document parsing markup html comments successful parsing should parse html comments inside an inline code block 1`] = `
+{
+  "success": true,
+  "value": {
+    "parts": [
+      {
+        "location": {
+          "char": 1,
+          "documentDepth": 5,
+          "documentIndex": 3,
+          "documentPath": "C:/html/inline.md",
+          "line": 1,
+        },
+        "text": "\`<!-- an example html comment -->\`",
+        "type": "text",
+      },
+    ],
+    "projectLocation": {
+      "documentDepth": 5,
+      "documentIndex": 3,
+      "documentPath": "C:/html/inline.md",
+    },
+  },
+}
+`;
+
+exports[`document parsing markup text basic text should parse a simple text of "hello" 1`] = `
+{
+  "success": true,
+  "value": {
+    "parts": [
+      {
+        "location": {
+          "char": 1,
+          "documentDepth": 3,
+          "documentIndex": 6,
+          "documentPath": "C:/my_document.md",
+          "line": 1,
+        },
+        "text": "hello",
+        "type": "text",
+      },
+    ],
+    "projectLocation": {
+      "documentDepth": 3,
+      "documentIndex": 6,
+      "documentPath": "C:/my_document.md",
+    },
+  },
+}
+`;
+
+exports[`document parsing markup text basic text should parse text of "   \\r\\n blow fish" 1`] = `
+{
+  "success": true,
+  "value": {
+    "parts": [
+      {
+        "location": {
+          "char": 1,
+          "documentDepth": 1,
+          "documentIndex": 8,
+          "documentPath": "C:/my_document.md",
+          "line": 2,
+        },
+        "text": " blow fish",
+        "type": "text",
+      },
+    ],
+    "projectLocation": {
+      "documentDepth": 1,
+      "documentIndex": 8,
+      "documentPath": "C:/my_document.md",
+    },
+  },
+}
+`;
+
+exports[`document parsing markup text basic text should parse text of " blow fish " 1`] = `
+{
+  "success": true,
+  "value": {
+    "parts": [
+      {
+        "location": {
+          "char": 1,
+          "documentDepth": 7,
+          "documentIndex": 1,
+          "documentPath": "C:/my_document.md",
+          "line": 1,
+        },
+        "text": " blow fish",
+        "type": "text",
+      },
+    ],
+    "projectLocation": {
+      "documentDepth": 7,
+      "documentIndex": 1,
+      "documentPath": "C:/my_document.md",
+    },
+  },
+}
+`;
+
+exports[`document parsing markup text basic text should parse text of " blow fish" 1`] = `
+{
+  "success": true,
+  "value": {
+    "parts": [
+      {
+        "location": {
+          "char": 1,
+          "documentDepth": 4,
+          "documentIndex": 6,
+          "documentPath": "C:/my_document.md",
+          "line": 1,
+        },
+        "text": " blow fish",
+        "type": "text",
+      },
+    ],
+    "projectLocation": {
+      "documentDepth": 4,
+      "documentIndex": 6,
+      "documentPath": "C:/my_document.md",
+    },
+  },
+}
+`;
+
+exports[`document parsing markup text basic text should parse text of "blow fish" 1`] = `
+{
+  "success": true,
+  "value": {
+    "parts": [
+      {
+        "location": {
+          "char": 1,
+          "documentDepth": 7,
+          "documentIndex": 2,
+          "documentPath": "C:/my_document.md",
+          "line": 1,
+        },
+        "text": "blow fish",
+        "type": "text",
+      },
+    ],
+    "projectLocation": {
+      "documentDepth": 7,
+      "documentIndex": 2,
+      "documentPath": "C:/my_document.md",
+    },
+  },
+}
+`;
+
+exports[`document parsing markup text basic text should successfully parse an empty string 1`] = `
+{
+  "success": true,
+  "value": {
+    "parts": [],
+    "projectLocation": {
+      "documentDepth": 4,
+      "documentIndex": 8,
+      "documentPath": "C:/my_document.md",
+    },
+  },
+}
+`;
+
+exports[`document parsing markup text nested code blocks should not parse nested multiline code blocks when closing markers are unbalanced 1`] = `
+{
+  "documentPath": "C:/markdown/multiline.md",
+  "failureCategory": "Parse Error",
+  "info": "Unclosed multiline code block at 'C:/markdown/multiline.md'.",
+  "message": "Unclosed multiline code block at 'C:/markdown/multiline.md'. (Line 2, Char 5)",
+  "processingStep": "Document Parsing",
+  "range": {
+    "end": {
+      "char": 8,
+      "documentDepth": 4,
+      "documentIndex": 3,
+      "documentPath": "C:/markdown/multiline.md",
+      "line": 2,
+    },
+    "start": {
+      "char": 5,
+      "documentDepth": 4,
+      "documentIndex": 3,
+      "documentPath": "C:/markdown/multiline.md",
+      "line": 2,
+    },
+  },
+  "success": false,
+}
+`;
+
+exports[`document parsing markup text nested code blocks should parse nested multiline code blocks 1`] = `
+{
+  "success": true,
+  "value": {
+    "parts": [
+      {
+        "location": {
+          "char": 1,
+          "documentDepth": 4,
+          "documentIndex": 3,
+          "documentPath": "C:/markdown/multiline.md",
+          "line": 1,
+        },
+        "text": "An example of an markdown document with nested code blocks:",
+        "type": "text",
+      },
+      {
+        "location": {
+          "char": 1,
+          "documentDepth": 4,
+          "documentIndex": 3,
+          "documentPath": "C:/markdown/multiline.md",
+          "line": 2,
+        },
+        "text": "    \`\`\`\`markdown
+    # A document
+
+    \`\`\`html
+    <a href="www.google.com">Google</a>
+    \`\`\`
+
+    ## Sub section title
+    \`\`\`\`",
+        "type": "text",
+      },
+    ],
+    "projectLocation": {
+      "documentDepth": 4,
+      "documentIndex": 3,
+      "documentPath": "C:/markdown/multiline.md",
+    },
+  },
+}
+`;
+
+exports[`document parsing markup text nested code blocks should parse nested multiline code blocks that end with the file 1`] = `
+{
+  "success": true,
+  "value": {
+    "parts": [
+      {
+        "location": {
+          "char": 1,
+          "documentDepth": 4,
+          "documentIndex": 3,
+          "documentPath": "C:/markdown/multiline.md",
+          "line": 1,
+        },
+        "text": "An example of an markdown document with nested code blocks:",
+        "type": "text",
+      },
+      {
+        "location": {
+          "char": 1,
+          "documentDepth": 4,
+          "documentIndex": 3,
+          "documentPath": "C:/markdown/multiline.md",
+          "line": 2,
+        },
+        "text": "    \`\`\`\`markdown
+    # A document
+
+    \`\`\`html
+    <a href="www.google.com">Google</a>
+    \`\`\`
+
+    ## Sub section title
+    \`\`\`\`",
+        "type": "text",
+      },
+    ],
+    "projectLocation": {
+      "documentDepth": 4,
+      "documentIndex": 3,
+      "documentPath": "C:/markdown/multiline.md",
+    },
+  },
+}
+`;
+
+exports[`document should not allow a document with a negative depth 1`] = `
+{
+  "documentPath": "C:/my_document.md",
+  "failureCategory": "Validation Error",
+  "info": "Document depth must be a value of 1 or larger.",
+  "message": "Document depth must be a value of 1 or larger. (Line 1, Char 1)",
+  "processingStep": "Document Parsing",
+  "range": {
+    "end": {
+      "char": 2,
+      "documentDepth": -1,
+      "documentIndex": 6,
+      "documentPath": "C:/my_document.md",
+      "line": 1,
+    },
+    "start": {
+      "char": 1,
+      "documentDepth": -1,
+      "documentIndex": 6,
+      "documentPath": "C:/my_document.md",
+      "line": 1,
+    },
+  },
+  "success": false,
+}
+`;
+
+exports[`document should not allow a document with a negative index 1`] = `
+{
+  "documentPath": "C:/my_document.md",
+  "failureCategory": "Validation Error",
+  "info": "Document index must be a value of 1 or larger.",
+  "message": "Document index must be a value of 1 or larger. (Line 1, Char 1)",
+  "processingStep": "Document Parsing",
+  "range": {
+    "end": {
+      "char": 2,
+      "documentDepth": 4,
+      "documentIndex": -1,
+      "documentPath": "C:/my_document.md",
+      "line": 1,
+    },
+    "start": {
+      "char": 1,
+      "documentDepth": 4,
+      "documentIndex": -1,
+      "documentPath": "C:/my_document.md",
+      "line": 1,
+    },
+  },
+  "success": false,
+}
+`;
+
+exports[`document should not allow a document with a zero depth 1`] = `
+{
+  "documentPath": "C:/my_document.md",
+  "failureCategory": "Validation Error",
+  "info": "Document depth must be a value of 1 or larger.",
+  "message": "Document depth must be a value of 1 or larger. (Line 1, Char 1)",
+  "processingStep": "Document Parsing",
+  "range": {
+    "end": {
+      "char": 2,
+      "documentDepth": 0,
+      "documentIndex": 6,
+      "documentPath": "C:/my_document.md",
+      "line": 1,
+    },
+    "start": {
+      "char": 1,
+      "documentDepth": 0,
+      "documentIndex": 6,
+      "documentPath": "C:/my_document.md",
+      "line": 1,
+    },
+  },
+  "success": false,
+}
+`;
+
+exports[`document should not allow a document with a zero index 1`] = `
+{
+  "documentPath": "C:/my_document.md",
+  "failureCategory": "Validation Error",
+  "info": "Document index must be a value of 1 or larger.",
+  "message": "Document index must be a value of 1 or larger. (Line 1, Char 1)",
+  "processingStep": "Document Parsing",
+  "range": {
+    "end": {
+      "char": 2,
+      "documentDepth": 4,
+      "documentIndex": 0,
+      "documentPath": "C:/my_document.md",
+      "line": 1,
+    },
+    "start": {
+      "char": 1,
+      "documentDepth": 4,
+      "documentIndex": 0,
+      "documentPath": "C:/my_document.md",
+      "line": 1,
+    },
+  },
+  "success": false,
+}
+`;
