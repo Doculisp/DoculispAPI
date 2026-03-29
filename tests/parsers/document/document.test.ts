@@ -240,16 +240,18 @@ describe('document', () => {
                 });
             });
 
-            it('should parse nested multiline code blocks', () => {
-                parseAndVerify(CODE_BLOCK_FIXTURES.nestedCodeBlocks, 'C:/markdown/multiline.md', HEADING_DEPTH.LEVEL_4, DOCUMENT_INDEX.THIRD);
-            });
+            describe('nested code blocks', () => {
+                it('should parse nested multiline code blocks', () => {
+                    parseAndVerify(CODE_BLOCK_FIXTURES.nestedCodeBlocks, 'C:/markdown/multiline.md', HEADING_DEPTH.LEVEL_4, DOCUMENT_INDEX.THIRD);
+                });
 
-            it('should parse nested multiline code blocks that end with the file', () => {
-                parseAndVerify(CODE_BLOCK_FIXTURES.nestedCodeBlocksEndOfFile, 'C:/markdown/multiline.md', HEADING_DEPTH.LEVEL_4, DOCUMENT_INDEX.THIRD);
-            });
+                it('should parse nested multiline code blocks that end with the file', () => {
+                    parseAndVerify(CODE_BLOCK_FIXTURES.nestedCodeBlocksEndOfFile, 'C:/markdown/multiline.md', HEADING_DEPTH.LEVEL_4, DOCUMENT_INDEX.THIRD);
+                });
 
-            it('should not parse nested multiline code blocks when closing markers are unbalanced', () => {
-                parseAndVerify(CODE_BLOCK_FIXTURES.nestedCodeBlocksUnbalanced, 'C:/markdown/multiline.md', HEADING_DEPTH.LEVEL_4, DOCUMENT_INDEX.THIRD);
+                it('should not parse nested multiline code blocks when closing markers are unbalanced', () => {
+                    parseAndVerify(CODE_BLOCK_FIXTURES.nestedCodeBlocksUnbalanced, 'C:/markdown/multiline.md', HEADING_DEPTH.LEVEL_4, DOCUMENT_INDEX.THIRD);
+                });
             });
         });
 
