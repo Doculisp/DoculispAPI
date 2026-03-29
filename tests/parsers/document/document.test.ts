@@ -198,20 +198,18 @@ describe('document', () => {
         verifyWithGiven(result, undefined, content);
     };
 
-    it('should not allow a document with a zero depth.', () => {
-        parseAndVerify('hello', 'C:/my_document.md', HEADING_DEPTH.INVALID_ZERO, DOCUMENT_INDEX.SIXTH);
+    test.each([
+        ['zero', HEADING_DEPTH.INVALID_ZERO],
+        ['negative', HEADING_DEPTH.INVALID_NEGATIVE],
+    ])('should not allow a document with a %s depth', (description, depth) => {
+        parseAndVerify('hello', 'C:/my_document.md', depth, DOCUMENT_INDEX.SIXTH);
     });
 
-    it('should not allow a document with a negative depth.', () => {
-        parseAndVerify('hello', 'C:/my_document.md', HEADING_DEPTH.INVALID_NEGATIVE, DOCUMENT_INDEX.SIXTH);
-    });
-
-    it('should not allow a document with a zero index.', () => {
-        parseAndVerify('', 'C:/my_document.md', HEADING_DEPTH.LEVEL_4, DOCUMENT_INDEX.INVALID_ZERO);
-    });
-
-    it('should not allow a document with a negative index.', () => {
-        parseAndVerify('', 'C:/my_document.md', HEADING_DEPTH.LEVEL_4, DOCUMENT_INDEX.INVALID_NEGATIVE);
+    test.each([
+        ['zero', DOCUMENT_INDEX.INVALID_ZERO],
+        ['negative', DOCUMENT_INDEX.INVALID_NEGATIVE],
+    ])('should not allow a document with a %s index', (description, index) => {
+        parseAndVerify('', 'C:/my_document.md', HEADING_DEPTH.LEVEL_4, index);
     });
 
     describe('parsing markup', () => {
