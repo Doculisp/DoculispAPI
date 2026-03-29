@@ -338,20 +338,24 @@ describe('document', () => {
 });
 
     describe('parsing .dlisp files', () => {
-        it('should handle a correctly formatted file', () => {
-            parseAndVerify(DLISP_FILE_FIXTURES.validFile, 'C:/main.dlisp', HEADING_DEPTH.LEVEL_7, DOCUMENT_INDEX.FIRST);
+        describe('successful parsing', () => {
+            it('should handle a correctly formatted file', () => {
+                parseAndVerify(DLISP_FILE_FIXTURES.validFile, 'C:/main.dlisp', HEADING_DEPTH.LEVEL_7, DOCUMENT_INDEX.FIRST);
+            });
         });
 
-        it('should fail to parse a file that contains a dl identifier', () => {
-            parseAndVerify(DLISP_FILE_FIXTURES.fileWithDlIdentifier, 'C:/bad/extraDl.dlisp', HEADING_DEPTH.LEVEL_5, DOCUMENT_INDEX.SIXTH);
-        });
+        describe('parsing failures', () => {
+            it('should fail to parse a file that contains a dl identifier', () => {
+                parseAndVerify(DLISP_FILE_FIXTURES.fileWithDlIdentifier, 'C:/bad/extraDl.dlisp', HEADING_DEPTH.LEVEL_5, DOCUMENT_INDEX.SIXTH);
+            });
 
-        it('should handle a file with parentheses that do not close', () => {
-            parseAndVerify(DLISP_FILE_FIXTURES.unclosedParentheses, 'C:/main.dlisp', HEADING_DEPTH.LEVEL_6, DOCUMENT_INDEX.FIRST);
-        });
+            it('should handle a file with parentheses that do not close', () => {
+                parseAndVerify(DLISP_FILE_FIXTURES.unclosedParentheses, 'C:/main.dlisp', HEADING_DEPTH.LEVEL_6, DOCUMENT_INDEX.FIRST);
+            });
 
-        it('should handle a file with to many parenthesis', () => {
-            parseAndVerify(DLISP_FILE_FIXTURES.tooManyParentheses, 'C:/main.dlisp', HEADING_DEPTH.LEVEL_5, DOCUMENT_INDEX.EIGHTH);
+            it('should handle a file with to many parenthesis', () => {
+                parseAndVerify(DLISP_FILE_FIXTURES.tooManyParentheses, 'C:/main.dlisp', HEADING_DEPTH.LEVEL_5, DOCUMENT_INDEX.EIGHTH);
+            });
         });
     });
 });
