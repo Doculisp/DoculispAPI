@@ -89,3 +89,26 @@ export function getVerifiers(configure: (overrideOptions?: Partial<Config> | und
         verifyText
     };
 };
+
+// Jest-based snapshot helpers (for gradual migration away from Approvals)
+export function verifyAsJsonJest(data: any): void {
+    expect(order(data)).toMatchSnapshot();
+}
+
+export function verifyWithGivenJest(data: any, ...given: any[]): void {
+    const combined: any = {
+        "999_received": data,
+    };
+    given.forEach((givenItem, index) => {
+        combined[`${index.toString().padStart(3, '0')}_given`] = givenItem;
+    });
+    expect(order(combined)).toMatchSnapshot();
+}
+
+export function verifyMarkdownJest(text: string): void {
+    expect(text).toMatchSnapshot();
+}
+
+export function verifyTextJest(text: string): void {
+    expect(text).toMatchSnapshot();
+}

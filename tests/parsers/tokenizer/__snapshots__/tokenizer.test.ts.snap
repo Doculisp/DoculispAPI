@@ -1,0 +1,909 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`tokenizer handling Doculisp should handle comment with nested lisp 1`] = `
+{
+  "success": true,
+  "value": {
+    "projectLocation": {
+      "documentDepth": 7,
+      "documentIndex": 1,
+      "documentPath": "A:/main.md",
+    },
+    "tokens": [
+      {
+        "location": {
+          "char": 2,
+          "documentDepth": 0,
+          "documentIndex": 0,
+          "documentPath": "A:/main.md",
+          "line": 2,
+        },
+        "text": "section-meta",
+        "type": "token - identifier",
+      },
+      {
+        "location": {
+          "char": 5,
+          "documentDepth": 0,
+          "documentIndex": 0,
+          "documentPath": "A:/main.md",
+          "line": 8,
+        },
+        "type": "token - close parenthesis",
+      },
+    ],
+  },
+}
+`;
+
+exports[`tokenizer handling Doculisp should handle nested lisp 1`] = `
+{
+  "success": true,
+  "value": {
+    "projectLocation": {
+      "documentDepth": 7,
+      "documentIndex": 7,
+      "documentPath": "A:/main.md",
+    },
+    "tokens": [
+      {
+        "location": {
+          "char": 2,
+          "documentDepth": 0,
+          "documentIndex": 0,
+          "documentPath": "A:/main.md",
+          "line": 2,
+        },
+        "text": "section-meta",
+        "type": "token - identifier",
+      },
+      {
+        "location": {
+          "char": 10,
+          "documentDepth": 0,
+          "documentIndex": 0,
+          "documentPath": "A:/main.md",
+          "line": 3,
+        },
+        "text": "include",
+        "type": "token - identifier",
+      },
+      {
+        "location": {
+          "char": 14,
+          "documentDepth": 0,
+          "documentIndex": 0,
+          "documentPath": "A:/main.md",
+          "line": 4,
+        },
+        "text": "Section",
+        "type": "token - identifier",
+      },
+      {
+        "location": {
+          "char": 22,
+          "documentDepth": 0,
+          "documentIndex": 0,
+          "documentPath": "A:/main.md",
+          "line": 4,
+        },
+        "text": "./structure.md",
+        "type": "token - parameter",
+      },
+      {
+        "location": {
+          "char": 36,
+          "documentDepth": 0,
+          "documentIndex": 0,
+          "documentPath": "A:/main.md",
+          "line": 4,
+        },
+        "type": "token - close parenthesis",
+      },
+      {
+        "location": {
+          "char": 9,
+          "documentDepth": 0,
+          "documentIndex": 0,
+          "documentPath": "A:/main.md",
+          "line": 5,
+        },
+        "type": "token - close parenthesis",
+      },
+      {
+        "location": {
+          "char": 5,
+          "documentDepth": 0,
+          "documentIndex": 0,
+          "documentPath": "A:/main.md",
+          "line": 6,
+        },
+        "type": "token - close parenthesis",
+      },
+    ],
+  },
+}
+`;
+
+exports[`tokenizer handling Doculisp should handle parameter with escaped close paren 1`] = `
+{
+  "success": true,
+  "value": {
+    "projectLocation": {
+      "documentDepth": 7,
+      "documentIndex": 1,
+      "documentPath": "A:/main.md",
+    },
+    "tokens": [
+      {
+        "location": {
+          "char": 2,
+          "documentDepth": 0,
+          "documentIndex": 0,
+          "documentPath": "A:/main.md",
+          "line": 2,
+        },
+        "text": "title",
+        "type": "token - identifier",
+      },
+      {
+        "location": {
+          "char": 8,
+          "documentDepth": 0,
+          "documentIndex": 0,
+          "documentPath": "A:/main.md",
+          "line": 2,
+        },
+        "text": "The elusive )",
+        "type": "token - parameter",
+      },
+      {
+        "location": {
+          "char": 22,
+          "documentDepth": 0,
+          "documentIndex": 0,
+          "documentPath": "A:/main.md",
+          "line": 2,
+        },
+        "type": "token - close parenthesis",
+      },
+    ],
+  },
+}
+`;
+
+exports[`tokenizer handling Doculisp should handle parameter with escaped open paren 1`] = `
+{
+  "success": true,
+  "value": {
+    "projectLocation": {
+      "documentDepth": 7,
+      "documentIndex": 1,
+      "documentPath": "A:/main.md",
+    },
+    "tokens": [
+      {
+        "location": {
+          "char": 2,
+          "documentDepth": 0,
+          "documentIndex": 0,
+          "documentPath": "A:/main.md",
+          "line": 2,
+        },
+        "text": "title",
+        "type": "token - identifier",
+      },
+      {
+        "location": {
+          "char": 8,
+          "documentDepth": 0,
+          "documentIndex": 0,
+          "documentPath": "A:/main.md",
+          "line": 2,
+        },
+        "text": "The elusive (",
+        "type": "token - parameter",
+      },
+      {
+        "location": {
+          "char": 22,
+          "documentDepth": 0,
+          "documentIndex": 0,
+          "documentPath": "A:/main.md",
+          "line": 2,
+        },
+        "type": "token - close parenthesis",
+      },
+      {
+        "location": {
+          "char": 23,
+          "documentDepth": 0,
+          "documentIndex": 0,
+          "documentPath": "A:/main.md",
+          "line": 2,
+        },
+        "type": "token - close parenthesis",
+      },
+    ],
+  },
+}
+`;
+
+exports[`tokenizer handling Doculisp should provide standardized error when tokenization fails (mocked parser) 1`] = `
+{
+  "documentPath": "D:/comments/simple.md",
+  "failureCategory": "Parse Error",
+  "info": "Tokenization failed: Simulated string parser failure",
+  "message": "Tokenization failed: Simulated string parser failure (Line 1, Char 1)",
+  "processingStep": "Tokenization",
+  "range": {
+    "end": {
+      "char": 5,
+      "documentDepth": 0,
+      "documentIndex": 0,
+      "documentPath": "D:/comments/simple.md",
+      "line": 1,
+    },
+    "start": {
+      "char": 1,
+      "documentDepth": 0,
+      "documentIndex": 0,
+      "documentPath": "D:/comments/simple.md",
+      "line": 1,
+    },
+  },
+  "success": false,
+}
+`;
+
+exports[`tokenizer handling Doculisp should tokenize a single identifier with a multi word parameter 1`] = `
+{
+  "success": true,
+  "value": {
+    "projectLocation": {
+      "documentDepth": 8,
+      "documentIndex": 1,
+      "documentPath": "Z:/parameter.md",
+    },
+    "tokens": [
+      {
+        "location": {
+          "char": 14,
+          "documentDepth": 0,
+          "documentIndex": 0,
+          "documentPath": "Z:/parameter.md",
+          "line": 1,
+        },
+        "text": "title",
+        "type": "token - identifier",
+      },
+      {
+        "location": {
+          "char": 20,
+          "documentDepth": 0,
+          "documentIndex": 0,
+          "documentPath": "Z:/parameter.md",
+          "line": 1,
+        },
+        "text": "the thing from beyond
+	the swamp",
+        "type": "token - parameter",
+      },
+      {
+        "location": {
+          "char": 52,
+          "documentDepth": 0,
+          "documentIndex": 0,
+          "documentPath": "Z:/parameter.md",
+          "line": 1,
+        },
+        "type": "token - close parenthesis",
+      },
+    ],
+  },
+}
+`;
+
+exports[`tokenizer handling Doculisp should tokenize a single identifier with a single word parameter 1`] = `
+{
+  "success": true,
+  "value": {
+    "projectLocation": {
+      "documentDepth": 5,
+      "documentIndex": 5,
+      "documentPath": "Z:/parameter.md",
+    },
+    "tokens": [
+      {
+        "location": {
+          "char": 14,
+          "documentDepth": 0,
+          "documentIndex": 0,
+          "documentPath": "Z:/parameter.md",
+          "line": 1,
+        },
+        "text": "the",
+        "type": "token - identifier",
+      },
+      {
+        "location": {
+          "char": 18,
+          "documentDepth": 0,
+          "documentIndex": 0,
+          "documentPath": "Z:/parameter.md",
+          "line": 1,
+        },
+        "text": "thing",
+        "type": "token - parameter",
+      },
+      {
+        "location": {
+          "char": 23,
+          "documentDepth": 0,
+          "documentIndex": 0,
+          "documentPath": "Z:/parameter.md",
+          "line": 1,
+        },
+        "type": "token - close parenthesis",
+      },
+    ],
+  },
+}
+`;
+
+exports[`tokenizer handling Doculisp should tokenize an empty comment 1`] = `
+{
+  "success": true,
+  "value": {
+    "projectLocation": {
+      "documentDepth": 1,
+      "documentIndex": 5,
+      "documentPath": "D:/comments/simple.md",
+    },
+    "tokens": [],
+  },
+}
+`;
+
+exports[`tokenizer handling Doculisp should tokenize an single identifier 1`] = `
+{
+  "success": true,
+  "value": {
+    "projectLocation": {
+      "documentDepth": 2,
+      "documentIndex": 7,
+      "documentPath": "D:/comments/simple.md",
+    },
+    "tokens": [
+      {
+        "location": {
+          "char": 3,
+          "documentDepth": 0,
+          "documentIndex": 0,
+          "documentPath": "D:/comments/simple.md",
+          "line": 4,
+        },
+        "text": "identifier",
+        "type": "token - identifier",
+      },
+      {
+        "location": {
+          "char": 13,
+          "documentDepth": 0,
+          "documentIndex": 0,
+          "documentPath": "D:/comments/simple.md",
+          "line": 4,
+        },
+        "type": "token - close parenthesis",
+      },
+    ],
+  },
+}
+`;
+
+exports[`tokenizer handling Doculisp should tokenize an single identifier containing only numbers 1`] = `
+{
+  "success": true,
+  "value": {
+    "projectLocation": {
+      "documentDepth": 4,
+      "documentIndex": 6,
+      "documentPath": "D:/comments/simple.md",
+    },
+    "tokens": [
+      {
+        "location": {
+          "char": 3,
+          "documentDepth": 0,
+          "documentIndex": 0,
+          "documentPath": "D:/comments/simple.md",
+          "line": 4,
+        },
+        "text": "123987",
+        "type": "token - identifier",
+      },
+      {
+        "location": {
+          "char": 9,
+          "documentDepth": 0,
+          "documentIndex": 0,
+          "documentPath": "D:/comments/simple.md",
+          "line": 4,
+        },
+        "type": "token - close parenthesis",
+      },
+    ],
+  },
+}
+`;
+
+exports[`tokenizer handling Doculisp should tokenize an single identifier with hyphen and underscore 1`] = `
+{
+  "success": true,
+  "value": {
+    "projectLocation": {
+      "documentDepth": 7,
+      "documentIndex": 7,
+      "documentPath": "D:/comments/simple.md",
+    },
+    "tokens": [
+      {
+        "location": {
+          "char": 3,
+          "documentDepth": 0,
+          "documentIndex": 0,
+          "documentPath": "D:/comments/simple.md",
+          "line": 4,
+        },
+        "text": "identifier-start_end",
+        "type": "token - identifier",
+      },
+      {
+        "location": {
+          "char": 23,
+          "documentDepth": 0,
+          "documentIndex": 0,
+          "documentPath": "D:/comments/simple.md",
+          "line": 4,
+        },
+        "type": "token - close parenthesis",
+      },
+    ],
+  },
+}
+`;
+
+exports[`tokenizer handling Doculisp should tokenize an single identifier with new line after identifier 1`] = `
+{
+  "success": true,
+  "value": {
+    "projectLocation": {
+      "documentDepth": 7,
+      "documentIndex": 4,
+      "documentPath": "D:/comments/simple.md",
+    },
+    "tokens": [
+      {
+        "location": {
+          "char": 3,
+          "documentDepth": 0,
+          "documentIndex": 0,
+          "documentPath": "D:/comments/simple.md",
+          "line": 4,
+        },
+        "text": "identifier",
+        "type": "token - identifier",
+      },
+      {
+        "location": {
+          "char": 1,
+          "documentDepth": 0,
+          "documentIndex": 0,
+          "documentPath": "D:/comments/simple.md",
+          "line": 5,
+        },
+        "type": "token - close parenthesis",
+      },
+    ],
+  },
+}
+`;
+
+exports[`tokenizer handling Doculisp should tokenize an single identifier with space after identifier 1`] = `
+{
+  "success": true,
+  "value": {
+    "projectLocation": {
+      "documentDepth": 3,
+      "documentIndex": 7,
+      "documentPath": "D:/comments/simple.md",
+    },
+    "tokens": [
+      {
+        "location": {
+          "char": 3,
+          "documentDepth": 0,
+          "documentIndex": 0,
+          "documentPath": "D:/comments/simple.md",
+          "line": 4,
+        },
+        "text": "identifier",
+        "type": "token - identifier",
+      },
+      {
+        "location": {
+          "char": 14,
+          "documentDepth": 0,
+          "documentIndex": 0,
+          "documentPath": "D:/comments/simple.md",
+          "line": 4,
+        },
+        "type": "token - close parenthesis",
+      },
+    ],
+  },
+}
+`;
+
+exports[`tokenizer should fail if document parsing failed 1`] = `
+{
+  "documentPath": "X:/non-exist.dlisp",
+  "failureCategory": "Parse Error",
+  "info": "This document did not parse",
+  "message": "This document did not parse",
+  "processingStep": "Tokenization",
+  "range": undefined,
+  "success": false,
+}
+`;
+
+exports[`tokenizer should return empty if given an empty parse result 1`] = `
+{
+  "success": true,
+  "value": {
+    "projectLocation": {
+      "documentDepth": 4,
+      "documentIndex": 8,
+      "documentPath": "c:/empty/readme.md",
+    },
+    "tokens": [],
+  },
+}
+`;
+
+exports[`tokenizer should tokenize text as text 1`] = `
+{
+  "success": true,
+  "value": {
+    "projectLocation": {
+      "documentDepth": 6,
+      "documentIndex": 8,
+      "documentPath": "D:/comments/simple.md",
+    },
+    "tokens": [
+      {
+        "location": {
+          "char": 23,
+          "documentDepth": 0,
+          "documentIndex": 0,
+          "documentPath": "D:/comments/simple.md",
+          "line": 5,
+        },
+        "text": "hello my text",
+        "type": "token - text",
+      },
+    ],
+  },
+}
+`;
+
+exports[`tokenizer whitespace error handling should fail in nested context with whitespace 1`] = `
+{
+  "000_given": "<!-- (dl (outer ( inner))) -->",
+  "999_received": {
+    "documentPath": "D:/comments/simple.md",
+    "failureCategory": "Parse Error",
+    "info": "Tokenization failed: Unexpected whitespace after opening parenthesis at 'D:/comments/simple.md'.",
+    "message": "Tokenization failed: Unexpected whitespace after opening parenthesis at 'D:/comments/simple.md'. (Line 1, Char 18)",
+    "processingStep": "Tokenization",
+    "range": {
+      "end": {
+        "char": 19,
+        "documentDepth": 1,
+        "documentIndex": 1,
+        "documentPath": "D:/comments/simple.md",
+        "line": 1,
+      },
+      "start": {
+        "char": 18,
+        "documentDepth": 1,
+        "documentIndex": 1,
+        "documentPath": "D:/comments/simple.md",
+        "line": 1,
+      },
+    },
+    "success": false,
+  },
+}
+`;
+
+exports[`tokenizer whitespace error handling should fail when multiple whitespace follows opening parenthesis 1`] = `
+{
+  "000_given": "<!-- (dl ( 
+	 identifier)) -->",
+  "999_received": {
+    "documentPath": "D:/comments/simple.md",
+    "failureCategory": "Parse Error",
+    "info": "Tokenization failed: Unexpected whitespace after opening parenthesis at 'D:/comments/simple.md'.",
+    "message": "Tokenization failed: Unexpected whitespace after opening parenthesis at 'D:/comments/simple.md'. (Line 1, Char 11)",
+    "processingStep": "Tokenization",
+    "range": {
+      "end": {
+        "char": 12,
+        "documentDepth": 1,
+        "documentIndex": 1,
+        "documentPath": "D:/comments/simple.md",
+        "line": 1,
+      },
+      "start": {
+        "char": 11,
+        "documentDepth": 1,
+        "documentIndex": 1,
+        "documentPath": "D:/comments/simple.md",
+        "line": 1,
+      },
+    },
+    "success": false,
+  },
+}
+`;
+
+exports[`tokenizer whitespace error handling should fail when newline follows opening parenthesis 1`] = `
+{
+  "000_given": "<!-- (dl (
+identifier)) -->",
+  "999_received": {
+    "documentPath": "D:/comments/simple.md",
+    "failureCategory": "Parse Error",
+    "info": "Tokenization failed: Unexpected whitespace after opening parenthesis at 'D:/comments/simple.md'.",
+    "message": "Tokenization failed: Unexpected whitespace after opening parenthesis at 'D:/comments/simple.md'. (Line 1, Char 11)",
+    "processingStep": "Tokenization",
+    "range": {
+      "end": {
+        "char": 12,
+        "documentDepth": 1,
+        "documentIndex": 1,
+        "documentPath": "D:/comments/simple.md",
+        "line": 1,
+      },
+      "start": {
+        "char": 11,
+        "documentDepth": 1,
+        "documentIndex": 1,
+        "documentPath": "D:/comments/simple.md",
+        "line": 1,
+      },
+    },
+    "success": false,
+  },
+}
+`;
+
+exports[`tokenizer whitespace error handling should fail when space follows opening parenthesis 1`] = `
+{
+  "000_given": "<!-- (dl ( identifier)) -->",
+  "999_received": {
+    "documentPath": "D:/comments/simple.md",
+    "failureCategory": "Parse Error",
+    "info": "Tokenization failed: Unexpected whitespace after opening parenthesis at 'D:/comments/simple.md'.",
+    "message": "Tokenization failed: Unexpected whitespace after opening parenthesis at 'D:/comments/simple.md'. (Line 1, Char 11)",
+    "processingStep": "Tokenization",
+    "range": {
+      "end": {
+        "char": 12,
+        "documentDepth": 1,
+        "documentIndex": 1,
+        "documentPath": "D:/comments/simple.md",
+        "line": 1,
+      },
+      "start": {
+        "char": 11,
+        "documentDepth": 1,
+        "documentIndex": 1,
+        "documentPath": "D:/comments/simple.md",
+        "line": 1,
+      },
+    },
+    "success": false,
+  },
+}
+`;
+
+exports[`tokenizer whitespace error handling should fail when tab follows opening parenthesis 1`] = `
+{
+  "000_given": "<!-- (dl (	identifier)) -->",
+  "999_received": {
+    "documentPath": "D:/comments/simple.md",
+    "failureCategory": "Parse Error",
+    "info": "Tokenization failed: Unexpected whitespace after opening parenthesis at 'D:/comments/simple.md'.",
+    "message": "Tokenization failed: Unexpected whitespace after opening parenthesis at 'D:/comments/simple.md'. (Line 1, Char 11)",
+    "processingStep": "Tokenization",
+    "range": {
+      "end": {
+        "char": 12,
+        "documentDepth": 1,
+        "documentIndex": 1,
+        "documentPath": "D:/comments/simple.md",
+        "line": 1,
+      },
+      "start": {
+        "char": 11,
+        "documentDepth": 1,
+        "documentIndex": 1,
+        "documentPath": "D:/comments/simple.md",
+        "line": 1,
+      },
+    },
+    "success": false,
+  },
+}
+`;
+
+exports[`tokenizer whitespace error handling should fail with Windows line endings after opening parenthesis 1`] = `
+{
+  "000_given": "<!-- (dl (
+identifier)) -->",
+  "999_received": {
+    "documentPath": "D:/comments/simple.md",
+    "failureCategory": "Parse Error",
+    "info": "Tokenization failed: Unexpected whitespace after opening parenthesis at 'D:/comments/simple.md'.",
+    "message": "Tokenization failed: Unexpected whitespace after opening parenthesis at 'D:/comments/simple.md'. (Line 1, Char 11)",
+    "processingStep": "Tokenization",
+    "range": {
+      "end": {
+        "char": 12,
+        "documentDepth": 1,
+        "documentIndex": 1,
+        "documentPath": "D:/comments/simple.md",
+        "line": 1,
+      },
+      "start": {
+        "char": 11,
+        "documentDepth": 1,
+        "documentIndex": 1,
+        "documentPath": "D:/comments/simple.md",
+        "line": 1,
+      },
+    },
+    "success": false,
+  },
+}
+`;
+
+exports[`tokenizer whitespace error handling should succeed when identifier immediately follows opening parenthesis 1`] = `
+{
+  "000_given": "<!-- (dl (identifier)) -->",
+  "999_received": {
+    "success": true,
+    "value": {
+      "projectLocation": {
+        "documentDepth": 1,
+        "documentIndex": 1,
+        "documentPath": "D:/comments/simple.md",
+      },
+      "tokens": [
+        {
+          "location": {
+            "char": 11,
+            "documentDepth": 1,
+            "documentIndex": 1,
+            "documentPath": "D:/comments/simple.md",
+            "line": 1,
+          },
+          "text": "identifier",
+          "type": "token - identifier",
+        },
+        {
+          "location": {
+            "char": 21,
+            "documentDepth": 1,
+            "documentIndex": 1,
+            "documentPath": "D:/comments/simple.md",
+            "line": 1,
+          },
+          "type": "token - close parenthesis",
+        },
+      ],
+    },
+  },
+}
+`;
+
+exports[`tokenizer whitespace error handling should succeed with whitespace before closing parenthesis 1`] = `
+{
+  "000_given": "<!-- (dl (identifier )) -->",
+  "999_received": {
+    "success": true,
+    "value": {
+      "projectLocation": {
+        "documentDepth": 1,
+        "documentIndex": 1,
+        "documentPath": "D:/comments/simple.md",
+      },
+      "tokens": [
+        {
+          "location": {
+            "char": 11,
+            "documentDepth": 1,
+            "documentIndex": 1,
+            "documentPath": "D:/comments/simple.md",
+            "line": 1,
+          },
+          "text": "identifier",
+          "type": "token - identifier",
+        },
+        {
+          "location": {
+            "char": 22,
+            "documentDepth": 1,
+            "documentIndex": 1,
+            "documentPath": "D:/comments/simple.md",
+            "line": 1,
+          },
+          "type": "token - close parenthesis",
+        },
+      ],
+    },
+  },
+}
+`;
+
+exports[`tokenizer whitespace error handling should succeed with whitespace in parameters 1`] = `
+{
+  "000_given": "<!-- (dl (command parameter with spaces)) -->",
+  "999_received": {
+    "success": true,
+    "value": {
+      "projectLocation": {
+        "documentDepth": 1,
+        "documentIndex": 1,
+        "documentPath": "D:/comments/simple.md",
+      },
+      "tokens": [
+        {
+          "location": {
+            "char": 11,
+            "documentDepth": 1,
+            "documentIndex": 1,
+            "documentPath": "D:/comments/simple.md",
+            "line": 1,
+          },
+          "text": "command",
+          "type": "token - identifier",
+        },
+        {
+          "location": {
+            "char": 19,
+            "documentDepth": 1,
+            "documentIndex": 1,
+            "documentPath": "D:/comments/simple.md",
+            "line": 1,
+          },
+          "text": "parameter with spaces",
+          "type": "token - parameter",
+        },
+        {
+          "location": {
+            "char": 40,
+            "documentDepth": 1,
+            "documentIndex": 1,
+            "documentPath": "D:/comments/simple.md",
+            "line": 1,
+          },
+          "type": "token - close parenthesis",
+        },
+      ],
+    },
+  },
+}
+`;

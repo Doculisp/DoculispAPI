@@ -1,7 +1,5 @@
 import { containerPromise } from "../../../src/moduleLoader";
-import { configure } from "approvals/lib/config";
-import { getVerifiers } from "../../tools";
-import { Options } from "approvals/lib/Core/Options";
+import { verifyAsJsonJest, verifyWithGivenJest } from "../../tools";
 import { IContainer, ITestableContainer } from "../../../src/types/types.containers";
 import { TokenFunction, TokenizedDocument } from '../../../src/types/types.tokens';
 import { IFail, ILocation, IRange, ISuccess, IUtil, Result, IProjectLocation } from "../../../src/types/types.general";
@@ -14,18 +12,10 @@ describe('tokenizer', () => {
 
     let container: IContainer = null as any;
     let tokenizer: TokenFunction = undefined as any;
-    let verifyAsJson: (data: any, options?: Options) => void = undefined as any;
-    let verifyWithGiven: (data: any, options?: Options | undefined, ...given: any[]) => void = undefined as any;
     let ok: (successfulValue: any) => ISuccess<any> = undefined as any;
     let fail: (message: string, range?: IRange | undefined, documentPath?: IPath) => IFail = undefined as any;
     let util: IUtil = undefined as any;
     let getLocation: (path: string, depth: number, index: number, line: number, char: number, extension?: string | false) => ILocation = undefined as any;
-
-    beforeAll(() => {
-        const verifiers = getVerifiers(configure);
-        verifyAsJson = verifiers.verifyAsJson;
-        verifyWithGiven = verifiers.verifyWithGiven;
-    });
 
     // Consolidated setup logic for tokenizer environment configuration
     const setupTokenizerEnvironment = (environment: ITestableContainer): IUtil => {
@@ -80,32 +70,32 @@ describe('tokenizer', () => {
 
         const result = tokenizer(parseResult);
 
-        verifyAsJson(result);
+        verifyAsJsonJest(result);
     });
 
     it('should return empty if given an empty parse result', () => {
         const result = tokenizeScenario.empty();
 
-        verifyAsJson(result);
+        verifyAsJsonJest(result);
     });
 
     it('should tokenize text as text', () => {
         const result = tokenizeScenario.text('hello my text');
 
-        verifyAsJson(result);
+        verifyAsJsonJest(result);
     });
 
     describe('handling Doculisp', () => {
         it('should tokenize an empty comment', () => {
             const result = tokenizeScenario.lisp('(*)', 1, 5, 2, 1);
 
-            verifyAsJson(result);
+            verifyAsJsonJest(result);
         });
         
         it('should tokenize an single identifier', () => {
             const result = tokenizeScenario.lisp('(identifier)');
 
-            verifyAsJson(result);
+            verifyAsJsonJest(result);
         });
 
         it('should provide standardized error when tokenization fails (mocked parser)', () => {
@@ -130,43 +120,43 @@ describe('tokenizer', () => {
 
             const result = failingTokenizer(parseResult);
 
-            verifyAsJson(result);
+            verifyAsJsonJest(result);
         });
         
         it('should tokenize an single identifier with space after identifier', () => {
             const result = tokenizeScenario.lisp('(identifier )', 3);
 
-            verifyAsJson(result);
+            verifyAsJsonJest(result);
         });
         
         it('should tokenize an single identifier with new line after identifier', () => {
             const result = tokenizeScenario.lisp('(identifier\r\n)', 7, 4);
 
-            verifyAsJson(result);
+            verifyAsJsonJest(result);
         });
         
         it('should tokenize an single identifier containing only numbers', () => {
             const result = tokenizeScenario.lisp('(123987)', 4, 6);
 
-            verifyAsJson(result);
+            verifyAsJsonJest(result);
         });
         
         it('should tokenize an single identifier with hyphen and underscore', () => {
             const result = tokenizeScenario.lisp('(identifier-start_end)', 7);
 
-            verifyAsJson(result);
+            verifyAsJsonJest(result);
         });
 
         it('should tokenize a single identifier with a single word parameter', () => {
             const result = tokenizeScenario.lisp('(the thing)', 5, 5, 1, 13, 'Z:/parameter.md');
 
-            verifyAsJson(result);
+            verifyAsJsonJest(result);
         });
 
         it('should tokenize a single identifier with a multi word parameter', () => {
             const result = tokenizeScenario.lisp('(title the thing from beyond\n\tthe swamp)', 8, 1, 1, 13, 'Z:/parameter.md');
 
-            verifyAsJson(result);
+            verifyAsJsonJest(result);
         });
 
         it('should handle nested lisp', () => {
@@ -176,7 +166,7 @@ describe('tokenizer', () => {
         )
     )`, 7, 7, 2, 1, 'A:/main.md');
 
-            verifyAsJson(result);
+            verifyAsJsonJest(result);
         });
 
         it('should handle comment with nested lisp', () => {
@@ -188,19 +178,19 @@ describe('tokenizer', () => {
         )
     )`, 7, 1, 2, 1, 'A:/main.md');
 
-            verifyAsJson(result);
+            verifyAsJsonJest(result);
         });
 
         it('should handle parameter with escaped open paren', () => {
             const result = tokenizeScenario.lisp("(title The elusive \\())", 7, 1, 2, 1, 'A:/main.md');
 
-            verifyAsJson(result);
+            verifyAsJsonJest(result);
         });
 
         it('should handle parameter with escaped close paren', () => {
             const result = tokenizeScenario.lisp("(title The elusive \\))", 7, 1, 2, 1, 'A:/main.md');
 
-            verifyAsJson(result);
+            verifyAsJsonJest(result);
         });
     });
 
@@ -219,7 +209,7 @@ describe('tokenizer', () => {
             it(description, () => {
                 const location = buildProjectLocation(BASIC_SAMPLE_DOCUMENT, 1, 1);
                 const result = toResult(input, location);
-                verifyWithGiven(result, undefined, input);
+                verifyWithGivenJest(result, input);
             });
         };
 
