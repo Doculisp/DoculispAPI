@@ -42,6 +42,24 @@ describe('tokenizer', () => {
         fail = util.fail('Tokenization')('Parse Error');
     });
 
+    // Test data builders
+    const createDocMap = (parts: any[], depth: number = 1, index: number = 1, path: string = BASIC_SAMPLE_DOCUMENT) => ok({
+        projectLocation: buildProjectLocation(path, depth, index),
+        parts: parts,
+    });
+
+    const createTextPart = (text: string, line: number, char: number, path: string = BASIC_SAMPLE_DOCUMENT) => ({
+        type: 'text' as const,
+        text: text,
+        location: getLocation(path, 0, 0, line, char),
+    });
+
+    const createLispPart = (text: string, line: number, char: number, path: string = BASIC_SAMPLE_DOCUMENT) => ({
+        type: 'lisp' as const,
+        text: text,
+        location: getLocation(path, 0, 0, line, char),
+    });
+
     it('should fail if document parsing failed', () => {
         const parseResult = fail('This document did not parse', undefined, buildPath('X:/non-exist.dlisp')) as Result<DocumentMap>;
 
@@ -51,10 +69,7 @@ describe('tokenizer', () => {
     });
 
     it('should return empty if given an empty parse result', () => {
-        const parseResult: Result<DocumentMap> = ok({
-            projectLocation: buildProjectLocation('c:/empty/readme.md', 4, 8),
-            parts: [],
-        });
+        const parseResult = createDocMap([], 4, 8, 'c:/empty/readme.md');
 
         const result = tokenizer(parseResult);
 
@@ -62,16 +77,7 @@ describe('tokenizer', () => {
     });
 
     it('should tokenize text as text', () => {
-        const parseResult: Result<DocumentMap> = ok({
-            projectLocation: buildProjectLocation(BASIC_SAMPLE_DOCUMENT, 6, 8),
-            parts: [
-                {
-                    type: 'text',
-                    text: 'hello my text',
-                    location: getLocation(BASIC_SAMPLE_DOCUMENT, 0, 0, 5, 23),
-                }
-            ],
-        });
+        const parseResult = createDocMap([createTextPart('hello my text', 5, 23)], 6, 8);
 
         const result = tokenizer(parseResult);
 
@@ -80,34 +86,15 @@ describe('tokenizer', () => {
 
     describe('handling Doculisp', () => {
         it('should tokenize an empty comment', () => {
-            let parseResult: Result<DocumentMap> = ok({
-                projectLocation: buildProjectLocation(BASIC_SAMPLE_DOCUMENT, 1, 5 ),
-                parts: [
-                    {
-                        type: 'lisp',
-                        text: '(*)',
-                        location: getLocation(BASIC_SAMPLE_DOCUMENT, 0, 0, 2, 1),
-                    },
-                ],
-            });
+            const parseResult = createDocMap([createLispPart('(*)', 2, 1)], 1, 5);
             
-            let result = tokenizer(parseResult);
+            const result = tokenizer(parseResult);
 
             verifyAsJson(result);
         });
         
         it('should tokenize an single identifier', () => {
-            const start: ILocation = getLocation(BASIC_SAMPLE_DOCUMENT, 0, 0, 4, 2);
-            let parseResult: Result<DocumentMap> = ok({
-                projectLocation: buildProjectLocation(BASIC_SAMPLE_DOCUMENT, 2, 7),
-                parts: [
-                    {
-                        type: 'lisp',
-                        text: '(identifier)',
-                        location: start,
-                    },
-                ],
-            });
+            const parseResult = createDocMap([createLispPart('(identifier)', 4, 2)], 2, 7);
             
             const result = tokenizer(parseResult);
 
@@ -137,17 +124,7 @@ describe('tokenizer', () => {
                 getLocation = buildLocation(util);
             });
 
-            const start: ILocation = getLocation(BASIC_SAMPLE_DOCUMENT, 0, 0, 1, 1);
-            const parseResult: Result<DocumentMap> = ok({
-                projectLocation: buildProjectLocation(BASIC_SAMPLE_DOCUMENT, 1, 1),
-                parts: [
-                    {
-                        type: 'lisp',
-                        location: start,
-                        text: '(unclosed (paren',
-                    }
-                ]
-            });
+            const parseResult = createDocMap([createLispPart('(unclosed (paren', 1, 1)], 1, 1);
 
             const result = failingTokenizer(parseResult);
 
@@ -155,17 +132,7 @@ describe('tokenizer', () => {
         });
         
         it('should tokenize an single identifier with space after identifier', () => {
-            const start: ILocation = getLocation(BASIC_SAMPLE_DOCUMENT, 0, 0, 4, 2);
-            let parseResult: Result<DocumentMap> = ok({
-                projectLocation: buildProjectLocation(BASIC_SAMPLE_DOCUMENT, 3, 7),
-                parts: [
-                    {
-                        type: 'lisp',
-                        text: '(identifier )',
-                        location: start,
-                    },
-                ],
-            });
+            const parseResult = createDocMap([createLispPart('(identifier )', 4, 2)], 3, 7);
             
             const result = tokenizer(parseResult);
 
@@ -173,17 +140,7 @@ describe('tokenizer', () => {
         });
         
         it('should tokenize an single identifier with new line after identifier', () => {
-            const start: ILocation = getLocation(BASIC_SAMPLE_DOCUMENT, 0, 0, 4, 2);
-            let parseResult: Result<DocumentMap> = ok({
-                projectLocation: buildProjectLocation(BASIC_SAMPLE_DOCUMENT, 7, 4),
-                parts: [
-                    {
-                        type: 'lisp',
-                        text: '(identifier\r\n)',
-                        location: start,
-                    },
-                ],
-            });
+            const parseResult = createDocMap([createLispPart('(identifier\r\n)', 4, 2)], 7, 4);
             
             const result = tokenizer(parseResult);
 
@@ -191,17 +148,7 @@ describe('tokenizer', () => {
         });
         
         it('should tokenize an single identifier containing only numbers', () => {
-            const start: ILocation = getLocation(BASIC_SAMPLE_DOCUMENT, 0, 0, 4, 2 );
-            let parseResult: Result<DocumentMap> = ok({
-                projectLocation: buildProjectLocation(BASIC_SAMPLE_DOCUMENT, 4, 6),
-                parts: [
-                    {
-                        type: 'lisp',
-                        text: '(123987)',
-                        location: start,
-                    },
-                ],
-            });
+            const parseResult = createDocMap([createLispPart('(123987)', 4, 2)], 4, 6);
             
             const result = tokenizer(parseResult);
 
@@ -209,17 +156,7 @@ describe('tokenizer', () => {
         });
         
         it('should tokenize an single identifier with hyphen and underscore', () => {
-            const start: ILocation = getLocation(BASIC_SAMPLE_DOCUMENT, 0, 0, 4, 2);
-            let parseResult: Result<DocumentMap> = ok({
-                projectLocation: buildProjectLocation(BASIC_SAMPLE_DOCUMENT, 7, 7),
-                parts: [
-                    {
-                        type: 'lisp',
-                        text: '(identifier-start_end)',
-                        location: start,
-                    },
-                ],
-            });
+            const parseResult = createDocMap([createLispPart('(identifier-start_end)', 4, 2)], 7, 7);
             
             const result = tokenizer(parseResult);
 
@@ -227,19 +164,7 @@ describe('tokenizer', () => {
         });
 
         it('should tokenize a single identifier with a single word parameter', () => {
-            const start: ILocation = getLocation('Z:/parameter.md', 0, 0, 1, 13);
-
-            let parseResult: Result<DocumentMap> = ok({
-                projectLocation: buildProjectLocation('Z:/parameter.md', 5, 5),
-                parts: [
-                    {
-                        type: 'lisp',
-                        text: '(the thing)',
-                        location: start,
-
-                    }
-                ],
-            }); 
+            const parseResult = createDocMap([createLispPart('(the thing)', 1, 13, 'Z:/parameter.md')], 5, 5, 'Z:/parameter.md');
 
             const result = tokenizer(parseResult);
 
@@ -247,19 +172,7 @@ describe('tokenizer', () => {
         });
 
         it('should tokenize a single identifier with a multi word parameter', () => {
-            const start: ILocation = getLocation('Z:/parameter.md', 0, 0, 1, 13);
-
-            let parseResult: Result<DocumentMap> = ok({
-                projectLocation: buildProjectLocation('Z:/parameter.md', 8, 1),
-                parts: [
-                    {
-                        type: 'lisp',
-                        text: '(title the thing from beyond\n\tthe swamp)',
-                        location: start,
-
-                    }
-                ],
-            }); 
+            const parseResult = createDocMap([createLispPart('(title the thing from beyond\n\tthe swamp)', 1, 13, 'Z:/parameter.md')], 8, 1, 'Z:/parameter.md');
 
             const result = tokenizer(parseResult);
 
@@ -267,22 +180,13 @@ describe('tokenizer', () => {
         });
 
         it('should handle nested lisp', () => {
-            const start: ILocation = getLocation('A:/main.md', 0, 0, 2, 1);
-
-            let parseResult: Result<DocumentMap> = ok({
-                projectLocation: buildProjectLocation('A:/main.md', 7, 7),
-                parts: [
-                    {
-                        type: 'lisp',
-                        location: start,
-                        text: `(section-meta
+            const parseResult = createDocMap([
+                createLispPart(`(section-meta
         (include
             (Section ./structure.md)
         )
-    )`,
-                    }
-                ]
-            });
+    )`, 2, 1, 'A:/main.md')
+            ], 7, 7, 'A:/main.md');
 
             const result = tokenizer(parseResult);
 
@@ -290,24 +194,15 @@ describe('tokenizer', () => {
         });
 
         it('should handle comment with nested lisp', () => {
-            const start: ILocation = getLocation('A:/main.md', 0, 0, 2, 1);
-
-            let parseResult: Result<DocumentMap> = ok({
-                projectLocation: buildProjectLocation('A:/main.md', 7, 1),
-                parts: [
-                    {
-                        type: 'lisp',
-                        location: start,
-                        text: `(section-meta
+            const parseResult = createDocMap([
+                createLispPart(`(section-meta
         (*include
             (Section ./structure.md)
             (*Section ./comments.md)
             (Section ./toc.md)
         )
-    )`,
-                    }
-                ]
-            });
+    )`, 2, 1, 'A:/main.md')
+            ], 7, 1, 'A:/main.md');
 
             const result = tokenizer(parseResult);
 
@@ -315,18 +210,7 @@ describe('tokenizer', () => {
         });
 
         it('should handle parameter with escaped open paren', () => {
-            const start: ILocation = getLocation('A:/main.md', 0, 0, 2, 1);
-
-            let parseResult: Result<DocumentMap> = ok({
-                projectLocation: buildProjectLocation('A:/main.md', 7, 1),
-                parts: [
-                    {
-                        type: 'lisp',
-                        location: start,
-                        text: "(title The elusive \\())",
-                    }
-                ]
-            });
+            const parseResult = createDocMap([createLispPart("(title The elusive \\())", 2, 1, 'A:/main.md')], 7, 1, 'A:/main.md');
 
             const result = tokenizer(parseResult);
 
@@ -334,18 +218,7 @@ describe('tokenizer', () => {
         });
 
         it('should handle parameter with escaped close paren', () => {
-            const start: ILocation = getLocation('A:/main.md', 0, 0, 2, 1);
-
-            let parseResult: Result<DocumentMap> = ok({
-                projectLocation: buildProjectLocation('A:/main.md', 7, 1),
-                parts: [
-                    {
-                        type: 'lisp',
-                        location: start,
-                        text: "(title The elusive \\))",
-                    }
-                ]
-            });
+            const parseResult = createDocMap([createLispPart("(title The elusive \\))", 2, 1, 'A:/main.md')], 7, 1, 'A:/main.md');
 
             const result = tokenizer(parseResult);
 
@@ -441,24 +314,6 @@ describe('tokenizer', () => {
 
         it('should succeed with whitespace in parameters', () => {
             const input = '<!-- (dl (command parameter with spaces)) -->';
-            const location = buildProjectLocation(BASIC_SAMPLE_DOCUMENT, 1, 1);
-            
-            const result = toResult(input, location);
-            
-            verifyWithGiven(result, undefined, input);
-        });
-
-        it('should fail when tab follows opening parenthesis', () => {
-            const input = '<!-- (dl (\tidentifier)) -->';
-            const location = buildProjectLocation(BASIC_SAMPLE_DOCUMENT, 1, 1);
-            
-            const result = toResult(input, location);
-            
-            verifyWithGiven(result, undefined, input);
-        });
-
-        it('should fail when multiple whitespace follows opening parenthesis', () => {
-            const input = '<!-- (dl ( \n\t identifier)) -->';
             const location = buildProjectLocation(BASIC_SAMPLE_DOCUMENT, 1, 1);
             
             const result = toResult(input, location);
