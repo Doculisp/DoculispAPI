@@ -211,6 +211,12 @@ When writing or modifying tests, always reference the **AI Testing Codex** (`AI-
 - **Best Practices**: Test isolation, dependency management, and error propagation
 
 ### Key Testing Requirements:
+- **CRITICAL: Never change test execution method and test structure in the same commit**
+  - Changing test infrastructure (e.g., Approvals → Jest snapshots) MUST be done separately from test refactoring
+  - If a test breaks, you must be able to determine if the infrastructure change or the refactoring caused it
+  - Always migrate test infrastructure first, verify tests pass, THEN refactor in a separate commit
+  - Examples of infrastructure changes: changing assertion libraries, snapshot systems, mocking frameworks, test runners
+  - Examples of refactoring: extracting fixtures, adding helper functions, reorganizing test structure
 - Use `testable` builders from `testHelpers.ts` for consistent test setup
 - Always use `buildTestable()` containers for test isolation
 - Mock file system operations with in-memory dictionaries
