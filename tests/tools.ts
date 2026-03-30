@@ -112,3 +112,12 @@ export function verifyMarkdownJest(text: string): void {
 export function verifyTextJest(text: string): void {
     expect(text).toMatchSnapshot();
 }
+
+export function getJestVerifiers() {
+    return {
+        verifyAsJson: verifyAsJsonJest,
+        verifyWithGiven: verifyWithGivenJest,
+        verifyMarkdown: verifyMarkdownJest,
+        verifyText: verifyTextJest
+    };
+}

@@ -1,5 +1,5 @@
 import { containerPromise } from "../../../src/moduleLoader";
-import { verifyAsJsonJest, verifyWithGivenJest } from "../../tools";
+import { getJestVerifiers } from "../../tools";
 import { DocumentParser } from "../../../src/types/types.document";
 import { buildProjectLocation, testable } from "../../testHelpers";
 import { IContainer } from "../../../src/types/types.containers";
@@ -144,8 +144,7 @@ const DLISP_FILE_FIXTURES = {
 describe('document', () => {
     let container: IContainer = null as any;
     let parse: DocumentParser = undefined as any;
-    const verifyAsJson = verifyAsJsonJest;
-    const verifyWithGiven = verifyWithGivenJest;
+    const { verifyAsJson, verifyWithGiven } = getJestVerifiers();
 
     beforeEach(async () => {
         container = await containerPromise;
