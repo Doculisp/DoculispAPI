@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`document parsing .dlisp files parsing failures should fail to parse a file that contains a dl identifier 1`] = `
 {
