@@ -9,7 +9,14 @@
     "section": {
       "doculisp": [
         {
-          "documentOrder": {
+          "end": {
+            "char": 11,
+            "documentDepth": 4,
+            "documentIndex": 8,
+            "documentPath": "T:/ext/only.md",
+            "line": 1
+          },
+          "start": {
             "char": 1,
             "documentDepth": 4,
             "documentIndex": 8,
@@ -20,7 +27,14 @@
           "value": "Intro text"
         },
         {
-          "documentOrder": {
+          "end": {
+            "char": 24,
+            "documentDepth": 4,
+            "documentIndex": 8,
+            "documentPath": "T:/ext/only.md",
+            "line": 5
+          },
+          "start": {
             "char": 1,
             "documentDepth": 4,
             "documentIndex": 8,

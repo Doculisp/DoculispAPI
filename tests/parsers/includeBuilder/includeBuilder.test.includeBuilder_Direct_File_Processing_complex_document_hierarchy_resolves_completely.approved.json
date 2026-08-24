@@ -114,7 +114,14 @@
                   "type": "doculisp-title"
                 },
                 {
-                  "documentOrder": {
+                  "end": {
+                    "char": 21,
+                    "documentDepth": 2,
+                    "documentIndex": 1,
+                    "documentPath": "./childDoc.md",
+                    "line": 12
+                  },
+                  "start": {
                     "char": 1,
                     "documentDepth": 2,
                     "documentIndex": 1,
@@ -192,7 +199,14 @@
                         "type": "doculisp-title"
                       },
                       {
-                        "documentOrder": {
+                        "end": {
+                          "char": 27,
+                          "documentDepth": 3,
+                          "documentIndex": 1,
+                          "documentPath": "./grandchild.md",
+                          "line": 10
+                        },
+                        "start": {
                           "char": 1,
                           "documentDepth": 3,
                           "documentIndex": 1,

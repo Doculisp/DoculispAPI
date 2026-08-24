@@ -7,7 +7,7 @@ export interface ILocationSortable {
     readonly documentOrder: ILocation;
 };
 
-export interface IWrite extends ILocationSortable {
+export interface IWrite extends IRange {
     readonly type: 'doculisp-write';
     readonly value: string;
 };

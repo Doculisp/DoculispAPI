@@ -50,7 +50,14 @@
             "type": "doculisp-title"
           },
           {
-            "documentOrder": {
+            "end": {
+              "char": 8,
+              "documentDepth": 2,
+              "documentIndex": 7,
+              "documentPath": "../main.md",
+              "line": 7
+            },
+            "start": {
               "char": 1,
               "documentDepth": 2,
               "documentIndex": 7,
@@ -88,7 +95,14 @@
             "type": "doculisp-path-id"
           },
           {
-            "documentOrder": {
+            "end": {
+              "char": 40,
+              "documentDepth": 2,
+              "documentIndex": 7,
+              "documentPath": "../main.md",
+              "line": 7
+            },
+            "start": {
               "char": 39,
               "documentDepth": 2,
               "documentIndex": 7,

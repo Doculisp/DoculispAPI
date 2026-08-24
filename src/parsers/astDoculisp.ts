@@ -45,12 +45,18 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
             if(ast.type !== 'ast-value') {
                 return internals.noResultFound();
             }
+
+            const lines = ast.value.split('\n');
+            const end = 1 < lines.length
+                ? ast.location.increaseLine(lines.length - 1).increaseChar((lines[lines.length - 1] as string).length)
+                : ast.location.increaseChar(ast.value.length);
     
             return util.ok({
                 type: 'parse result',
                 subResult: {
                     type: 'doculisp-write',
-                    documentOrder: ast.location,
+                    start: ast.location,
+                    end,
                     value: ast.value,
                 },
                 rest: trimArray.trim(1, input),

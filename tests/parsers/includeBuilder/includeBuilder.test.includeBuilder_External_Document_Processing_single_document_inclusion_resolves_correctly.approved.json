@@ -110,7 +110,14 @@
                   "type": "doculisp-title"
                 },
                 {
-                  "documentOrder": {
+                  "end": {
+                    "char": 13,
+                    "documentDepth": 2,
+                    "documentIndex": 1,
+                    "documentPath": "C:/sub.md",
+                    "line": 9
+                  },
+                  "start": {
                     "char": 1,
                     "documentDepth": 2,
                     "documentIndex": 1,

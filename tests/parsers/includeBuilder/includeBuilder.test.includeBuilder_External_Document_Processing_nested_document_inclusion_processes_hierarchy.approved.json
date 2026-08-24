@@ -58,7 +58,14 @@
             "type": "doculisp-content"
           },
           {
-            "documentOrder": {
+            "end": {
+              "char": 13,
+              "documentDepth": 1,
+              "documentIndex": 1,
+              "documentPath": "./_main.md",
+              "line": 13
+            },
+            "start": {
               "char": 1,
               "documentDepth": 1,
               "documentIndex": 1,
@@ -136,7 +143,14 @@
                   "type": "doculisp-content"
                 },
                 {
-                  "documentOrder": {
+                  "end": {
+                    "char": 8,
+                    "documentDepth": 2,
+                    "documentIndex": 1,
+                    "documentPath": "./child.md",
+                    "line": 14
+                  },
+                  "start": {
                     "char": 1,
                     "documentDepth": 2,
                     "documentIndex": 1,
@@ -188,7 +202,14 @@
                         "type": "doculisp-title"
                       },
                       {
-                        "documentOrder": {
+                        "end": {
+                          "char": 11,
+                          "documentDepth": 3,
+                          "documentIndex": 1,
+                          "documentPath": "C:/grand.md",
+                          "line": 9
+                        },
+                        "start": {
                           "char": 1,
                           "documentDepth": 3,
                           "documentIndex": 1,

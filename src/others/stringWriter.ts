@@ -1,6 +1,6 @@
 import { DoculispPart, IDoculisp, IEmptyDoculisp, IHeader, ILoad, IPathId, ISectionWriter, ITableOfContents, ITitle, IWrite } from "../types/types.astDoculisp";
 import { IRegisterable } from "../types/types.containers";
-import { ILocation, IUtil, Result } from "../types/types.general";
+import { ILocation, ILocationCoordinates, IUtil, Result } from "../types/types.general";
 import { IStringBuilder, StringBuilderConstructor } from "../types/types.sringBuilder";
 import { IStringWriter } from "../types/types.stringWriter";
 import { destKey, IStringArray, IVariableEmptyId, IVariableId, IVariablePath, IVariableTable } from "../types/types.variableTable";
@@ -12,6 +12,11 @@ function buildWriter(util: IUtil, stringBuilderConstructor: StringBuilderConstru
 
     function writeAstWrite(astWrite: IWrite) : string {
         return astWrite.value;
+    }
+
+    // 'doculisp-write' tracks a start/end range; every other part is still a single point
+    function partStart(part: DoculispPart): ILocationCoordinates {
+        return part.type === 'doculisp-write' ? part.start : part.documentOrder;
     }
     
     function writeAstTitle(astTitle: ITitle): string {
@@ -159,7 +164,7 @@ function buildWriter(util: IUtil, stringBuilderConstructor: StringBuilderConstru
             }
     
             const doc = load.document;
-            let previous: ILocation = doc.documentOrder;
+            let previous: ILocationCoordinates = doc.documentOrder;
     
             if(0 < sb.length) {
                 sb.addLine();
@@ -213,12 +218,12 @@ function buildWriter(util: IUtil, stringBuilderConstructor: StringBuilderConstru
         return util.ok('./' + idPath.getRelativeFrom(outPutPath.getContainingDir()).replaceAll('\\', '/') + headerLinkText);
     }
     
-    function writeSection(previous: ILocation, section: ISectionWriter, variableTable: IVariableTable): Result<string> {
+    function writeSection(previous: ILocationCoordinates, section: ISectionWriter, variableTable: IVariableTable): Result<string> {
         const sb = stringBuilderConstructor();
         let previousType = '';
         let previousLine = (
             !!section.doculisp?.length
-            ? section.doculisp[0]?.documentOrder.line as number
+            ? partStart(section.doculisp[0] as DoculispPart).line
             : 0
         );
     
@@ -228,16 +233,18 @@ function buildWriter(util: IUtil, stringBuilderConstructor: StringBuilderConstru
                 continue;
             }
     
-            if (previousLine < doculisp.documentOrder.line) {
+            const start = partStart(doculisp);
+    
+            if (previousLine < start.line) {
                 sb.addLine();
             }
 
-            previousLine = doculisp.documentOrder.line;
+            previousLine = start.line;
     
             if((previousType === 'doculisp-write' || previousType === 'doculisp-path-id') && (doculisp.type === 'doculisp-write' || doculisp.type === 'doculisp-path-id')) {
-                if(previous.documentPath !== doculisp.documentOrder.documentPath
-                   || (previous.line + 2) <= doculisp.documentOrder.line
-                   || (doculisp.documentOrder.line + 2) <= previous.line
+                if(previous.documentPath !== start.documentPath
+                   || (previous.line + 2) <= start.line
+                   || (start.line + 2) <= previous.line
                 ) {
                     sb.addLine();
                 }
@@ -287,7 +294,7 @@ function buildWriter(util: IUtil, stringBuilderConstructor: StringBuilderConstru
             }
     
             previousType = doculisp.type;
-            previous = doculisp.documentOrder;
+            previous = start;
         }
     
         return util.ok(sb.toString());

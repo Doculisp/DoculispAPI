@@ -102,7 +102,14 @@
                   "type": "doculisp-title"
                 },
                 {
-                  "documentOrder": {
+                  "end": {
+                    "char": 21,
+                    "documentDepth": 2,
+                    "documentIndex": 1,
+                    "documentPath": "A:/subA.md",
+                    "line": 9
+                  },
+                  "start": {
                     "char": 1,
                     "documentDepth": 2,
                     "documentIndex": 1,
@@ -167,7 +174,14 @@
                   "type": "doculisp-title"
                 },
                 {
-                  "documentOrder": {
+                  "end": {
+                    "char": 21,
+                    "documentDepth": 2,
+                    "documentIndex": 2,
+                    "documentPath": "B:/subB.md",
+                    "line": 9
+                  },
+                  "start": {
                     "char": 1,
                     "documentDepth": 2,
                     "documentIndex": 2,
