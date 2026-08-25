@@ -443,10 +443,10 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
                         return {
                             type: 'doculisp-load',
                             document: false,
-                            documentOrder: rawLoad.location,
+                            start: rawLoad.blockRange.start,
+                            end: rawLoad.blockRange.end,
                             path: pathConstructor(rawLoad.parameter.value),
                             sectionLabel: rawLoad.value.replaceAll('-', ' '),
-                            blockRange: rawLoad.blockRange,
                         }
                     });
 

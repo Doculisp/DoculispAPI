@@ -73,22 +73,6 @@
         },
         "include": [
           {
-            "blockRange": {
-              "end": {
-                "char": 29,
-                "documentDepth": 1,
-                "documentIndex": 1,
-                "documentPath": "./_main.dlisp",
-                "line": 5
-              },
-              "start": {
-                "char": 9,
-                "documentDepth": 1,
-                "documentIndex": 1,
-                "documentPath": "./_main.dlisp",
-                "line": 5
-              }
-            },
             "document": {
               "doculisp": [
                 {
@@ -149,22 +133,6 @@
               },
               "include": [
                 {
-                  "blockRange": {
-                    "end": {
-                      "char": 34,
-                      "documentDepth": 2,
-                      "documentIndex": 1,
-                      "documentPath": "./childDoc.md",
-                      "line": 7
-                    },
-                    "start": {
-                      "char": 13,
-                      "documentDepth": 2,
-                      "documentIndex": 1,
-                      "documentPath": "./childDoc.md",
-                      "line": 7
-                    }
-                  },
                   "document": {
                     "doculisp": [
                       {
@@ -209,8 +177,8 @@
                     "include": [],
                     "type": "doculisp-section"
                   },
-                  "documentOrder": {
-                    "char": 14,
+                  "end": {
+                    "char": 34,
                     "documentDepth": 2,
                     "documentIndex": 1,
                     "documentPath": "./childDoc.md",
@@ -218,13 +186,20 @@
                   },
                   "path": "./grandchild.md",
                   "sectionLabel": "Chip",
+                  "start": {
+                    "char": 13,
+                    "documentDepth": 2,
+                    "documentIndex": 1,
+                    "documentPath": "./childDoc.md",
+                    "line": 7
+                  },
                   "type": "doculisp-load"
                 }
               ],
               "type": "doculisp-section"
             },
-            "documentOrder": {
-              "char": 10,
+            "end": {
+              "char": 29,
               "documentDepth": 1,
               "documentIndex": 1,
               "documentPath": "./_main.dlisp",
@@ -232,6 +207,13 @@
             },
             "path": "./childDoc.md",
             "sectionLabel": "Block",
+            "start": {
+              "char": 9,
+              "documentDepth": 1,
+              "documentIndex": 1,
+              "documentPath": "./_main.dlisp",
+              "line": 5
+            },
             "type": "doculisp-load"
           }
         ],

@@ -375,6 +375,8 @@ A story of a misbehaving parser.
         (github jason-kerney)
     )
 )
+
+(content)
 `;
                     const result = toResult(contents, buildProjectLocation('main.dlisp', 1, 7));
                                                     
@@ -554,6 +556,30 @@ A story of a misbehaving parser.
                     const result = toResult(contents, buildProjectLocation('main.dlisp', 1, 4));
 
                     verifyWithGiven(result, undefined, contents);
+                });
+
+                it('should represent an include as its full logical range', () => {
+                    const contents = `
+(section-meta
+    (title Main Document)
+    (include
+        (section ./file.md)
+    )
+)
+
+(content)
+`;
+
+                    const result = toResult(contents, buildProjectLocation('main.dlisp', 1, 4));
+
+                    expect(result.success).toBe(true);
+                    if(!result.success || result.value.type === 'doculisp-empty') {
+                        return;
+                    }
+
+                    const load = result.value.section.include[0] as any;
+                    expect(load.start).toMatchObject({ line: 5, char: 9 });
+                    expect(load.end).toMatchObject({ line: 5, char: 27 });
                 });
 
                 it('should parse include without section information', () => {

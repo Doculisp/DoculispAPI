@@ -21,12 +21,11 @@ export interface ITitle extends ILocationSortable {
     readonly subtitle?: string | undefined;
 };
 
-export interface ILoad extends ILocationSortable {
+export interface ILoad extends IRange {
     readonly type: 'doculisp-load';
     readonly path: IPath;
     readonly sectionLabel: string;
     document: ISectionWriter | false;
-    blockRange: IRange;
 }
 
 export type DoculispBulletStyle = 

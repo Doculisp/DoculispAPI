@@ -76,22 +76,6 @@
         },
         "include": [
           {
-            "blockRange": {
-              "end": {
-                "char": 30,
-                "documentDepth": 1,
-                "documentIndex": 1,
-                "documentPath": "./_main.md",
-                "line": 6
-              },
-              "start": {
-                "char": 13,
-                "documentDepth": 1,
-                "documentIndex": 1,
-                "documentPath": "./_main.md",
-                "line": 6
-              }
-            },
             "document": {
               "doculisp": [
                 {
@@ -152,22 +136,6 @@
               },
               "include": [
                 {
-                  "blockRange": {
-                    "end": {
-                      "char": 36,
-                      "documentDepth": 2,
-                      "documentIndex": 1,
-                      "documentPath": "./child.md",
-                      "line": 6
-                    },
-                    "start": {
-                      "char": 13,
-                      "documentDepth": 2,
-                      "documentIndex": 1,
-                      "documentPath": "./child.md",
-                      "line": 6
-                    }
-                  },
                   "document": {
                     "doculisp": [
                       {
@@ -212,8 +180,8 @@
                     "include": [],
                     "type": "doculisp-section"
                   },
-                  "documentOrder": {
-                    "char": 14,
+                  "end": {
+                    "char": 36,
                     "documentDepth": 2,
                     "documentIndex": 1,
                     "documentPath": "./child.md",
@@ -221,13 +189,20 @@
                   },
                   "path": "C:/grand.md",
                   "sectionLabel": "GrandChild",
+                  "start": {
+                    "char": 13,
+                    "documentDepth": 2,
+                    "documentIndex": 1,
+                    "documentPath": "./child.md",
+                    "line": 6
+                  },
                   "type": "doculisp-load"
                 }
               ],
               "type": "doculisp-section"
             },
-            "documentOrder": {
-              "char": 14,
+            "end": {
+              "char": 30,
               "documentDepth": 1,
               "documentIndex": 1,
               "documentPath": "./_main.md",
@@ -235,6 +210,13 @@
             },
             "path": "./child.md",
             "sectionLabel": "Child",
+            "start": {
+              "char": 13,
+              "documentDepth": 1,
+              "documentIndex": 1,
+              "documentPath": "./_main.md",
+              "line": 6
+            },
             "type": "doculisp-load"
           }
         ],

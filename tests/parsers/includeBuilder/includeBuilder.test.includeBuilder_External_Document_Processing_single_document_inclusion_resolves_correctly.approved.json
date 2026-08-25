@@ -69,22 +69,6 @@
         },
         "include": [
           {
-            "blockRange": {
-              "end": {
-                "char": 27,
-                "documentDepth": 1,
-                "documentIndex": 1,
-                "documentPath": "C:/_main.dlisp",
-                "line": 5
-              },
-              "start": {
-                "char": 9,
-                "documentDepth": 1,
-                "documentIndex": 1,
-                "documentPath": "C:/_main.dlisp",
-                "line": 5
-              }
-            },
             "document": {
               "doculisp": [
                 {
@@ -129,8 +113,8 @@
               "include": [],
               "type": "doculisp-section"
             },
-            "documentOrder": {
-              "char": 10,
+            "end": {
+              "char": 27,
               "documentDepth": 1,
               "documentIndex": 1,
               "documentPath": "C:/_main.dlisp",
@@ -138,6 +122,13 @@
             },
             "path": "C:/sub.md",
             "sectionLabel": "Section",
+            "start": {
+              "char": 9,
+              "documentDepth": 1,
+              "documentIndex": 1,
+              "documentPath": "C:/_main.dlisp",
+              "line": 5
+            },
             "type": "doculisp-load"
           }
         ],
