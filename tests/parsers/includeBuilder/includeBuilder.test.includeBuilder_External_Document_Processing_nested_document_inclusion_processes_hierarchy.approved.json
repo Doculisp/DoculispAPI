@@ -32,24 +32,15 @@
             "type": "doculisp-title"
           },
           {
-            "blockRange": {
-              "end": {
-                "char": 13,
-                "documentDepth": 1,
-                "documentIndex": 1,
-                "documentPath": "./_main.md",
-                "line": 10
-              },
-              "start": {
-                "char": 5,
-                "documentDepth": 1,
-                "documentIndex": 1,
-                "documentPath": "./_main.md",
-                "line": 10
-              }
+            "end": {
+              "char": 13,
+              "documentDepth": 1,
+              "documentIndex": 1,
+              "documentPath": "./_main.md",
+              "line": 10
             },
-            "documentOrder": {
-              "char": 6,
+            "start": {
+              "char": 5,
               "documentDepth": 1,
               "documentIndex": 1,
               "documentPath": "./_main.md",
@@ -117,24 +108,15 @@
                   "type": "doculisp-title"
                 },
                 {
-                  "blockRange": {
-                    "end": {
-                      "char": 13,
-                      "documentDepth": 2,
-                      "documentIndex": 1,
-                      "documentPath": "./child.md",
-                      "line": 10
-                    },
-                    "start": {
-                      "char": 5,
-                      "documentDepth": 2,
-                      "documentIndex": 1,
-                      "documentPath": "./child.md",
-                      "line": 10
-                    }
+                  "end": {
+                    "char": 13,
+                    "documentDepth": 2,
+                    "documentIndex": 1,
+                    "documentPath": "./child.md",
+                    "line": 10
                   },
-                  "documentOrder": {
-                    "char": 6,
+                  "start": {
+                    "char": 5,
                     "documentDepth": 2,
                     "documentIndex": 1,
                     "documentPath": "./child.md",

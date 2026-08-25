@@ -14,9 +14,9 @@ function buildWriter(util: IUtil, stringBuilderConstructor: StringBuilderConstru
         return astWrite.value;
     }
 
-    // 'doculisp-write' and 'doculisp-path-id' track a start/end range; every other part is still a single point
+    // 'doculisp-write', 'doculisp-path-id', and 'doculisp-content' track a start/end range; every other part is still a single point
     function partStart(part: DoculispPart): ILocationCoordinates {
-        return part.type === 'doculisp-write' || part.type === 'doculisp-path-id' ? part.start : part.documentOrder;
+        return part.type === 'doculisp-write' || part.type === 'doculisp-path-id' || part.type === 'doculisp-content' ? part.start : part.documentOrder;
     }
 
     

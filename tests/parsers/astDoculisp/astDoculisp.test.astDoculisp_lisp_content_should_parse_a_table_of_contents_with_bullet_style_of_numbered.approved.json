@@ -36,24 +36,15 @@
             "type": "doculisp-toc"
           },
           {
-            "blockRange": {
-              "end": {
-                "char": 24,
-                "documentDepth": 2,
-                "documentIndex": 1,
-                "documentPath": "./itty.dlisp",
-                "line": 9
-              },
-              "start": {
-                "char": 1,
-                "documentDepth": 2,
-                "documentIndex": 1,
-                "documentPath": "./itty.dlisp",
-                "line": 9
-              }
+            "end": {
+              "char": 24,
+              "documentDepth": 2,
+              "documentIndex": 1,
+              "documentPath": "./itty.dlisp",
+              "line": 9
             },
-            "documentOrder": {
-              "char": 2,
+            "start": {
+              "char": 1,
               "documentDepth": 2,
               "documentIndex": 1,
               "documentPath": "./itty.dlisp",

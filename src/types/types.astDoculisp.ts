@@ -61,9 +61,8 @@ export interface IHeader extends ILocationSortable {
     readonly id?: string | undefined;
 };
 
-export interface IContentLocation extends ILocationSortable {
+export interface IContentLocation extends IRange {
     readonly type: 'doculisp-content';
-    readonly blockRange: IRange;
 }
 
 export interface IPathId extends IRange {

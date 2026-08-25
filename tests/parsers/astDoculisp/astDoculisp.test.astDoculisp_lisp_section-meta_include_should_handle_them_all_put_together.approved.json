@@ -24,24 +24,15 @@
             "type": "doculisp-title"
           },
           {
-            "blockRange": {
-              "end": {
-                "char": 9,
-                "documentDepth": 1,
-                "documentIndex": 4,
-                "documentPath": "main.dlisp",
-                "line": 11
-              },
-              "start": {
-                "char": 1,
-                "documentDepth": 1,
-                "documentIndex": 4,
-                "documentPath": "main.dlisp",
-                "line": 11
-              }
+            "end": {
+              "char": 9,
+              "documentDepth": 1,
+              "documentIndex": 4,
+              "documentPath": "main.dlisp",
+              "line": 11
             },
-            "documentOrder": {
-              "char": 2,
+            "start": {
+              "char": 1,
               "documentDepth": 1,
               "documentIndex": 4,
               "documentPath": "main.dlisp",
