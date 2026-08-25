@@ -25,14 +25,21 @@
           },
           {
             "bulletStyle": "bulleted-labeled",
-            "documentOrder": {
+            "end": {
+              "char": 5,
+              "documentDepth": 2,
+              "documentIndex": 1,
+              "documentPath": "./itty.dlisp",
+              "line": 13
+            },
+            "label": "### Awesome ###",
+            "start": {
               "char": 5,
               "documentDepth": 2,
               "documentIndex": 1,
               "documentPath": "./itty.dlisp",
               "line": 10
             },
-            "label": "### Awesome ###",
             "type": "doculisp-toc"
           },
           {

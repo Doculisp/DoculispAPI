@@ -47,13 +47,13 @@ export const bulletStyles: ReadonlyArray<DoculispBulletStyle> = [
     'bulleted-labeled',
 ];
 
-export interface ITableOfContents extends ILocationSortable {
+export interface ITableOfContents extends IRange {
     readonly type: 'doculisp-toc';
     readonly label: string | false;
     readonly bulletStyle: DoculispBulletStyle;
 };
 
-export interface IHeader extends ILocationSortable {
+export interface IHeader extends IRange {
     readonly type: 'doculisp-header';
     readonly depthCount: number;
     readonly text: string;

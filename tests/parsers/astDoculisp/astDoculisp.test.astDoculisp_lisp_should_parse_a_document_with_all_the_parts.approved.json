@@ -25,7 +25,14 @@
           },
           {
             "depthCount": 6,
-            "documentOrder": {
+            "end": {
+              "char": 32,
+              "documentDepth": 4,
+              "documentIndex": 7,
+              "documentPath": "./_main.dlisp",
+              "line": 15
+            },
+            "start": {
               "char": 2,
               "documentDepth": 4,
               "documentIndex": 7,
@@ -37,14 +44,21 @@
           },
           {
             "bulletStyle": "numbered-labeled",
-            "documentOrder": {
-              "char": 10,
+            "end": {
+              "char": 31,
               "documentDepth": 4,
               "documentIndex": 7,
               "documentPath": "./_main.dlisp",
               "line": 17
             },
             "label": false,
+            "start": {
+              "char": 10,
+              "documentDepth": 4,
+              "documentIndex": 7,
+              "documentPath": "./_main.dlisp",
+              "line": 17
+            },
             "type": "doculisp-toc"
           },
           {

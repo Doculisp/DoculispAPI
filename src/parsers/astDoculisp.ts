@@ -173,7 +173,8 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
                 subResult: {
                     type: 'doculisp-header',
                     depthCount: current.documentDepth + ast.value.length - id.length,
-                    documentOrder: ast.location,
+                    start: ast.location,
+                    end: ast.blockRange.end,
                     text: ast.parameter.value,
                     id: 0 < id.length ? id : undefined,
                 },
@@ -918,7 +919,8 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
                     const docuToc: ITableOfContents = {
                         type: 'doculisp-toc',
                         label: labelText ? headerize(location.documentDepth + 1, labelText) : labelText,
-                        documentOrder: toc.location.increaseChar(-1),
+                        start: toc.location.increaseChar(-1),
+                        end: toc.blockRange.end,
                         bulletStyle: bulletStyle,
                     };
         
@@ -941,7 +943,8 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
                     const docuToc: ITableOfContents = {
                         type: 'doculisp-toc',
                         label: false,
-                        documentOrder: toc.location.increaseChar(-1),
+                        start: toc.location.increaseChar(-1),
+                        end: toc.blockRange.end,
                         bulletStyle: bulletStyle,
                     };
         
@@ -1051,7 +1054,7 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
             return util.ok({
                 type: 'parse group result',
                 subResult: [tocMaybe.value as ITableOfContents, content].map((r): IKeeper<ITableOfContents | IContentLocation> => { return { type: 'keep', keptValue: r } }),
-                location: tocMaybe.value.documentOrder,
+                location: util.toLocation(tocMaybe.value.start, tocMaybe.value.start.line, tocMaybe.value.start.char),
                 rest: trimArray.trim(1, input),
             });
         }

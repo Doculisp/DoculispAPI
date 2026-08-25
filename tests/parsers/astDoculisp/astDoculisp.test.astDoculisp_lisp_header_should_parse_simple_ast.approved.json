@@ -12,7 +12,14 @@
         "doculisp": [
           {
             "depthCount": 3,
-            "documentOrder": {
+            "end": {
+              "char": 18,
+              "documentDepth": 2,
+              "documentIndex": 1,
+              "documentPath": "S:/ome/file.md",
+              "line": 2
+            },
+            "start": {
               "char": 6,
               "documentDepth": 2,
               "documentIndex": 1,

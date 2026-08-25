@@ -12,14 +12,21 @@
         "doculisp": [
           {
             "depthCount": 3,
-            "documentOrder": {
-              "char": 6,
+            "end": {
+              "char": 23,
               "documentDepth": 2,
               "documentIndex": 1,
               "documentPath": "S:/ome/file.md",
               "line": 2
             },
             "id": "first",
+            "start": {
+              "char": 6,
+              "documentDepth": 2,
+              "documentIndex": 1,
+              "documentPath": "S:/ome/file.md",
+              "line": 2
+            },
             "text": "My heading",
             "type": "doculisp-header"
           }

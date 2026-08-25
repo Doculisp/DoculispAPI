@@ -132,6 +132,26 @@ describe('astDoculisp', () => {
         
                 verifyWithGiven(result, undefined, contents);
             });
+
+            it('should expose range locations for a parsed header', () => {
+                const contents = `<!--
+(dl (# My heading))
+-->`;
+                const result = toResult(contents, buildProjectLocation('S:/ome/file.md', 2, 1));
+
+                expect(result.success).toBe(true);
+
+                if(!result.success || result.value.type === 'doculisp-empty') {
+                    return;
+                }
+
+                const header = result.value.section.doculisp.find(p => p.type === 'doculisp-header');
+
+                expect(header).toBeDefined();
+                expect(header && 'start' in header).toBe(true);
+                expect(header && 'end' in header).toBe(true);
+                expect(header && 'documentOrder' in (header as object)).toBe(false);
+            });
         
             it('should not parse a header without a parameter', () => {
                 const contents = `<!--
@@ -859,6 +879,34 @@ A story of a misbehaving parser.
                 const result = toResult(text, buildProjectLocation('./itty.dlisp', 2, 1));
 
                 verifyWithGiven(result, undefined, text);
+            });
+
+            it('should expose range locations for parsed toc', () => {
+                const text = `
+(section-meta
+    (title Sing Me a Song)
+    (include
+        (Chapter ./sleep.md)
+    )
+)
+
+(content (toc))
+`;
+
+                const result = toResult(text, buildProjectLocation('./itty.dlisp', 2, 1));
+
+                expect(result.success).toBe(true);
+
+                if(!result.success || result.value.type === 'doculisp-empty') {
+                    return;
+                }
+
+                const toc = result.value.section.doculisp.find(p => p.type === 'doculisp-toc');
+
+                expect(toc).toBeDefined();
+                expect(toc && 'start' in toc).toBe(true);
+                expect(toc && 'end' in toc).toBe(true);
+                expect(toc && 'documentOrder' in (toc as object)).toBe(false);
             });
 
             it.each([
