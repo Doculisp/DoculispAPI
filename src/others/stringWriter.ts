@@ -1,6 +1,6 @@
 import { DoculispPart, IDoculisp, IEmptyDoculisp, IHeader, ILoad, IPathId, ISectionWriter, ITableOfContents, ITitle, IWrite } from "../types/types.astDoculisp";
 import { IRegisterable } from "../types/types.containers";
-import { ILocation, ILocationCoordinates, IUtil, Result } from "../types/types.general";
+import { ILocation, ILocationCoordinates, IRange, IUtil, Result } from "../types/types.general";
 import { IStringBuilder, StringBuilderConstructor } from "../types/types.sringBuilder";
 import { IStringWriter } from "../types/types.stringWriter";
 import { destKey, IStringArray, IVariableEmptyId, IVariableId, IVariablePath, IVariableTable } from "../types/types.variableTable";
@@ -14,10 +14,11 @@ function buildWriter(util: IUtil, stringBuilderConstructor: StringBuilderConstru
         return astWrite.value;
     }
 
-    // 'doculisp-write' tracks a start/end range; every other part is still a single point
+    // 'doculisp-write' and 'doculisp-path-id' track a start/end range; every other part is still a single point
     function partStart(part: DoculispPart): ILocationCoordinates {
-        return part.type === 'doculisp-write' ? part.start : part.documentOrder;
+        return part.type === 'doculisp-write' || part.type === 'doculisp-path-id' ? part.start : part.documentOrder;
     }
+
     
     function writeAstTitle(astTitle: ITitle): string {
         const sb = stringBuilderConstructor();
@@ -183,8 +184,10 @@ function buildWriter(util: IUtil, stringBuilderConstructor: StringBuilderConstru
     }
 
     function writeGetPath(astIdPath: IPathId, table: IVariableTable): Result<string> {
+        const range: IRange = { start: astIdPath.start, end: astIdPath.end };
+
         if(!table.hasKey(astIdPath.id)) {
-            return validationFailure(`Unknown document ID '${astIdPath.id}' at '${astIdPath.documentOrder.documentPath}'.`, astIdPath.blockRange, astIdPath.documentOrder.documentPath);
+            return validationFailure(`Unknown document ID '${astIdPath.id}' at '${astIdPath.start.documentPath}'.`, range, astIdPath.start.documentPath);
         }
 
         const output = (
@@ -196,7 +199,7 @@ function buildWriter(util: IUtil, stringBuilderConstructor: StringBuilderConstru
         const idPathVariable = table.getValue(astIdPath.id) as IVariableId | IVariableEmptyId | false;
 
         if(!idPathVariable) {
-            return validationFailure(`Unknown document ID '${astIdPath.id}' at '${astIdPath.documentOrder.documentPath}'.`, astIdPath.blockRange, astIdPath.documentOrder.documentPath);
+            return validationFailure(`Unknown document ID '${astIdPath.id}' at '${astIdPath.start.documentPath}'.`, range, astIdPath.start.documentPath);
         }
 
         if(idPathVariable.type === 'variable-empty-id' || !output) {

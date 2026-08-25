@@ -1090,8 +1090,8 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
                 subResult: {
                     type: 'doculisp-path-id',
                     id: pathIdBlock.parameter.value,
-                    documentOrder: pathIdBlock.location,
-                    blockRange: pathIdBlock.blockRange,
+                    start: pathIdBlock.blockRange.start,
+                    end: pathIdBlock.blockRange.end,
                 },
                 rest: trimArray.trim(1, input),
             });

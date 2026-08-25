@@ -66,10 +66,9 @@ export interface IContentLocation extends ILocationSortable {
     readonly blockRange: IRange;
 }
 
-export interface IPathId extends ILocationSortable {
+export interface IPathId extends IRange {
     readonly type: 'doculisp-path-id';
     readonly id: string;
-    readonly blockRange: IRange;
 }
 
 export type DoculispPart = IWrite | ITitle | ITableOfContents | IContentLocation | IHeader | IPathId;
