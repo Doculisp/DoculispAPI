@@ -11,8 +11,8 @@
       "section": {
         "doculisp": [
           {
-            "documentOrder": {
-              "char": 6,
+            "end": {
+              "char": 26,
               "documentDepth": 2,
               "documentIndex": 1,
               "documentPath": "./itty.dlisp",
@@ -20,6 +20,13 @@
             },
             "label": "## Sing Me a Song ##",
             "ref_link": "#sing-me-a-song",
+            "start": {
+              "char": 5,
+              "documentDepth": 2,
+              "documentIndex": 1,
+              "documentPath": "./itty.dlisp",
+              "line": 3
+            },
             "title": "Sing Me a Song",
             "type": "doculisp-title"
           },
@@ -90,7 +97,7 @@
           }
         ],
         "start": {
-          "char": 6,
+          "char": 5,
           "documentDepth": 2,
           "documentIndex": 1,
           "documentPath": "./itty.dlisp",

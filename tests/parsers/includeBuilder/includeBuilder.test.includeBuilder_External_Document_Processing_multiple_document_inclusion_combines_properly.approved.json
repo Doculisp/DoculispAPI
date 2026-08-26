@@ -22,8 +22,8 @@
       "section": {
         "doculisp": [
           {
-            "documentOrder": {
-              "char": 6,
+            "end": {
+              "char": 39,
               "documentDepth": 1,
               "documentIndex": 1,
               "documentPath": "_main.dlisp",
@@ -31,6 +31,13 @@
             },
             "label": "# Main Multiple Sub Documents #",
             "ref_link": "#main-multiple-sub-documents",
+            "start": {
+              "char": 5,
+              "documentDepth": 1,
+              "documentIndex": 1,
+              "documentPath": "_main.dlisp",
+              "line": 3
+            },
             "title": "Main Multiple Sub Documents",
             "type": "doculisp-title"
           },
@@ -64,8 +71,8 @@
             "document": {
               "doculisp": [
                 {
-                  "documentOrder": {
-                    "char": 10,
+                  "end": {
+                    "char": 21,
                     "documentDepth": 2,
                     "documentIndex": 1,
                     "documentPath": "A:/subA.md",
@@ -73,6 +80,13 @@
                   },
                   "label": "## Sub A ##",
                   "ref_link": "#sub-a",
+                  "start": {
+                    "char": 9,
+                    "documentDepth": 2,
+                    "documentIndex": 1,
+                    "documentPath": "A:/subA.md",
+                    "line": 4
+                  },
                   "title": "Sub A",
                   "type": "doculisp-title"
                 },
@@ -104,7 +118,7 @@
               },
               "include": [],
               "start": {
-                "char": 10,
+                "char": 9,
                 "documentDepth": 2,
                 "documentIndex": 1,
                 "documentPath": "A:/subA.md",
@@ -134,8 +148,8 @@
             "document": {
               "doculisp": [
                 {
-                  "documentOrder": {
-                    "char": 10,
+                  "end": {
+                    "char": 21,
                     "documentDepth": 2,
                     "documentIndex": 2,
                     "documentPath": "B:/subB.md",
@@ -143,6 +157,13 @@
                   },
                   "label": "## Sub B ##",
                   "ref_link": "#sub-b",
+                  "start": {
+                    "char": 9,
+                    "documentDepth": 2,
+                    "documentIndex": 2,
+                    "documentPath": "B:/subB.md",
+                    "line": 4
+                  },
                   "title": "Sub B",
                   "type": "doculisp-title"
                 },
@@ -174,7 +195,7 @@
               },
               "include": [],
               "start": {
-                "char": 10,
+                "char": 9,
                 "documentDepth": 2,
                 "documentIndex": 2,
                 "documentPath": "B:/subB.md",
@@ -202,7 +223,7 @@
           }
         ],
         "start": {
-          "char": 6,
+          "char": 5,
           "documentDepth": 1,
           "documentIndex": 1,
           "documentPath": "_main.dlisp",

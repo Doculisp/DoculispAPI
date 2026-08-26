@@ -22,8 +22,8 @@
       "section": {
         "doculisp": [
           {
-            "documentOrder": {
-              "char": 6,
+            "end": {
+              "char": 25,
               "documentDepth": 1,
               "documentIndex": 1,
               "documentPath": "./_main.dlisp",
@@ -31,6 +31,13 @@
             },
             "label": "# The True Root #",
             "ref_link": "#the-true-root",
+            "start": {
+              "char": 5,
+              "documentDepth": 1,
+              "documentIndex": 1,
+              "documentPath": "./_main.dlisp",
+              "line": 3
+            },
             "title": "The True Root",
             "type": "doculisp-title"
           },
@@ -83,8 +90,8 @@
             "document": {
               "doculisp": [
                 {
-                  "documentOrder": {
-                    "char": 10,
+                  "end": {
+                    "char": 33,
                     "documentDepth": 2,
                     "documentIndex": 1,
                     "documentPath": "./childDoc.md",
@@ -92,6 +99,13 @@
                   },
                   "label": "## The Child to Bare ##",
                   "ref_link": "#the-child-to-bare",
+                  "start": {
+                    "char": 9,
+                    "documentDepth": 2,
+                    "documentIndex": 1,
+                    "documentPath": "./childDoc.md",
+                    "line": 5
+                  },
                   "title": "The Child to Bare",
                   "type": "doculisp-title"
                 },
@@ -143,8 +157,8 @@
                   "document": {
                     "doculisp": [
                       {
-                        "documentOrder": {
-                          "char": 10,
+                        "end": {
+                          "char": 37,
                           "documentDepth": 3,
                           "documentIndex": 1,
                           "documentPath": "./grandchild.md",
@@ -152,6 +166,13 @@
                         },
                         "label": "### The GRoot of all Docs ###",
                         "ref_link": "#the-groot-of-all-docs",
+                        "start": {
+                          "char": 9,
+                          "documentDepth": 3,
+                          "documentIndex": 1,
+                          "documentPath": "./grandchild.md",
+                          "line": 5
+                        },
                         "title": "The GRoot of all Docs",
                         "type": "doculisp-title"
                       },
@@ -183,7 +204,7 @@
                     },
                     "include": [],
                     "start": {
-                      "char": 10,
+                      "char": 9,
                       "documentDepth": 3,
                       "documentIndex": 1,
                       "documentPath": "./grandchild.md",
@@ -211,7 +232,7 @@
                 }
               ],
               "start": {
-                "char": 10,
+                "char": 9,
                 "documentDepth": 2,
                 "documentIndex": 1,
                 "documentPath": "./childDoc.md",
@@ -239,7 +260,7 @@
           }
         ],
         "start": {
-          "char": 6,
+          "char": 5,
           "documentDepth": 1,
           "documentIndex": 1,
           "documentPath": "./_main.dlisp",

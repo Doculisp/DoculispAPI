@@ -9,8 +9,8 @@
     "section": {
       "doculisp": [
         {
-          "documentOrder": {
-            "char": 6,
+          "end": {
+            "char": 40,
             "documentDepth": 1,
             "documentIndex": 4,
             "documentPath": "main.dlisp",
@@ -18,12 +18,19 @@
           },
           "label": "# Doculisp a short description #",
           "ref_link": "#doculisp-a-short-description",
+          "start": {
+            "char": 5,
+            "documentDepth": 1,
+            "documentIndex": 4,
+            "documentPath": "main.dlisp",
+            "line": 3
+          },
           "title": "Doculisp a short description",
           "type": "doculisp-title"
         }
       ],
       "end": {
-        "char": 6,
+        "char": 40,
         "documentDepth": 1,
         "documentIndex": 4,
         "documentPath": "main.dlisp",
@@ -31,7 +38,7 @@
       },
       "include": [],
       "start": {
-        "char": 6,
+        "char": 5,
         "documentDepth": 1,
         "documentIndex": 4,
         "documentPath": "main.dlisp",

@@ -1,18 +1,14 @@
 import { IAstEmpty, RootAst } from "./types.ast";
 import { IPath } from "./types.filePath";
-import { ILocation, IProjectLocation, IRange, Result } from "./types.general";
+import { IProjectLocation, IRange, Result } from "./types.general";
 import { IVariableTable } from "./types.variableTable";
-
-export interface ILocationSortable {
-    readonly documentOrder: ILocation;
-};
 
 export interface IWrite extends IRange {
     readonly type: 'doculisp-write';
     readonly value: string;
 };
 
-export interface ITitle extends ILocationSortable {
+export interface ITitle extends IRange {
     readonly type: 'doculisp-title';
     readonly title: string;
     readonly label: string;

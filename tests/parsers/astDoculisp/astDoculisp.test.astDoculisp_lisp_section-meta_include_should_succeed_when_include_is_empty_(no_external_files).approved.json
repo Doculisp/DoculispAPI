@@ -9,8 +9,8 @@
     "section": {
       "doculisp": [
         {
-          "documentOrder": {
-            "char": 6,
+          "end": {
+            "char": 25,
             "documentDepth": 1,
             "documentIndex": 4,
             "documentPath": "./no-externals.dlisp",
@@ -18,12 +18,19 @@
           },
           "label": "# Test Document #",
           "ref_link": "#test-document",
+          "start": {
+            "char": 5,
+            "documentDepth": 1,
+            "documentIndex": 4,
+            "documentPath": "./no-externals.dlisp",
+            "line": 3
+          },
           "title": "Test Document",
           "type": "doculisp-title"
         }
       ],
       "end": {
-        "char": 6,
+        "char": 25,
         "documentDepth": 1,
         "documentIndex": 4,
         "documentPath": "./no-externals.dlisp",
@@ -31,7 +38,7 @@
       },
       "include": [],
       "start": {
-        "char": 6,
+        "char": 5,
         "documentDepth": 1,
         "documentIndex": 4,
         "documentPath": "./no-externals.dlisp",

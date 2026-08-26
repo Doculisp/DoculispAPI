@@ -332,6 +332,24 @@ A story of a misbehaving parser.
             
                     verifyAsJson(result);
                 });
+
+                it('should expose range locations for a parsed title', () => {
+                    const contents = `(section-meta My Cool Document)`;
+                    const result = toResult(contents, buildProjectLocation('main.dlisp', 1, 1));
+
+                    expect(result.success).toBe(true);
+
+                    if(!result.success || result.value.type === 'doculisp-empty') {
+                        return;
+                    }
+
+                    const title = result.value.section.doculisp.find(p => p.type === 'doculisp-title');
+
+                    expect(title).toBeDefined();
+                    expect(title && 'start' in title).toBe(true);
+                    expect(title && 'end' in title).toBe(true);
+                    expect(title && 'documentOrder' in (title as object)).toBe(false);
+                });
             
                 it('should not parse a title without a parameter', () => {
                     const contents = `(section-meta (title))`;

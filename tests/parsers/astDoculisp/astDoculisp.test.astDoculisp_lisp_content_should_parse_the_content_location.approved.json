@@ -11,8 +11,8 @@
       "section": {
         "doculisp": [
           {
-            "documentOrder": {
-              "char": 6,
+            "end": {
+              "char": 25,
               "documentDepth": 2,
               "documentIndex": 7,
               "documentPath": "../main.dlisp",
@@ -20,6 +20,13 @@
             },
             "label": "## Using Content ##",
             "ref_link": "#using-content",
+            "start": {
+              "char": 5,
+              "documentDepth": 2,
+              "documentIndex": 7,
+              "documentPath": "../main.dlisp",
+              "line": 3
+            },
             "title": "Using Content",
             "type": "doculisp-title"
           },
@@ -71,7 +78,7 @@
           }
         ],
         "start": {
-          "char": 6,
+          "char": 5,
           "documentDepth": 2,
           "documentIndex": 7,
           "documentPath": "../main.dlisp",

@@ -259,7 +259,8 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
                 return util.ok({
                     type: 'doculisp-title',
                     title: title.parameter.value,
-                    documentOrder: title.location,
+                    start: title.blockRange.start,
+                    end: title.blockRange.end,
                     label: headerize(title.location.documentDepth, title.parameter.value),
                     ref_link: '#' + (refLink ? refLink : linkText),
                     subtitle: subtitle ? subtitle : undefined,
@@ -677,7 +678,8 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
                 const title: ITitle = {
                     type: 'doculisp-title',
                     title: sectionMeta.parameter.value,
-                    documentOrder: sectionMeta.location,
+                    start: sectionMeta.blockRange.start,
+                    end: sectionMeta.blockRange.end,
                     label: headerize(sectionMeta.location.documentDepth, sectionMeta.parameter.value),
                     ref_link: '#' + getLinkText(sectionMeta, false),
                 };
@@ -1135,22 +1137,18 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
         const loadParts = result.filter(d => d.type === 'doculisp-load') as ILoad[];
         const hasContentBlock = doculispParts.some(d => d.type === 'doculisp-content');
 
-        const getPartLocation = (part: DoculispPart | ILoad | undefined, side: 'start' | 'end') => {
+        const getPartLocation = (part: DoculispPart | undefined, side: 'start' | 'end') => {
             if(!part) {
                 return util.toLocation(astRoot.location, 1, 1);
             }
 
-            if('start' in part && 'end' in part) {
-                return side === 'start' ? part.start : part.end;
-            }
-
-            return part.documentOrder;
+            return side === 'start' ? part.start : part.end;
         };
 
         if(hasInclude && !hasContentBlock) {
             // Find the section-meta block to report error location
             const sectionMetaPart = doculispParts.find(d => d.type === 'doculisp-title');
-            const errorLocation = sectionMetaPart ? sectionMetaPart.documentOrder : util.toLocation(astRoot.location, 1, 1);
+            const errorLocation = sectionMetaPart ? sectionMetaPart.start : util.toLocation(astRoot.location, 1, 1);
             
             const range: IRange = {
                 start: errorLocation,

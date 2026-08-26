@@ -11,8 +11,8 @@
       "section": {
         "doculisp": [
           {
-            "documentOrder": {
-              "char": 14,
+            "end": {
+              "char": 73,
               "documentDepth": 1,
               "documentIndex": 1,
               "documentPath": "./_main.md",
@@ -20,12 +20,19 @@
             },
             "label": "# A !@#$%^&*+=(){[]}|\\;:'\" Story ,./<>? about things #",
             "ref_link": "#a--story--about-things",
+            "start": {
+              "char": 13,
+              "documentDepth": 1,
+              "documentIndex": 1,
+              "documentPath": "./_main.md",
+              "line": 4
+            },
             "title": "A !@#$%^&*+=(){[]}|\\;:'\" Story ,./<>? about things",
             "type": "doculisp-title"
           }
         ],
         "end": {
-          "char": 14,
+          "char": 73,
           "documentDepth": 1,
           "documentIndex": 1,
           "documentPath": "./_main.md",
@@ -33,7 +40,7 @@
         },
         "include": [],
         "start": {
-          "char": 14,
+          "char": 13,
           "documentDepth": 1,
           "documentIndex": 1,
           "documentPath": "./_main.md",

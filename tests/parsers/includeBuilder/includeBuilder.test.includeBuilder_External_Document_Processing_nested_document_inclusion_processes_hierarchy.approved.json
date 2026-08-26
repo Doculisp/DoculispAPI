@@ -19,8 +19,8 @@
       "section": {
         "doculisp": [
           {
-            "documentOrder": {
-              "char": 10,
+            "end": {
+              "char": 34,
               "documentDepth": 1,
               "documentIndex": 1,
               "documentPath": "./_main.md",
@@ -28,6 +28,13 @@
             },
             "label": "# Top Level Document #",
             "ref_link": "#top-level-document",
+            "start": {
+              "char": 9,
+              "documentDepth": 1,
+              "documentIndex": 1,
+              "documentPath": "./_main.md",
+              "line": 4
+            },
             "title": "Top Level Document",
             "type": "doculisp-title"
           },
@@ -79,8 +86,8 @@
             "document": {
               "doculisp": [
                 {
-                  "documentOrder": {
-                    "char": 10,
+                  "end": {
+                    "char": 32,
                     "documentDepth": 2,
                     "documentIndex": 1,
                     "documentPath": "./child.md",
@@ -88,6 +95,13 @@
                   },
                   "label": "## A Child Document ##",
                   "ref_link": "#a-child-document",
+                  "start": {
+                    "char": 9,
+                    "documentDepth": 2,
+                    "documentIndex": 1,
+                    "documentPath": "./child.md",
+                    "line": 4
+                  },
                   "title": "A Child Document",
                   "type": "doculisp-title"
                 },
@@ -139,8 +153,8 @@
                   "document": {
                     "doculisp": [
                       {
-                        "documentOrder": {
-                          "char": 10,
+                        "end": {
+                          "char": 37,
                           "documentDepth": 3,
                           "documentIndex": 1,
                           "documentPath": "C:/grand.md",
@@ -148,6 +162,13 @@
                         },
                         "label": "### A Grandchild Document ###",
                         "ref_link": "#a-grandchild-document",
+                        "start": {
+                          "char": 9,
+                          "documentDepth": 3,
+                          "documentIndex": 1,
+                          "documentPath": "C:/grand.md",
+                          "line": 4
+                        },
                         "title": "A Grandchild Document",
                         "type": "doculisp-title"
                       },
@@ -179,7 +200,7 @@
                     },
                     "include": [],
                     "start": {
-                      "char": 10,
+                      "char": 9,
                       "documentDepth": 3,
                       "documentIndex": 1,
                       "documentPath": "C:/grand.md",
@@ -207,7 +228,7 @@
                 }
               ],
               "start": {
-                "char": 10,
+                "char": 9,
                 "documentDepth": 2,
                 "documentIndex": 1,
                 "documentPath": "./child.md",
@@ -235,7 +256,7 @@
           }
         ],
         "start": {
-          "char": 10,
+          "char": 9,
           "documentDepth": 1,
           "documentIndex": 1,
           "documentPath": "./_main.md",

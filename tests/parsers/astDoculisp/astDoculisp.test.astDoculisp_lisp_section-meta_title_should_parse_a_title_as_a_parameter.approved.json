@@ -9,8 +9,8 @@
     "section": {
       "doculisp": [
         {
-          "documentOrder": {
-            "char": 2,
+          "end": {
+            "char": 31,
             "documentDepth": 1,
             "documentIndex": 7,
             "documentPath": "main.dlisp",
@@ -18,12 +18,19 @@
           },
           "label": "# My Cool Document #",
           "ref_link": "#my-cool-document",
+          "start": {
+            "char": 1,
+            "documentDepth": 1,
+            "documentIndex": 7,
+            "documentPath": "main.dlisp",
+            "line": 1
+          },
           "title": "My Cool Document",
           "type": "doculisp-title"
         }
       ],
       "end": {
-        "char": 2,
+        "char": 31,
         "documentDepth": 1,
         "documentIndex": 7,
         "documentPath": "main.dlisp",
@@ -31,7 +38,7 @@
       },
       "include": [],
       "start": {
-        "char": 2,
+        "char": 1,
         "documentDepth": 1,
         "documentIndex": 7,
         "documentPath": "main.dlisp",

@@ -18,8 +18,8 @@
       "section": {
         "doculisp": [
           {
-            "documentOrder": {
-              "char": 6,
+            "end": {
+              "char": 25,
               "documentDepth": 1,
               "documentIndex": 1,
               "documentPath": "C:/_main.dlisp",
@@ -27,6 +27,13 @@
             },
             "label": "# Main Document #",
             "ref_link": "#main-document",
+            "start": {
+              "char": 5,
+              "documentDepth": 1,
+              "documentIndex": 1,
+              "documentPath": "C:/_main.dlisp",
+              "line": 3
+            },
             "title": "Main Document",
             "type": "doculisp-title"
           },
@@ -79,8 +86,8 @@
             "document": {
               "doculisp": [
                 {
-                  "documentOrder": {
-                    "char": 10,
+                  "end": {
+                    "char": 33,
                     "documentDepth": 2,
                     "documentIndex": 1,
                     "documentPath": "C:/sub.md",
@@ -88,6 +95,13 @@
                   },
                   "label": "## Fist Sub-Document ##",
                   "ref_link": "#fist-sub-document",
+                  "start": {
+                    "char": 9,
+                    "documentDepth": 2,
+                    "documentIndex": 1,
+                    "documentPath": "C:/sub.md",
+                    "line": 4
+                  },
                   "title": "Fist Sub-Document",
                   "type": "doculisp-title"
                 },
@@ -119,7 +133,7 @@
               },
               "include": [],
               "start": {
-                "char": 10,
+                "char": 9,
                 "documentDepth": 2,
                 "documentIndex": 1,
                 "documentPath": "C:/sub.md",
@@ -147,7 +161,7 @@
           }
         ],
         "start": {
-          "char": 6,
+          "char": 5,
           "documentDepth": 1,
           "documentIndex": 1,
           "documentPath": "C:/_main.dlisp",

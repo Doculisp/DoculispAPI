@@ -11,8 +11,8 @@
       "section": {
         "doculisp": [
           {
-            "documentOrder": {
-              "char": 2,
+            "end": {
+              "char": 21,
               "documentDepth": 1,
               "documentIndex": 4,
               "documentPath": "main.dlisp",
@@ -20,6 +20,13 @@
             },
             "label": "# Doculisp is ✨ #",
             "ref_link": "#doculisp_is_",
+            "start": {
+              "char": 1,
+              "documentDepth": 1,
+              "documentIndex": 4,
+              "documentPath": "main.dlisp",
+              "line": 8
+            },
             "title": "Doculisp is ✨",
             "type": "doculisp-title"
           },
@@ -91,7 +98,7 @@
           }
         ],
         "start": {
-          "char": 2,
+          "char": 1,
           "documentDepth": 1,
           "documentIndex": 4,
           "documentPath": "main.dlisp",

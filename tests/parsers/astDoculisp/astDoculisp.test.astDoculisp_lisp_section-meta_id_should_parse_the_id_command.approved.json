@@ -11,8 +11,8 @@
       "section": {
         "doculisp": [
           {
-            "documentOrder": {
-              "char": 6,
+            "end": {
+              "char": 26,
               "documentDepth": 1,
               "documentIndex": 1,
               "documentPath": "main.md",
@@ -21,12 +21,19 @@
             "id": "my-id",
             "label": "# The use of IDs #",
             "ref_link": "#the-use-of-ids",
+            "start": {
+              "char": 5,
+              "documentDepth": 1,
+              "documentIndex": 1,
+              "documentPath": "main.md",
+              "line": 4
+            },
             "title": "The use of IDs",
             "type": "doculisp-title"
           }
         ],
         "end": {
-          "char": 6,
+          "char": 26,
           "documentDepth": 1,
           "documentIndex": 1,
           "documentPath": "main.md",
@@ -34,7 +41,7 @@
         },
         "include": [],
         "start": {
-          "char": 6,
+          "char": 5,
           "documentDepth": 1,
           "documentIndex": 1,
           "documentPath": "main.md",

@@ -37,8 +37,8 @@
       "section": {
         "doculisp": [
           {
-            "documentOrder": {
-              "char": 6,
+            "end": {
+              "char": 30,
               "documentDepth": 2,
               "documentIndex": 7,
               "documentPath": "../main.md",
@@ -46,6 +46,13 @@
             },
             "label": "## Using Dynamic Path ##",
             "ref_link": "#using-dynamic-path",
+            "start": {
+              "char": 5,
+              "documentDepth": 2,
+              "documentIndex": 7,
+              "documentPath": "../main.md",
+              "line": 3
+            },
             "title": "Using Dynamic Path",
             "type": "doculisp-title"
           },
@@ -113,7 +120,7 @@
         },
         "include": [],
         "start": {
-          "char": 6,
+          "char": 5,
           "documentDepth": 2,
           "documentIndex": 7,
           "documentPath": "../main.md",

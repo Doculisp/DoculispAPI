@@ -14,9 +14,8 @@ function buildWriter(util: IUtil, stringBuilderConstructor: StringBuilderConstru
         return astWrite.value;
     }
 
-    // Range-based parts use start/end while legacy point-based parts still expose documentOrder.
     function partStart(part: DoculispPart): ILocationCoordinates {
-        return part.type === 'doculisp-write' || part.type === 'doculisp-path-id' || part.type === 'doculisp-content' || part.type === 'doculisp-header' || part.type === 'doculisp-toc' ? part.start : part.documentOrder;
+        return part.start;
     }
 
     
