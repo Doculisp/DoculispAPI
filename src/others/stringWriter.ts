@@ -14,11 +14,6 @@ function buildWriter(util: IUtil, stringBuilderConstructor: StringBuilderConstru
         return astWrite.value;
     }
 
-    function partStart(part: DoculispPart): ILocationCoordinates {
-        return part.start;
-    }
-
-    
     function writeAstTitle(astTitle: ITitle): string {
         const sb = stringBuilderConstructor();
     
@@ -225,7 +220,7 @@ let previous: ILocationCoordinates = doc.start;
         let previousType = '';
         let previousLine = (
             !!section.doculisp?.length
-            ? partStart(section.doculisp[0] as DoculispPart).line
+            ? section.doculisp[0]!.start.line
             : 0
         );
     
@@ -235,7 +230,7 @@ let previous: ILocationCoordinates = doc.start;
                 continue;
             }
     
-            const start = partStart(doculisp);
+            const start = doculisp.start;
     
             if (previousLine < start.line) {
                 sb.addLine();
