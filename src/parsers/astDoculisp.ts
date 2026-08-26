@@ -1135,6 +1135,18 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
         const loadParts = result.filter(d => d.type === 'doculisp-load') as ILoad[];
         const hasContentBlock = doculispParts.some(d => d.type === 'doculisp-content');
 
+        const getPartLocation = (part: DoculispPart | ILoad | undefined, side: 'start' | 'end') => {
+            if(!part) {
+                return util.toLocation(astRoot.location, 1, 1);
+            }
+
+            if('start' in part && 'end' in part) {
+                return side === 'start' ? part.start : part.end;
+            }
+
+            return part.documentOrder;
+        };
+
         if(hasInclude && !hasContentBlock) {
             // Find the section-meta block to report error location
             const sectionMetaPart = doculispParts.find(d => d.type === 'doculisp-title');
@@ -1155,12 +1167,8 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
 
         const firstPart = 0 < doculispParts.length ? doculispParts[0] : undefined;
         const lastPart = 0 < doculispParts.length ? doculispParts[doculispParts.length - 1] : undefined;
-        const sectionStart = firstPart
-            ? (firstPart.type === 'doculisp-write' || firstPart.type === 'doculisp-path-id' || firstPart.type === 'doculisp-content' || firstPart.type === 'doculisp-header' || firstPart.type === 'doculisp-toc' ? firstPart.start : firstPart.documentOrder)
-            : util.toLocation(astRoot.location, 1, 1);
-        const sectionEnd = lastPart
-            ? (lastPart.type === 'doculisp-write' || lastPart.type === 'doculisp-path-id' || lastPart.type === 'doculisp-content' || lastPart.type === 'doculisp-header' || lastPart.type === 'doculisp-toc' ? lastPart.end : lastPart.documentOrder)
-            : util.toLocation(astRoot.location, 1, 1);
+        const sectionStart = getPartLocation(firstPart, 'start');
+        const sectionEnd = getPartLocation(lastPart, 'end');
 
         return util.ok({
             projectLocation: astRoot.location,
