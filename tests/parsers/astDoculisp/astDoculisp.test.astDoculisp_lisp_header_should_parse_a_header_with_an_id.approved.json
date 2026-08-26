@@ -31,14 +31,21 @@
             "type": "doculisp-header"
           }
         ],
-        "documentOrder": {
-          "char": 1,
+        "end": {
+          "char": 23,
           "documentDepth": 2,
           "documentIndex": 1,
           "documentPath": "S:/ome/file.md",
-          "line": 1
+          "line": 2
         },
         "include": [],
+        "start": {
+          "char": 6,
+          "documentDepth": 2,
+          "documentIndex": 1,
+          "documentPath": "S:/ome/file.md",
+          "line": 2
+        },
         "type": "doculisp-section"
       },
       "type": "doculisp-root"

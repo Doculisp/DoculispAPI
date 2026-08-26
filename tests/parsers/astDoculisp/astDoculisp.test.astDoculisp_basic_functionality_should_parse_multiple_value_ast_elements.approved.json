@@ -45,14 +45,21 @@
           "value": "Text after some comment"
         }
       ],
-      "documentOrder": {
+      "end": {
+        "char": 24,
+        "documentDepth": 4,
+        "documentIndex": 8,
+        "documentPath": "T:/ext/only.md",
+        "line": 5
+      },
+      "include": [],
+      "start": {
         "char": 1,
         "documentDepth": 4,
         "documentIndex": 8,
         "documentPath": "T:/ext/only.md",
         "line": 1
       },
-      "include": [],
       "type": "doculisp-section"
     },
     "type": "doculisp-root"

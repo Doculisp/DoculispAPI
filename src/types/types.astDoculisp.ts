@@ -71,7 +71,7 @@ export interface IPathId extends IRange {
 
 export type DoculispPart = IWrite | ITitle | ITableOfContents | IContentLocation | IHeader | IPathId;
 
-export interface ISectionWriter extends ILocationSortable {
+export interface ISectionWriter extends IRange {
     readonly doculisp: DoculispPart[];
     readonly include: ILoad[];
     readonly type: 'doculisp-section';

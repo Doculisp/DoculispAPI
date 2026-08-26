@@ -67,10 +67,10 @@ function buildAstBuilder(util: IUtil, doculispParser: IDoculispParser, documentP
                     start: load.start,
                     end: load.end,
                 };
-                return failureBuilder(`Invalid file type in include block at '${doculisp.documentOrder.documentPath}'. Included files must be markdown or dlisp files.`, range, load.start.documentPath);
+                return failureBuilder(`Invalid file type in include block at '${doculisp.start.documentPath}'. Included files must be markdown or dlisp files.`, range, load.start.documentPath);
             }
 
-            const astResult = _parse(load.path, { documentDepth: doculisp.documentOrder.documentDepth + 1, documentIndex: index + 1, documentPath: load.path}, variableTable);
+            const astResult = _parse(load.path, { documentDepth: doculisp.start.documentDepth + 1, documentIndex: index + 1, documentPath: load.path}, variableTable);
             if(!astResult.success) {
                 return astResult;
             }

@@ -216,6 +216,33 @@ describe('astDoculisp', () => {
         });
 
         describe('section-meta', () => {
+            it('should expose range locations for a parsed section', () => {
+                const contents = `
+(section-meta
+    (title Test Document)
+    (include
+        (Section ./first.md)
+    )
+)
+
+(content)`;
+
+                const result = toResult(contents, buildProjectLocation('main.dlisp', 1, 1));
+
+                expect(result.success).toBe(true);
+
+                if(!result.success || result.value.type === 'doculisp-empty') {
+                    return;
+                }
+
+                const section = result.value.section;
+
+                expect(section).toBeDefined();
+                expect(section && 'start' in section).toBe(true);
+                expect(section && 'end' in section).toBe(true);
+                expect(section && 'documentOrder' in (section as object)).toBe(false);
+            });
+
             it('should handle all subparts put together out of order', () => {
                 const contents = `
 (section-meta

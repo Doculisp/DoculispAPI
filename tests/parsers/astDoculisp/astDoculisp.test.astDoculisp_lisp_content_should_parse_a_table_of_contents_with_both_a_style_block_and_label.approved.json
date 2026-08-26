@@ -60,12 +60,12 @@
             "type": "doculisp-content"
           }
         ],
-        "documentOrder": {
+        "end": {
           "char": 1,
           "documentDepth": 2,
           "documentIndex": 1,
           "documentPath": "./itty.dlisp",
-          "line": 1
+          "line": 14
         },
         "include": [
           {
@@ -89,6 +89,13 @@
             "type": "doculisp-load"
           }
         ],
+        "start": {
+          "char": 6,
+          "documentDepth": 2,
+          "documentIndex": 1,
+          "documentPath": "./itty.dlisp",
+          "line": 3
+        },
         "type": "doculisp-section"
       },
       "type": "doculisp-root"

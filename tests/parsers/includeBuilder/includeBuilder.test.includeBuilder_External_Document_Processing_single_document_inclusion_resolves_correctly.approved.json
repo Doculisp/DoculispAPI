@@ -67,12 +67,12 @@
             "type": "doculisp-content"
           }
         ],
-        "documentOrder": {
-          "char": 1,
+        "end": {
+          "char": 32,
           "documentDepth": 1,
           "documentIndex": 1,
           "documentPath": "C:/_main.dlisp",
-          "line": 1
+          "line": 9
         },
         "include": [
           {
@@ -110,14 +110,21 @@
                   "value": "Hello world!"
                 }
               ],
-              "documentOrder": {
-                "char": 1,
+              "end": {
+                "char": 13,
                 "documentDepth": 2,
                 "documentIndex": 1,
                 "documentPath": "C:/sub.md",
-                "line": 1
+                "line": 9
               },
               "include": [],
+              "start": {
+                "char": 10,
+                "documentDepth": 2,
+                "documentIndex": 1,
+                "documentPath": "C:/sub.md",
+                "line": 4
+              },
               "type": "doculisp-section"
             },
             "end": {
@@ -139,6 +146,13 @@
             "type": "doculisp-load"
           }
         ],
+        "start": {
+          "char": 6,
+          "documentDepth": 1,
+          "documentIndex": 1,
+          "documentPath": "C:/_main.dlisp",
+          "line": 3
+        },
         "type": "doculisp-section"
       },
       "type": "doculisp-root"

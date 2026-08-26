@@ -52,12 +52,12 @@
             "type": "doculisp-content"
           }
         ],
-        "documentOrder": {
-          "char": 1,
+        "end": {
+          "char": 9,
           "documentDepth": 1,
           "documentIndex": 1,
           "documentPath": "_main.dlisp",
-          "line": 1
+          "line": 10
         },
         "include": [
           {
@@ -95,14 +95,21 @@
                   "value": "Sub document A text."
                 }
               ],
-              "documentOrder": {
-                "char": 1,
+              "end": {
+                "char": 21,
                 "documentDepth": 2,
                 "documentIndex": 1,
                 "documentPath": "A:/subA.md",
-                "line": 1
+                "line": 9
               },
               "include": [],
+              "start": {
+                "char": 10,
+                "documentDepth": 2,
+                "documentIndex": 1,
+                "documentPath": "A:/subA.md",
+                "line": 4
+              },
               "type": "doculisp-section"
             },
             "end": {
@@ -158,14 +165,21 @@
                   "value": "Sub document B text."
                 }
               ],
-              "documentOrder": {
-                "char": 1,
+              "end": {
+                "char": 21,
                 "documentDepth": 2,
                 "documentIndex": 2,
                 "documentPath": "B:/subB.md",
-                "line": 1
+                "line": 9
               },
               "include": [],
+              "start": {
+                "char": 10,
+                "documentDepth": 2,
+                "documentIndex": 2,
+                "documentPath": "B:/subB.md",
+                "line": 4
+              },
               "type": "doculisp-section"
             },
             "end": {
@@ -187,6 +201,13 @@
             "type": "doculisp-load"
           }
         ],
+        "start": {
+          "char": 6,
+          "documentDepth": 1,
+          "documentIndex": 1,
+          "documentPath": "_main.dlisp",
+          "line": 3
+        },
         "type": "doculisp-section"
       },
       "type": "doculisp-root"

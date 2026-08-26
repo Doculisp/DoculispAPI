@@ -165,7 +165,7 @@ function buildWriter(util: IUtil, stringBuilderConstructor: StringBuilderConstru
             }
     
             const doc = load.document;
-            let previous: ILocationCoordinates = doc.documentOrder;
+let previous: ILocationCoordinates = doc.start;
     
             if(0 < sb.length) {
                 sb.addLine();

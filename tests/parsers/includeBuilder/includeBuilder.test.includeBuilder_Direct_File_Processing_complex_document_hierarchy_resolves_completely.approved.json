@@ -71,12 +71,12 @@
             "type": "doculisp-content"
           }
         ],
-        "documentOrder": {
-          "char": 1,
+        "end": {
+          "char": 15,
           "documentDepth": 1,
           "documentIndex": 1,
           "documentPath": "./_main.dlisp",
-          "line": 1
+          "line": 9
         },
         "include": [
           {
@@ -131,12 +131,12 @@
                   "type": "doculisp-content"
                 }
               ],
-              "documentOrder": {
-                "char": 1,
+              "end": {
+                "char": 18,
                 "documentDepth": 2,
                 "documentIndex": 1,
                 "documentPath": "./childDoc.md",
-                "line": 1
+                "line": 14
               },
               "include": [
                 {
@@ -174,14 +174,21 @@
                         "value": "Hello from the grand child"
                       }
                     ],
-                    "documentOrder": {
-                      "char": 1,
+                    "end": {
+                      "char": 27,
                       "documentDepth": 3,
                       "documentIndex": 1,
                       "documentPath": "./grandchild.md",
-                      "line": 1
+                      "line": 10
                     },
                     "include": [],
+                    "start": {
+                      "char": 10,
+                      "documentDepth": 3,
+                      "documentIndex": 1,
+                      "documentPath": "./grandchild.md",
+                      "line": 5
+                    },
                     "type": "doculisp-section"
                   },
                   "end": {
@@ -203,6 +210,13 @@
                   "type": "doculisp-load"
                 }
               ],
+              "start": {
+                "char": 10,
+                "documentDepth": 2,
+                "documentIndex": 1,
+                "documentPath": "./childDoc.md",
+                "line": 5
+              },
               "type": "doculisp-section"
             },
             "end": {
@@ -224,6 +238,13 @@
             "type": "doculisp-load"
           }
         ],
+        "start": {
+          "char": 6,
+          "documentDepth": 1,
+          "documentIndex": 1,
+          "documentPath": "./_main.dlisp",
+          "line": 3
+        },
         "type": "doculisp-section"
       },
       "type": "doculisp-root"

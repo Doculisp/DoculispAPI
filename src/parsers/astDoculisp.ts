@@ -1153,12 +1153,22 @@ function buildAstParser(internals: IInternals, util: IUtil, trimArray: ITrimArra
             return validationFailure(`The section-meta block at '${errorLocation.documentPath.fullName}' has an include block with external files but no content block. A content block is required when including external files.`, range, errorLocation.documentPath);
         }
 
+        const firstPart = 0 < doculispParts.length ? doculispParts[0] : undefined;
+        const lastPart = 0 < doculispParts.length ? doculispParts[doculispParts.length - 1] : undefined;
+        const sectionStart = firstPart
+            ? (firstPart.type === 'doculisp-write' || firstPart.type === 'doculisp-path-id' || firstPart.type === 'doculisp-content' || firstPart.type === 'doculisp-header' || firstPart.type === 'doculisp-toc' ? firstPart.start : firstPart.documentOrder)
+            : util.toLocation(astRoot.location, 1, 1);
+        const sectionEnd = lastPart
+            ? (lastPart.type === 'doculisp-write' || lastPart.type === 'doculisp-path-id' || lastPart.type === 'doculisp-content' || lastPart.type === 'doculisp-header' || lastPart.type === 'doculisp-toc' ? lastPart.end : lastPart.documentOrder)
+            : util.toLocation(astRoot.location, 1, 1);
+
         return util.ok({
             projectLocation: astRoot.location,
             section: {
                 doculisp: doculispParts,
                 include: loadParts,
-                documentOrder: util.toLocation(astRoot.location, 1, 1),
+                start: sectionStart,
+                end: sectionEnd,
                 type: 'doculisp-section'
             },
             type: 'doculisp-root'
